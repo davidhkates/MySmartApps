@@ -1,4 +1,4 @@
-service: simple-motion-lighting-smartapp
+service: fan-control
 
 package:
   patterns:
