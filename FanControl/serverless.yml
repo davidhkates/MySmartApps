@@ -1,7 +1,7 @@
 service: simple-motion-lighting-smartapp
 
 package:
-  include:
+  patterns:
     - index.js
     - smartapp.js
     - locales/**
