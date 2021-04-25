@@ -8,6 +8,15 @@ module.exports = new SmartApp()
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
 
+        // get controls and sensors
+        page.section('controls', section => {
+            section
+                .deviceSetting('fan')
+                .capabilities(['switch'])
+                .required(true)
+                .multiple(false);
+        });
+    
         // prompts user to select a contact sensor
         page.section('sensors', section => {
             section
