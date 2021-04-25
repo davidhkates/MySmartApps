@@ -16,6 +16,13 @@ module.exports = new SmartApp()
                 .required(true)
                 .multiple(false);
         });
+        
+        // get start and end time
+        page.section('time', section => {
+            section
+                .timeSetting('startTime')
+                .required(false)
+        });
     
         // prompts user to select a contact sensor
         page.section('sensors', section => {
