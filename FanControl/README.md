@@ -1,6 +1,6 @@
 # Fan Control
 
-Control fan switch based on room temperature, set temperature, outside temperature/humidity, and door/window sensors
+Control fan switch based on room temperature, set temperature, outside temperature/humidity, and door/window sensors - updated
 
 
 ## File Structure
