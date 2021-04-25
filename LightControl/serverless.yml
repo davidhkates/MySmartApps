@@ -1,7 +1,8 @@
 service: simple-motion-lighting-smartapp
 
 package:
-  include:
+package:
+  patterns:
     - index.js
     - smartapp.js
     - locales/**
@@ -10,7 +11,9 @@ provider:
   name: aws
   stage: dev
   runtime: nodejs12.x
-
+  lambdaHashingVersion: 20201221
+  region: us-west-2
+  
 functions:
   smartapp:
     handler: index.handle
