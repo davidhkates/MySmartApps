@@ -1,0 +1,17 @@
+service: simple-motion-lighting-smartapp
+
+package:
+  include:
+    - index.js
+    - smartapp.js
+    - locales/**
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs12.x
+
+functions:
+  smartapp:
+    handler: index.handle
+    timeout: 20
