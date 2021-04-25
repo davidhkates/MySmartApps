@@ -1,4 +1,4 @@
-service: simple-motion-lighting-smartapp
+service: light-control
 
 package:
   patterns:
