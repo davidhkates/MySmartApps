@@ -27,15 +27,16 @@ module.exports = new SmartApp()
                 .required(false);
         });
     
-        // prompts user to select a contact sensor
+        // prompts user to select one or more contact sensor(s)
         page.section('sensors', section => {
             section
                 .deviceSetting('motionSensors')
                 .capabilities(['motionSensor'])
-                .required(true)
+                .required(false)
                 .multiple(true);
         });
 
+/*
         // prompts users to select one or more switch devices
         page.section('lights', section => {
             section
@@ -45,6 +46,7 @@ module.exports = new SmartApp()
                 .multiple(true)
                 .permissions('rx');
         });
+*/
 
         // optional turn-off delay after motions stops
         page.section('delay', section => {
@@ -113,3 +115,20 @@ module.exports = new SmartApp()
     .scheduledEventHandler('motionStopped', async (context, event) => {
         await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
     });
+
+/*
+    // Handler called whenever app is installed or updated
+    // Called for both INSTALLED and UPDATED lifecycle events if there is
+    // no separate installed() handler
+    .updated(async (context, updateData) => {
+        await context.api.subscriptions.delete()
+        await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
+            'contactSensor', 'contact', 'openCloseHandler');
+    })
+
+    // Handler called when the configured open/close sensor opens or closes
+    .subscribedEventHandler('openCloseHandler', (context, event) => {
+        const value = event.value === 'open' ? 'on' : 'off';
+        context.api.devices.sendCommands(context.config.lights, 'switch', value);
+    });
+*/
