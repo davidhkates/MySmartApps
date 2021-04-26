@@ -34,16 +34,6 @@ module.exports = new SmartApp()
                 .multiple(true);
         });
 
-        // prompts users to select one or more switch devices
-        page.section('lights', section => {
-            section
-                .deviceSetting('lights')
-                .capabilities(['switch'])
-                .required(true)
-                .multiple(true)
-                .permissions('rx');
-        });
-
         // optional turn-off delay after motions stops
         page.section('delay', section => {
             section
@@ -58,6 +48,10 @@ module.exports = new SmartApp()
     .updated(async (context, updateData) => {
         await context.api.subscriptions.unsubscribeAll()
 
+        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+            'switch', 'switch.on', 'mainSwitchOnHandler')
+        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+            'switch', 'switch.off', 'mainSwitchOffHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.active', 'motionStartHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
@@ -66,9 +60,16 @@ module.exports = new SmartApp()
     })
 
     // Turn on the lights when main switch is pressed
-    .subscribedEventHandler('motionStartHandler', async (context, event) => {
-        // Turn on the lights
-        await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
+    .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
+        // Turn on the lights in the on group
+        await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+    })
+
+    // Turn off the lights when main switch is pressed
+    .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
+        // Turn on the lights in the on group
+        await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
+        await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
     })
 
     // Turn on the lights when any motion sensor becomes active
