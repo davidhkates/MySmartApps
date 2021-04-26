@@ -1,7 +1,7 @@
-# Simple Motion Lighting
+# Lighting Group Control
 
-This SmartApp turns on lights when motion is detected and turns them off after it stops, with and option to delay the turn-off for a period of time. It supports
-multiple motion sensor and multiple lights. Motion on any sensor turns the lights on and the lack of motion or all sensors triggers the turn off process.
+Turns on and off lights from master switch.  Keep on if motion in room.
+
 
 ## File Structure
 
