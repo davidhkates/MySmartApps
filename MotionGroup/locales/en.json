@@ -1,6 +1,7 @@
 {
 	"pages.mainPage.name": "Light Group with Motion",
-	"Tap to set": "Tap to set",
+	"Tap to set": "Tap to set"
+/*
 	"pages.mainPage.sections.switches.name": "Select switches to control lights"
 	"pages.mainPage.settings.mainSwitch.name": "Main switch to turn on lights in room",
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on when main switch is pressed",
@@ -8,4 +9,5 @@
 	"pages.mainPage.sections.sensors.name": "Motion sensor(s) in room",
 	"pages.mainPage.settings.motionSensors.name": "Select motion sensors",
 	"pages.mainPage.settings.delay.name": "Optional time delay in seconds"
+*/
 }
