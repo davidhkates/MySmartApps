@@ -32,10 +32,6 @@ module.exports = new SmartApp()
                 .capabilities(['motionSensor'])
                 .required(true)
                 .multiple(true);
-        });
-
-        // optional turn-off delay after motions stops
-        page.section('delay', section => {
             section
                 .numberSetting('delay')
                 .required(false)
@@ -52,6 +48,8 @@ module.exports = new SmartApp()
             'switch', 'switch.on', 'mainSwitchOnHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
             'switch', 'switch.off', 'mainSwitchOffHandler')
+        await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
+            'switch', 'switch.on', 'onGroupHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.active', 'motionStartHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
@@ -61,8 +59,21 @@ module.exports = new SmartApp()
 
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
-        // Turn on the lights in the on group
-        await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+        // Turn on the lights in the on group if they are all off
+        const stateSwitches = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+                it.deviceConfig.deviceId,
+                it.deviceConfig.componentId,
+                'motionSensor'
+            ));
+
+            // Quit if there are other sensor still active
+            const states = await Promise.all(stateRequests)
+            if (states.find(it => it.motion.value === 'active')) {
+                return
+            }
+        if () {
+            await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+        }
     })
 
     // Turn off the lights when main switch is pressed
@@ -70,6 +81,12 @@ module.exports = new SmartApp()
         // Turn on the lights in the on group
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
         await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+    })
+
+    // Turn on main switch if any of the on group lights are turned on separately
+    .subscribedEventHandler('onGroupHandler', async (context, event) => {
+        // Turn on the lights in the on group
+        await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
 
     // Turn on the lights when any motion sensor becomes active
