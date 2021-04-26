@@ -50,6 +50,7 @@ module.exports = new SmartApp()
 
     // Turn on the lights when any motion sensor becomes active
     .subscribedEventHandler('motionStartHandler', async (context, event) => {
+        console.log('MOTION DETECTED, TURN ON LIGHTS')
         // Turn on the lights
         await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
 
