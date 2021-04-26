@@ -65,6 +65,12 @@ module.exports = new SmartApp()
             console.log('END CREATING SUBSCRIPTIONS')
     })
 
+    // Turn on the lights when main switch is pressed
+    .subscribedEventHandler('motionStartHandler', async (context, event) => {
+        // Turn on the lights
+        await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
+    })
+
     // Turn on the lights when any motion sensor becomes active
     .subscribedEventHandler('motionStartHandler', async (context, event) => {
         // Turn on the lights
