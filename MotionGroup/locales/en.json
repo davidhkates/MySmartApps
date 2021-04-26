@@ -1,6 +1,10 @@
 {
 	"pages.mainPage.name": "Fan Control",
 	"Tap to set": "Tap to set",
+	"pages.mainPage.sections.switches.name": "Switches to control",
+	"pages.mainPage.settings.mainSwitch.name": "Main switch",
+	"pages.mainPage.settings.onGroup.name": "Lights to turn on with main switch",
+	"pages.mainPage.settings.offGroup.name": "Additional lights to turn off",
 	"pages.mainPage.sections.controls.name": "Fan to control",
 	"pages.mainPage.settings.fan.name": "Switch controlling fan",
 	"pages.mainPage.sections.time.name": "Time window for running fan",
