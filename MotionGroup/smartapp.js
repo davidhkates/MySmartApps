@@ -60,6 +60,7 @@ module.exports = new SmartApp()
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
         console.log("MotionGroup: Turn on main switch");
+    /*
         // Turn on the lights in the on group if they are all off
         const stateSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
                 it.deviceConfig.deviceId,
@@ -75,6 +76,8 @@ module.exports = new SmartApp()
             }
             await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
         }
+        */
+        await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
     })
 
     // Turn off the lights when main switch is pressed
