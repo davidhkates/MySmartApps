@@ -59,12 +59,14 @@ module.exports = new SmartApp()
 
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
+        console.log("MotionGroup: Turn on main switch");
         // Turn on the lights in the on group if they are all off
         const stateSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
                 it.deviceConfig.deviceId,
                 it.deviceConfig.componentId,
                 'switch'
             ));
+            console.log("MotionGroup: Mapped state switches");
 
             // Quit if there are other sensor still active
             const states = await Promise.all(stateSwitches)
@@ -84,6 +86,7 @@ module.exports = new SmartApp()
 
     // Turn on main switch if any of the on group lights are turned on separately
     .subscribedEventHandler('onGroupHandler', async (context, event) => {
+        console.log("MotionGroup: onGroupHandler");
         // Turn on the main switch when a light in the on group is turned on
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
@@ -114,7 +117,6 @@ module.exports = new SmartApp()
                 it.deviceConfig.componentId,
                 'motionSensor'
             ));
-            console.log("STATE REQUESTS: " & stateRequests);
             
             // Quit if there are other sensor still active
             const states = await Promise.all(stateRequests)
