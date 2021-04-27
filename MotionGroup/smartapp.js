@@ -88,6 +88,7 @@ module.exports = new SmartApp()
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
 
+/*
     // Turn on the lights when any motion sensor becomes active
     .subscribedEventHandler('motionStartHandler', async (context, event) => {
         // Turn on the lights
@@ -98,6 +99,7 @@ module.exports = new SmartApp()
             await context.api.schedules.delete('motionStopped');
         }
     })
+*/
 
     // Turn off the lights only when all motion sensors become inactive
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
@@ -112,7 +114,8 @@ module.exports = new SmartApp()
                 it.deviceConfig.componentId,
                 'motionSensor'
             ));
-
+            console.log("STATE REQUESTS: " & stateRequests);
+            
             // Quit if there are other sensor still active
             const states = await Promise.all(stateRequests)
             if (states.find(it => it.motion.value === 'active')) {
