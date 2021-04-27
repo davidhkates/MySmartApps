@@ -55,7 +55,7 @@ module.exports = new SmartApp()
             'motionSensor', 'motion.active', 'motionStartHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.inactive', 'motionStopHandler');
-            console.log('END CREATING SUBSCRIPTIONS')
+        console.log('Motion Group: END CREATING SUBSCRIPTIONS')
     })
 
     // Turn on the lights when main switch is pressed
