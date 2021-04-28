@@ -80,6 +80,7 @@ module.exports = new SmartApp()
             await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
         }
         */
+        console.log("MotionGroup: Calling await statement for on group");
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
         console.log("MotionGroup: Tried turning on all lights in on group");
     })
