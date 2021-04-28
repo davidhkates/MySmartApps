@@ -42,7 +42,7 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-        console.log("Motion Group: Installed/Updated");
+        console.log("MotionGroup: Installed/Updated");
         await context.api.subscriptions.unsubscribeAll();
 
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -79,6 +79,7 @@ module.exports = new SmartApp()
         }
         */
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+        console.log("MotionGroup: Tried turning on all lights in on group");
     })
 
     // Turn off the lights when main switch is pressed
