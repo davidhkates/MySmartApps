@@ -43,16 +43,16 @@ module.exports = new SmartApp()
     // no separate installed() handler
     .updated(async (context, updateData) => {
         console.log("Motion Group: Installed/Updated");
-        await context.api.subscriptions.unsubscribeAll()
+        await context.api.subscriptions.unsubscribeAll();
 
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.on', 'mainSwitchOnHandler')
+            'switch', 'switch.on', 'mainSwitchOnHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.off', 'mainSwitchOffHandler')
+            'switch', 'switch.off', 'mainSwitchOffHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-            'switch', 'switch.on', 'onGroupHandler')
+            'switch', 'switch.on', 'onGroupHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-            'motionSensor', 'motion.active', 'motionStartHandler')
+            'motionSensor', 'motion.active', 'motionStartHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.inactive', 'motionStopHandler');
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
