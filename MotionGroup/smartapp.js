@@ -18,11 +18,13 @@ module.exports = new SmartApp()
                 .deviceSetting('onGroup')
                 .capabilities(['switch'])
                 .required(true)
-                .multiple(true);
+                .multiple(true)
+                .permissions('rx');            
             section
                 .deviceSetting('offGroup')
                 .capabilities(['switch'])
-                .multiple(true);            
+                .multiple(true)
+                .permissions('rx');            
         });
 
         // prompts user to select a contact sensor
