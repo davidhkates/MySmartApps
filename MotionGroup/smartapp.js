@@ -44,7 +44,7 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-        console.log("MotionGroup: Installed/Updated");
+        // console.log("MotionGroup: Installed/Updated");
         await context.api.subscriptions.unsubscribeAll();
 
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
