@@ -1,4 +1,4 @@
-service: motion-group
+service: light-group
 
 package:
   patterns:
