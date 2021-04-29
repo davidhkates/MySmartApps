@@ -13,7 +13,8 @@ module.exports = new SmartApp()
             section
                 .deviceSetting('mainSwitch')
                 .capabilities(['switch'])
-                .required(true);
+                .required(true)
+                .permissions('rx');            
             section
                 .deviceSetting('onGroup')
                 .capabilities(['switch'])
@@ -32,7 +33,6 @@ module.exports = new SmartApp()
             section
                 .deviceSetting('motionSensors')
                 .capabilities(['motionSensor'])
-                .required(true)
                 .multiple(true);
             section
                 .numberSetting('delay')
@@ -63,6 +63,21 @@ module.exports = new SmartApp()
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+    
+        // Turn on the lights in the on group if they are all off
+        const stateSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
+                it.deviceConfig.deviceId,
+                it.deviceConfig.componentId,
+                'switch'
+            ));
+ 
+            // Quit if there are other sensor still active
+            const states = await Promise.all(stateSwitches)
+            if (states.find(it => it.switch.value === 'on')) {
+                return
+            }
+            await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+        }
         console.log("MotionGroup: Turn on all lights on onGroup");
     })
 
@@ -128,21 +143,3 @@ module.exports = new SmartApp()
     .scheduledEventHandler('motionStopped', async (context, event) => {
         await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
     });
-
-    /*
-        // Turn on the lights in the on group if they are all off
-        const stateSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
-                it.deviceConfig.deviceId,
-                it.deviceConfig.componentId,
-                'switch'
-            ));
-            console.log("MotionGroup: Mapped state switches");
-
-            // Quit if there are other sensor still active
-            const states = await Promise.all(stateSwitches)
-            if (states.find(it => it.switch.value === 'on')) {
-                return
-            }
-            await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-        }
-    */
