@@ -66,18 +66,18 @@ module.exports = new SmartApp()
     
         // Turn on the lights in the on group if they are all off
         const stateSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
-                it.deviceConfig.deviceId,
-                it.deviceConfig.componentId,
-                'switch'
-            ));
- 
-            // Quit if there are other sensor still active
-            const states = await Promise.all(stateSwitches)
-            if (states.find(it => it.switch.value === 'on')) {
-                return
-            }
-            await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+            it.deviceConfig.deviceId,
+            it.deviceConfig.componentId,
+            'switch'));
+     
+        // Quit if there are other sensor still active
+        const states = await Promise.all(stateSwitches)
+        if (states.find(it => it.switch.value === 'on')) {
+            return
         }
+    
+        // If we make it here, turn on all lights in onGroup
+        await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
         console.log("MotionGroup: Turn on all lights on onGroup");
     })
 
