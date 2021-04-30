@@ -77,9 +77,7 @@ module.exports = new SmartApp()
 */    
         // If we make it here, turn on all lights in onGroup
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-        console.log("MotionGroup: Turn on all lights on onGroup");
-        console.log(onGroup);
-        // console.log(stateSwitches);
+        console.log("Turn on all lights on onGroup");
     })
 
     // Turn off the lights when main switch is pressed
@@ -87,12 +85,12 @@ module.exports = new SmartApp()
         // Turn on the lights in the on group
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
         await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-        console.log("MotionGroup: Turn off all lights in on and off groups");
+        console.log("Turn off all lights in on and off groups");
     })
 
     // Turn on main switch if any of the on group lights are turned on separately
     .subscribedEventHandler('onGroupHandler', async (context, event) => {
-        console.log("MotionGroup: onGroupHandler");
+        console.log("Turn on the main switch when a light in the on group is turned on");
         // Turn on the main switch when a light in the on group is turned on
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
@@ -103,7 +101,7 @@ module.exports = new SmartApp()
         const motionSensors =  context.config.motionSensors
             .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
-        if (otherSensors) {
+        if (motionSensors) {
             // Get the current states of the other motion sensors
             const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
                 it.deviceConfig.deviceId,
@@ -117,6 +115,7 @@ module.exports = new SmartApp()
                 return
             }
         }
+        console.log("Turn off lights after specified delay");
 
         const delay = context.configNumberValue('delay')
         if (delay) {
