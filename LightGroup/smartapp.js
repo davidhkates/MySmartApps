@@ -78,7 +78,8 @@ module.exports = new SmartApp()
     
         // If we make it here, turn on all lights in onGroup
         // await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-        console.log("MotionGroup: Turn on all lights on onGroup: " & stateSwitches);
+        console.log("MotionGroup: Turn on all lights on onGroup");
+        // console.log(stateSwitches);
     })
 
     // Turn off the lights when main switch is pressed
