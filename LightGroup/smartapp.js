@@ -123,11 +123,11 @@ module.exports = new SmartApp()
             await context.api.schedules.runIn('motionStopped', delay)
         } else {
             // Turn off immediately if no delay
-            await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
+            await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
         }
     })
 
     // Turns off lights after delay elapses
     .scheduledEventHandler('motionStopped', async (context, event) => {
-        await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
+        await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
     });
