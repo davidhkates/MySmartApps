@@ -64,7 +64,7 @@ module.exports = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
   
         // Turn on the lights in the on group if they are all off
-        const stateSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
+        const roomSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
             it.deviceConfig.deviceId,
             it.deviceConfig.componentId,
             'switch'));
