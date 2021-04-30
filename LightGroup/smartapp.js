@@ -69,9 +69,9 @@ module.exports = new SmartApp()
             it.deviceConfig.componentId,
             'switch'));
      
-        // Quit if there are other sensor still active
+        // Quit if any of the switches in the on group are off
         const states = await Promise.all(stateSwitches)
-        if (states.find(it => it.switch.value === 'on')) {
+        if (states.find(it => it.switch.value === 'off')) {
             return
         }
 */    
@@ -97,28 +97,15 @@ module.exports = new SmartApp()
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
 
-/*
-    // Turn on the lights when any motion sensor becomes active
-    .subscribedEventHandler('motionStartHandler', async (context, event) => {
-        // Turn on the lights
-        await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
-
-        // Delete any scheduled turn offs
-        if (context.configNumberValue('delay')) {
-            await context.api.schedules.delete('motionStopped');
-        }
-    })
-*/
-
     // Turn off the lights only when all motion sensors become inactive
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
-        // See if there are other sensors
-        const otherSensors =  context.config.motionSensors
+        // See if there are any motion sensors defined
+        const motionSensors =  context.config.motionSensors
             .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
         if (otherSensors) {
             // Get the current states of the other motion sensors
-            const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+            const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
                 it.deviceConfig.deviceId,
                 it.deviceConfig.componentId,
                 'motionSensor'
