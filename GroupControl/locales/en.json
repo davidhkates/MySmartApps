@@ -1,7 +1,7 @@
 {
-	"pages.mainPage.name": "Light Control",
+	"pages.mainPage.name": "Room Control",
 	"Tap to set": "Tap to set",
-	"pages.mainPage.sections.controls.name": "Fan to control",
+	"pages.mainPage.sections.controls.name": "Main room control",
 	"pages.mainPage.settings.fan.name": "Switch controlling fan",
 	"pages.mainPage.sections.time.name": "Time window for running fan",
 	"pages.mainPage.settings.startTime.name": "Start time",
