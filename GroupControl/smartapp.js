@@ -8,16 +8,7 @@ module.exports = new SmartApp()
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
 
-        // prompts user to select a contact sensor
-        page.section('sensors', section => {
-            section
-                .deviceSetting('motionSensors')
-                .capabilities(['motionSensor'])
-                .required(true)
-                .multiple(true);
-        });
-
-        // prompts users to select one or more switch devices
+        // lights to control
         page.section('lights', section => {
             section
                 .deviceSetting('lights')
@@ -25,6 +16,22 @@ module.exports = new SmartApp()
                 .required(true)
                 .multiple(true)
                 .permissions('rx');
+        });
+
+        // contact sensor(s)
+        page.section('contact', section => {
+            section
+                .deviceSetting('contactSensors')
+                .capabilities(['contactSensor'])
+                .multiple(true);
+        });
+    
+        // motion sensor(s)
+        page.section('sensors', section => {
+            section
+                .deviceSetting('motionSensors')
+                .capabilities(['motionSensor'])
+                .multiple(true);
         });
 
         // optional turn-off delay after motions stops
@@ -41,11 +48,28 @@ module.exports = new SmartApp()
     .updated(async (context, updateData) => {
         await context.api.subscriptions.unsubscribeAll()
 
+        await context.api.subscriptions.subscribeToDevices(context.config.contactSensors,
+            'contactSensor', 'contact.open', 'contactOpenHandler')
+        await context.api.subscriptions.subscribeToDevices(context.config.contactSensors,
+            'contactSensor', 'contact.closed', 'contactClosedHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.active', 'motionStartHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.inactive', 'motionStopHandler');
-            console.log('END CREATING SUBSCRIPTIONS')
+        
+        console.log('END CREATING SUBSCRIPTIONS')
+    })
+
+    // Turn on the lights when door contact(s) closed
+    .subscribedEventHandler('contactClosedSensor', async (context, event) => {
+        console.log('DOOR(S) CLOSED, TURN ON LIGHTS')
+        // Turn on the lights
+        await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
+
+        // Delete any scheduled turn offs
+        if (context.configNumberValue('delay')) {
+            await context.api.schedules.delete('motionStopped');
+        }
     })
 
     // Turn on the lights when any motion sensor becomes active
