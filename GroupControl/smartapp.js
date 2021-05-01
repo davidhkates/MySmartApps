@@ -79,6 +79,14 @@ module.exports = new SmartApp()
     
         // If we make it here, turn on all lights in onGroup
         await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+    
+        // start timer to turn off lights if value specified
+        const delay = context.configNumberValue('delay')
+        if (delay) {
+            // Schedule turn off if delay is set
+            await context.api.schedules.runIn('motionStopped', delay)
+        }
+
         console.log("Turn on all lights on onGroup");
     })
 
