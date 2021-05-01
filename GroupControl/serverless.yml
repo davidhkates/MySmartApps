@@ -1,4 +1,4 @@
-service: room-control
+service: group-control
 
 package:
   patterns:
