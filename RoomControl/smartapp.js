@@ -60,15 +60,31 @@ module.exports = new SmartApp()
         console.log('END CREATING SUBSCRIPTIONS')
     })
 
-    // Turn on the lights when door contact(s) closed
+    // Turn on the lights when door contact is closed
     .subscribedEventHandler('contactClosedSensor', async (context, event) => {
-        console.log('DOOR(S) CLOSED, TURN ON LIGHTS')
+        console.log('DOOR CLOSED, TURN ON LIGHTS')
         // Turn on the lights
         await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
 
         // Delete any scheduled turn offs
         if (context.configNumberValue('delay')) {
             await context.api.schedules.delete('motionStopped');
+        }
+    })
+
+    // Turn off the lights when door contact is open
+    .subscribedEventHandler('contactOpenSensor', async (context, event) => {
+        console.log('DOOR OPEN, TURN OFF LIGHTS')
+        // Turn off the lights
+        await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
+
+        const delay = context.configNumberValue('delay')
+        if (delay) {
+            // Schedule turn off if delay is set
+            await context.api.schedules.runIn('motionStopped', delay)
+        } else {
+            // Turn off immediately if no delay
+            await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
         }
     })
 
