@@ -1,6 +1,6 @@
-# Group Control
+# Room Control
 
-Turns on and off groups of lights/switches from specified switch.
+Turns on and off lights using switch, motion sensor, and door contact sensor status
 
 ## File Structure
 
