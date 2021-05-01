@@ -102,6 +102,13 @@ module.exports = new SmartApp()
 
     // Turn off the lights only when all motion sensors become inactive
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
+        // Leave lights on if door is closed
+/*
+        if ( context.api.devices.getCapabilityStatus() ) { 
+            return
+        }
+*/
+    
         // See if there are other sensors
         const otherSensors =  context.config.motionSensors
             .filter(it => it.deviceConfig.deviceId !== event.deviceId)
