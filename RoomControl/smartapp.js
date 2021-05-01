@@ -18,12 +18,11 @@ module.exports = new SmartApp()
                 .permissions('rx');
         });
 
-        // contact sensor(s)
+        // door contact sensor
         page.section('contact', section => {
             section
-                .deviceSetting('contactSensors')
+                .deviceSetting('contactSensor')
                 .capabilities(['contactSensor'])
-                .multiple(true);
         });
     
         // motion sensor(s)
@@ -48,9 +47,9 @@ module.exports = new SmartApp()
     .updated(async (context, updateData) => {
         await context.api.subscriptions.unsubscribeAll()
 
-        await context.api.subscriptions.subscribeToDevices(context.config.contactSensors,
+        await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
             'contactSensor', 'contact.open', 'contactOpenHandler')
-        await context.api.subscriptions.subscribeToDevices(context.config.contactSensors,
+        await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
             'contactSensor', 'contact.closed', 'contactClosedHandler')
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.active', 'motionStartHandler')
@@ -100,17 +99,18 @@ module.exports = new SmartApp()
         }
     })
 
-    // Turn off the lights only when all motion sensors become inactive
+    // Turn off the lights when all motion sensors become inactive, unless door(s) are closed
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
         // Leave lights on if door is closed
-/*
-        if ( context.api.devices.getCapabilityStatus() ) { 
+
+        console.log('Checking room contact sensor');
+        if ( context.config.contactSensor.value === 'closed'  ) { 
             return
         }
-*/
+        console.log('Room door is closed');
     
-        // See if there are other sensors
-        const otherSensors =  context.config.motionSensors
+        // See if there are other motion sensors
+        const otherSensors = context.config.motionSensors
             .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
         if (otherSensors) {
