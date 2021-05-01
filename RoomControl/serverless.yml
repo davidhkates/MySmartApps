@@ -1,4 +1,4 @@
-service: light-control
+service: room-control
 
 package:
   patterns:
