@@ -102,7 +102,7 @@ module.exports = new SmartApp()
     .subscribedEventHandler('onGroupHandler', async (context, event) => {
         console.log("Turn on the main switch when a light in the on group is turned on");
         // Turn on the main switch when a light in the on group is turned on
-        await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+        // await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
 
     // Turn off the lights only when all motion sensors become inactive
