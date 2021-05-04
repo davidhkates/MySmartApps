@@ -122,7 +122,7 @@ module.exports = new SmartApp()
     // Turn off the lights when all motion sensors become inactive, unless door(s) are closed
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
         // Leave lights on if door is closed
-        console.log('Checking room contact sensor');
+        // console.log('Checking room contact sensor');
         if ( context.config.contactSensor.contact === 'closed'  ) { 
             return
         }
