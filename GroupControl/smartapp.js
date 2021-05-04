@@ -6,7 +6,16 @@ module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
     // .contextStore(contextStore)     // context store to persist room state
-
+    .contextStore(new DynamoDBContextStore(
+        {
+            AWSConfigJSON: {
+                accessKeyId: '<YOUR_ACCESS_KEY_ID>',
+                secretAccessKey: '<YOUR_SECRET_ACCESS_KEY>',
+                region: 'us-east-2'
+            }
+        }
+    )
+    
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
 
