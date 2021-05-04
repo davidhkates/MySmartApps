@@ -123,7 +123,7 @@ module.exports = new SmartApp()
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
         // Leave lights on if door is closed
         console.log('Checking room contact sensor');
-        if ( context.api.devices.contactSensor.value === 'closed'  ) { 
+        if ( context.config.contactSensor.contact === 'closed'  ) { 
             return
         }
         console.log('Room door is closed');
