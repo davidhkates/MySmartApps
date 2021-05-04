@@ -11,7 +11,7 @@ module.exports = new SmartApp()
             AWSConfigJSON: {
                 accessKeyId: '${{ secrets.AWS_ACCESS_KEY_ID }}',
                 secretAccessKey: '${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}',
-                region: 'us-east-2'
+                region: 'us-west-2'
             }
         }
     )
