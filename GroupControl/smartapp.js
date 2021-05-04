@@ -1,9 +1,11 @@
 const SmartApp   = require('@smartthings/smartapp');
+const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
+    .contextStore(contextStore)     // context store to persist room state
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
