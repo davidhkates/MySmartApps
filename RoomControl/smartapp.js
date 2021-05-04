@@ -1,21 +1,7 @@
 const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBContextStore = require('../lib/dynamodb-context-store')
 // store = new DynamoDBContextStore({client: testDynamoClient, autoCreate: false})
-const contextStore = new DynamoDBContextStore(
-    {
-/*
-        table: {
-            name: 'custom-table',   // defaults to 'smartapp'
-            hashKey: 'key1',        // defaults to 'id'
-            prefix: 'context',      // defaults to 'ctx'
-            readCapacityUnits: 10,  // defaults to 5, applies to automatic creation only
-            writeCapacityUnits: 10  // defaults to 5, applies to automatic creation only
-        },
-*/
-        AWSRegion: 'us-west-2',     // defaults to 'us-east-1'
-        autoCreate: true            // defaults to true
-    }
-)
+const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
