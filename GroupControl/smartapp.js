@@ -9,8 +9,8 @@ module.exports = new SmartApp()
     .contextStore(new DynamoDBContextStore(
         {
             AWSConfigJSON: {
-                accessKeyId: '<YOUR_ACCESS_KEY_ID>',
-                secretAccessKey: '<YOUR_SECRET_ACCESS_KEY>',
+                accessKeyId: '${{ secrets.AWS_ACCESS_KEY_ID }}',
+                secretAccessKey: '${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}',
                 region: 'us-east-2'
             }
         }
