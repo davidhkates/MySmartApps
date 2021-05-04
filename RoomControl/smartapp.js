@@ -61,7 +61,7 @@ module.exports = new SmartApp()
             'motionSensor', 'motion.inactive', 'motionStopHandler');
 
         // initialize context variables
-        // contextStore.put( context.appId );
+        // await contextStore.put( context.appId );
         console.log('END CREATING SUBSCRIPTIONS')
     })
 
