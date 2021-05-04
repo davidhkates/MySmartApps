@@ -15,7 +15,7 @@ const contextStore = new DynamoDBContextStore(
         AWSRegion: 'us-west-2',     // defaults to 'us-east-1'
         autoCreate: true            // defaults to true
     }
-))
+)
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -75,7 +75,7 @@ module.exports = new SmartApp()
             'motionSensor', 'motion.inactive', 'motionStopHandler');
 
         // initialize context variables
-        contextStore.put( context.appId );
+        // contextStore.put( context.appId );
         console.log('END CREATING SUBSCRIPTIONS')
     })
 
@@ -122,9 +122,8 @@ module.exports = new SmartApp()
     // Turn off the lights when all motion sensors become inactive, unless door(s) are closed
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
         // Leave lights on if door is closed
-
         console.log('Checking room contact sensor');
-        if ( context.config.contactSensor.value === 'closed'  ) { 
+        if ( context.api.devices.contactSensor.value === 'closed'  ) { 
             return
         }
         console.log('Room door is closed');
