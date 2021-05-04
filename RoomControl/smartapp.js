@@ -1,9 +1,27 @@
 const SmartApp   = require('@smartthings/smartapp');
+// const DynamoDBContextStore = require('../lib/dynamodb-context-store')
+// store = new DynamoDBContextStore({client: testDynamoClient, autoCreate: false})
+const contextStore = new DynamoDBContextStore(
+    {
+/*
+        table: {
+            name: 'custom-table',   // defaults to 'smartapp'
+            hashKey: 'key1',        // defaults to 'id'
+            prefix: 'context',      // defaults to 'ctx'
+            readCapacityUnits: 10,  // defaults to 5, applies to automatic creation only
+            writeCapacityUnits: 10  // defaults to 5, applies to automatic creation only
+        },
+*/
+        AWSRegion: 'us-west-2',     // defaults to 'us-east-1'
+        autoCreate: true            // defaults to true
+    }
+))
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
+    .contextStore(contextStore)     // context store to persist room state
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
@@ -48,14 +66,16 @@ module.exports = new SmartApp()
         await context.api.subscriptions.unsubscribeAll()
 
         await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
-            'contactSensor', 'contact.open', 'contactOpenHandler')
+            'contactSensor', 'contact.open', 'contactOpenHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
-            'contactSensor', 'contact.closed', 'contactClosedHandler')
+            'contactSensor', 'contact.closed', 'contactClosedHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-            'motionSensor', 'motion.active', 'motionStartHandler')
+            'motionSensor', 'motion.active', 'motionStartHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.inactive', 'motionStopHandler');
-        
+
+        // initialize context variables
+        contextStore.put( context.appId );
         console.log('END CREATING SUBSCRIPTIONS')
     })
 
