@@ -1,5 +1,5 @@
 const SmartApp   = require('@smartthings/smartapp');
-const DynamoDBStore = require('dynamodb-store');
+// const DynamoDBStore = require('dynamodb-store');
 const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
 
 const appId = process.env.APP_ID
