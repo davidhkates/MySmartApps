@@ -41,7 +41,7 @@ const contextStore = new DynamoDBContextStore({
 		name: tableName,
 		hashKey : "id"
 	},
-    	AWSRegion: 'us-west-2'
+    	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
 
