@@ -53,9 +53,9 @@ module.exports = new SmartApp()
         await context.api.subscriptions.unsubscribeAll()
 
         await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
-            'contactSensor', 'contact.open', 'contactOpenHandler');
+            'contactSensors', 'contact.open', 'contactOpenHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.contactSensor,
-            'contactSensor', 'contact.closed', 'contactClosedHandler');
+            'contactSensors', 'contact.closed', 'contactClosedHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.active', 'motionStartHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
