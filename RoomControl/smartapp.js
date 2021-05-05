@@ -25,8 +25,9 @@ module.exports = new SmartApp()
         // door contact sensor
         page.section('contact', section => {
             section
-                .deviceSetting('contactSensor')
+                .deviceSetting('contactSensors')
                 .capabilities(['contactSensor'])
+                .multiple(true)
         });
     
         // motion sensor(s)
@@ -34,7 +35,7 @@ module.exports = new SmartApp()
             section
                 .deviceSetting('motionSensors')
                 .capabilities(['motionSensor'])
-                .multiple(true);
+                .multiple(true)
         });
 
         // optional turn-off delay after motions stops
@@ -108,6 +109,25 @@ module.exports = new SmartApp()
     // Turn off the lights when all motion sensors become inactive, unless door(s) are closed
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
         // Leave lights on if door is closed
+        
+        if (contactSensors) {
+           if (otherSensors) {
+            // Get the current states of the other motion sensors
+            const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+                it.deviceConfig.deviceId,
+                it.deviceConfig.componentId,
+                'motionSensor'
+            ));
+
+            // Quit if there are other sensor still active
+            const states = await Promise.all(stateRequests)
+            if (states.find(it => it.motion.value === 'active')) {
+                return
+            }
+
+    
+    
+    
         // console.log('Checking room contact sensor');
         if ( context.config.contactSensor.contact === 'closed'  ) { 
             return
