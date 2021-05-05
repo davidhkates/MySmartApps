@@ -49,7 +49,42 @@ const contextStore = new DynamoDBContextStore({
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
-    // .contextStore(contextStore)     // context store to persist room state
+    .contextStore(contextStore)     // context store to persist room state
+
+
+
+
+/*
+ * Thew SmartApp. Provides an API for making REST calls to the SmartThings platform and
+ * handles calls from the platform for subscribed events as well as the initial app registration challenge.
+ */
+/*
+const apiApp = new SmartApp()
+	.appId(appId)
+	.clientId(clientId)
+	.clientSecret(clientSecret)
+	.contextStore(contextStore)
+	.redirectUri(redirectUri)
+	.subscribedEventHandler('switchHandler', async (ctx, event) => {
+		/* Device event handler. Current implementation only supports main component switches */
+/*
+		if (event.componentId === 'main') {
+			sse.send({
+				deviceId: event.deviceId,
+				switchState: event.value
+			})
+		}
+		console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
+	})
+*/
+
+
+
+
+
+
+
+
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
