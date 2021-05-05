@@ -51,6 +51,7 @@ module.exports = new SmartApp()
     .configureI18n()        // auto-create i18n files for localizing config pages
     .contextStore(contextStore)     // context store to persist room state
 
+    contextStore.put("123")	// test how to store context data
 
 
 
@@ -120,6 +121,8 @@ const apiApp = new SmartApp()
                 .required(false)
         });
     })
+
+    // 
 
     // Handler called whenever app is installed or updated
     // Called for both INSTALLED and UPDATED lifecycle events if there is
