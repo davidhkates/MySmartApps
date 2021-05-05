@@ -67,7 +67,7 @@ module.exports = new SmartApp()
     })
 
     // Turn on the lights when door contact is closed
-    .subscribedEventHandler('contactClosedSensor', async (context, event) => {
+    .subscribedEventHandler('contactClosedHandler', async (context, event) => {
         console.log('DOOR CLOSED, TURN ON LIGHTS')
         // Turn on the lights
         await context.api.devices.sendCommands(context.config.lights, 'switch', 'on');
@@ -79,7 +79,7 @@ module.exports = new SmartApp()
     })
 
     // Turn off the lights when door contact is open
-    .subscribedEventHandler('contactOpenSensor', async (context, event) => {
+    .subscribedEventHandler('contactOpenHandler', async (context, event) => {
         console.log('DOOR OPEN, TURN OFF LIGHTS')
         // Turn off the lights
         await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
