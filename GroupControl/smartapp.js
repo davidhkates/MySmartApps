@@ -51,7 +51,7 @@ module.exports = new SmartApp()
     .configureI18n()        // auto-create i18n files for localizing config pages
     .contextStore(contextStore)     // context store to persist room state
 
-    contextStore.put("123")	// test how to store context data
+    .put("123")	// test how to store context data
 
 
 
