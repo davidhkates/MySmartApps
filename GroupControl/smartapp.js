@@ -26,12 +26,14 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 /*
  * Persistent storage of session data in DynamoDB. Table will be automatically created if it doesn't already exist.
  */
+/*
 const sessionStore = new DynamoDBStore({
 	table: {
 		name: tableName,
 		hashKey : "id"
 	}
 })
+*/
 
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
