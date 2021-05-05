@@ -1,4 +1,7 @@
 const SmartApp   = require('@smartthings/smartapp');
+const DynamoDBStore = require('dynamodb-store');
+const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
+
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
 	table: {
