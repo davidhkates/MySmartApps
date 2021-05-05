@@ -78,13 +78,11 @@ module.exports = new SmartApp()
         }
     })
 
-    // Turn off the lights when door contact is open
+    // Turn off the lights when door contact is open after specified delay
     .subscribedEventHandler('contactOpenHandler', async (context, event) => {
         console.log('DOOR OPEN, TURN OFF LIGHTS')
-        // Turn off the lights
-        await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
-
-/*
+        // Turn off the lights after specified delay
+        // await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
         const delay = context.configNumberValue('delay')
         if (delay) {
             // Schedule turn off if delay is set
@@ -93,7 +91,6 @@ module.exports = new SmartApp()
             // Turn off immediately if no delay
             await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
         }
-*/
     })
 
     // Turn on the lights when any motion sensor becomes active
