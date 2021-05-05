@@ -2,13 +2,44 @@ const SmartApp   = require('@smartthings/smartapp');
 const DynamoDBStore = require('dynamodb-store');
 const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
 
+const appId = process.env.APP_ID
+const clientId = process.env.CLIENT_ID
+const clientSecret = process.env.CLIENT_SECRET
+const tableName = process.env.DYNAMODB_TABLE || 'api-app-subscription-example'
+// const serverUrl = process.env.SERVER_URL || `https://${process.env.PROJECT_DOMAIN}.glith.me`
+// const redirectUri =  `${serverUrl}/oauth/callback`
+// const scope = encodeUrl('r:locations:* r:devices:* x:devices:*');
+
+if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
+	console.log('\n***************************************************************************')
+	console.log('*** Please add AWS_REGION, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY ***')
+	console.log('*** entries to the .env file to run the server                          ***')
+	console.log('***************************************************************************')
+	return
+}
+
+/*
+ * Server-sent events. Used to update the status of devices on the web page from subscribed events
+ */
+// const sse = new SSE()
+
+/*
+ * Persistent storage of session data in DynamoDB. Table will be automatically created if it doesn't already exist.
+ */
+const sessionStore = new DynamoDBStore({
+	table: {
+		name: tableName,
+		hashKey : "id"
+	}
+})
+
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
 	table: {
 		name: tableName,
-		hashKey : 'id'
+		hashKey : "id"
 	},
-    AWSRegion: 'us-west-2'
+    	// AWSRegion: 'us-west-2'
 	autoCreate: false
 });
 
