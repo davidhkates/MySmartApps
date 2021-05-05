@@ -110,31 +110,24 @@ module.exports = new SmartApp()
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
         // Leave lights on if door is closed
         
-        if (contactSensors) {
-           if (otherSensors) {
-            // Get the current states of the other motion sensors
-            const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+        const doorSensors =  context.config.contactSensors;
+        if (doorSensors) {
+            // Get the current states of the door contact sensors
+            const stateRequests = doorSensors.map(it => context.api.devices.getCapabilityStatus(
                 it.deviceConfig.deviceId,
                 it.deviceConfig.componentId,
-                'motionSensor'
+                'contactSensor'
             ));
 
             // Quit if there are other sensor still active
             const states = await Promise.all(stateRequests)
-            if (states.find(it => it.motion.value === 'active')) {
+            if (states.find(it => it.motion.value === 'closed')) {
+            console.log('Room door is closed');
                 return
             }
-
-    
-    
-    
-        // console.log('Checking room contact sensor');
-        if ( context.config.contactSensor.contact === 'closed'  ) { 
-            return
         }
-        console.log('Room door is closed');
     
-        // See if there are other motion sensors
+        // Check to see if there are other motion sensors
         const otherSensors = context.config.motionSensors
             .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
