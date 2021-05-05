@@ -122,7 +122,7 @@ module.exports = new SmartApp()
 
             // Quit if there are other sensor still active
             const states = await Promise.all(stateRequests)
-            if (states.find(it => it.motion.value === 'closed')) {
+            if (states.find(it => it.contact.value === 'closed')) {
             console.log('Room door is closed');
                 return
             }
