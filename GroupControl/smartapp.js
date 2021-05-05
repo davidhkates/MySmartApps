@@ -51,9 +51,6 @@ module.exports = new SmartApp()
     .configureI18n()        // auto-create i18n files for localizing config pages
     .contextStore(contextStore)     // context store to persist room state
 
-    .put("123")	// test how to store context data
-
-
 
 /*
  * Thew SmartApp. Provides an API for making REST calls to the SmartThings platform and
@@ -78,12 +75,6 @@ const apiApp = new SmartApp()
 		console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
 	})
 */
-
-
-
-
-
-
 
 
 
@@ -128,7 +119,10 @@ const apiApp = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-        // console.log("MotionGroup: Installed/Updated");
+	// initialize context variable
+	await context.put("123");
+	
+	// console.log("MotionGroup: Installed/Updated");
         await context.api.subscriptions.unsubscribeAll();
 
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
