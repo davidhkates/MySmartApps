@@ -5,7 +5,7 @@ const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
 const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
-const tableName = process.env.DYNAMODB_TABLE || 'api-app-subscription-example'
+const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
 // const serverUrl = process.env.SERVER_URL || `https://${process.env.PROJECT_DOMAIN}.glith.me`
 // const redirectUri =  `${serverUrl}/oauth/callback`
 // const scope = encodeUrl('r:locations:* r:devices:* x:devices:*');
@@ -43,6 +43,9 @@ const contextStore = new DynamoDBContextStore({
 	},
     	AWSRegion: 'us-west-2',
 	autoCreate: false
+});
+
+const contextRecord = new contextRecord({
 });
 
 /* Define the SmartApp */
