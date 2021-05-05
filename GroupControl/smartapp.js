@@ -1,22 +1,19 @@
 const SmartApp   = require('@smartthings/smartapp');
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
+const contextStore = new DynamoDBContextStore({
+	table: {
+		name: tableName,
+		hashKey : 'id'
+	},
+    AWSRegion: 'us-west-2'
+	autoCreate: false
+});
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
     // .contextStore(contextStore)     // context store to persist room state
-/*
-    .contextStore(new DynamoDBContextStore(
-        {
-            AWSConfigJSON: {
-                accessKeyId: '${{ secrets.AWS_ACCESS_KEY_ID }}',
-                secretAccessKey: '${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}',
-                region: 'us-west-2'
-            }
-        }
-    )
-*/
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
