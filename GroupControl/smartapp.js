@@ -35,15 +35,33 @@ const sessionStore = new DynamoDBStore({
 })
 */
 
+const contextStore = new DynamoDBContextStore();
+/*
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
 	table: {
 		name: tableName,
 		hashKey : "id"
 	},
-    	AWSRegion: 'us-west-2',
+    	// AWSRegion: 'us-west-2',
+	AWSRegion: 'us-east-2',
 	autoCreate: false
 });
+
+smartapp.contextStore(new DynamoDBContextStore(
+    {
+        table: {
+            name: 'custom-table',   // defaults to 'smartapp'
+            hashKey: 'key1',        // defaults to 'id'
+            prefix: 'context',      // defaults to 'ctx'
+            readCapacityUnits: 10,  // defaults to 5, applies to automatic creation only
+            writeCapacityUnits: 10  // defaults to 5, applies to automatic creation only
+        },
+        AWSRegion: 'us-east-2',     // defaults to 'us-east-1'
+        autoCreate: true            // defaults to true
+    }
+))
+*/
 
 /*
 const contextRecord = JSON.stringify({
