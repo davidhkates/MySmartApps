@@ -46,12 +46,12 @@ const contextStore = new DynamoDBContextStore({
 });
 
 const contextRecord = JSON.stringify({
-  "installedAppId": "b643d57e-e2eb-40e4-b2ef-ff43519941cc",
+  "installedAppId": "27db1e27-1b8b-47e7-a476-b978fb7ebfb5",
   "locationId": "8ea7ab21-932d-4256-80c6-abc53932dd3a",
   "authToken": "f4b3b75c-091f-4b31-9833-7b52fe875ffb",
   "refreshToken": "e980829a-9763-4105-b986-2d94114b1e80",
-  "clientId": "12475d16-ec68-490a-a708-6d390c112c7c",
-  "clientSecret": "2888d8f4-88b6-4741-a98e-54a267e6373b",
+  "clientId": "b0e85683-4f06-4cfd-8cdf-3ecdda60dbc0",
+  "clientSecret": "8ca75fde-9f84-4cf5-ad16-e8b5275fefd1",
   "config": {
     "scenes": [
       {
