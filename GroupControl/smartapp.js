@@ -18,7 +18,28 @@ docClient.get(params, function(err, data) {
 });
 
 */
+
 const SmartApp   = require('@smartthings/smartapp');
+
+// Import required AWS SDK clients and commands for Node.js
+const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+
+// Set the AWS Region
+const REGION = "us-west-2"; //e.g. "us-east-1"
+
+// Create DynamoDB service object
+const dbclient = new DynamoDBClient({ region: REGION });
+
+// Set the parameters
+const params = {
+  TableName: 'smartapp-context-store',
+  Key: {
+    ID: { N: 1 },
+  },
+  ProjectionExpression: 'main-switch-pressed',
+};
+
+/*
 const DynamoDBStore = require('dynamodb-store');
 const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
 
@@ -37,6 +58,7 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('***************************************************************************')
 	return
 }
+*/
 
 /*
  * Server-sent events. Used to update the status of devices on the web page from subscribed events
@@ -46,6 +68,7 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 /*
  * Persistent storage of session data in DynamoDB. Table will be automatically created if it doesn't already exist.
  */
+/*
 const sessionStore = new DynamoDBStore({
 	table: {
 		name: tableName,
@@ -63,6 +86,7 @@ const contextStore = new DynamoDBContextStore({
     	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
+*/
 
 /*
 smartapp.contextStore(new DynamoDBContextStore(
@@ -212,7 +236,10 @@ const apiApp = new SmartApp()
 
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
-  
+	// Get session state variable to see if button was manually pressed
+  	const data = await dbclient.send(new GetItemCommand(params));
+  	console.log("Success", data.Item);
+
 /*
         // Turn on the lights in the on group if they are all off
         const roomSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
