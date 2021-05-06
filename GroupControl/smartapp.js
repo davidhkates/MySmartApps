@@ -46,6 +46,38 @@ const contextStore = new DynamoDBContextStore({
 });
 
 const contextRecord = new contextRecord({
+  "installedAppId": "b643d57e-e2eb-40e4-b2ef-ff43519941cc",
+  "locationId": "8ea7ab21-932d-4256-80c6-abc53932dd3a",
+  "authToken": "f4b3b75c-091f-4b31-9833-7b52fe875ffb",
+  "refreshToken": "e980829a-9763-4105-b986-2d94114b1e80",
+  "clientId": "12475d16-ec68-490a-a708-6d390c112c7c",
+  "clientSecret": "2888d8f4-88b6-4741-a98e-54a267e6373b",
+  "config": {
+    "scenes": [
+      {
+        "valueType": "STRING",
+        "stringConfig": {
+          "value": "true"
+        }
+      }
+    ],
+    "switches": [
+      {
+        "valueType": "STRING",
+        "stringConfig": {
+          "value": "true"
+        }
+      }
+    ],
+    "locks": [
+      {
+        "valueType": "STRING",
+        "stringConfig": {
+          "value": "true"
+        }
+      }
+    ]
+  }
 });
 
 /* Define the SmartApp */
