@@ -155,7 +155,7 @@ const apiApp = new SmartApp()
     // no separate installed() handler
     .updated(async (context, updateData) => {
 	// initialize context variable
-	await context.put(contextRecord);
+	// await context.put(contextRecord);
 	
 	// console.log("MotionGroup: Installed/Updated");
         await context.api.subscriptions.unsubscribeAll();
