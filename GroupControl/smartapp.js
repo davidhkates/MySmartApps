@@ -45,6 +45,7 @@ const contextStore = new DynamoDBContextStore({
 	autoCreate: false
 });
 
+/*
 const contextRecord = JSON.stringify({
   "installedAppId": "27db1e27-1b8b-47e7-a476-b978fb7ebfb5",
   "locationId": "8ea7ab21-932d-4256-80c6-abc53932dd3a",
@@ -79,6 +80,7 @@ const contextRecord = JSON.stringify({
     ]
   }
 });
+*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -110,7 +112,6 @@ const apiApp = new SmartApp()
 		console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
 	})
 */
-
 
 
     // Configuration page definition
