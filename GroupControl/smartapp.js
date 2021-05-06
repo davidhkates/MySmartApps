@@ -35,19 +35,18 @@ const sessionStore = new DynamoDBStore({
 })
 */
 
-const contextStore = new DynamoDBContextStore();
-/*
+// const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
 	table: {
 		name: tableName,
 		hashKey : "id"
 	},
-    	// AWSRegion: 'us-west-2',
-	AWSRegion: 'us-east-2',
+    	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
 
+/*
 smartapp.contextStore(new DynamoDBContextStore(
     {
         table: {
@@ -104,7 +103,7 @@ const contextRecord = JSON.stringify({
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
-    .contextStore(contextStore)     // context store to persist room state
+    // .contextStore(contextStore)     // context store to persist room state
 
 
 /*
