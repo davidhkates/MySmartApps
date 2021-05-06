@@ -86,7 +86,7 @@ const contextRecord = JSON.stringify({
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
-    // .contextStore(contextStore)     // context store to persist room state
+    .contextStore(contextStore)     // context store to persist room state
 
 
 /*
@@ -157,6 +157,7 @@ const apiApp = new SmartApp()
     .updated(async (context, updateData) => {
 	// initialize context variable
 	// await context.put(contextRecord);
+	// context.put(context.config.
 	
 	// console.log("MotionGroup: Installed/Updated");
         await context.api.subscriptions.unsubscribeAll();
