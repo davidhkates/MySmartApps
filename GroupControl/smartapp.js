@@ -1,5 +1,25 @@
+/*
+
+const AWS = require('aws-sdk');
+AWS.config.update({region: 'us-west-2'});
+const stateDB = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+
+var params = {
+ TableName: 'smartapp-state-variables',
+ Key: {'KEY_NAME': VALUE}
+};
+
+docClient.get(params, function(err, data) {
+  if (err) {
+    console.log("Error", err);
+  } else {
+    console.log("Success", data.Item);
+  }
+});
+
+*/
 const SmartApp   = require('@smartthings/smartapp');
-// const DynamoDBStore = require('dynamodb-store');
+const DynamoDBStore = require('dynamodb-store');
 const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
 
 const appId = process.env.APP_ID
@@ -26,14 +46,12 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 /*
  * Persistent storage of session data in DynamoDB. Table will be automatically created if it doesn't already exist.
  */
-/*
 const sessionStore = new DynamoDBStore({
 	table: {
 		name: tableName,
 		hashKey : "id"
 	}
 })
-*/
 
 // const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
