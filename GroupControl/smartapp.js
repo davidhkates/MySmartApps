@@ -4,13 +4,14 @@ const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
-const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
-// const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
+const { DynamoDBClientGet, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClientPut, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
 const dynamodb = new DynamoDB({ region: REGION });
-const dbclient = new DynamoDBClient({ region: REGION });
+const dbclientGet = new DynamoDBClientGet({ region: REGION });
+const dbclientPut = new DynamoDBClientPut({ region: REGION });
 
 // Set the parameters
 const params = {
@@ -176,7 +177,7 @@ module.exports = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	console.log("Calling DynamoDB store");
-  	const data = await dbclient.send(new GetItemCommand(params));
+  	const data = await dbclientGet.send(new GetItemCommand(params));
 	
 	/*
 	try {
