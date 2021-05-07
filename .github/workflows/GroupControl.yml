@@ -32,8 +32,8 @@ jobs:
       run: |
         npm ci
         npm run build --if-present
-        env:
-          CI: true    
+#        env:
+#          CI: true    
 
     - name: serverless deploy
       uses: serverless/github-action@master
