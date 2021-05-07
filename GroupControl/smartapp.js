@@ -1,7 +1,7 @@
 
 const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBStore = require('dynamodb-store');
-// const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
+const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
@@ -17,7 +17,7 @@ const params = {
   ProjectionExpression: 'mainSwitchPressed',
 };
 
-/*
+
 const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
@@ -47,13 +47,13 @@ const contextStore = new DynamoDBContextStore({
     	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
-*/
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
-    // .contextStore(contextStore)     // context store to persist room state
+    .contextStore(contextStore)     // context store to persist room state
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
@@ -123,7 +123,7 @@ module.exports = new SmartApp()
 	// console.log("Context object: ", JSON.stringify(context));
 	
 	// data = await contextStore.get(context.appId);
-	console.log("Success (context store): ", data.Item);
+	// console.log("Success (context store): ", data.Item);
 	
 /*
         // Turn on the lights in the on group if they are all off
