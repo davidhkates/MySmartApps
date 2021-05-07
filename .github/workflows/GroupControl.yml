@@ -35,12 +35,10 @@ jobs:
 #        env:
 #          CI: true    
 
-    - name: serverless deploy
-      uses: serverless/github-action@master
-#      uses: serverless/GroupControl@master
-#      working-directory: ${{ env.working-directory }}
-      with:
-        args: deploy
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+#    - name: serverless deploy
+#      uses: serverless/github-action@master
+#      with:
+#        args: deploy
+#      env:
+#        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+#        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
