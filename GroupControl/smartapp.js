@@ -89,11 +89,24 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	// initialize context variable
+	// initialize context variable(s)
+/*
 	console.log("Adding new state variable to context object");
 	context.mainSwitchPressed = true;
 	console.log("SUCCESS - added new state variable to context object");
+*/
 	
+	// Set the parameters
+	const params = {
+  		TableName: 'smartapp-context-store',
+		Item: {
+			id: { N: 2 },
+			appId: { S: context.event.appId },
+		}
+	};
+    	const data = await dbclient.send(new PutItemCommand(params));
+    	console.log("PutItemCommand response: ",data);
+
 	// await context.put(contextRecord);
 	// context.put(context.config.
 	
