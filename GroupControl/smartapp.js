@@ -110,6 +110,7 @@ module.exports = new SmartApp()
     	console.log("PutItemCommand response: ",data);
 */
 
+/*
 	const input = {
     		id: 2,
 		appId: context.event.appId
@@ -125,7 +126,8 @@ module.exports = new SmartApp()
 	} catch(err) {
 	        console.log('Error', err)}
 	}
-	    
+*/
+	
 	// await context.put(contextRecord);
 	// context.put(context.config.
 	
