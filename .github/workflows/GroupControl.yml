@@ -36,7 +36,8 @@ jobs:
 #          CI: true    
 
     - name: serverless deploy
-      uses: serverless/github-action@master
+#      uses: serverless/github-action@master
+      uses: serverless/${{env.working-directory}}@master
 #      working-directory: ${{ env.working-directory }}
       with:
         args: deploy
