@@ -9,7 +9,8 @@ const SmartApp   = require('@smartthings/smartapp');
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
-const dbclient = new DynamoDBClient({ region: REGION });
+const dynamodb = new DynamoDB({ region: REGION });
+// const dbclient = new DynamoDBClient({ region: REGION });
 
 // Set the parameters
 const params = {
@@ -112,7 +113,7 @@ module.exports = new SmartApp()
 
 	const input = {
     		id: '2',
-		// appId: context.event.appId     ${event.deviceId}
+		appId: context.event.appId     // ${event.deviceId}
 	};
 	
 	// Marshall util converts then JavaScript object to DynamoDB format
@@ -120,7 +121,7 @@ module.exports = new SmartApp()
 	
 	// write to DynamoDB table
 	try {
-	        const data = await dbclient.putItem({ 'smartapp-context-store', Item });
+	        const data = await dynamodb.putItem({ 'smartapp-context-store', Item });
         	console.log('Success - put')
 	} catch(err) {
 		console.log('Error', err)
