@@ -4,8 +4,10 @@ const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
-const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
-const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+// const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+// const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
 const dbclient = new DynamoDBClient({ region: REGION });
 
@@ -95,8 +97,7 @@ module.exports = new SmartApp()
 	console.log("Adding new state variable to context object");
 	context.mainSwitchPressed = true;
 	console.log("SUCCESS - added new state variable to context object");
-*/
-	
+
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -107,7 +108,24 @@ module.exports = new SmartApp()
 	};
     	const data = await dbclient.send(new PutItemCommand(params));
     	console.log("PutItemCommand response: ",data);
+*/
 
+	const input = {
+    		id: 2,
+		appId: context.event.appId
+	};
+	
+	// Marshall util converts then JavaScript object to DynamoDB format
+	const Item = marshall(input);
+	
+	// write to DynamoDB table
+	try {
+	        const data = await client.putItem({ 'smartapp-context-store', Item });
+        	console.log('Success - put')
+	} catch(err) {
+	        console.log('Error', err)}
+	}
+	    
 	// await context.put(contextRecord);
 	// context.put(context.config.
 	
