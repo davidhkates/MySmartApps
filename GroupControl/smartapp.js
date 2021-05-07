@@ -244,8 +244,11 @@ const apiApp = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
   	const data = await dbclient.send(new GetItemCommand(params));
-  	console.log("Success", data.Item);
-
+  	console.log("Success (dbClient): ", data.Item);
+	
+	// data = await contextStore.get(context.appId);
+	console.log("Success (context store): ", data.Item);
+	
 /*
         // Turn on the lights in the on group if they are all off
         const roomSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
