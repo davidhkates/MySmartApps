@@ -123,7 +123,7 @@ module.exports = new SmartApp()
 	        const data = await dbclient.putItem({ 'smartapp-context-store', Item });
         	console.log('Success - put')
 	} catch(err) {
-	        console.log('Error', err)}
+	        console.log('Error', err)
 	}
 	
 	// await context.put(contextRecord);
