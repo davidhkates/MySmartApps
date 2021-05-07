@@ -5,6 +5,7 @@ const SmartApp   = require('@smartthings/smartapp');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
 const dbclient = new DynamoDBClient({ region: REGION });
 
