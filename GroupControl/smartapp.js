@@ -122,7 +122,7 @@ module.exports = new SmartApp()
 	console.log("Calling DynamoDB store");
   	const data = await dbclient.send(new GetItemCommand(params));
   	console.log("Success (dbClient): ", data.Item);
-	// console.log("Context object: ", JSON.stringify(context));
+	console.log("Context object: ", JSON.stringify(context));
 	
 	// data = await contextStore.get(context.appId);
 	// console.log("Success (context store): ", data.Item);
