@@ -111,8 +111,8 @@ module.exports = new SmartApp()
 */
 
 	const input = {
-    		id: 2,
-		appId: context.event.appId
+    		id: '2',
+		// appId: context.event.appId     ${event.deviceId}
 	};
 	
 	// Marshall util converts then JavaScript object to DynamoDB format
@@ -120,7 +120,7 @@ module.exports = new SmartApp()
 	
 	// write to DynamoDB table
 	try {
-	        // const data = await dbclient.putItem({ 'smartapp-context-store', Item });
+	        const data = await dbclient.putItem({ 'smartapp-context-store', Item });
         	console.log('Success - put')
 	} catch(err) {
 		console.log('Error', err)
