@@ -89,7 +89,7 @@ module.exports = new SmartApp()
     // no separate installed() handler
     .updated(async (context, updateData) => {
 	// initialize context variable
-	context.state.mainSwitchPressed = true;
+	context.mainSwitchPressed = true;
 	
 	// await context.put(contextRecord);
 	// context.put(context.config.
