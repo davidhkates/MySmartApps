@@ -34,17 +34,12 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 // const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
-	table: {
-		name: tableName,
-		hashKey : "id"
-		sortKey: {
-                	AttributeName: 'sk',
-                	AttributeType: 'S',
-                	AttributeValue: 'context',
-                	KeyType: 'RANGE'
-            	}
+        table: {
+            name: tableName,
+            hashKey: 'id', 
+            // sortKey: 'sk'
         },
-    	AWSRegion: 'us-west-2',
+	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
 
