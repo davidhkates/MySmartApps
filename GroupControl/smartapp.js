@@ -1,7 +1,7 @@
 
 const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBStore = require('dynamodb-store');
-const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
+// const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
@@ -17,6 +17,7 @@ const params = {
   ProjectionExpression: 'mainSwitchPressed',
 };
 
+/*
 const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
@@ -46,6 +47,7 @@ const contextStore = new DynamoDBContextStore({
     	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
+*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -88,8 +90,6 @@ module.exports = new SmartApp()
         });
     })
 
-    // 
-
     // Handler called whenever app is installed or updated
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
@@ -120,7 +120,7 @@ module.exports = new SmartApp()
 	console.log("Calling DynamoDB store");
   	const data = await dbclient.send(new GetItemCommand(params));
   	console.log("Success (dbClient): ", data.Item);
-	console.log("Context object: ", JSON.stringify(context));
+	// console.log("Context object: ", JSON.stringify(context));
 	
 	// data = await contextStore.get(context.appId);
 	console.log("Success (context store): ", data.Item);
