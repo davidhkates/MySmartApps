@@ -18,7 +18,6 @@ const params = {
 };
 
 
-/*
 const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
@@ -32,6 +31,7 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	return
 }
 
+/*
 // const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
