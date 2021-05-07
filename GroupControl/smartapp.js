@@ -139,7 +139,7 @@ module.exports = new SmartApp()
 */
 
 	const input = {
-    		id: '2',
+    		id: 2
 		appId: context.event.appId     // ${event.deviceId}
 	};
 	
