@@ -10,8 +10,9 @@ const { DynamoDBClientGet, GetItemCommand } = require("@aws-sdk/client-dynamodb"
 const { DynamoDBClientPut, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
 // const dynamodb = new DynamoDB({ region: REGION });
-const dbclientGet = new DynamoDBClientGet({ region: REGION });
-const dbclientPut = new DynamoDBClientPut({ region: REGION });
+// const dbclientGet = new DynamoDBClientGet({ region: REGION });
+// const dbclientPut = new DynamoDBClientPut({ region: REGION });
+const dbclient = new DynamoDBClient({ region: REGION });
 
 // Set the parameters
 const params = {
@@ -166,7 +167,7 @@ module.exports = new SmartApp()
 	};
 	
 	try {
-    		const data = await dbclientPut.send(new PutItemCommand(params));
+    		const data = await dbclient.send(new PutItemCommand(params));
     		console.log(data);
   	} catch (err) {
     		console.error(err);
@@ -195,7 +196,7 @@ module.exports = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	console.log("Calling DynamoDB store");
-  	const data = await dbclientGet.send(new GetItemCommand(params));
+  	const data = await dbclient.send(new GetItemCommand(params));
 	
 	/*
 	try {
