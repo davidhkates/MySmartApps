@@ -4,12 +4,12 @@ const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
-const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
+// const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
+// const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const { DynamoDBClientGet, GetItemCommand } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBClientPut, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
-const dynamodb = new DynamoDB({ region: REGION });
+// const dynamodb = new DynamoDB({ region: REGION });
 const dbclientGet = new DynamoDBClientGet({ region: REGION });
 const dbclientPut = new DynamoDBClientPut({ region: REGION });
 
@@ -137,7 +137,8 @@ module.exports = new SmartApp()
     	const data = await dbclient.send(new PutItemCommand(params));
     	console.log("PutItemCommand response: ",data);
 */
-
+	
+/*
 	const input = {
     		id: '2'
 		// appId: context.event.appId     // ${event.deviceId}
@@ -153,6 +154,23 @@ module.exports = new SmartApp()
 	} catch(err) {
 		console.log('Error', err)
 	}
+*/
+	
+	// Set the parameters
+	const params = {
+  		TableName: 'smartapp-context-store',
+  		Item: {
+	    		id: { S: "2" },		// N: "2"
+    			appId: { S: context.event.appId },
+  		},
+	};
+	
+	try {
+    		const data = await dbclientPut.send(new PutItemCommand(params));
+    		console.log(data);
+  	} catch (err) {
+    		console.error(err);
+  	}
 	
 	// await context.put(contextRecord);
 	// context.put(context.config.
