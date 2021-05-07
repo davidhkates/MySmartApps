@@ -36,7 +36,7 @@ const params = {
   Key: {
     id: { S: '1' },
   },
-  ProjectionExpression: 'main-switch-pressed',
+  ProjectionExpression: 'mainSwitchPressed',
 };
 
 /*
