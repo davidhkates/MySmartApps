@@ -243,6 +243,7 @@ const apiApp = new SmartApp()
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
+	console.log("Calling DynamoDB store");
   	const data = await dbclient.send(new GetItemCommand(params));
   	console.log("Success (dbClient): ", data.Item);
 	
