@@ -1,33 +1,11 @@
-/*
-
-const AWS = require('aws-sdk');
-AWS.config.update({region: 'us-west-2'});
-const stateDB = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-
-var params = {
- TableName: 'smartapp-state-variables',
- Key: {'KEY_NAME': VALUE}
-};
-
-docClient.get(params, function(err, data) {
-  if (err) {
-    console.log("Error", err);
-  } else {
-    console.log("Success", data.Item);
-  }
-});
-
-*/
 
 const SmartApp   = require('@smartthings/smartapp');
+// const DynamoDBStore = require('dynamodb-store');
+const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
 
-// Import required AWS SDK clients and commands for Node.js
+// Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
-
-// Set the AWS Region
 const REGION = "us-west-2"; //e.g. "us-east-1"
-
-// Create DynamoDB service object
 const dbclient = new DynamoDBClient({ region: REGION });
 
 // Set the parameters
@@ -39,17 +17,10 @@ const params = {
   ProjectionExpression: 'mainSwitchPressed',
 };
 
-/*
-const DynamoDBStore = require('dynamodb-store');
-const DynamoDBContextStore = require('@smartthings/dynamodb-context-store')
-
 const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
-// const serverUrl = process.env.SERVER_URL || `https://${process.env.PROJECT_DOMAIN}.glith.me`
-// const redirectUri =  `${serverUrl}/oauth/callback`
-// const scope = encodeUrl('r:locations:* r:devices:* x:devices:*');
 
 if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('\n***************************************************************************')
@@ -58,23 +29,6 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('***************************************************************************')
 	return
 }
-*/
-
-/*
- * Server-sent events. Used to update the status of devices on the web page from subscribed events
- */
-// const sse = new SSE()
-
-/*
- * Persistent storage of session data in DynamoDB. Table will be automatically created if it doesn't already exist.
- */
-/*
-const sessionStore = new DynamoDBStore({
-	table: {
-		name: tableName,
-		hashKey : "id"
-	}
-})
 
 // const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
@@ -92,92 +46,12 @@ const contextStore = new DynamoDBContextStore({
     	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
-*/
-
-/*
-smartapp.contextStore(new DynamoDBContextStore(
-    {
-        table: {
-            name: 'custom-table',   // defaults to 'smartapp'
-            hashKey: 'key1',        // defaults to 'id'
-            prefix: 'context',      // defaults to 'ctx'
-            readCapacityUnits: 10,  // defaults to 5, applies to automatic creation only
-            writeCapacityUnits: 10  // defaults to 5, applies to automatic creation only
-        },
-        AWSRegion: 'us-east-2',     // defaults to 'us-east-1'
-        autoCreate: true            // defaults to true
-    }
-))
-*/
-
-/*
-const contextRecord = JSON.stringify({
-  "installedAppId": "27db1e27-1b8b-47e7-a476-b978fb7ebfb5",
-  "locationId": "8ea7ab21-932d-4256-80c6-abc53932dd3a",
-  "authToken": "f4b3b75c-091f-4b31-9833-7b52fe875ffb",
-  "refreshToken": "e980829a-9763-4105-b986-2d94114b1e80",
-  "clientId": "b0e85683-4f06-4cfd-8cdf-3ecdda60dbc0",
-  "clientSecret": "8ca75fde-9f84-4cf5-ad16-e8b5275fefd1",
-  "config": {
-    "scenes": [
-      {
-        "valueType": "STRING",
-        "stringConfig": {
-          "value": "true"
-        }
-      }
-    ],
-    "switches": [
-      {
-        "valueType": "STRING",
-        "stringConfig": {
-          "value": "true"
-        }
-      }
-    ],
-    "locks": [
-      {
-        "valueType": "STRING",
-        "stringConfig": {
-          "value": "true"
-        }
-      }
-    ]
-  }
-});
-*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
     // .contextStore(contextStore)     // context store to persist room state
-
-
-/*
- * Thew SmartApp. Provides an API for making REST calls to the SmartThings platform and
- * handles calls from the platform for subscribed events as well as the initial app registration challenge.
- */
-/*
-const apiApp = new SmartApp()
-	.appId(appId)
-	.clientId(clientId)
-	.clientSecret(clientSecret)
-	.contextStore(contextStore)
-	.redirectUri(redirectUri)
-	.subscribedEventHandler('switchHandler', async (ctx, event) => {
-		/* Device event handler. Current implementation only supports main component switches */
-/*
-		if (event.componentId === 'main') {
-			sse.send({
-				deviceId: event.deviceId,
-				switchState: event.value
-			})
-		}
-		console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
-	})
-*/
-
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
@@ -246,6 +120,7 @@ const apiApp = new SmartApp()
 	console.log("Calling DynamoDB store");
   	const data = await dbclient.send(new GetItemCommand(params));
   	console.log("Success (dbClient): ", data.Item);
+	console.log("Context object: ", JSON.stringify(context));
 	
 	// data = await contextStore.get(context.appId);
 	console.log("Success (context store): ", data.Item);
@@ -324,6 +199,12 @@ const apiApp = new SmartApp()
             await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
         }
     })
+
+/*
+    .subscribedEventHandler('switchHandler', async (ctx, event) => {
+	console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
+    })
+*/
 
     // Turns off lights after delay elapses
     .scheduledEventHandler('motionStopped', async (context, event) => {
