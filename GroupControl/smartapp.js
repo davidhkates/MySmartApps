@@ -139,8 +139,8 @@ module.exports = new SmartApp()
 */
 
 	const input = {
-    		id: 2
-		appId: context.event.appId     // ${event.deviceId}
+    		id: '2'
+		// appId: context.event.appId     // ${event.deviceId}
 	};
 	
 	// Marshall util converts then JavaScript object to DynamoDB format
