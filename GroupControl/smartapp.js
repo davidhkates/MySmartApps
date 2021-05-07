@@ -119,12 +119,12 @@ module.exports = new SmartApp()
 	const Item = marshall(input);
 	
 	// write to DynamoDB table
-	// try {
-	        const data = await dbclient.putItem({ 'smartapp-context-store', Item });
-        //	console.log('Success - put')
-	// } catch(err) {
-	//        console.log('Error', err)
-	// }
+	try {
+	        // const data = await dbclient.putItem({ 'smartapp-context-store', Item });
+        	console.log('Success - put')
+	} catch(err) {
+		console.log('Error', err)
+	}
 	
 	// await context.put(contextRecord);
 	// context.put(context.config.
