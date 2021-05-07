@@ -1,11 +1,11 @@
 
 const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBStore = require('dynamodb-store');
-const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
+// const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
-const REGION = "us-west-2"; //e.g. "us-east-1"
+const REGION = 'us-west-2'; //e.g. "us-east-1"
 const dbclient = new DynamoDBClient({ region: REGION });
 
 // Set the parameters
@@ -17,7 +17,7 @@ const params = {
   ProjectionExpression: 'mainSwitchPressed',
 };
 
-
+/*
 const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
@@ -42,12 +42,13 @@ const contextStore = new DynamoDBContextStore({
 	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
+*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
-    .contextStore(contextStore)     // context store to persist room state
+    // .contextStore(contextStore)     // context store to persist room state
 
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
@@ -89,7 +90,9 @@ module.exports = new SmartApp()
     // no separate installed() handler
     .updated(async (context, updateData) => {
 	// initialize context variable
+	console.log("Adding new state variable to context object");
 	context.mainSwitchPressed = true;
+	console.log("SUCCESS - added new state variable to context object");
 	
 	// await context.put(contextRecord);
 	// context.put(context.config.
@@ -118,6 +121,7 @@ module.exports = new SmartApp()
   	console.log("Success (dbClient): ", data.Item);
 	// console.log("Context object: ", JSON.stringify(context, censor(context)));
 	console.log("Context object: ", context);
+	console.log("appId: ", context.event.appId);
 	
 	// data = await contextStore.get(context.appId);
 	// console.log("Success (context store): ", data.Item);
