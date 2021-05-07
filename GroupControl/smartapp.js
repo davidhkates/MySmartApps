@@ -34,7 +34,7 @@ const dbclient = new DynamoDBClient({ region: REGION });
 const params = {
   TableName: 'smartapp-context-store',
   Key: {
-    ID: { N: 1 },
+    id: { S: '1' },
   },
   ProjectionExpression: 'main-switch-pressed',
 };
