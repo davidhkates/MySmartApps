@@ -4,13 +4,13 @@ const SmartApp   = require('@smartthings/smartapp');
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
-// const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
+const { DynamoDBClient, GetItemCommand } = require("@aws-sdk/client-dynamodb");
 // const { DynamoDBClient, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
 const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
 const dynamodb = new DynamoDB({ region: REGION });
-// const dbclient = new DynamoDBClient({ region: REGION });
+const dbclient = new DynamoDBClient({ region: REGION });
 
 // Set the parameters
 const params = {
@@ -20,6 +20,32 @@ const params = {
   },
   ProjectionExpression: 'mainSwitchPressed',
 };
+
+/*
+/ Set the parameters
+const params = {
+  TableName: "TABLE_NAME",
+  // Convert the key JavaScript object you are deleting to the required DynamoDB format. The format of values
+  // specifies the datatype. The following list demonstrates different datatype formatting requirements:
+  // HashKey: "hashKey",
+  // NumAttribute: 1,
+  // BoolAttribute: true,
+  // ListAttribute: [1, "two", false],
+  // MapAttribute: { foo: "bar" },
+  // NullAttribute: null
+  Key: marshall({
+    primaryKey: VALUE, // For example, "Season: 2"
+    sortKey: VALUE, // For example,  "Episode: 1" (only required if table has sort key)
+  }),
+  // Define expressions for the new or updated attributes
+  UpdateExpression: "set ATTRIBUTE_NAME_1 = :t, ATTRIBUTE_NAME_2 = :s", // For example, "'set Title = :t, Subtitle = :s'"
+  // Convert the attribute JavaScript object you are deleting to the required DynamoDB format
+  ExpressionAttributeValues: marshall({
+    ":t": NEW_ATTRIBUTE_VALUE_1, // For example "':t' : 'NEW_TITLE'"
+    ":s": NEW_ATTRIBUTE_VALUE_2, // For example " ':s' : 'NEW_SUBTITLE'"
+  }),
+};
+*/
 
 /*
 const appId = process.env.APP_ID
@@ -151,6 +177,16 @@ module.exports = new SmartApp()
 	// Get session state variable to see if button was manually pressed
 	console.log("Calling DynamoDB store");
   	const data = await dbclient.send(new GetItemCommand(params));
+	
+	/*
+	try {
+    		const { Item } = await client.updateItem(params);
+    		console.log("Success - updated");
+  	} catch (err) {
+    		console.log("Error", err);
+  	}
+	*/
+	
   	console.log("Success (dbClient): ", data.Item);
 	// console.log("Context object: ", JSON.stringify(context, censor(context)));
 	console.log("Context object: ", context);
