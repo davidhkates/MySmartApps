@@ -82,7 +82,13 @@ const contextStore = new DynamoDBContextStore({
 	table: {
 		name: tableName,
 		hashKey : "id"
-	},
+		sortKey: {
+                	AttributeName: 'sk',
+                	AttributeType: 'S',
+                	AttributeValue: 'context',
+                	KeyType: 'RANGE'
+            	}
+        },
     	AWSRegion: 'us-west-2',
 	autoCreate: false
 });
