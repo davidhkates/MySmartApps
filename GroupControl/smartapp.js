@@ -1,42 +1,15 @@
 const SmartApp   = require('@smartthings/smartapp');
-const stateVariable = require('./state-variable');
+// const stateVariable = require('./state-variable');
 // import { getState, putState } from './state-variable.js';
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 
-/*
-const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
-
-const appId = process.env.APP_ID
-const clientId = process.env.CLIENT_ID
-const clientSecret = process.env.CLIENT_SECRET
-const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
-if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
-	console.log('\n***************************************************************************')
-	console.log('*** Please add AWS_REGION, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY ***')
-	console.log('*** entries to the .env file to run the server                          ***')
-	console.log('***************************************************************************')
-	return
-}
-// const contextStore = new DynamoDBContextStore();
-// const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
-const contextStore = new DynamoDBContextStore({
-        table: {
-            name: tableName,
-            hashKey: 'id', 
-            // sortKey: 'sk'
-        },
-	AWSRegion: 'us-west-2',
-	autoCreate: false
-});
-*/
 
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
-/*
 async function putState( appId, variableName, value ) {
 	// Set the parameters
 	const params = {
@@ -56,7 +29,9 @@ async function putState( appId, variableName, value ) {
   	}
 };
 
-//  Get the value of the specified state variable stored in DynamoDB, returned as string
+/*
+  Get the value of the specified state variable stored in DynamoDB, returned as string
+  */
 async function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
