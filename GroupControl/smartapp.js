@@ -123,9 +123,15 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	// console.log("MotionGroup: Installed/Updated");
-        await context.api.subscriptions.unsubscribeAll();
+	console.log("MotionGroup: Installed/Updated");
+        
+	// initialize state variable(s)
+	putState( context.event.appId, 'mainSwitchPressed', 'true' );
 
+	// unsubscribe all previously established subscriptions
+	await context.api.subscriptions.unsubscribeAll();
+
+	// create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
             'switch', 'switch.on', 'mainSwitchOnHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -137,28 +143,6 @@ module.exports = new SmartApp()
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.inactive', 'motionStopHandler');
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
-
-	// initialize state variable(s)
-	putState( context.event.appId, 'mainSwitchPressed', 'true' );
-
-/*
-	// Set the parameters
-	const params = {
-  		TableName: 'smartapp-context-store',
-  		Item: {
-    			appId: { S: context.event.appId },
-			name: { S: 'mainSwitchPressed' },
-			value: { S: 'true' },
-  		},
-	};
-	
-	try {
-    		const data = await dbclient.send(new PutItemCommand(params));
-    		console.log(data);
-  	} catch (err) {
-    		console.error(err);
-  	}
-*/
     })
 
     // Turn on the lights when main switch is pressed
