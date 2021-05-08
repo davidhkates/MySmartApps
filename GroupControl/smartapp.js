@@ -58,7 +58,9 @@ function putState( appId, variableName, value ) {
   	}
 };
 
-//  Get the value of the specified state variable stored in DynamoDB, returned as string
+/*
+  Get the value of the specified state variable stored in DynamoDB, returned as string
+  */
 function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
@@ -136,6 +138,7 @@ module.exports = new SmartApp()
 	console.log("SUCCESS - added new state variable to context object");
 */
 
+/*
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -152,6 +155,7 @@ module.exports = new SmartApp()
   	} catch (err) {
     		console.error(err);
   	}
+*/
 	
 	// await context.put(contextRecord);
 	// context.put(context.config.	
