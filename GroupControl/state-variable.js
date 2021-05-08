@@ -59,7 +59,9 @@ async function putState( appId, variableName, value ) {
   	}
 };
 
-//  Get the value of the specified state variable stored in DynamoDB, returned as string
+/*
+  Get the value of the specified state variable stored in DynamoDB, returned as string
+  */
 async function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
