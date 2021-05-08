@@ -1,5 +1,6 @@
 const SmartApp   = require('@smartthings/smartapp');
-import { getState, putState } from './state-variable.js';
+const stateVariable = require('./state-variable');
+// import { getState, putState } from './state-variable.js';
 
 /*
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
