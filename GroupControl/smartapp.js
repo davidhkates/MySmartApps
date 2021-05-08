@@ -149,28 +149,15 @@ module.exports = new SmartApp()
 	// get state variable
 	if ( getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
 		
-/*
-        // Turn on the lights in the on group if they are all off
-        const roomSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
-            it.deviceConfig.deviceId,
-            it.deviceConfig.componentId,
-            'switch'));
-        // Quit if any of the switches in the on group are off
-        const states = await Promise.all(stateSwitches)
-        if (states.find(it => it.switch.value === 'off')) {
-            return
-        }
-*/
-    
-        // If we make it here, turn on all lights in onGroup
-        await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-    
-        // start timer to turn off lights if value specified
-        const delay = context.configNumberValue('delay')
-        if (delay) {
-            // Schedule turn off if delay is set
-            await context.api.schedules.runIn('motionStopped', delay)
-        }
+		// If we make it here, turn on all lights in onGroup
+		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+
+		// start timer to turn off lights if value specified
+		const delay = context.configNumberValue('delay')
+		if (delay) {
+		    // Schedule turn off if delay is set
+		    await context.api.schedules.runIn('motionStopped', delay)
+		}
 	}
 
         console.log("Turn on all lights on onGroup");
