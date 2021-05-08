@@ -6,7 +6,6 @@ const SmartApp   = require('@smartthings/smartapp');
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 
-
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
@@ -125,8 +124,9 @@ module.exports = new SmartApp()
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
-	console.log("Calling DynamoDB store");
+	console.log("Checking value of mainSwitchPressed");
 
+	/*
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -145,6 +145,9 @@ module.exports = new SmartApp()
 		console.log("Error", err);
 	}	
 	console.log("Context object: ", context);
+	*/
+	// get state variable
+	if ( getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
 		
 /*
         // Turn on the lights in the on group if they are all off
@@ -168,6 +171,7 @@ module.exports = new SmartApp()
             // Schedule turn off if delay is set
             await context.api.schedules.runIn('motionStopped', delay)
         }
+	}
 
         console.log("Turn on all lights on onGroup");
     })
