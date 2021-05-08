@@ -1,6 +1,8 @@
 
 const SmartApp   = require('@smartthings/smartapp');
-const stateVariable = require('./state-variable')
+// const stateVariable = require('./state-variable')
+
+
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
