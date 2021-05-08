@@ -91,6 +91,8 @@ module.exports = new SmartApp()
   		TableName: 'smartapp-context-store',
   		Item: {
     			appId: { S: context.event.appId },
+			name: { S: 'mainSwitchPressed' },
+			value: { S: 'true' },
   		},
 	};
 	
@@ -130,8 +132,9 @@ module.exports = new SmartApp()
   		TableName: 'smartapp-context-store',
   		Key: {
     			appId: { S: context.event.appId },
+			name: { S: 'mainSwitchPressed' },
   		},
-  		ProjectionExpression: 'mainSwitchPressed',
+  		ProjectionExpression: 'value',
 	};
   	
 	// Get the requested state variable
