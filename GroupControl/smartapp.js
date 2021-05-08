@@ -34,6 +34,52 @@ const contextStore = new DynamoDBContextStore({
 });
 */
 
+/*
+  Store the value of the specified state variable stored in DynamoDB as string
+  */
+function putState( appId, variableName, value ) {
+	// Set the parameters
+	const params = {
+  		TableName: 'smartapp-context-store',
+  		Item: {
+    			appId: { S: appId },
+			name: { S: variableName },
+			value: { S: value },
+  		},
+	};
+	
+	try {
+    		const data = await dbclient.send(new PutItemCommand(params));
+    		console.log(data);
+  	} catch (err) {
+    		console.error(err);
+  	}
+};
+
+//  Get the value of the specified state variable stored in DynamoDB, returned as string
+function getState( appId, variableName ) {
+	console.log("Calling DynamoDB application context store to get state variable value");
+
+	// Set the parameters
+	const params = {
+  		TableName: 'smartapp-context-store',
+  		Key: {
+    			appId: { S: appId },
+			name: { S: variableName },
+  		},
+  		ProjectionExpression: 'value',
+	};
+  	
+	// Return the requested state variable
+	try {
+		const data = await dbclient.send(new GetItemCommand(params));
+		console.log("Success - state variable value = ", data.Item);
+		return data.Item;
+	} catch (err) {
+		console.log("Error", err);
+	}	
+};	
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
