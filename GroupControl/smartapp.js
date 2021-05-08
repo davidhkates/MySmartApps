@@ -128,7 +128,7 @@ module.exports = new SmartApp()
 	console.log("MotionGroup: Installed/Updated");
         
 	// initialize state variable(s)
-	// putState( context.event.appId, 'mainSwitchPressed', 'true' );
+	putState( context.event.appId, 'mainSwitchPressed', 'true' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
