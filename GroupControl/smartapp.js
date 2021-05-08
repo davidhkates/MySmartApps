@@ -1,11 +1,14 @@
 const SmartApp   = require('@smartthings/smartapp');
-// const StateVariable = require('./state-variable');
+const StateVariable = require('./state-variable');
+
+/*
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
 const dbclient = new DynamoDBClient({ region: REGION });
+*/
 
 /*
 const appId = process.env.APP_ID
@@ -35,6 +38,7 @@ const contextStore = new DynamoDBContextStore({
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
+/*
 async function putState( appId, variableName, value ) {
 	// Set the parameters
 	const params = {
@@ -77,6 +81,7 @@ async function getState( appId, variableName ) {
 		console.log("Error", err);
 	}	
 };	
+*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
