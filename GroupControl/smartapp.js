@@ -1,5 +1,5 @@
 const SmartApp   = require('@smartthings/smartapp');
-const StateVariable = require('./state-variable');
+import { getState, putState } from './state-variable.js';
 
 /*
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
@@ -131,7 +131,7 @@ module.exports = new SmartApp()
 	console.log("MotionGroup: Installed/Updated");
         
 	// initialize state variable(s)
-	putState( context.event.appId, 'mainSwitchPressed', 'true' );
+	let putState( context.event.appId, 'mainSwitchPressed', 'true' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
