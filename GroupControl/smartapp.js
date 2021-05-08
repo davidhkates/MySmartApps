@@ -84,6 +84,7 @@ async function getState( appId, variableName ) {
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
+    import { getState, putState } from './state-variable.js';
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
     // .contextStore(contextStore)     // context store to persist room state
@@ -130,8 +131,6 @@ module.exports = new SmartApp()
 	console.log("MotionGroup: Installed/Updated");
         
 	// initialize state variable(s)
-	// import { getState, putState } from './state-variable.js';
-	import { putState } from './state-variable.js';
 	let putState( context.event.appId, 'mainSwitchPressed', 'true' );
 
 	// unsubscribe all previously established subscriptions
