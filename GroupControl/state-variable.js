@@ -31,7 +31,6 @@ const contextStore = new DynamoDBContextStore({
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
-/*
 async function putState( appId, variableName, value ) {
 	// Set the parameters
 	const params = {
@@ -50,10 +49,10 @@ async function putState( appId, variableName, value ) {
     		console.error(err);
   	}
 };
-*/
 
 /*
-//  Get the value of the specified state variable stored in DynamoDB, returned as string
+  Get the value of the specified state variable stored in DynamoDB, returned as string
+  */
 async function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
@@ -79,4 +78,3 @@ async function getState( appId, variableName ) {
 
 // Export state variable functions
 export { getState, putState };
-*/
