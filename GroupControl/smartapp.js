@@ -1,7 +1,4 @@
 const SmartApp   = require('@smartthings/smartapp');
-// const stateVariable = require('./state-variable')
-
-
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
@@ -14,7 +11,6 @@ const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
-
 if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('\n***************************************************************************')
 	console.log('*** Please add AWS_REGION, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY ***')
@@ -22,7 +18,6 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('***************************************************************************')
 	return
 }
-
 // const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
@@ -58,9 +53,7 @@ function putState( appId, variableName, value ) {
   	}
 };
 
-/*
-  Get the value of the specified state variable stored in DynamoDB, returned as string
-  */
+//  Get the value of the specified state variable stored in DynamoDB, returned as string
 function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
@@ -129,16 +122,13 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	console.log("MotionGroup: Installed/Updated");
-	// initialize state variable(s)
-	// putState( context.event.appId, 'mainSwitchPressed', true );
+	// initialize context variable(s)
 /*
 	console.log("Adding new state variable to context object");
 	context.mainSwitchPressed = true;
 	console.log("SUCCESS - added new state variable to context object");
 */
-
-/*
+	
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -155,10 +145,11 @@ module.exports = new SmartApp()
   	} catch (err) {
     		console.error(err);
   	}
-*/
 	
 	// await context.put(contextRecord);
-	// context.put(context.config.	
+	// context.put(context.config.
+	
+	// console.log("MotionGroup: Installed/Updated");
         await context.api.subscriptions.unsubscribeAll();
 
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -173,7 +164,7 @@ module.exports = new SmartApp()
             'motionSensor', 'motion.inactive', 'motionStopHandler');
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
     })
-	
+
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
@@ -204,7 +195,6 @@ module.exports = new SmartApp()
             it.deviceConfig.deviceId,
             it.deviceConfig.componentId,
             'switch'));
-
         // Quit if any of the switches in the on group are off
         const states = await Promise.all(stateSwitches)
         if (states.find(it => it.switch.value === 'off')) {
