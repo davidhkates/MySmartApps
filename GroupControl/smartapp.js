@@ -1,4 +1,3 @@
-
 const SmartApp   = require('@smartthings/smartapp');
 // const stateVariable = require('./state-variable')
 
@@ -128,13 +127,16 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	// initialize context variable(s)
+	// console.log("MotionGroup: Installed/Updated");
+	// initialize state variable(s)
+	putState( context.event.appId, 'mainSwitchPressed', true );
 /*
 	console.log("Adding new state variable to context object");
 	context.mainSwitchPressed = true;
 	console.log("SUCCESS - added new state variable to context object");
 */
-	
+
+/*
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -154,8 +156,7 @@ module.exports = new SmartApp()
 	
 	// await context.put(contextRecord);
 	// context.put(context.config.
-	
-	// console.log("MotionGroup: Installed/Updated");
+*/	
         await context.api.subscriptions.unsubscribeAll();
 
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -170,7 +171,7 @@ module.exports = new SmartApp()
             'motionSensor', 'motion.inactive', 'motionStopHandler');
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
     })
-
+	
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
