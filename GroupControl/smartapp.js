@@ -1,53 +1,11 @@
 
 const SmartApp   = require('@smartthings/smartapp');
-// const DynamoDBStore = require('dynamodb-store');
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
-// const { DynamoDBClient } = require("@aws-sdk/client-dynamodb");
-// const { marshall, unmarshall } = require("@aws-sdk/util-dynamodb");
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-// const { DynamoDBClientPut, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const REGION = 'us-west-2'; //e.g. "us-east-1"
-// const dynamodb = new DynamoDB({ region: REGION });
-// const dbclientGet = new DynamoDBClientGet({ region: REGION });
-// const dbclientPut = new DynamoDBClientPut({ region: REGION });
 const dbclient = new DynamoDBClient({ region: REGION });
-
-// Set the parameters
-const params = {
-  TableName: 'smartapp-context-store',
-  Key: {
-    id: { S: '1' },
-  },
-  ProjectionExpression: 'mainSwitchPressed',
-};
-
-/*
-/ Set the parameters
-const params = {
-  TableName: "TABLE_NAME",
-  // Convert the key JavaScript object you are deleting to the required DynamoDB format. The format of values
-  // specifies the datatype. The following list demonstrates different datatype formatting requirements:
-  // HashKey: "hashKey",
-  // NumAttribute: 1,
-  // BoolAttribute: true,
-  // ListAttribute: [1, "two", false],
-  // MapAttribute: { foo: "bar" },
-  // NullAttribute: null
-  Key: marshall({
-    primaryKey: VALUE, // For example, "Season: 2"
-    sortKey: VALUE, // For example,  "Episode: 1" (only required if table has sort key)
-  }),
-  // Define expressions for the new or updated attributes
-  UpdateExpression: "set ATTRIBUTE_NAME_1 = :t, ATTRIBUTE_NAME_2 = :s", // For example, "'set Title = :t, Subtitle = :s'"
-  // Convert the attribute JavaScript object you are deleting to the required DynamoDB format
-  ExpressionAttributeValues: marshall({
-    ":t": NEW_ATTRIBUTE_VALUE_1, // For example "':t' : 'NEW_TITLE'"
-    ":s": NEW_ATTRIBUTE_VALUE_2, // For example " ':s' : 'NEW_SUBTITLE'"
-  }),
-};
-*/
 
 /*
 const appId = process.env.APP_ID
@@ -126,42 +84,12 @@ module.exports = new SmartApp()
 	console.log("Adding new state variable to context object");
 	context.mainSwitchPressed = true;
 	console.log("SUCCESS - added new state variable to context object");
-
-	// Set the parameters
-	const params = {
-  		TableName: 'smartapp-context-store',
-		Item: {
-			id: { N: 2 },
-			appId: { S: context.event.appId },
-		}
-	};
-    	const data = await dbclient.send(new PutItemCommand(params));
-    	console.log("PutItemCommand response: ",data);
-*/
-	
-/*
-	const input = {
-    		id: '2'
-		// appId: context.event.appId     // ${event.deviceId}
-	};
-	
-	// Marshall util converts then JavaScript object to DynamoDB format
-	const Item = marshall(input);
-	
-	// write to DynamoDB table
-	try {
-	        const data = await dynamodb.putItem({ 'smartapp-context-store', Item });
-        	console.log('Success - put')
-	} catch(err) {
-		console.log('Error', err)
-	}
 */
 	
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
   		Item: {
-	    		id: { S: "2" },		// N: "2"
     			appId: { S: context.event.appId },
   		},
 	};
@@ -196,25 +124,25 @@ module.exports = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	console.log("Calling DynamoDB store");
-  	const data = await dbclient.send(new GetItemCommand(params));
-	
-	/*
+
+	// Set the parameters
+	const params = {
+  		TableName: 'smartapp-context-store',
+  		Key: {
+    			appId: { S: context.event.appId },
+  		},
+  		ProjectionExpression: 'mainSwitchPressed',
+	};
+  	
+	// Get the requested state variable
 	try {
-    		const { Item } = await client.updateItem(params);
-    		console.log("Success - updated");
-  	} catch (err) {
-    		console.log("Error", err);
-  	}
-	*/
-	
-  	console.log("Success (dbClient): ", data.Item);
-	// console.log("Context object: ", JSON.stringify(context, censor(context)));
+		const data = await dbclient.send(new GetItemCommand(params));
+		console.log("Success - main switch pressed value = ", data.Item);
+	} catch (err) {
+		console.log("Error", err);
+	}	
 	console.log("Context object: ", context);
-	console.log("appId: ", context.event.appId);
-	
-	// data = await contextStore.get(context.appId);
-	// console.log("Success (context store): ", data.Item);
-	
+		
 /*
         // Turn on the lights in the on group if they are all off
         const roomSwitches = onGroup.map(it => context.api.devices.getCapabilityStatus(
