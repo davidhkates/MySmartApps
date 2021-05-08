@@ -1,4 +1,5 @@
 const SmartApp   = require('@smartthings/smartapp');
+// const StateVariable = require('./state-variable');
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
 
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
@@ -122,13 +123,25 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	// initialize context variable(s)
+	// console.log("MotionGroup: Installed/Updated");
+        await context.api.subscriptions.unsubscribeAll();
+
+        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+            'switch', 'switch.on', 'mainSwitchOnHandler');
+        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+            'switch', 'switch.off', 'mainSwitchOffHandler');
+        await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
+            'switch', 'switch.on', 'onGroupHandler');
+        await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
+            'motionSensor', 'motion.active', 'motionStartHandler');
+        await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
+            'motionSensor', 'motion.inactive', 'motionStopHandler');
+        console.log('Motion Group: END CREATING SUBSCRIPTIONS')
+
+	// initialize state variable(s)
+	putState( context.event.appId, 'mainSwitchPressed', 'true' );
+
 /*
-	console.log("Adding new state variable to context object");
-	context.mainSwitchPressed = true;
-	console.log("SUCCESS - added new state variable to context object");
-*/
-	
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -145,24 +158,7 @@ module.exports = new SmartApp()
   	} catch (err) {
     		console.error(err);
   	}
-	
-	// await context.put(contextRecord);
-	// context.put(context.config.
-	
-	// console.log("MotionGroup: Installed/Updated");
-        await context.api.subscriptions.unsubscribeAll();
-
-        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.on', 'mainSwitchOnHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.off', 'mainSwitchOffHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-            'switch', 'switch.on', 'onGroupHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-            'motionSensor', 'motion.active', 'motionStartHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-            'motionSensor', 'motion.inactive', 'motionStopHandler');
-        console.log('Motion Group: END CREATING SUBSCRIPTIONS')
+*/
     })
 
     // Turn on the lights when main switch is pressed
