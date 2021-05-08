@@ -8,7 +8,6 @@ const appId = process.env.APP_ID
 const clientId = process.env.CLIENT_ID
 const clientSecret = process.env.CLIENT_SECRET
 const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
-
 if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('\n***************************************************************************')
 	console.log('*** Please add AWS_REGION, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY ***')
@@ -16,7 +15,6 @@ if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
 	console.log('***************************************************************************')
 	return
 }
-
 // const contextStore = new DynamoDBContextStore();
 // const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
 const contextStore = new DynamoDBContextStore({
@@ -33,7 +31,7 @@ const contextStore = new DynamoDBContextStore({
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
-function putState( appId, variableName, value ) {
+async function putState( appId, variableName, value ) {
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -53,7 +51,7 @@ function putState( appId, variableName, value ) {
 };
 
 //  Get the value of the specified state variable stored in DynamoDB, returned as string
-function getState( appId, variableName ) {
+async function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
 	// Set the parameters
