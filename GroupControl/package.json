@@ -11,6 +11,7 @@
     "type": "git",
     "url": "git+https://github.com/SmartThingsCommunity/app-examples.git"
   },
+  "type": "state-variable",
   "keywords": [
     "SmartThings",
     "SmartApp",
