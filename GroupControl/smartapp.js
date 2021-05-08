@@ -1,4 +1,5 @@
 const SmartApp   = require('@smartthings/smartapp');
+import { getState, putState } from './state-variable.js';
 
 /*
 // const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
@@ -84,7 +85,6 @@ async function getState( appId, variableName ) {
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
-    import { getState, putState } from './state-variable.js';
     .enableEventLogging()  // logs requests and responses as pretty-printed JSON
     .configureI18n()        // auto-create i18n files for localizing config pages
     // .contextStore(contextStore)     // context store to persist room state
