@@ -40,7 +40,7 @@ const contextStore = new DynamoDBContextStore({
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
-async function putState( appId, variableName, value ) {
+export async function putState( appId, variableName, value ) {
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -62,7 +62,7 @@ async function putState( appId, variableName, value ) {
 /*
   Get the value of the specified state variable stored in DynamoDB, returned as string
   */
-async function getState( appId, variableName ) {
+export async function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
 	// Set the parameters
