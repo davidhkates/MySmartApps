@@ -1,12 +1,12 @@
 const SmartApp   = require('@smartthings/smartapp');
-// const stateVariable = require('./state-variable');
+const stateVariable = require('./state-variable');
 // import { getState, putState } from './state-variable.js';
 
+/*
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 
-/*
 //  Store the value of the specified state variable stored in DynamoDB as string
 async function putState( appId, variableName, value ) {
 	// Set the parameters
@@ -100,7 +100,7 @@ module.exports = new SmartApp()
 	console.log("MotionGroup: Installed/Updated");
         
 	// initialize state variable(s)
-	putState( context.event.appId, 'mainSwitchPressed', 'true' );
+	stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -145,7 +145,7 @@ module.exports = new SmartApp()
 	console.log("Context object: ", context);
 	*/
 	// get state variable
-	if ( getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
+	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
 		
 		// If we make it here, turn on all lights in onGroup
 		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
