@@ -51,9 +51,9 @@ async function getState( appId, variableName ) {
 };	
 
 // Export state variable functions
-module.exports { getState, putState };
-// exports.getState = getState;
-// exports.putState = putState;
+// module.exports { getState, putState };
+exports.getState = getState;
+exports.putState = putState;
 
 /*-------- Old code just in case  ----------*/
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
