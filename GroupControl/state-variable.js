@@ -1,41 +1,6 @@
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
-/*
-const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-const REGION = 'us-west-2'; //e.g. "us-east-1"
-const dbclient = new DynamoDBClient({ region: REGION });
-*/
-// Import required AWS SDK clients and commands for establishing DynamoDBClient
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 const dbclient = new DynamoDBClient({ region: 'us-west-2' });
-
-// const state-variable = require('./state-variable');
-// import { getState, putState } from './state-variable.js';
-/*
-const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
-
-const appId = process.env.APP_ID
-const clientId = process.env.CLIENT_ID
-const clientSecret = process.env.CLIENT_SECRET
-const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
-if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
-	console.log('\n***************************************************************************')
-	console.log('*** Please add AWS_REGION, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY ***')
-	console.log('*** entries to the .env file to run the server                          ***')
-	console.log('***************************************************************************')
-	return
-}
-// const contextStore = new DynamoDBContextStore();
-// const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
-const contextStore = new DynamoDBContextStore({
-        table: {
-            name: tableName,
-            hashKey: 'id', 
-            // sortKey: 'sk'
-        },
-	AWSRegion: 'us-west-2',
-	autoCreate: false
-});
-*/
 
 /*
   Store the value of the specified state variable stored in DynamoDB as string
@@ -86,4 +51,40 @@ export async function getState( appId, variableName ) {
 };	
 
 // Export state variable functions
-// export { getState, putState };
+module.exports { getState, putState };
+
+/*-------- Old code just in case  ----------*/
+// Import required AWS SDK clients and commands for establishing DynamoDBClient
+/*
+const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const REGION = 'us-west-2'; //e.g. "us-east-1"
+const dbclient = new DynamoDBClient({ region: REGION });
+*/
+// const state-variable = require('./state-variable');
+// import { getState, putState } from './state-variable.js';
+/*
+const DynamoDBContextStore = require('@smartthings/dynamodb-context-store');
+
+const appId = process.env.APP_ID
+const clientId = process.env.CLIENT_ID
+const clientSecret = process.env.CLIENT_SECRET
+const tableName = process.env.DYNAMODB_TABLE || 'smartapp-context-store'
+if (!process.env.AWS_REGION && !process.env.AWS_PROFILE) {
+	console.log('\n***************************************************************************')
+	console.log('*** Please add AWS_REGION, AWS_ACCESS_KEY_ID, and AWS_SECRET_ACCESS_KEY ***')
+	console.log('*** entries to the .env file to run the server                          ***')
+	console.log('***************************************************************************')
+	return
+}
+// const contextStore = new DynamoDBContextStore();
+// const contextStore = new DynamoDBContextStore({AWSRegion: 'us-west-2'});
+const contextStore = new DynamoDBContextStore({
+        table: {
+            name: tableName,
+            hashKey: 'id', 
+            // sortKey: 'sk'
+        },
+	AWSRegion: 'us-west-2',
+	autoCreate: false
+});
+*/
