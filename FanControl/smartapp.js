@@ -12,7 +12,7 @@ module.exports = new SmartApp()
         // get controls and sensors
         page.section('controls', section => {
             section
-                .deviceSetting('fan')
+                .deviceSetting('fanSwitch')
                 .capabilities(['switch'])
                 .required(true)
                 .multiple(false);
@@ -147,8 +147,10 @@ module.exports = new SmartApp()
     
     // Check temperature and turn on/off fan as appropriate
     .scheduledEventHandler('checkTemperature', async (context, event) => {
-        // await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-        // If we make it here, turn on all lights in onGroup
-	await context.api.devices.sendCommands(context.config.fanControl, 'switch', 'on');
+	// compare current temperature to target temperate
+	console.log("Context: ", context);
+
+	// if off and temp above target, turn fan on
+	// await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
 
     });
