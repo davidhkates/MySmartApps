@@ -53,7 +53,6 @@ module.exports = new SmartApp()
         // Schedule turn off if delay is set
         await context.api.schedules.runIn('checkTemperature', 300);
 	console.log("Control: ", context.config.tempSensor);
-	console.log("Temp Value: ", context.config.tempSensor.temperature.value);
 
 	// Get the current states of the other motion sensors
         /*
@@ -64,6 +63,7 @@ module.exports = new SmartApp()
 	*/
 	
 	var sensor = context.config.tempSensor.deviceConfig; 
+	console.log("Sensor: ", sensor);
 	var tempCurrent = context.api.devices.getCapabilityStatus( sensor.deviceId, sensor.componentId, 'temperatureMeasurement' );
 	console.log("Temp Value: ", tempCurrent);
 	
