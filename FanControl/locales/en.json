@@ -5,5 +5,5 @@
 	"pages.mainPage.settings.fan.name": "Fan switch",
 	"pages.mainPage.settings.tempTarget.name": "Target temperature",
 	"pages.mainPage.settings.tempSensor.name": "Temperature sensor",
-	"pages.mainPage.settings.contact.name": "Door/contacts that need to be open",
+	"pages.mainPage.settings.contact.name": "Door/contacts that need to be open"
 }
