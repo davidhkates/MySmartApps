@@ -54,6 +54,22 @@ module.exports = new SmartApp()
         await context.api.schedules.runIn('checkTemperature', 300);
 	console.log("Control: ", context.config.tempSensor);
 
+	
+	
+	
+	const currentTemp =  context.config.tempSensor;
+
+	// Get the current states of the other motion sensors
+	const stateRequests = currentTemp.map(it => context.api.devices.getCapabilityStatus(
+		it.deviceConfig.deviceId,
+		it.deviceConfig.componentId,
+		'temperatureMeasurement'
+	));
+
+	// Quit if there are other sensor still active
+	const states = await Promise.all(stateRequests);
+	console.log('Device State: ', states); 
+	
 	// Get the current states of the other motion sensors
         /*
 	const states = await Promise.all(stateRequests)
@@ -61,16 +77,12 @@ module.exports = new SmartApp()
                 return
             }
 	*/
-	
+	/*
 	var sensor = context.config.tempSensor; 
 	console.log("Sensor: ", sensor);
 	var tempCurrent = context.api.devices.getCapabilityStatus( sensor.deviceId, sensor.componentId, 'temperatureMeasurement' );
 	console.log("Temp Value: ", tempCurrent);
 	
-        const states = await Promise.all(stateRequests)
-            if (states.find(it => it.motion.value === 'active')) {
-                return
-            }
 /*
 	    // create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
