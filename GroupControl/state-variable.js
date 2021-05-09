@@ -5,7 +5,7 @@ const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
-export async function putState( appId, variableName, value ) {
+async function putState( appId, variableName, value ) {
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
@@ -27,7 +27,7 @@ export async function putState( appId, variableName, value ) {
 /*
   Get the value of the specified state variable stored in DynamoDB, returned as string
   */
-export async function getState( appId, variableName ) {
+async function getState( appId, variableName ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
 	// Set the parameters
@@ -52,6 +52,8 @@ export async function getState( appId, variableName ) {
 
 // Export state variable functions
 module.exports { getState, putState };
+// exports.getState = getState;
+// exports.putState = putState;
 
 /*-------- Old code just in case  ----------*/
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
