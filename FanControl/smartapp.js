@@ -51,8 +51,14 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
         // Schedule turn off if delay is set
-        await context.api.schedules.runIn('checkTemperature', 300)
-	console.log("Context: ", context.config.tempSensor);
+        await context.api.schedules.runIn('checkTemperature', 300);
+	console.log("Control: ", context.config.tempSensor);
+	console.log("Temp Value: ", context.config.tempSensor.temperature.value);
+	
+        const states = await Promise.all(stateRequests)
+            if (states.find(it => it.motion.value === 'active')) {
+                return
+            }
 /*
 	    // create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
