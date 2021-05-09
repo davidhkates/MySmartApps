@@ -63,7 +63,7 @@ module.exports = new SmartApp()
             }
 	*/
 	
-	var sensor = context.config.tempSensor; 
+	var sensor = context.config.tempSensor.deviceConfig; 
 	var tempCurrent = context.api.devices.getCapabilityStatus( sensor.deviceId, sensor.componentId, 'temperatureMeasurement' );
 	console.log("Temp Value: ", tempCurrent);
 	
