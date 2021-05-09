@@ -17,25 +17,20 @@ module.exports = new SmartApp()
                 .required(true)
                 .multiple(false);
             section
-                .deviceSetting('contact')
-                .capabilities(['contactSensor'])
-                .required(false)
-                .multiple(true);
-            section
                 .numberSetting('tempTarget')
                 .required(true);
-            section
-                .numberSetting('delay')
-                .required(true);
-        });
-        
-        page.section('sensors', section => {
             section
                 .deviceSetting('tempSensor')
                 .capabilities(['temperatureMeasurement'])
                 .required(true);
+		
+            section
+                .deviceSetting('contact')
+                .capabilities(['contactSensor'])
+                .required(false)
+                .multiple(true);
         });
-	
+        
         // get start and end time
         page.section('time', section => {
             section
