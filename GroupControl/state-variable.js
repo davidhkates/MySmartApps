@@ -55,7 +55,7 @@ async function getState( appId, variableName ) {
 exports.getState = getState;
 exports.putState = putState;
 
-/*-------- Old code just in case  ----------*/
+/*-------- Leftover code using DynamoDBContextStore, just in case  ----------*/
 // Import required AWS SDK clients and commands for establishing DynamoDBClient
 /*
 const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
