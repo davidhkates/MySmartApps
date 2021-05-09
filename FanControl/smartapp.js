@@ -34,7 +34,8 @@ module.exports = new SmartApp()
                 .deviceSetting('tempSensor')
                 .capabilities(['temperatureMeasurement'])
                 .required(true);
-        
+        });
+	
         // get start and end time
         page.section('time', section => {
             section
@@ -50,10 +51,10 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	    console.log("FanControl: Installed/Updated");
+	console.log("FanControl: Installed/Updated");
         
     	// unsubscribe all previously established subscriptions
-	    await context.api.subscriptions.unsubscribeAll();
+	await context.api.subscriptions.unsubscribeAll();
 
         // Schedule turn off if delay is set
         await context.api.schedules.runIn('checkTemperature', delay)
@@ -153,7 +154,6 @@ module.exports = new SmartApp()
     .scheduledEventHandler('checkTemperature', async (context, event) => {
         // await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
         // If we make it here, turn on all lights in onGroup
-		await context.api.devices.sendCommands(context.config.fanControl, 'switch', 'on');
-
+	await context.api.devices.sendCommands(context.config.fanControl, 'switch', 'on');
 
     });
