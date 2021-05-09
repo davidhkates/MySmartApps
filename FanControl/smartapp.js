@@ -51,8 +51,8 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
         // Schedule turn off if delay is set
-        // await context.api.schedules.runIn('checkTemperature', delay)
-	console.log("Context: ", context);
+        await context.api.schedules.runIn('checkTemperature', 300)
+	console.log("Context: ", context.config.tempSensor);
 /*
 	    // create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
