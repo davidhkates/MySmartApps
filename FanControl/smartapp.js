@@ -22,8 +22,7 @@ module.exports = new SmartApp()
             section
                 .deviceSetting('tempSensor')
                 .capabilities(['temperatureMeasurement'])
-                .required(true);
-		
+                .required(true);		
             section
                 .deviceSetting('contact')
                 .capabilities(['contactSensor'])
@@ -52,7 +51,8 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
         // Schedule turn off if delay is set
-        await context.api.schedules.runIn('checkTemperature', delay)
+        // await context.api.schedules.runIn('checkTemperature', delay)
+	console.log("Context: ", context);
 /*
 	    // create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
