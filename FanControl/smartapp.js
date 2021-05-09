@@ -54,6 +54,18 @@ module.exports = new SmartApp()
         await context.api.schedules.runIn('checkTemperature', 300);
 	console.log("Control: ", context.config.tempSensor);
 	console.log("Temp Value: ", context.config.tempSensor.temperature.value);
+
+	// Get the current states of the other motion sensors
+        /*
+	const states = await Promise.all(stateRequests)
+            if (states.find(it => it.motion.value === 'active')) {
+                return
+            }
+	*/
+	
+	var sensor = context.config.tempSensor; 
+	var tempCurrent = context.api.devices.getCapabilityStatus( sensor.deviceId, sensor.componentId, 'temperatureMeasurement' );
+	console.log("Temp Value: ", tempCurrent);
 	
         const states = await Promise.all(stateRequests)
             if (states.find(it => it.motion.value === 'active')) {
