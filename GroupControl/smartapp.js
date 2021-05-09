@@ -1,56 +1,5 @@
 const SmartApp   = require('@smartthings/smartapp');
 const stateVariable = require('./state-variable');
-// import { getState, putState } from './state-variable.js';
-
-/*
-// Import required AWS SDK clients and commands for establishing DynamoDBClient
-const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-const dbclient = new DynamoDBClient({ region: 'us-west-2' });
-
-//  Store the value of the specified state variable stored in DynamoDB as string
-async function putState( appId, variableName, value ) {
-	// Set the parameters
-	const params = {
-  		TableName: 'smartapp-context-store',
-  		Item: {
-    			appId: { S: appId },
-			name: { S: variableName },
-			value: { S: value },
-  		},
-	};
-	
-	try {
-    		const data = await dbclient.send(new PutItemCommand(params));
-    		console.log(data);
-  	} catch (err) {
-    		console.error(err);
-  	}
-};
-
-//  Get the value of the specified state variable stored in DynamoDB, returned as string
-async function getState( appId, variableName ) {
-	console.log("Calling DynamoDB application context store to get state variable value");
-
-	// Set the parameters
-	const params = {
-  		TableName: 'smartapp-context-store',
-  		Key: {
-    			appId: { S: appId },
-			name: { S: variableName },
-  		},
-  		ProjectionExpression: 'value',
-	};
-  	
-	// Return the requested state variable
-	try {
-		const data = await dbclient.send(new GetItemCommand(params));
-		console.log("Success - state variable value = ", data.Item);
-		return data.Item;
-	} catch (err) {
-		console.log("Error", err);
-	}	
-};
-*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -124,27 +73,7 @@ module.exports = new SmartApp()
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of mainSwitchPressed");
 
-	/*
-	// Set the parameters
-	const params = {
-  		TableName: 'smartapp-context-store',
-  		Key: {
-    			appId: { S: context.event.appId },
-			name: { S: 'mainSwitchPressed' },
-  		},
-  		ProjectionExpression: 'value',
-	};
-  	
-	// Get the requested state variable
-	try {
-		const data = await dbclient.send(new GetItemCommand(params));
-		console.log("Success - main switch pressed value = ", data.Item);
-	} catch (err) {
-		console.log("Error", err);
-	}	
-	console.log("Context object: ", context);
-	*/
-	// get state variable
+	// check value of mainSwitchPressed state variable
 	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
 		
 		// If we make it here, turn on all lights in onGroup
@@ -172,8 +101,12 @@ module.exports = new SmartApp()
     // Turn on main switch if any of the on group lights are turned on separately
     .subscribedEventHandler('onGroupHandler', async (context, event) => {
         console.log("Turn on the main switch when a light in the on group is turned on");
-        // Turn on the main switch when a light in the on group is turned on
-        // await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+
+	// indicate main switch was NOT manually pressed
+	stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'false' );
+        
+	// Turn on the main switch when a light in the on group is turned on
+        await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
 
     // Turn off the lights only when all motion sensors become inactive
