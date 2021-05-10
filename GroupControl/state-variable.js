@@ -44,7 +44,7 @@ async function getState( appId, name ) {
 	try {
 		const data = await dbclient.send(new GetItemCommand(params));
 		console.log("Success - state variable value = ", data.Item);
-		const returnValue = data.Item.stateValue;
+		const returnValue = JSON.stringify(data.Item.stateValue);
 		console.log('State value: ', returnValue.right(returnValue.length - returnValue.charAt(':')));
 		return data.Item;
 	} catch (err) {
