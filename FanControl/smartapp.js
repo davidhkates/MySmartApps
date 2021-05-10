@@ -39,6 +39,9 @@ module.exports = new SmartApp()
             section
                 .timeSetting('endTime')
                 .required(false);
+	    section
+		.booleanSetting('fanEnabled')
+		.required('false')
         });
     })
 
@@ -78,10 +81,11 @@ module.exports = new SmartApp()
 	const states = await Promise.all(stateRequests);
 	const currentTemp = states[0].temperature.value;
 	const targetTemp = context.configNumberValue('tempTarget');
+	const fanEnabled = context.configuBooleanValue('fanEnabled');
 
 	console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 
-	if (currentTemp>targetTemp) {
+	if ((currentTemp>targetTemp) && fanEnabled) {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
 	} else {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
