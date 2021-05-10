@@ -19,4 +19,4 @@ function getTemp( sensor ) {
   return states;
 }
 
-exports capabilities.getTemp;
+exports.getTemp = getTemp;
