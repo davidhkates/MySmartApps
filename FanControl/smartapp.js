@@ -56,11 +56,7 @@ module.exports = new SmartApp()
 	
 	// console.log("Control: ", context.config.tempSensor);	
 	const currentTemp =  context.config.tempSensor;
-	const sensorRequest = context.api.devices.getCapbilityStatus(currentTemp.deviceConfig, currentTemp.deviceConfig.componentId, 'temperatureMeasureemnt');
-	const sensorValue = await Promise.all(sensorRequest);
-	console.log('Device State: ', sensorValue);
 
-/*
 	// Get the current states of the other motion sensors
 	const stateRequests = currentTemp.map(it => context.api.devices.getCapabilityStatus(
 		it.deviceConfig.deviceId,
@@ -68,6 +64,11 @@ module.exports = new SmartApp()
 		'temperatureMeasurement'
 	));
 
+/*
+	const sensorRequest = context.api.devices.getCapbilityStatus(currentTemp.deviceConfig, currentTemp.deviceConfig.componentId, 'temperatureMeasureemnt');
+	const sensorValue = await Promise.all(sensorRequest);
+	console.log('Device State: ', sensorValue);
+*/
 	// Quit if there are other sensor still active
 	const states = await Promise.all(stateRequests);
 	console.log('Device State: ', states);
