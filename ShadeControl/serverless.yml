@@ -1,4 +1,4 @@
-service: group-control
+service: shades-control
 
 package:
   patterns:
