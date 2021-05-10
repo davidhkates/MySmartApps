@@ -1,5 +1,6 @@
-const SmartApp   = require('@smartthings/smartapp');
+const SmartApp = require('@smartthings/smartapp');
 // const stateVariable = require('./state-variable');
+const SmartUtils = require('../Utilities/capabilities');
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -52,11 +53,8 @@ module.exports = new SmartApp()
 
         // Schedule turn off if delay is set
         await context.api.schedules.runIn('checkTemperature', 300);
-	console.log("Control: ", context.config.tempSensor);
-
 	
-	
-	
+	// console.log("Control: ", context.config.tempSensor);	
 	const currentTemp =  context.config.tempSensor;
 
 	// Get the current states of the other motion sensors
@@ -68,7 +66,8 @@ module.exports = new SmartApp()
 
 	// Quit if there are other sensor still active
 	const states = await Promise.all(stateRequests);
-	console.log('Device State: ', states); 
+	console.log('Device State: ', states);
+	console.log('Temperature: ', states.temperature.value);
 	
 	// Get the current states of the other motion sensors
         /*
