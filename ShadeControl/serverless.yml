@@ -1,4 +1,4 @@
-service: shades-control
+service: shade-control
 
 package:
   patterns:
