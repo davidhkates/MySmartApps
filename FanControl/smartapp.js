@@ -84,6 +84,7 @@ module.exports = new SmartApp()
 	const fanEnabled = context.configuBooleanValue('fanEnabled');
 
 	console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
+	console.log('Fan enabled: ', fanEnabled);
 
 	if ((currentTemp>targetTemp) && fanEnabled) {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
