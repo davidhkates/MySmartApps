@@ -50,6 +50,9 @@ module.exports = new SmartApp()
     // no separate installed() handler
     .updated(async (context, updateData) => {
 	console.log("FanControl: Installed/Updated");
+	
+	const fanEnabled = context.configBooleanValue('fanEnabled');
+	console.log('Fan enabled value: ', fanEnabled);
         
     	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -81,7 +84,7 @@ module.exports = new SmartApp()
 	const states = await Promise.all(stateRequests);
 	const currentTemp = states[0].temperature.value;
 	const targetTemp = context.configNumberValue('tempTarget');
-	const fanEnabled = context.configuBooleanValue('fanEnabled');
+	const fanEnabled = context.configBooleanValue('fanEnabled');
 
 	console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 	console.log('Fan enabled: ', fanEnabled);
