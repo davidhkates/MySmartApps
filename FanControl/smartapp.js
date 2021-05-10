@@ -51,51 +51,10 @@ module.exports = new SmartApp()
     	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
-        // Schedule turn off if delay is set
+        // Schedule temperature check in specified time (in seconds)
         await context.api.schedules.runIn('checkTemperature', 300);
 	
-	// console.log("Control: ", context.config.tempSensor);	
-	const currentTemp =  context.config.tempSensor;
-
-	// Get the current states of the other motion sensors
-	const stateRequests = currentTemp.map(it => context.api.devices.getCapabilityStatus(
-		it.deviceConfig.deviceId,
-		it.deviceConfig.componentId,
-		'temperatureMeasurement'
-	));
-
-	// Quit if there are other sensor still active
-	const states = await Promise.all(stateRequests);
-	console.log('Device State: ', states);
-	console.log('Temperature: ', states[0].temperature.value);
-	
-	// Get the current states of the other motion sensors
-        /*
-	const states = await Promise.all(stateRequests)
-            if (states.find(it => it.motion.value === 'active')) {
-                return
-            }
-	*/
-	/*
-	var sensor = context.config.tempSensor; 
-	console.log("Sensor: ", sensor);
-	var tempCurrent = context.api.devices.getCapabilityStatus( sensor.deviceId, sensor.componentId, 'temperatureMeasurement' );
-	console.log("Temp Value: ", tempCurrent);
-	
-/*
-	    // create subscriptions for relevant devices
-        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.on', 'mainSwitchOnHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.off', 'mainSwitchOffHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-            'switch', 'switch.on', 'onGroupHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-            'motionSensor', 'motion.active', 'motionStartHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-            'motionSensor', 'motion.inactive', 'motionStopHandler');
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
-*/
     })
 
 /*
@@ -167,9 +126,32 @@ module.exports = new SmartApp()
     // Check temperature and turn on/off fan as appropriate
     .scheduledEventHandler('checkTemperature', async (context, event) => {
 	// compare current temperature to target temperate
-	console.log("Context: ", context);
+	// console.log("Context: ", context);
 
-	// if off and temp above target, turn fan on
-	// await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
+	// console.log("Control: ", context.config.tempSensor);	
+	const sensorTemp =  context.config.tempSensor;
 
+	// Get the current states of the other motion sensors
+	const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
+		it.deviceConfig.deviceId,
+		it.deviceConfig.componentId,
+		'temperatureMeasurement'
+	));
+
+	// Quit if there are other sensor still active
+	const states = await Promise.all(stateRequests);
+	const currentTemp = states[0].temperature.value;
+	const targetTemp = context.configNumberValue('tempTarget');
+
+	console.log('Temperature: ', currentTemp);
+
+	if (currentTemp>targetTemp) {
+		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
+	} else {
+		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
+	}
+	
+	// call next temperature check
+        await context.api.schedules.runIn('checkTemperature', 300);	
+		
     });
