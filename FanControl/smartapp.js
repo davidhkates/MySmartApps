@@ -69,10 +69,6 @@ module.exports = new SmartApp()
 	console.log('Device State: ', states);
 	console.log('Temperature: ', states[0].temperature.value);
 	
-	// Try current value function
-	const currentTemp = tempSensor.currentValue('temperatureMeasurement');
-	console.log('Current temperature: ', currentTemp);
-	
 	// Get the current states of the other motion sensors
         /*
 	const states = await Promise.all(stateRequests)
