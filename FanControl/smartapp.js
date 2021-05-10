@@ -1,6 +1,7 @@
 const SmartApp = require('@smartthings/smartapp');
 // const stateVariable = require('./state-variable');
 // const SmartUtils = require('../Utilities/capabilities');
+const checkInterval = 60;  // number of seconds between checking fan status
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -58,7 +59,7 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
         // Schedule temperature check in specified time (in seconds)
-        await context.api.schedules.runIn('checkTemperature', 300);
+        await context.api.schedules.runIn('checkTemperature', checkInterval);
 	
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
     })
@@ -96,6 +97,6 @@ module.exports = new SmartApp()
 	}
 	
 	// call next temperature check
-        // await context.api.schedules.runIn('checkTemperature', 300);	
+        // await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		
     });
