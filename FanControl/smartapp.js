@@ -70,7 +70,7 @@ module.exports = new SmartApp()
 	console.log('Temperature: ', states[0].temperature.value);
 	
 	// Try current value function
-	const currentTemp = context.api.devices.currentValue('temperatureMeasurement');
+	const currentTemp = tempSensor.currentValue('temperatureMeasurement');
 	console.log('Current temperature: ', currentTemp);
 	
 	// Get the current states of the other motion sensors
