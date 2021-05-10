@@ -11,8 +11,8 @@ async function putState( appId, name, value ) {
   		TableName: 'smartapp-context-store',
   		Item: {
     			appId: { S: appId },
-			variableName: { S: name },
-			variableValue: { S: value },
+			name: { S: name },
+			stateValue: { S: value },
   		},
 	};
 	
@@ -27,7 +27,7 @@ async function putState( appId, name, value ) {
 /*
   Get the value of the specified state variable stored in DynamoDB, returned as string
   */
-async function getState( appId, variableName ) {
+async function getState( appId, name ) {
 	console.log("Calling DynamoDB application context store to get state variable value");
 
 	// Set the parameters
@@ -35,9 +35,9 @@ async function getState( appId, variableName ) {
   		TableName: 'smartapp-context-store',
   		Key: {
     			appId: { S: appId },
-			name: { S: variableName },
+			name: { S: name },
   		},
-  		ProjectionExpression: 'variableValue',
+  		ProjectionExpression: 'stateValue',
 	};
   	
 	// Return the requested state variable
