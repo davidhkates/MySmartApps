@@ -12,7 +12,7 @@ async function putState( appId, variableName, value ) {
   		Item: {
     			appId: { S: appId },
 			name: { S: variableName },
-			value: { S: value },
+			value: { S: variableValue },
   		},
 	};
 	
@@ -37,7 +37,7 @@ async function getState( appId, variableName ) {
     			appId: { S: appId },
 			name: { S: variableName },
   		},
-  		ProjectionExpression: 'value',
+  		ProjectionExpression: 'variableValue',
 	};
   	
 	// Return the requested state variable
