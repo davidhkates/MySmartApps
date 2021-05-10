@@ -64,17 +64,24 @@ module.exports = new SmartApp()
 		'temperatureMeasurement'
 	));
 
-/*
-	const sensorRequest = context.api.devices.getCapbilityStatus(currentTemp.deviceConfig, currentTemp.deviceConfig.componentId, 'temperatureMeasureemnt');
-	const sensorValue = await Promise.all(sensorRequest);
-	console.log('Device State: ', sensorValue);
-*/
 	// Quit if there are other sensor still active
 	const states = await Promise.all(stateRequests);
 	console.log('Device State: ', states);
 	console.log('Temperature: ', states.temperature.value);
-*/	
-
+	
+	// Get the current states of the other motion sensors
+        /*
+	const states = await Promise.all(stateRequests)
+            if (states.find(it => it.motion.value === 'active')) {
+                return
+            }
+	*/
+	/*
+	var sensor = context.config.tempSensor; 
+	console.log("Sensor: ", sensor);
+	var tempCurrent = context.api.devices.getCapabilityStatus( sensor.deviceId, sensor.componentId, 'temperatureMeasurement' );
+	console.log("Temp Value: ", tempCurrent);
+	
 /*
 	    // create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -96,13 +103,11 @@ module.exports = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of mainSwitchPressed");
-
 	// check value of mainSwitchPressed state variable
 	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
 		
 		// If we make it here, turn on all lights in onGroup
 		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-
 		// start timer to turn off lights if value specified
 		const delay = context.configNumberValue('delay')
 		if (delay) {
@@ -110,10 +115,8 @@ module.exports = new SmartApp()
 		    await context.api.schedules.runIn('motionStopped', delay)
 		}
 	}
-
         console.log("Turn on all lights on onGroup");
     })
-
     // Turn off the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
         // Turn on the lights in the on group
@@ -121,25 +124,20 @@ module.exports = new SmartApp()
         await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
         console.log("Turn off all lights in on and off groups");
     })
-
     // Turn on main switch if any of the on group lights are turned on separately
     .subscribedEventHandler('onGroupHandler', async (context, event) => {
         console.log("Turn on the main switch when a light in the on group is turned on");
-
 	// indicate main switch was NOT manually pressed
 	stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'false' );
         
 	// Turn on the main switch when a light in the on group is turned on
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
     })
-
     // Turn off the lights only when all motion sensors become inactive
     .subscribedEventHandler('motionStopHandler', async (context, event) => {
-
         // See if there are any motion sensors defined
         const motionSensors =  context.config.motionSensors
             .filter(it => it.deviceConfig.deviceId !== event.deviceId)
-
         if (motionSensors) {
             // Get the current states of the other motion sensors
             const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
@@ -155,7 +153,6 @@ module.exports = new SmartApp()
             }
         }
         console.log("Turn off lights after specified delay");
-
         const delay = context.configNumberValue('delay')
         if (delay) {
             // Schedule turn off if delay is set
