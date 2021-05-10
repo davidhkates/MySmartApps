@@ -79,7 +79,7 @@ module.exports = new SmartApp()
 	const currentTemp = states[0].temperature.value;
 	const targetTemp = context.configNumberValue('tempTarget');
 
-	console.log('Temperature: ', currentTemp);
+	console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 
 	if (currentTemp>targetTemp) {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
@@ -88,6 +88,6 @@ module.exports = new SmartApp()
 	}
 	
 	// call next temperature check
-        await context.api.schedules.runIn('checkTemperature', 300);	
+        // await context.api.schedules.runIn('checkTemperature', 300);	
 		
     });
