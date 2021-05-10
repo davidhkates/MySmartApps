@@ -5,14 +5,14 @@ const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 /*
   Store the value of the specified state variable stored in DynamoDB as string
   */
-async function putState( appId, variableName, variableValue ) {
+async function putState( appId, name, value ) {
 	// Set the parameters
 	const params = {
   		TableName: 'smartapp-context-store',
   		Item: {
     			appId: { S: appId },
-			name: { S: variableName },
-			value: { S: variableValue },
+			variableName: { S: name },
+			variableValue: { S: value },
   		},
 	};
 	
