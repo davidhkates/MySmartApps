@@ -90,12 +90,15 @@ module.exports = new SmartApp()
 	console.log('Fan enabled: ', fanEnabled);
 
 	if ((currentTemp>targetTemp) && fanEnabled) {
+		console.log('Trying to turn ON fan');
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
 	} else {
+		console.log('Trying to turn OFF fan');
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
 	}
 	
 	// call next temperature check
-        // await context.api.schedules.runIn('checkTemperature', checkInterval);	
+        console.log('Recursive call to check interval again');
+	await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		
     });
