@@ -13,8 +13,8 @@ module.exports = new SmartApp()
         // main control switch
         page.section('switch', section => {
             section
-                .deviceSetting('controlSwitch')
-                .capabilities(['switch'])
+                .deviceSetting('shadeControl')
+                .capabilities(['button'])
                 .required(true)
                 .permissions('rx');            
         });
@@ -54,9 +54,9 @@ module.exports = new SmartApp()
 
 	// create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.shade0,
-            'switch', 'switch.on', 'shadeUpHandler');
+            'button', 'button.up', 'shadeUpHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-            'switch', 'switch.off', 'shadeDownHandler');
+            'button', 'button.down', 'shadeDownHandler');
 
 	console.log('Shade Control: END CREATING SUBSCRIPTIONS')
     })
