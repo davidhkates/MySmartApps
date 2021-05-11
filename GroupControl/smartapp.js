@@ -76,7 +76,7 @@ module.exports = new SmartApp()
 	console.log("Main Switch Pressed: ", switchPressed);
 	
 	// check value of mainSwitchPressed state variable
-	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
+	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) ) {
 		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 	} else {
 		stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
