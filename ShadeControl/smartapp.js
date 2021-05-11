@@ -47,7 +47,7 @@ module.exports = new SmartApp()
 	console.log("ShadeControl: Installed/Updated");
         
 	// initialize state variable(s)
-	stateVariable.putState( context.event.appId, 'shadeState', '0' );
+	// stateVariable.putState( context.event.appId, 'shadeState', '0' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
