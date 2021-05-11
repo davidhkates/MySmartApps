@@ -72,7 +72,7 @@ module.exports = new SmartApp()
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of mainSwitchPressed");
-	const switchPressed = stateVariable.getState( context.event.appId, 'mainSwitchPressed' );
+	const switchPressed = await stateVariable.getState( context.event.appId, 'mainSwitchPressed' );
 	console.log("Main Switch Pressed: ", switchPressed);
 	
 	// check value of mainSwitchPressed state variable
