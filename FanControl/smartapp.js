@@ -1,6 +1,6 @@
 const SmartApp = require('@smartthings/smartapp');
 // const SmartUtils = require('../Utilities/capabilities');
-const checkInterval = 60;  // number of seconds between checking fan status
+const checkInterval = 300;  // number of seconds between checking fan status
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
