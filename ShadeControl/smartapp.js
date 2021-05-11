@@ -53,6 +53,8 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// create subscriptions for relevant devices
+	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+            'button', 'button.pushed', 'shadeUpHandler');
 /*
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.up', 'shadeUpHandler');
