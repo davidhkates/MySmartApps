@@ -1,6 +1,4 @@
 const SmartApp = require('@smartthings/smartapp');
-// const stateVariable = require('./state-variable');
-const stateVariable = require('../Utilities/state-variable');
 // const SmartUtils = require('../Utilities/capabilities');
 const checkInterval = 60;  // number of seconds between checking fan status
 
