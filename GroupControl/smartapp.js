@@ -76,9 +76,11 @@ module.exports = new SmartApp()
 	console.log("Main Switch Pressed: ", switchPressed);
 	
 	// check value of mainSwitchPressed state variable
-	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) == true ) {
+	if ( switchPressed == true ) {
+		console.log("Main switch pressed, turning on all lights in OnGroup");
 		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 	} else {
+		console.log("Main switch NOT pressed, don't turn on other lights");
 		stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 	}	
 
@@ -88,8 +90,6 @@ module.exports = new SmartApp()
 	    // Schedule turn off if delay is set
 	    await context.api.schedules.runIn('motionStopped', delay)
 	}
-
-        console.log("Turn on all lights on onGroup");
     })
 
     // Turn off the lights when main switch is pressed
