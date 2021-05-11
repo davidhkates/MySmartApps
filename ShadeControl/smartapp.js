@@ -47,15 +47,15 @@ module.exports = new SmartApp()
 	console.log("ShadeControl: Installed/Updated");
         
 	// initialize state variable(s)
-	// stateVariable.putState( context.event.appId, 'shadeState', '0' );
+	stateVariable.putState( context.event.appId, 'shadeState', '0' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
 	// create subscriptions for relevant devices
-        await context.api.subscriptions.subscribeToDevices(context.config.shade0,
+	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.up', 'shadeUpHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+        await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.down', 'shadeDownHandler');
 
 	console.log('Shade Control: END CREATING SUBSCRIPTIONS')
