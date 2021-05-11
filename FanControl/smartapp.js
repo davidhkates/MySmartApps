@@ -16,8 +16,9 @@ module.exports = new SmartApp()
                 .deviceSetting('fanSwitch')
                 .capabilities(['switch'])
                 .required(true)
-                .multiple(false);
-            section
+                .multiple(false)
+                .permissions('rx');           
+	    section
                 .numberSetting('tempTarget')
                 .required(true);
             section
