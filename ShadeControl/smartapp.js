@@ -11,34 +11,32 @@ module.exports = new SmartApp()
     .page('mainPage', (context, page, configData) => {
 
         // main control switch
-        page.section('switches', section => {
+        page.section('switch', section => {
             section
-                .deviceSetting('mainSwitch')
+                .deviceSetting('controlSwitch')
                 .capabilities(['switch'])
                 .required(true)
-                .permissions('rx');            
-            section
-                .deviceSetting('onGroup')
-                .capabilities(['switch'])
-                .required(true)
-                .multiple(true)
-                .permissions('rx');            
-            section
-                .deviceSetting('offGroup')
-                .capabilities(['switch'])
-                .multiple(true)
                 .permissions('rx');            
         });
 
-        // prompts user to select a contact sensor
-        page.section('sensors', section => {
+        // shade states
+        page.section('shades', section => {
             section
-                .deviceSetting('motionSensors')
-                .capabilities(['motionSensor'])
-                .multiple(true);
+                .deviceSetting('shade0')
+                .capabilities(['switch'])
+		.permissions('rx');
             section
-                .numberSetting('delay')
-                .required(false)
+                .deviceSetting('shade1')
+                .capabilities(['switch'])
+		.permissions('rx');
+            section
+                .deviceSetting('shade2')
+                .capabilities(['switch'])
+		.permissions('rx');
+            section
+                .deviceSetting('shade3')
+                .capabilities(['switch'])
+		.permissions('rx')
         });
     })
 
@@ -46,14 +44,15 @@ module.exports = new SmartApp()
     // Called for both INSTALLED and UPDATED lifecycle events if there is
     // no separate installed() handler
     .updated(async (context, updateData) => {
-	console.log("MotionGroup: Installed/Updated");
+	console.log("ShadeControl: Installed/Updated");
         
 	// initialize state variable(s)
-	stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+	stateVariable.putState( context.event.appId, 'shadeState', '0' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
+	/*
 	// create subscriptions for relevant devices
         await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
             'switch', 'switch.on', 'mainSwitchOnHandler');
@@ -65,9 +64,11 @@ module.exports = new SmartApp()
             'motionSensor', 'motion.active', 'motionStartHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
             'motionSensor', 'motion.inactive', 'motionStopHandler');
-        console.log('Motion Group: END CREATING SUBSCRIPTIONS')
+	*/
+        console.log('Shade Control: END CREATING SUBSCRIPTIONS')
     })
 
+/*
     // Turn on the lights when main switch is pressed
     .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
@@ -145,13 +146,8 @@ module.exports = new SmartApp()
         }
     })
 
-/*
-    .subscribedEventHandler('switchHandler', async (ctx, event) => {
-	console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
-    })
-*/
-
     // Turns off lights after delay elapses
     .scheduledEventHandler('motionStopped', async (context, event) => {
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
     });
+*/
