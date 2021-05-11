@@ -23,19 +23,19 @@ module.exports = new SmartApp()
         page.section('shades', section => {
             section
                 .deviceSetting('shade0')
-                .capabilities(['button'])
+                .capabilities(['switch'])
 		.permissions('rx');
             section
                 .deviceSetting('shade1')
-                .capabilities(['button'])
+                .capabilities(['switch'])
 		.permissions('rx');
             section
                 .deviceSetting('shade2')
-                .capabilities(['button'])
+                .capabilities(['switch'])
 		.permissions('rx');
             section
                 .deviceSetting('shade3')
-                .capabilities(['button'])
+                .capabilities(['switch'])
 		.permissions('rx')
         });
     })
