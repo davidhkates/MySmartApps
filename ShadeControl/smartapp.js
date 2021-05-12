@@ -60,6 +60,8 @@ module.exports = new SmartApp()
 	// create subscriptions for relevant devices
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.pushed', 'shadeUpHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+            'switch', 'switch', 'shadeDirectionHandler');
 /*
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.up', 'shadeUpHandler');
@@ -69,6 +71,7 @@ module.exports = new SmartApp()
 	
 	console.log('Shade Control: END CREATING SUBSCRIPTIONS')
     })
+
 
     // Update shade state in response to switch being pressed
     .subscribedEventHandler('shadeUpHandler', async (context, event) => {
@@ -88,6 +91,7 @@ module.exports = new SmartApp()
 */
     })
 
+
     .subscribedEventHandler('shadeDownHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
@@ -104,3 +108,20 @@ module.exports = new SmartApp()
 	}	
 */
     });
+
+
+    .subscribedEventHandler('shadeDirectionHandler', async (context, event) => {
+	// Get session state variable to see if button was manually pressed
+	// console.log("Checking value of mainSwitchPressed");
+	console.log("On Switch Pressed");
+	console.log("Context: ", context);
+	console.log("Event: ", event);
+    });
+
+
+/*
+    .subscribedEventHandler('switchHandler', async (ctx, event) => {
+	console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
+    })
+*/
+
