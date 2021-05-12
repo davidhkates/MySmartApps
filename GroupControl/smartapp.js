@@ -132,10 +132,10 @@ module.exports = new SmartApp()
 		it.deviceConfig.componentId,
 		'switch'
 	    ));	
-	    console.log('Other on group switch state requests: ', stateRequests);
 		
 	    // Quit if there are other switches still on
     	    const states = await Promise.all(stateRequests)
+	    console.log('Other on group switch state requests: ', stateRequests);
     	    if (states.find(it => it.switch.value === 'on')) {
 	        return
     	    }
