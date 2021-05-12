@@ -91,10 +91,11 @@ module.exports = new SmartApp()
 	// const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
 	const shadeDirection = await stateVariable.getState( context.event.appId, 'shadeDirection' );
 	const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
+	var newShadeState = oldShadeState;
 	if ( shadeDirection == "up" ) {
-	    const newShadeState = Math.min( oldShadeState+1, maxState ); 
+	    newShadeState = Math.min( oldShadeState+1, maxState ); 
 	} else {
-	    const newShadeState = Math.max( oldShadeState-1, 0 );
+	    newShadeState = Math.max( oldShadeState-1, 0 );
         }
 	console.log('Shade state - old: ', oldShadeState, ', new: ', newShadeState);
 	
