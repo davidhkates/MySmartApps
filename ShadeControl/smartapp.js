@@ -107,7 +107,7 @@ module.exports = new SmartApp()
 		stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 	}	
 */
-    });
+    })
 
 
     .subscribedEventHandler('shadeDirectionHandler', async (context, event) => {
