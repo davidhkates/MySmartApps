@@ -87,7 +87,7 @@ module.exports = new SmartApp()
 	//     maxState--;
 	// }
 	       
-	const currentShadeState = await stateVariable.getState( context.event.appId, 'shadeState' ).parseInt();
+	const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
 	// if ( ) {
 	    var newShadeState = Math.min( currentShadeState+1, maxState ); 
 	/*	
@@ -95,10 +95,10 @@ module.exports = new SmartApp()
 	    shadeState = Math.max( shadeState-1, 0 );
         }
 	*/
-	console.log('Shade state - current: ', currentShadeState, ', new: ', newShadeState);
+	console.log('Shade state - old: ', oldShadeState, ', new: ', newShadeState);
 	
 	// set shade to new state and save in state settings if changed
-	if (newShadeState!=currentShadeState) {	
+	if (newShadeState!=oldShadeState) {	
 		switch(newShadeState) {
 		    case 0:
 			context.api.devices.sendCommands(context.config.shade0, 'switch', 'on');
