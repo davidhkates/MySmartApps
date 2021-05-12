@@ -78,8 +78,8 @@ module.exports = new SmartApp()
     .subscribedEventHandler('shadeUpHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
-	console.log("On Switch Pressed");
-	console.log("Context: ", context);
+	console.log("Shade Button Pushed");
+	// console.log("Context: ", context);
 	console.log("Event: ", event);
 
 	// determine number of shade states specified
@@ -122,9 +122,9 @@ module.exports = new SmartApp()
     .subscribedEventHandler('shadeDownHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
-	console.log("On Switch Pressed");
+	console.log("Down Switch Pressed");
 	console.log("Context: ", context);
-	console.log("Event: ", event);
+	// console.log("Event: ", event);
 
 /*
 	// check value of mainSwitchPressed state variable
@@ -141,7 +141,7 @@ module.exports = new SmartApp()
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
 	console.log("On/Off Switch Pressed");
-	console.log("Context: ", context);
+	// console.log("Context: ", context);
 	console.log("Event: ", event);
 
 	stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
