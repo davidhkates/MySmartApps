@@ -16,7 +16,12 @@ module.exports = new SmartApp()
                 .deviceSetting('shadeControl')
                 .capabilities(['button'])
                 .required(true)
-                .permissions('rx');            
+                .permissions('r');
+	    section
+	    	.deviceSetting('shadeDirection')
+		.capabilities(['switch'])
+		.required(true)
+		.permissions('r');
         });
 
         // shade states
