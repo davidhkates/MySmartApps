@@ -132,7 +132,7 @@ module.exports = new SmartApp()
 		it.deviceConfig.componentId,
 		'switch'
 	    ));	
-	    log.console('Other on group switch state requests: ', stateRequests);
+	    console.log('Other on group switch state requests: ', stateRequests);
 		
 	    // Quit if there are other switches still on
     	    const states = await Promise.all(stateRequests)
