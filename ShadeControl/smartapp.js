@@ -28,7 +28,7 @@ module.exports = new SmartApp()
         page.section('shades', section => {
             section
                 .deviceSetting('shade0')
-                .capabilities(['switch'])
+                .capabilities(['momentary'])
 		.permissions('rx');
             section
                 .deviceSetting('shade1')
