@@ -81,14 +81,40 @@ module.exports = new SmartApp()
 	console.log("Context: ", context);
 	console.log("Event: ", event);
 
-/*
-	// check value of mainSwitchPressed state variable
-	if ( stateVariable.getState( context.event.appId, 'mainSwitchPressed' ) == 'true' ) {
-		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
+	// determine number of shade states specified
+	var maxState = 3;
+	// while ( ) {
+	//     maxState--;
+	// }
+	       
+	const currentShadeState = await stateVariable.getState( context.event.appId, 'shadeState' ).parseInt();
+	// if ( ) {
+	    var newShadeState = Math.min( currentShadeState+1, maxState ); 
+	/*	
 	} else {
-		stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+	    shadeState = Math.max( shadeState-1, 0 );
+        }
+	*/
+	console.log('Shade state - current: ', currentShadeState, ', new: ', newShadeState);
+	
+	// set shade to new state and save in state settings if changed
+	if (newShadeState!=currentShadeState) {	
+		switch(newShadeState) {
+		    case 0:
+			context.api.devices.sendCommands(context.config.shade0, 'switch', 'on');
+			break;
+		    case "1":
+			context.api.devices.sendCommands(context.config.shade1, 'switch', 'on');
+			break;
+		    case "2":
+			context.api.devices.sendCommands(context.config.shade2, 'switch', 'on');
+			break;
+		    case "3":
+			context.api.devices.sendCommands(context.config.shade3, 'switch', 'on');
+			break;				
+		}
+		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
 	}	
-*/
     })
 
 
