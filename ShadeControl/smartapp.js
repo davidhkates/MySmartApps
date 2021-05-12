@@ -32,15 +32,15 @@ module.exports = new SmartApp()
 		.permissions('rx');
             section
                 .deviceSetting('shade1')
-                .capabilities(['switch'])
+                .capabilities(['momentary'])
 		.permissions('rx');
             section
                 .deviceSetting('shade2')
-                .capabilities(['switch'])
+                .capabilities(['momentary'])
 		.permissions('rx');
             section
                 .deviceSetting('shade3')
-                .capabilities(['switch'])
+                .capabilities(['momentary'])
 		.permissions('rx')
         });
     })
@@ -102,16 +102,16 @@ module.exports = new SmartApp()
 	if (newShadeState!=oldShadeState) {	
 		switch(newShadeState) {
 		    case 0:
-			context.api.devices.sendCommands(context.config.shade0, 'switch', 'on');
+			context.api.devices.sendCommands(context.config.shade0, 'momentary', 'push');
 			break;
 		    case "1":
-			context.api.devices.sendCommands(context.config.shade1, 'switch', 'on');
+			context.api.devices.sendCommands(context.config.shade1, 'momentary', 'push');
 			break;
 		    case "2":
-			context.api.devices.sendCommands(context.config.shade2, 'switch', 'on');
+			context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
 			break;
 		    case "3":
-			context.api.devices.sendCommands(context.config.shade3, 'switch', 'on');
+			context.api.devices.sendCommands(context.config.shade3, 'momentary', 'push');
 			break;				
 		}
 		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
