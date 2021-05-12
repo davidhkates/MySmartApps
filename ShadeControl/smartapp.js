@@ -53,6 +53,7 @@ module.exports = new SmartApp()
         
 	// initialize state variable(s)
 	stateVariable.putState( context.event.appId, 'shadeState', '0' );
+	stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -87,14 +88,14 @@ module.exports = new SmartApp()
 	//     maxState--;
 	// }
 	       
-	const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
-	// if ( ) {
+	// const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
+	const shadeDirection = await stateVariable.getState( context.event.appId, 'shadeDirection' );
+	const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
+	if ( shadeDirection == "up" ) {
 	    var newShadeState = Math.min( currentShadeState+1, maxState ); 
-	/*	
 	} else {
 	    shadeState = Math.max( shadeState-1, 0 );
         }
-	*/
 	console.log('Shade state - old: ', oldShadeState, ', new: ', newShadeState);
 	
 	// set shade to new state and save in state settings if changed
@@ -139,9 +140,12 @@ module.exports = new SmartApp()
     .subscribedEventHandler('shadeDirectionHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
-	console.log("On Switch Pressed");
+	console.log("On/Off Switch Pressed");
 	console.log("Context: ", context);
 	console.log("Event: ", event);
+
+	stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
+
     });
 
 
