@@ -128,6 +128,7 @@ module.exports = new SmartApp()
 	    'switch'
         ));
 
+	/*
 	// Quit if there are other sensor still active
     	const states = await Promise.all(stateRequests)
     	if (states.find(it => it.switch.value === 'on')) {
@@ -135,6 +136,7 @@ module.exports = new SmartApp()
     	}
 	// Turn on the main switch when a light in the on group is turned on
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	*/
     })
 
 
