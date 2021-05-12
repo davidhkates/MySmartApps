@@ -127,11 +127,12 @@ module.exports = new SmartApp()
  
 	// Get the current states of the other motion sensors
 	if (otherOnGroup) {
-	    const stateRequests = onGroup.map(it => context.api.devices.getCapabilityStatus(
+	    const stateRequests = otherOnGroup.map(it => context.api.devices.getCapabilityStatus(
 		it.deviceConfig.deviceId,
 		it.deviceConfig.componentId,
 		'switch'
-	    ));
+	    ));	
+	    log.console('Other on group switch state requests: ', stateRequests);
 		
 	    // Quit if there are other switches still on
     	    const states = await Promise.all(stateRequests)
