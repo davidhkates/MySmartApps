@@ -121,14 +121,14 @@ module.exports = new SmartApp()
     .subscribedEventHandler('onGroupOffHandler', async (context, event) => {
         console.log("Turn off the main switch when ALL lights in the on group are turned off");
 
-        // Get the current states of the other motion sensors
+/*
+	// Get the current states of the other motion sensors
         const stateRequests = onGroup.map(it => context.api.devices.getCapabilityStatus(
 	    it.deviceConfig.deviceId,
 	    it.deviceConfig.componentId,
 	    'switch'
         ));
 
-	/*
 	// Quit if there are other sensor still active
     	const states = await Promise.all(stateRequests)
     	if (states.find(it => it.switch.value === 'on')) {
@@ -136,7 +136,7 @@ module.exports = new SmartApp()
     	}
 	// Turn on the main switch when a light in the on group is turned on
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-	*/
+*/
     })
 
 
