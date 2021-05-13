@@ -61,8 +61,11 @@ module.exports = new SmartApp()
 	// create subscriptions for relevant devices
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.pushed', 'shadeUpHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-            'switch', 'switch', 'shadeDirectionHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
+            'switch', 'switch.on', 'shadeDirectionUpHandler');
+        await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
+            'switch', 'switch.off', 'shadeDirectionDownHandler');
+/*
 /*
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.up', 'shadeUpHandler');
@@ -103,16 +106,16 @@ module.exports = new SmartApp()
 	if (newShadeState!=oldShadeState) {	
 		switch(newShadeState) {
 		    case 0:
-			context.api.devices.sendCommands(context.config.shade0, 'momentary', 'push');
+			await context.api.devices.sendCommands(context.config.shade0, 'momentary', 'push');
 			break;
 		    case "1":
-			context.api.devices.sendCommands(context.config.shade1, 'momentary', 'push');
+			await context.api.devices.sendCommands(context.config.shade1, 'momentary', 'push');
 			break;
 		    case "2":
-			context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
+			await context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
 			break;
 		    case "3":
-			context.api.devices.sendCommands(context.config.shade3, 'momentary', 'push');
+			await context.api.devices.sendCommands(context.config.shade3, 'momentary', 'push');
 			break;				
 		}
 		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
@@ -138,14 +141,27 @@ module.exports = new SmartApp()
     })
 
 
-    .subscribedEventHandler('shadeDirectionHandler', async (context, event) => {
+    .subscribedEventHandler('shadeDirectionUpHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
-	console.log("On/Off Switch Pressed");
+	console.log("On Switch Pressed");
 	// console.log("Context: ", context);
 	console.log("Event: ", event);
 
-	stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
+	await context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
+        stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
+
+    })
+
+
+    .subscribedEventHandler('shadeDirectionDownHandler', async (context, event) => {
+	// Get session state variable to see if button was manually pressed
+	// console.log("Checking value of mainSwitchPressed");
+	console.log("Off Switch Pressed");
+	// console.log("Context: ", context);
+	// console.log("Event: ", event);
+
+	stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
 
     });
 
