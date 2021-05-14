@@ -1,5 +1,6 @@
 const SmartApp   = require('@smartthings/smartapp');
-const stateVariable = require('./state-variable');
+// const stateVariable = require('./state-variable');
+const SmartApp   = require('@davidhkates/dynamo-context');
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
