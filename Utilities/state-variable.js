@@ -18,7 +18,7 @@ async function putState( appId, name, value ) {
 	
 	try {
     		const data = await dbclient.send(new PutItemCommand(params));
-    		console.log(data);
+    		// console.log(data);
   	} catch (err) {
     		console.error(err);
   	}
@@ -28,7 +28,7 @@ async function putState( appId, name, value ) {
   Get the value of the specified state variable stored in DynamoDB, returned as string
   */
 async function getState( appId, name ) {
-	console.log("Calling DynamoDB application context store to get state variable value");
+	// console.log("Calling DynamoDB application context store to get state variable value");
 
 	// Set the parameters
 	const params = {
@@ -43,9 +43,9 @@ async function getState( appId, name ) {
 	// Return the requested state variable
 	try {
 		const data = await dbclient.send(new GetItemCommand(params));
-		console.log("Success - state variable value = ", data.Item);
-		const returnValue = data.Item.stateValue.S;
-		console.log("Value: ", returnValue);
+		// console.log("Success - state variable value = ", data.Item);
+		// const returnValue = data.Item.stateValue.S;
+		// console.log("Value: ", returnValue);
 		return data.Item.stateValue.S;
 	} catch (err) {
 		console.log("Error", err);
