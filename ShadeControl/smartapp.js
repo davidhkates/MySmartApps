@@ -111,17 +111,23 @@ module.exports = new SmartApp()
 	if (newShadeState!=oldShadeState) {	
 		switch(newShadeState) {
 		    case 0:
+			console.log("Pushing button for shade 0");
 			await context.api.devices.sendCommands(context.config.shade0, 'momentary', 'push');
 			break;
 		    case "1":
+			console.log("Pushing button for shade 1");
 			await context.api.devices.sendCommands(context.config.shade1, 'momentary', 'push');
 			break;
 		    case "2":
+			console.log("Pushing button for shade 2");
 			await context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
 			break;
 		    case "3":
+			console.log("Pushing button for shade 3");
 			await context.api.devices.sendCommands(context.config.shade3, 'momentary', 'push');
-			break;				
+			break;		
+		    default:
+			console.log("We shouldn't ever get here");
 		}
 		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
 	}	
