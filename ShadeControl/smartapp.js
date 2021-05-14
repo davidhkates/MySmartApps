@@ -42,6 +42,11 @@ module.exports = new SmartApp()
                 .deviceSetting('shade3')
                 .capabilities(['momentary'])
 		.permissions('rx')
+	    section
+                .deviceSetting('switch0')
+                .capabilities(['switch'])
+		.permissions('rx');
+
         });
     })
 
@@ -148,6 +153,7 @@ module.exports = new SmartApp()
 	// console.log("Context: ", context);
 	console.log("Event: ", event);
 
+	await context.api.devices.sendCommands(context.config.switch0, 'switch', 'on');
 	await context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
         stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
 
