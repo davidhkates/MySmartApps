@@ -67,39 +67,50 @@ module.exports = new SmartApp()
     
     // Check temperature and turn on/off fan as appropriate
     .scheduledEventHandler('checkTemperature', async (context, event) => {
-	// compare current temperature to target temperate
-	// console.log("Context: ", context);
-
-	// console.log("Control: ", context.config.tempSensor);	
-	const sensorTemp =  context.config.tempSensor;
-
-	// Get the current states of the other motion sensors
-	const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
-		it.deviceConfig.deviceId,
-		it.deviceConfig.componentId,
-		'temperatureMeasurement'
-	));
-	console.log("State Requests Map: ", stateRequests);
-	
-	// Quit if there are other sensor still active
-	const states = await Promise.all(stateRequests);
-	const currentTemp = states[0].temperature.value;
-	const targetTemp = context.configNumberValue('tempTarget');
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 
-	console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
-	console.log('Fan enabled: ', fanEnabled);
+	const time1 = '12:42';
+const time2 = '18:30';
 
-	if ((currentTemp>targetTemp) && fanEnabled) {
-		console.log('Trying to turn ON fan');
-		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
-	} else {
-		console.log('Trying to turn OFF fan');
-		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
-	}
+const getTime = time => new Date(2019, 9, 2, time.substring(0, 2), time.substring(3, 5), 0, 0);
+
+const result = getTime(time1) < getTime(time2);
 	
-	// call next temperature check
-        console.log('Recursive call to check interval again');
-	await context.api.schedules.runIn('checkTemperature', checkInterval);	
-		
+	// determine if fan is enabled and within time window
+	const fanEnabled = context.configBooleanValue('fanEnabled');
+	console.log('Fan enabled: ', fanEnabled);
+	if ( fanEnabled ) {
+		const startTime = context.configTimeValue('startTime');
+		const endTime = context.configTimeValue('endTime');
+		console.log('Start time: ', startTime, ', end time: ', endTime);
+	
+		// compare current temperature to target temperate
+		// console.log("Context: ", context);
+		// console.log("Control: ", context.config.tempSensor);	
+		const sensorTemp =  context.config.tempSensor;
+
+		// Get the the current temperature
+		const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'temperatureMeasurement'
+		));
+		const states = await Promise.all(stateRequests);
+	
+		const currentTemp = states[0].temperature.value;
+		const targetTemp = context.configNumberValue('tempTarget');
+		console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
+
+		if ((currentTemp>targetTemp) && fanEnabled) {
+			console.log('Trying to turn ON fan');
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
+		} else {
+			console.log('Trying to turn OFF fan');
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
+		}
+	
+		// call next temperature check
+        	console.log('Recursive call to check interval again');
+		await context.api.schedules.runIn('checkTemperature', checkInterval);	
+	}	
     });
