@@ -1,6 +1,6 @@
 const SmartApp   = require('@smartthings/smartapp');
 // const stateVariable = require('./state-variable');
-const stateVariable = require('@katesthigns/smartstate');
+const stateVariable = require('@katesthings/smartstate');
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
