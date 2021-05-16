@@ -67,14 +67,13 @@ module.exports = new SmartApp()
     
     // Check temperature and turn on/off fan as appropriate
     .scheduledEventHandler('checkTemperature', async (context, event) => {
-	const fanEnabled = context.configBooleanValue('fanEnabled');
-
+/*
 	const time1 = '12:42';
-const time2 = '18:30';
+	const time2 = '18:30';
 
-const getTime = time => new Date(2019, 9, 2, time.substring(0, 2), time.substring(3, 5), 0, 0);
-
-const result = getTime(time1) < getTime(time2);
+	const getTime = time => new Date(2019, 9, 2, time.substring(0, 2), time.substring(3, 5), 0, 0);
+	const result = getTime(time1) < getTime(time2);
+*/
 	
 	// determine if fan is enabled and within time window
 	const fanEnabled = context.configBooleanValue('fanEnabled');
