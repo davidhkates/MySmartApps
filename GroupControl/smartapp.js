@@ -1,5 +1,6 @@
 const SmartApp   = require('@smartthings/smartapp');
-const stateVariable = require('./state-variable');
+// const stateVariable = require('./state-variable');
+const stateVariable = require('@katesthings/smartstate');
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -140,8 +141,9 @@ module.exports = new SmartApp()
     	    }
 	}
 	
-	// If we get here, turn off the main switch 
+	// If we get here, turn off the main switch and reset mainSwitchPressed state variable
         await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
     })
 
 
