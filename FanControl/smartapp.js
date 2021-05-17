@@ -66,16 +66,24 @@ module.exports = new SmartApp()
         const startTime = context.config.startTime;
         const endTime   = context.config.endTime;
 	if (startTime) {
-		// context.schedules.runDaily('fanStartHandler', context.config.startTime)
 		context.schedules.runDaily('checkTemperature', context.config.startTime)
 		if (endTime) {
-			context.schedules.runDaily('fanEndHandler', context.config.endTime)
+			context.schedules.runDaily('fanStopHandler', context.config.endTime)
 		}
 	} else {
 		await context.api.schedules.runIn('checkTemperature', checkInterval);
 	}
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
     })
+
+
+	// Handle end time if specified
+	.scheduledEventHandler('fanStopHandler', async(context, event) => {
+		// turn off fan
+		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
+		// cancel any upcoming temperature check calls
+		await context.api.schedules.delete('checkTemperature');
+	})
 
     
     // Check temperature and turn on/off fan as appropriate
