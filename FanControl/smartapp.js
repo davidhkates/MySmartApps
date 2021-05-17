@@ -138,9 +138,8 @@ module.exports = new SmartApp()
 		}
 	
 		// call next temperature check after interval (in seconds) until end time (if specified)
-		const endTime = context.config.endTime;
-        	console.log('Recursive call to check interval again, until endTime: ', endTime);
-
+        	console.log('Recursive call to check interval again");
+		const checkInterval = context.configNumberValue("checkInterval");
 		await context.api.schedules.runIn('checkTemperature', checkInterval);	
 	}	
     });
