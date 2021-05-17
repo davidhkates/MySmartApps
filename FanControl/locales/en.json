@@ -8,9 +8,9 @@
 	"pages.mainPage.settings.tempTarget.name": "Target temperature",
 	"pages.mainPage.settings.tempSensor.name": "Temperature sensor",
 	"pages.mainPage.settings.contact.name": "Doors/windows to check",
-	"pages.mainPage.sections.time.name": "Time to operate",
-	"pages.mainPage.settings.startTime.name": "Start time",
-	"pages.mainPage.settings.endTime.name": "End time",
+	"pages.mainPage.sections.interval.name": "Interval for checking temperature"
 	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)",
-	"pages.mainPage.settings.checkInterval.postMessage": "This setting is required"
+	"pages.mainPage.sections.time.name": "Time of day to operate",
+	"pages.mainPage.settings.startTime.name": "Start time",
+	"pages.mainPage.settings.endTime.name": "End time"
 }
