@@ -1,7 +1,7 @@
 {
 	"pages.mainPage.name": "Fan Control",
 	"Tap to set": "Tap to set",
-	"pages.mainPage.sections.parameters.name": "Operating parameters"
+	"pages.mainPage.sections.parameters.name": "Operating parameters",
 	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
 	"pages.mainPage.settings.fanEnabled.description": "Turn on/off to operate fan",
 	"pages.mainPage.settings.tempTarget.name": "Target temperature",
