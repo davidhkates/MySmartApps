@@ -65,9 +65,9 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.pushed', 'shadeButtonHandler');
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-            'switch', 'switch.on', 'shadeDirectionUpHandler');
+            'switch', 'switch.on', 'shadeUpHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-            'switch', 'switch.off', 'shadeDirectionDownHandler');
+            'switch', 'switch.off', 'shadeDownHandler');
 
 /*
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
@@ -140,27 +140,16 @@ module.exports = new SmartApp()
     })
 
 
-    .subscribedEventHandler('shadeDownHandler', async (context, event) => {
-	// Get session state variable to see if button was manually pressed
-	// console.log("Checking value of mainSwitchPressed");
-	console.log("Down Switch Pressed");
-	// console.log("Context: ", context);
-	console.log("Event: ", event);
-    })
-
-
-    .subscribedEventHandler('shadeDirectionUpHandler', async (context, event) => {
+    .subscribedEventHandler('shadeUpHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
 	console.log("On Switch Pressed");
 	// console.log("Context: ", context);
-	console.log("Event: ", event);
+	// console.log("Event: ", event);
 
 	// await context.api.devices.sendCommands(context.config.switch0, 'switch', 'on');
 	console.log("Set shade to state 2");
-	await context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
-	console.log("Press shade control button");
-	await context.api.devices.sendCommands(context.config.shadeControl, 'momentary', 'push');
+	await context.api.devices.sendCommands(context.config.shade2, 'button', 'push');
 	console.log("Shade control button pressed");
         stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
     })
@@ -171,7 +160,7 @@ module.exports = new SmartApp()
 	// console.log("Checking value of mainSwitchPressed");
 	console.log("Off Switch Pressed");
 	// console.log("Context: ", context);
-	console.log("Event: ", event);
+	// console.log("Event: ", event);
 
 	stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
     });
