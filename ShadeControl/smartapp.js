@@ -18,12 +18,14 @@ module.exports = new SmartApp()
                 .capabilities(['button'])
                 .required(true)
                 .permissions('rx');
+/*
 	    section
 	    	.deviceSetting('shadeDirection')
 		.capabilities(['switch'])
 		.required(false)
 		.permissions('rx');
-        });
+*/
+	});
 
         // shade states
         page.section('shades', section => {
@@ -43,11 +45,6 @@ module.exports = new SmartApp()
                 .deviceSetting('shade3')
                 .capabilities(['momentary'])
 		.permissions('rx')
-	    section
-                .deviceSetting('switch0')
-                .capabilities(['switch'])
-		.permissions('rx');
-
         });
     })
 
@@ -66,19 +63,18 @@ module.exports = new SmartApp()
 
 	// create subscriptions for relevant devices
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-            'button', 'button.pushed', 'shadeUpHandler');
+            'button', 'button.pushed', 'shadeButtonHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+            'switch', 'switch.on', 'shadeDirectionUpHandler');
+        await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+            'switch', 'switch.off', 'shadeDirectionDownHandler');
 
+/*
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
             'switch', 'switch.on', 'shadeDirectionUpHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
             'switch', 'switch.off', 'shadeDirectionDownHandler');
 
-	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-            'switch', 'switch.on', 'shadeDirectionUpHandler');
-        await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-            'switch', 'switch.off', 'shadeDirectionDownHandler');
-	
-/*
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.up', 'shadeUpHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
@@ -90,7 +86,7 @@ module.exports = new SmartApp()
 
 
     // Update shade state in response to switch being pressed
-    .subscribedEventHandler('shadeUpHandler', async (context, event) => {
+    .subscribedEventHandler('shadeButtonHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
 	console.log("Shade Button Pushed");
@@ -137,7 +133,7 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.shade3, 'momentary', 'push');
 			break;		
 		    default:
-			console.log("We shouldn't ever get here");
+			console.log("We shouldn't ever get here... Old Shade State: ", oldShadeState, ", New Shade State: ", newShadeState);
 		}
 		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
 	}	
@@ -160,8 +156,12 @@ module.exports = new SmartApp()
 	// console.log("Context: ", context);
 	console.log("Event: ", event);
 
-	await context.api.devices.sendCommands(context.config.switch0, 'switch', 'on');
+	// await context.api.devices.sendCommands(context.config.switch0, 'switch', 'on');
+	console.log("Set shade to state 2");
 	await context.api.devices.sendCommands(context.config.shade2, 'momentary', 'push');
+	console.log("Press shade control button");
+	await context.api.devices.sendCommands(context.config.shadeControl, 'momentary', 'push');
+	console.log("Shade control button pressed");
         stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
     })
 
