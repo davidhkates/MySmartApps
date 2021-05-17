@@ -1,6 +1,6 @@
-# Group Control
+# Shade Control
 
-Turn groups of lights on and off from main switch
+Sets shade position up or down when specified button is pushed
 
 ## File Structure
 
