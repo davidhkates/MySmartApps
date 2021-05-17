@@ -155,7 +155,7 @@ module.exports = new SmartApp()
     })
 
 
-    .subscribedEventHandler('shadeDirectionDownHandler', async (context, event) => {
+    .subscribedEventHandler('shadeDownHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
 	// console.log("Checking value of mainSwitchPressed");
 	console.log("Off Switch Pressed");
