@@ -14,7 +14,7 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 	    section
 		.booleanSetting('fanEnabled')
-		.required('false')
+		.required('false');
 	    section
                 .numberSetting('tempTarget')
                 .required(true);
@@ -40,7 +40,7 @@ module.exports = new SmartApp()
                 .deviceSetting('contact')
                 .capabilities(['contactSensor'])
                 .required(false)
-                .multiple(true);
+                .multiple(true)
         });
 
         // get start and end time
@@ -50,7 +50,7 @@ module.exports = new SmartApp()
                 .required(false);
             section
                 .timeSetting('endTime')
-                .required(false);
+                .required(false)
         });
     })
 
