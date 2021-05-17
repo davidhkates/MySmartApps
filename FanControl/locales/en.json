@@ -2,7 +2,7 @@
 	"pages.mainPage.name": "Fan Control",
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.controls.name": "Fan to control",
-	"pages.mainPage.settings.fanEnabled.resource": "Enabled",
+	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
 	"pages.mainPage.settings.fanEnabled.description": "Turn on/off to enable",
 	"pages.mainPage.settings.fanSwitch.name": "Fan switch",
 	"pages.mainPage.settings.tempTarget.name": "Target temperature",
