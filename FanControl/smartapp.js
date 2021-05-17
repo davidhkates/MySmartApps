@@ -45,7 +45,7 @@ module.exports = new SmartApp()
                 .required(false);
 	    section
 		.decimalSetting('checkInterval')
-		.defaultValue(300)
+		.defaultValue('300')
 		.required(true);
         });
     })
@@ -65,7 +65,7 @@ module.exports = new SmartApp()
         // Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
         const startTime = context.config.startTime.configString;
         const endTime   = context.config.endTime.configString;
-	console.log('Start time: ', startTime);
+	console.log('Start time: ', context.config.startTime);
 	if (startTime) {
 		context.schedules.runDaily('checkTemperature', startTime)
 		if (endTime) {
