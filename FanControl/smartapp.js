@@ -10,11 +10,19 @@ module.exports = new SmartApp()
     // Configuration page definition
     .page('mainPage', (context, page, configData) => {
 
-        // get controls and sensors
-        page.section('controls', section => {
+	// operating switch and interval for checking temperature
+	page.section('interval', section => {
 	    section
 		.booleanSetting('fanEnabled')
 		.required('false')
+	    section
+		.decimalSetting('checkInterval')
+		.defaultValue(300)
+		.required(true);
+	});
+		
+        // get controls and sensors
+        page.section('controls', section => {
             section
                 .deviceSetting('fanSwitch')
                 .capabilities(['switch'])
@@ -34,13 +42,9 @@ module.exports = new SmartApp()
                 .required(false)
                 .multiple(true);
         });
-        
+
         // get start and end time
         page.section('time', section => {
-	    section
-		.decimalSetting('checkInterval')
-		.defaultValue(300)
-		.required(true);
             section
                 .timeSetting('startTime')
                 .required(false);
