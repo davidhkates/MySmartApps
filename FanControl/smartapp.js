@@ -37,16 +37,16 @@ module.exports = new SmartApp()
         
         // get start and end time
         page.section('time', section => {
+	    section
+		.decimalSetting('checkInterval')
+		.defaultValue(300)
+		.required(true);
             section
                 .timeSetting('startTime')
                 .required(false);
             section
                 .timeSetting('endTime')
                 .required(false);
-	    section
-		.decimalSetting('checkInterval')
-		// .defaultValue('300')
-		.required(true);
         });
     })
 
