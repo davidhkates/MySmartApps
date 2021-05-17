@@ -11,10 +11,13 @@ module.exports = new SmartApp()
     .page('mainPage', (context, page, configData) => {
 
 	// operating switch and interval for checking temperature
-	page.section('interval', section => {
+	page.section('parameters', section => {
 	    section
 		.booleanSetting('fanEnabled')
 		.required('false')
+	    section
+                .numberSetting('tempTarget')
+                .required(true);
 	    section
 		.decimalSetting('checkInterval')
 		.defaultValue(300)
@@ -28,10 +31,7 @@ module.exports = new SmartApp()
                 .capabilities(['switch'])
                 .required(true)
                 .multiple(false)
-                .permissions('rx');           
-	    section
-                .numberSetting('tempTarget')
-                .required(true);
+                .permissions('rx');
             section
                 .deviceSetting('tempSensor')
                 .capabilities(['temperatureMeasurement'])
