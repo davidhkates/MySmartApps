@@ -79,8 +79,8 @@ module.exports = new SmartApp()
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 	console.log('Fan enabled: ', fanEnabled);
 	if ( fanEnabled ) {
-		const startTime = context.configTimeValue('startTime');
-		const endTime = context.configTimeValue('endTime');
+		const startTime = context.config.startTime;
+		const endTime = context.config.endTime;
 		console.log('Start time: ', startTime, ', end time: ', endTime);
 	
 		// compare current temperature to target temperate
