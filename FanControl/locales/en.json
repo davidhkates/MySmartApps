@@ -6,6 +6,7 @@
 	"pages.mainPage.settings.fanEnabled.description": "Turn on/off to operate fan",
 	"pages.mainPage.settings.tempTarget.name": "Target temperature",
 	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)",
+	"pages.mainPage.settings.checkInterval.postMessages": "Try this",
 	"pages.mainPage.sections.controls.name": "Fan switch and sensors",
 	"pages.mainPage.settings.fanSwitch.name": "Fan switch",
 	"pages.mainPage.settings.tempSensor.name": "Temperature sensor",
