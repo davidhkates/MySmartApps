@@ -17,7 +17,7 @@ module.exports = new SmartApp()
                 .deviceSetting('shadeControl')
                 .capabilities(['button'])
                 .required(true)
-                .permissions('rx');
+                .permissions('rx')
 /*
 	    section
 	    	.deviceSetting('shadeDirection')
