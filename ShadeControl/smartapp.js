@@ -67,12 +67,12 @@ module.exports = new SmartApp()
 	// create subscriptions for relevant devices
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'button', 'button.pushed', 'shadeUpHandler');
-/*
+
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
             'switch', 'switch.on', 'shadeDirectionUpHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
             'switch', 'switch.off', 'shadeDirectionDownHandler');
-*/
+
 	await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
             'switch', 'switch.on', 'shadeDirectionUpHandler');
         await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
