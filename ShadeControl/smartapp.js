@@ -171,4 +171,3 @@ module.exports = new SmartApp()
 	console.log(`EVENT ${event.deviceId} ${event.componentId}.${event.capability}.${event.attribute}: ${event.value}`)
     })
 */
-
