@@ -1,6 +1,6 @@
 const SmartApp = require('@smartthings/smartapp');
 // const SmartUtils = require('../Utilities/capabilities');
-const checkInterval = 300;  // number of seconds between checking fan status
+// const defaultInterval = 300;  // number of seconds between checking fan status
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -12,6 +12,9 @@ module.exports = new SmartApp()
 
         // get controls and sensors
         page.section('controls', section => {
+	    section
+		.booleanSetting('fanEnabled')
+		.required('false')
             section
                 .deviceSetting('fanSwitch')
                 .capabilities(['switch'])
@@ -41,8 +44,9 @@ module.exports = new SmartApp()
                 .timeSetting('endTime')
                 .required(false);
 	    section
-		.booleanSetting('fanEnabled')
-		.required('false')
+		.decimalSetting('checkInterval')
+		.defaultValue(300)
+		.required(true);
         });
     })
 
@@ -58,9 +62,18 @@ module.exports = new SmartApp()
     	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
-        // Schedule temperature check in specified time (in seconds)
-        await context.api.schedules.runIn('checkTemperature', checkInterval);
-	
+        // Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
+        const startTime = context.config.startTime;
+        const endTime   = context.config.endTime;
+	if (startTime) {
+		// context.schedules.runDaily('fanStartHandler', context.config.startTime)
+		context.schedules.runDaily('checkTemperature', context.config.startTime)
+		if (endTime) {
+			context.schedules.runDaily('fanEndHandler', context.config.endTime)
+		}
+	} else {
+		await context.api.schedules.runIn('checkTemperature', checkInterval);
+	}
         console.log('Motion Group: END CREATING SUBSCRIPTIONS')
     })
 
@@ -79,9 +92,9 @@ module.exports = new SmartApp()
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 	console.log('Fan enabled: ', fanEnabled);
 	if ( fanEnabled ) {
-		const startTime = context.config.startTime;
-		const endTime = context.config.endTime;
-		console.log('Start time: ', startTime, ', end time: ', endTime);
+		// const startTime = context.config.startTime;
+		// const endTime = context.config.endTime;
+		// console.log('Start time: ', startTime, ', end time: ', endTime);
 	
 		// compare current temperature to target temperate
 		// console.log("Context: ", context);
@@ -100,7 +113,7 @@ module.exports = new SmartApp()
 		const targetTemp = context.configNumberValue('tempTarget');
 		console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 
-		if ((currentTemp>targetTemp) && fanEnabled) {
+		if (currentTemp>targetTemp) {
 			console.log('Trying to turn ON fan');
 			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
 		} else {
@@ -108,8 +121,10 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
 		}
 	
-		// call next temperature check
-        	console.log('Recursive call to check interval again');
+		// call next temperature check after interval (in seconds) until end time (if specified)
+		const endTime = context.config.endTime;
+        	console.log('Recursive call to check interval again, until endTime: ', endTime);
+
 		await context.api.schedules.runIn('checkTemperature', checkInterval);	
 	}	
     });
