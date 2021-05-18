@@ -3,7 +3,7 @@
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.switch.name": "Shade controls",
 	"pages.mainPage.settings.shadeControl.name": "Switch to raise and lower shades",
-	// "pages.mainPage.settings.shadeDirection.name": "Shade switch",
+	"pages.mainPage.settings.shadeDirection.name": "Shade switch",
 	"pages.mainPage.sections.shades.name": "Shade scenes in sequential order",
 	"pages.mainPage.settings.shade0.name": "Shade Scene 0",
 	"pages.mainPage.settings.shade1.name": "Shade Scene 1",
