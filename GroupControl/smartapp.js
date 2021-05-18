@@ -41,7 +41,8 @@ module.exports = new SmartApp()
 				.numberSetting('delay')
 				.required(false)
 		});
-	
+
+	/*
 		// speaker(s) in room to turn on/off with group lights
 		page.section('speakers', section => {
 			section
@@ -50,6 +51,7 @@ module.exports = new SmartApp()
 				.multiple(true)
 				.required(false)
 		});
+	*/
 	})
 
 	// Handler called whenever app is installed or updated
