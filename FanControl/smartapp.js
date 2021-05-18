@@ -13,7 +13,7 @@ module.exports = new SmartApp()
 		page.section('parameters', section => {
 			section
 				.booleanSetting('fanEnabled')
-				.required('false');
+				.required(false);
 			section
 				.numberSetting('tempTarget')
 				.required(true);
