@@ -35,13 +35,13 @@ module.exports = new SmartApp()
 				.deviceSetting('tempSensor')
 				.capabilities(['temperatureMeasurement'])
 				.required(true)		
-				.permissions('r');
+				.permissions('rx');
 			section
 				.deviceSetting('contact')
 				.capabilities(['contactSensor'])
 				.required(false)
 				.multiple(true)
-				.permissions('r');
+				.permissions('rx');
 		});
 
 		// get start and end time
@@ -51,7 +51,7 @@ module.exports = new SmartApp()
 				.required(false);
 			section
 				.timeSetting('endTime')
-				.required(false)
+				.required(false);
 		});
 	})
 
