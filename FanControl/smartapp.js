@@ -87,7 +87,7 @@ module.exports = new SmartApp()
 		console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 	})
 
-
+/*
 	// Handle end time if specified
 	.scheduledEventHandler('fanStopHandler', async(context, event) => {
 		console.log("Turn off fan handler");
@@ -136,3 +136,4 @@ module.exports = new SmartApp()
 			await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		}
 	});
+*/
