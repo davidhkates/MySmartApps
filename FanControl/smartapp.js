@@ -89,6 +89,8 @@ module.exports = new SmartApp()
 
 	// Handle end time if specified
 	.scheduledEventHandler('fanStopHandler', async(context, event) => {
+		console.log("Turn off fan handler");
+
 		// turn off fan
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 		// cancel any upcoming temperature check calls
@@ -97,7 +99,8 @@ module.exports = new SmartApp()
 
  
 	// Check temperature and turn on/off fan as appropriate
-	.scheduledEventHandler('checkTemperature', async (context, event) => {
+	.scheduledEventHandler('checkTemperature', async (context, event) => {		
+		console.log("Check temperature");
 	
 		// determine if fan is enabled and within time window
 		const fanEnabled = context.configBooleanValue('fanEnabled');
