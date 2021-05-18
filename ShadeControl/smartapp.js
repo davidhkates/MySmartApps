@@ -16,6 +16,11 @@ module.exports = new SmartApp()
 				.capabilities(['button'])
 				.required(true)
 				.permissions('rx')
+			section
+				.deviceSetting('shadeDirection')
+				.capabilities(['switch'])
+				.required(true)
+				.permissions('rx')
 		});
 
         // shade states
@@ -55,11 +60,17 @@ module.exports = new SmartApp()
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
 		    'button', 'button.pushed', 'shadeButtonHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
+		    'switch', 'switch.on', 'shadeUpHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
+		    'switch', 'switch.off', 'shadeDownHandler');
+	/*
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
 		    'switch', 'switch.on', 'shadeUpHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
 		    'switch', 'switch.off', 'shadeDownHandler');
-
+	*/
+		
 		console.log('Shade Control: END CREATING SUBSCRIPTIONS')
 	})
 
