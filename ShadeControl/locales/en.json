@@ -1,12 +1,12 @@
 {
 	"pages.mainPage.name": "Shade Control",
 	"Tap to set": "Tap to set",
-	"pages.mainPage.sections.switches.name": "Switches to conrrol",
-	"pages.mainPage.settings.mainSwitch.name": "Main switch to control light groups",
-	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
-	"pages.mainPage.settings.offGroup.name": "Additional lights to turn off from main switch",
-	"pages.mainPage.sections.sensors.name": "Sensors to control light groups",
-	"pages.mainPage.settings.motionSensors.name": "Select motion sensors",
-	"pages.mainPage.sections.lights.name": "Turn on these devices",
-	"pages.mainPage.settings.delay.name": "Optional time delay in seconds"
+	"pages.mainPage.sections.switch.name": "Switches to raise and lower shades",
+	"pages.mainPage.settings.shadeControl.name": "Shade button",
+	"pages.mainPage.settings.shadeDirection.name": "Shade switch",
+	"pages.mainPage.sections.shades.name": "Shade scenes in sequential order",
+	"pages.mainPage.settings.shade0.name": "Shade Scene 0",
+	"pages.mainPage.settings.shade1.name": "Shade Scene 1",
+	"pages.mainPage.settings.shade2.name": "Shade Scene 2",
+	"pages.mainPage.settings.shade3.name": "Shade Scene 3",
 }
