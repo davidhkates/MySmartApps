@@ -66,7 +66,6 @@ module.exports = new SmartApp()
 		// unsubscribe all previously established subscriptions
 		await context.api.subscriptions.unsubscribeAll();
 
-	/*
 		// Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
 		const startTime = context.configStringValue("startTime");
 		const endTime   = context.configStringValue("endTime");
@@ -81,7 +80,7 @@ module.exports = new SmartApp()
 			const checkInterval = context.configNumberValue("checkInterval");
 			await context.api.schedules.runIn('checkTemperature', checkInterval);
 		}
-	*/
+
 		console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 	})
 
@@ -93,7 +92,7 @@ module.exports = new SmartApp()
 		// cancel any upcoming temperature check calls
 		await context.api.schedules.delete('checkTemperature');
 	})
-
+*/
     
 	// Check temperature and turn on/off fan as appropriate
 	.scheduledEventHandler('checkTemperature', async (context, event) => {
@@ -132,4 +131,3 @@ module.exports = new SmartApp()
 			await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		}	
 	});
-*/
