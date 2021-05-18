@@ -46,7 +46,7 @@ module.exports = new SmartApp()
 		page.section('speakers', section => {
 			section
 				.deviceSetting('sonos')
-				.capabilities(['speaker'])
+				.capabilities(['Music Player'])
 				.multiple(true)
 				.required(false)
 		});
