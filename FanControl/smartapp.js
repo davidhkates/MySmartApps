@@ -84,7 +84,7 @@ module.exports = new SmartApp()
 		console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 	})
 
-/*
+
 	// Handle end time if specified
 	.scheduledEventHandler('fanStopHandler', async(context, event) => {
 		// turn off fan
@@ -92,7 +92,7 @@ module.exports = new SmartApp()
 		// cancel any upcoming temperature check calls
 		await context.api.schedules.delete('checkTemperature');
 	})
-*/
+
     
 	// Check temperature and turn on/off fan as appropriate
 	.scheduledEventHandler('checkTemperature', async (context, event) => {
@@ -101,7 +101,7 @@ module.exports = new SmartApp()
 		const fanEnabled = context.configBooleanValue('fanEnabled');
 		console.log('Fan enabled: ', fanEnabled);
 		if ( fanEnabled ) {
-	
+	/*
 			// compare current temperature to target temperate
 			const sensorTemp =  context.config.tempSensor;
 
@@ -119,12 +119,12 @@ module.exports = new SmartApp()
 
 			if (currentTemp>targetTemp) {
 				console.log('Trying to turn ON fan');
-				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on')
+				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
 			} else {
 				console.log('Trying to turn OFF fan');
-				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off')
+				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 			}
-	
+	*/
 			// call next temperature check after interval (in seconds) until end time (if specified)
         		console.log('Recursive call to check interval again");
 			const checkInterval = context.configNumberValue("checkInterval");
