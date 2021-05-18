@@ -100,7 +100,7 @@ module.exports = new SmartApp()
 		// determine if fan is enabled and within time window
 		const fanEnabled = context.configBooleanValue('fanEnabled');
 		console.log('Fan enabled: ', fanEnabled);
-	
+	/*	
 		if ( fanEnabled ) {
 			// Get the the current temperature
 			const sensorTemp =  context.config.tempSensor;
@@ -110,7 +110,7 @@ module.exports = new SmartApp()
 				'temperatureMeasurement'
 			));
 			const states = await Promise.all(stateRequests);
-	/*
+
 			const currentTemp = states[0].temperature.value;
 			const targetTemp = context.configNumberValue('tempTarget');
 			console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
