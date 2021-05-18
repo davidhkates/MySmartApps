@@ -20,7 +20,7 @@ module.exports = new SmartApp()
 			section
 				.numberSetting('checkInterval')
 				.defaultValue(300)
-				.required(false)
+				.required(false);
 		});
 		
 		// get controls and sensors
@@ -102,21 +102,20 @@ module.exports = new SmartApp()
 		console.log('Fan enabled: ', fanEnabled);
 	
 		if ( fanEnabled ) {
-			// compare current temperature to target temperate
-			// const sensorTemp =  context.config.tempSensor;
-
 			// Get the the current temperature
+			const sensorTemp =  context.config.tempSensor;
 			const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
 				it.deviceConfig.deviceId,
 				it.deviceConfig.componentId,
 				'temperatureMeasurement'
 			));
 			const states = await Promise.all(stateRequests);
-	
+	/*
 			const currentTemp = states[0].temperature.value;
 			const targetTemp = context.configNumberValue('tempTarget');
 			console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 
+			// Compare current temperature to target temperature
 			if (currentTemp>targetTemp) {
 				console.log('Trying to turn ON fan');
 				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
@@ -124,7 +123,7 @@ module.exports = new SmartApp()
 				console.log('Trying to turn OFF fan');
 				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 			}
-			
+	*/		
 			// call next temperature check after interval (in seconds) until end time (if specified)
         		console.log('Recursive call to check interval again");
 			const checkInterval = context.configNumberValue("checkInterval");
