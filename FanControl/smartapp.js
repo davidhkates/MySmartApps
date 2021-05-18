@@ -100,7 +100,7 @@ module.exports = new SmartApp()
 		// determine if fan is enabled and within time window
 		const fanEnabled = context.configBooleanValue('fanEnabled');
 		console.log('Fan enabled: ', fanEnabled);
-	/*	
+	
 		if ( fanEnabled ) {
 			// Get the the current temperature
 			const sensorTemp =  context.config.tempSensor;
@@ -123,9 +123,9 @@ module.exports = new SmartApp()
 				console.log('Trying to turn OFF fan');
 				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 			}
-	*/		
+		
 			// call next temperature check after interval (in seconds) until end time (if specified)
-        		console.log('Recursive call to check interval again");
+        		console.log('Recursive call to check interval again');
 			const checkInterval = context.configNumberValue("checkInterval");
 			await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		}
