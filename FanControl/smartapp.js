@@ -72,8 +72,10 @@ module.exports = new SmartApp()
 		const currentTime = new Date();
 		console.log("Start time: ", startTime, ", end time: ", endTime, ", current time: ", currentTime);
 		if (startTime) {
+			console.log('Setting start time');
 			context.schedules.runDaily(startTime, 'checkTemperature')
 			if (endTime) {
+				console.log('Setting end time');
 				context.schedules.runDaily('fanStopHandler', endTime)
 			}
 		} else {
