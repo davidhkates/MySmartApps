@@ -96,11 +96,11 @@ module.exports = new SmartApp()
  
 	// Check temperature and turn on/off fan as appropriate
 	.scheduledEventHandler('checkTemperature', async (context, event) => {
-/*
 	
 		// determine if fan is enabled and within time window
 		const fanEnabled = context.configBooleanValue('fanEnabled');
 		console.log('Fan enabled: ', fanEnabled);
+	/*
 		if ( fanEnabled ) {
 			// compare current temperature to target temperate
 			const sensorTemp =  context.config.tempSensor;
@@ -130,5 +130,5 @@ module.exports = new SmartApp()
 			const checkInterval = context.configNumberValue("checkInterval");
 			await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		}
-*/
+	*/
 	});
