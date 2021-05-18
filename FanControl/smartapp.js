@@ -4,85 +4,84 @@ const SmartApp = require('@smartthings/smartapp');
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
-    .enableEventLogging()  // logs requests and responses as pretty-printed JSON
-    .configureI18n()        // auto-create i18n files for localizing config pages
+	.enableEventLogging()  // logs requests and responses as pretty-printed JSON
+	.configureI18n()        // auto-create i18n files for localizing config pages
 
-    // Configuration page definition
-    .page('mainPage', (context, page, configData) => {
+	// Configuration page definition
+	.page('mainPage', (context, page, configData) => {
 
-	// operating switch and interval for checking temperature
-	page.section('parameters', section => {
-	    section
-		.booleanSetting('fanEnabled')
-		.required('false');
-	    section
-                .numberSetting('tempTarget')
-                .required(true);
-	    section
-		.numberSetting('checkInterval')
-		.defaultValue(300)
-		.required(false)
-	});
+		// operating switch and interval for checking temperature
+		page.section('parameters', section => {
+			section
+				.booleanSetting('fanEnabled')
+				.required('false');
+			section
+				.numberSetting('tempTarget')
+				.required(true);
+			section
+				.numberSetting('checkInterval')
+				.defaultValue(300)
+				.required(false)
+		});
 		
-        // get controls and sensors
-        page.section('controls', section => {
-            section
-                .deviceSetting('fanSwitch')
-                .capabilities(['switch'])
-                .required(true)
-                .multiple(false)
-                .permissions('rx');
-            section
-                .deviceSetting('tempSensor')
-                .capabilities(['temperatureMeasurement'])
-                .required(true);		
-            section
-                .deviceSetting('contact')
-                .capabilities(['contactSensor'])
-                .required(false)
-                .multiple(true)
-        });
+		// get controls and sensors
+		page.section('controls', section => {
+			section
+				.deviceSetting('fanSwitch')
+				.capabilities(['switch'])
+				.required(true)
+				.multiple(false)
+				.permissions('rx');
+			section
+				.deviceSetting('tempSensor')
+				.capabilities(['temperatureMeasurement'])
+				.required(true);		
+			section
+				.deviceSetting('contact')
+				.capabilities(['contactSensor'])
+				.required(false)
+				.multiple(true)
+		});
 
-        // get start and end time
-        page.section('time', section => {
-            section
-                .timeSetting('startTime')
-                .required(false);
-            section
-                .timeSetting('endTime')
-                .required(false)
-        });
-    })
+		// get start and end time
+		page.section('time', section => {
+			section
+				.timeSetting('startTime')
+				.required(false);
+			section
+				.timeSetting('endTime')
+				.required(false)
+		});
+	})
 
-    // Handler called whenever app is installed or updated
-    // Called for both INSTALLED and UPDATED lifecycle events if there is
-    // no separate installed() handler
-    .updated(async (context, updateData) => {
-	console.log("FanControl: Installed/Updated");
+
+	// Handler called whenever app is installed or updated
+	// Called for both INSTALLED and UPDATED lifecycle events if there is
+	// no separate installed() handler
+	.updated(async (context, updateData) => {
+		console.log("FanControl: Installed/Updated");
 	
-	const fanEnabled = context.configBooleanValue('fanEnabled');
-	console.log('Fan enabled value: ', fanEnabled);
+		const fanEnabled = context.configBooleanValue('fanEnabled');
+		console.log('Fan enabled value: ', fanEnabled);
         
-    	// unsubscribe all previously established subscriptions
-	await context.api.subscriptions.unsubscribeAll();
+		// unsubscribe all previously established subscriptions
+		await context.api.subscriptions.unsubscribeAll();
 
-/*
-        // Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
-        const startTime = context.configStringValue("startTime");
-        const endTime   = context.configStringValue("endTime");
-	console.log("Start time: ", startTime, ", end time: ", endTime);
-	if (startTime) {
-		context.schedules.runDaily('checkTemperature', startTime)
-		if (endTime) {
-			context.schedules.runDaily('fanStopHandler', endTime)
+		// Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
+		const startTime = context.configStringValue("startTime");
+		const endTime   = context.configStringValue("endTime");
+		console.log("Start time: ", startTime, ", end time: ", endTime);
+		if (startTime) {
+			context.schedules.runDaily(startTime, 'checkTemperature')
+			if (endTime) {
+				context.schedules.runDaily('fanStopHandler', endTime)
+			}
+		} else {
+			const checkInterval = context.configNumberValue("checkInterval");
+			await context.api.schedules.runIn('checkTemperature', checkInterval);
 		}
-	} else {
-*/
-		const checkInterval = context.configNumberValue("checkInterval");
-		await context.api.schedules.runIn('checkTemperature', checkInterval);
-//	}
-        console.log('Motion Group: END CREATING SUBSCRIPTIONS')
-    })
+		console.log('Motion Group: END CREATING SUBSCRIPTIONS')
+	})
 
 
 	// Handle end time if specified
