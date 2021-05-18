@@ -1,6 +1,5 @@
+// Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
-// const SmartUtils = require('../Utilities/capabilities');
-// const defaultInterval = 300;  // number of seconds between checking fan status
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -67,6 +66,7 @@ module.exports = new SmartApp()
 		// unsubscribe all previously established subscriptions
 		await context.api.subscriptions.unsubscribeAll();
 
+	/*
 		// Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
 		const startTime = context.configStringValue("startTime");
 		const endTime   = context.configStringValue("endTime");
@@ -81,6 +81,7 @@ module.exports = new SmartApp()
 			const checkInterval = context.configNumberValue("checkInterval");
 			await context.api.schedules.runIn('checkTemperature', checkInterval);
 		}
+	*/
 		console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 	})
 
