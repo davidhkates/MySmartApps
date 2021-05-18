@@ -29,19 +29,18 @@ module.exports = new SmartApp()
 				.deviceSetting('fanSwitch')
 				.capabilities(['switch'])
 				.required(true)
-				.multiple(false)
 				.permissions('rx');
 			section
 				.deviceSetting('tempSensor')
 				.capabilities(['temperatureMeasurement'])
 				.required(true)		
-				.permissions('rx');
+				.permissions('r');
 			section
 				.deviceSetting('contact')
 				.capabilities(['contactSensor'])
 				.required(false)
 				.multiple(true)
-				.permissions('rx');
+				.permissions('r');
 		});
 
 		// get start and end time
