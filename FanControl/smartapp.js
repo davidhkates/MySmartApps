@@ -34,12 +34,14 @@ module.exports = new SmartApp()
 			section
 				.deviceSetting('tempSensor')
 				.capabilities(['temperatureMeasurement'])
-				.required(true);		
+				.required(true)		
+				.permissions('r');
 			section
 				.deviceSetting('contact')
 				.capabilities(['contactSensor'])
 				.required(false)
 				.multiple(true)
+				.permissions('r');
 		});
 
 		// get start and end time
