@@ -4,7 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 // const SmartSensor = require('@katesthings/smartcontrols');
 
-function getTemperature( context, sensor ) {
+async function getTemperature( context, sensor ) {
 	const sensorDevice = sensor.deviceConfig;
 	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
 	console.log('Sensor state: ', sensorState);
