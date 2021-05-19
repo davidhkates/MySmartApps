@@ -1,7 +1,8 @@
 {
-  "name": "simple-motion-lighting",
+  # "name": "simple-motion-lighting",
+  "name": "fan-control",
   "version": "1.0.0",
-  "description": "Turns lights on when motion is detected and off some time after it has stopped",
+  "description": "Turns fan on/off based on inside, outside, and target temperature",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
