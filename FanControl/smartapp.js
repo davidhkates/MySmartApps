@@ -110,7 +110,7 @@ module.exports = new SmartApp()
 	
 		if ( fanEnabled ) {
 			// Get the the current temperature
-			const thisTemp = SmartSensor.getTemperature( context.config.tempSensor[0] );
+			const thisTemp = SmartSensor.getTemperature( context, 'tempSensor' );
 			console.log('Indoor temperature: ', thisTemp);
 			const sensorTemp =  context.config.tempSensor;
 			console.log('Temperature sensor: ', sensorTemp);
