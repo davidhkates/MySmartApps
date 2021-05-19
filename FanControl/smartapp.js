@@ -28,6 +28,9 @@ module.exports = new SmartApp()
 				.numberSetting('tempTarget')
 				.required(true);
 			section
+				.numberSetting('humidityTarget')
+				.required(false);
+			section
 				.numberSetting('checkInterval')
 				.defaultValue(300)
 				.required(false);
@@ -50,6 +53,11 @@ module.exports = new SmartApp()
 				.capabilities(['contactSensor'])
 				.required(false)
 				.multiple(true)
+				.permissions('r');
+			section
+				.deviceSetting('weather')
+				.capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement']
+				.required(false)
 				.permissions('r');
 		});
 
@@ -122,12 +130,13 @@ module.exports = new SmartApp()
 		if ( fanEnabled ) {
 			// Get the the current temperature
 			// const thisTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-			const currentTemp = await getTemperature( context, context.config.tempSensor[0] );
+			const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
+			const outsideTemp = await getTemperature( context, context.config.weather[0] );
 			const targetTemp = context.configNumberValue('tempTarget');
 			console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 
 			// Compare current temperature to target temperature
-			if (currentTemp>targetTemp) {
+			if (indoorTemp>targetTemp && outsideTemp<indoorTemp) {
 				console.log('Turning fan on');
 				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
 			} else {
