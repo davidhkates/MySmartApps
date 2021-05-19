@@ -64,9 +64,13 @@ module.exports = new SmartApp()
 	.updated(async (context, updateData) => {
 		console.log("FanControl: Installed/Updated");
 	
+		// get fan enabled setting and turn off fan if not
 		const fanEnabled = context.configBooleanValue('fanEnabled');
 		console.log('Fan enabled value: ', fanEnabled);
-        
+		if (!fanEnabled) {
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+		}
+	
 		// unsubscribe all previously established subscriptions
 		await context.api.subscriptions.unsubscribeAll();
 
