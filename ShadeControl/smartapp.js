@@ -52,7 +52,7 @@ module.exports = new SmartApp()
         
 		// initialize state variable(s)
 		stateVariable.putState( context.event.appId, 'shadeState', '0' );
-		stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
+		stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
 
 		// unsubscribe all previously established subscriptions
 		await context.api.subscriptions.unsubscribeAll();
@@ -126,6 +126,7 @@ module.exports = new SmartApp()
 					console.log("We shouldn't ever get here... Old Shade State: ", oldShadeState, ", New Shade State: ", newShadeState);
 			}
 			*/
+			console.log('Pressing switch for shade state: ', newShadeState);
 			await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
 			stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
 		}	
