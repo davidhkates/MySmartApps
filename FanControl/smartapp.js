@@ -56,7 +56,7 @@ module.exports = new SmartApp()
 				.permissions('r');
 			section
 				.deviceSetting('weather')
-				.capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement']
+				.capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
 				.required(false)
 				.permissions('r');
 		});
