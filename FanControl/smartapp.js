@@ -1,6 +1,9 @@
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
 
+// Install relevant SmartApp utilities
+const SmartSensor = require('@katesthings/sensor-value');
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
 	.enableEventLogging()  // logs requests and responses as pretty-printed JSON
@@ -107,6 +110,8 @@ module.exports = new SmartApp()
 	
 		if ( fanEnabled ) {
 			// Get the the current temperature
+			const thisTemp = SmartSensor.getTemperature( context.config.tempSensor[0] );
+			console.log('Indoor temperature: ', thisTemp);
 			const sensorTemp =  context.config.tempSensor;
 			console.log('Temperature sensor: ', sensorTemp);
 			const indoorTemp = await context.api.devices.getCapabilityStatus(
