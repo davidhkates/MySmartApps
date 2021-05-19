@@ -44,15 +44,15 @@ module.exports = new SmartApp()
 				.required(true)
 				.permissions('rx');
 			section
-				.deviceSetting('tempSensor')
-				.capabilities(['temperatureMeasurement'])
-				.required(true)		
-				.permissions('r');
-			section
 				.deviceSetting('contact')
 				.capabilities(['contactSensor'])
 				.required(false)
 				.multiple(true)
+				.permissions('r');
+			section
+				.deviceSetting('tempSensor')
+				.capabilities(['temperatureMeasurement'])
+				.required(true)		
 				.permissions('r');
 			section
 				.deviceSetting('weather')
