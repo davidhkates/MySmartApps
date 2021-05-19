@@ -109,7 +109,8 @@ module.exports = new SmartApp()
 			// Get the the current temperature
 			const sensorTemp =  context.config.tempSensor;
 			console.log('Temperature sensor: ', sensorTemp);
-			const indoorTemp = await context.api.devices.getCapabilityStatus(sensorTemp.deviceConfig.deviceId, sensorTemp.deviceConfig.componentId, 'temperatureMeasurement');
+			const indoorTemp = await context.api.devices.getCapabilityStatus(
+				sensorTemp[0].deviceConfig.deviceId, sensorTemp[0].deviceConfig.componentId, 'temperatureMeasurement');
 			console.log('Temperature value: ', indoorTemp);
 			const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
 				it.deviceConfig.deviceId,
