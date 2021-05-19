@@ -71,6 +71,7 @@ module.exports = new SmartApp()
 		// const startTime = context.configStringValue("startTime");
 		const startTime = new Date();
 		const endTime   = context.configStringValue("endTime");
+		console.log('Start time: ', startTime, ', end time: ', endTime);
 		if (startTime) {
 			console.log('Setting start time');
 			await context.api.schedules.runDaily('checkTemperature', startTime)
