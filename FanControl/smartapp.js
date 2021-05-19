@@ -133,7 +133,7 @@ module.exports = new SmartApp()
 			const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
 			const outsideTemp = await getTemperature( context, context.config.weather[0] );
 			const targetTemp = context.configNumberValue('tempTarget');
-			console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
+			console.log('Indoor: ', indoorTemp, ', outside: ', outsideTemp, ', target: ', targetTemp);
 
 			// Compare current temperature to target temperature
 			if (indoorTemp>targetTemp && outsideTemp<indoorTemp) {
