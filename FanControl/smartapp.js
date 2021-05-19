@@ -7,7 +7,7 @@ const SmartApp = require('@smartthings/smartapp');
 async function getTemperature( context, sensor ) {
 	const sensorDevice = sensor.deviceConfig;
 	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
-	console.log('Sensor state: ', sensorState);
+	// console.log('Sensor state: ', sensorState);
 	return sensorState.temperature.value;
 }
 
@@ -122,21 +122,7 @@ module.exports = new SmartApp()
 		if ( fanEnabled ) {
 			// Get the the current temperature
 			// const thisTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-			const thisTemp = await getTemperature( context, context.config.tempSensor[0] );
-			console.log('Indoor temperature: ', thisTemp);
-			const sensorTemp =  context.config.tempSensor;
-			console.log('Temperature sensor: ', sensorTemp);
-			const indoorTemp = await context.api.devices.getCapabilityStatus(
-				sensorTemp[0].deviceConfig.deviceId, sensorTemp[0].deviceConfig.componentId, 'temperatureMeasurement');
-			console.log('Temperature value: ', indoorTemp);
-			const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'temperatureMeasurement'
-			));
-			const states = await Promise.all(stateRequests);
-
-			const currentTemp = states[0].temperature.value;
+			const currentTemp = await getTemperature( context, context.config.tempSensor[0] );
 			const targetTemp = context.configNumberValue('tempTarget');
 			console.log('Current temp: ', currentTemp, ', target temp: ', targetTemp, ', variance: ', currentTemp-targetTemp);
 
@@ -151,7 +137,7 @@ module.exports = new SmartApp()
 		
 			// call next temperature check after interval (in seconds) until end time (if specified)
         		console.log('Recursive call to check interval again');
-			const checkInterval = context.configNumberValue("checkInterval");
+			const checkInterval = context.configNumberValue('checkInterval');
 			await context.api.schedules.runIn('checkTemperature', checkInterval);	
 		}
 	});
