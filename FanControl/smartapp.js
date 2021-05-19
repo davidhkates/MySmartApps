@@ -2,7 +2,14 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartSensor = require('@katesthings/smartcontrols');
+
+function getTemperature( context, sensor ) {
+	const sensorDevice = sensor.deviceConfig;
+	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
+	console.log('Sensor state: ', sensorState);
+	return sensorState[0].temperature.value;
+}
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -114,7 +121,8 @@ module.exports = new SmartApp()
 	
 		if ( fanEnabled ) {
 			// Get the the current temperature
-			const thisTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
+			// const thisTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
+			const thisTemp = await getTemperature( context, context.config.tempSensor[0] );
 			console.log('Indoor temperature: ', thisTemp);
 			const sensorTemp =  context.config.tempSensor;
 			console.log('Temperature sensor: ', sensorTemp);
