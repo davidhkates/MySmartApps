@@ -7,7 +7,7 @@ const SmartSensor = require('@katesthings/smartcontrols');
 /* Define the SmartApp */
 module.exports = new SmartApp()
 	.enableEventLogging()  // logs requests and responses as pretty-printed JSON
-	.configureI18n()        // auto-create i18n files for localizing config pages
+	.configureI18n()       // auto-create i18n files for localizing config pages
 
 	// Configuration page definition
 	.page('mainPage', (context, page, configData) => {
@@ -114,7 +114,7 @@ module.exports = new SmartApp()
 	
 		if ( fanEnabled ) {
 			// Get the the current temperature
-			const thisTemp = SmartSensor.getTemperature( context, tempSensor );
+			const thisTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
 			console.log('Indoor temperature: ', thisTemp);
 			const sensorTemp =  context.config.tempSensor;
 			console.log('Temperature sensor: ', sensorTemp);
