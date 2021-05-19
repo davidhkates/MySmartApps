@@ -14,7 +14,7 @@
 	"pages.mainPage.settings.fanSwitch.name": "Fan switch",
 	"pages.mainPage.settings.tempSensor.name": "Temperature sensor",
 	"pages.mainPage.settings.contact.name": "Doors/windows to check",
-	"pages.mainPage.settings.weather.name": "Sensor for outside temperature and humidity",
+	"pages.mainPage.settings.weather.name": "Outside temperature and humidity",
 	"pages.mainPage.sections.time.name": "Time of day to operate",
 	"pages.mainPage.settings.startTime.name": "Start time",
 	"pages.mainPage.settings.startTime.description": "Time when fan should start operating (optional)",
