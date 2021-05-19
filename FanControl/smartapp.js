@@ -68,11 +68,12 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.unsubscribeAll();
 
 		// Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
-		const startTime = context.configStringValue("startTime");
+		// const startTime = context.configStringValue("startTime");
+		const startTime = new Date();
 		const endTime   = context.configStringValue("endTime");
 		if (startTime) {
 			console.log('Setting start time');
-			// await context.api.schedules.runDaily('checkTemperature', startTime)
+			await context.api.schedules.runDaily('checkTemperature', startTime)
 			if (endTime) {
 				console.log('Setting end time');
 				// await context.api.schedules.runDaily('fanStopHandler', endTime)
