@@ -108,6 +108,7 @@ module.exports = new SmartApp()
 		if ( fanEnabled ) {
 			// Get the the current temperature
 			const sensorTemp =  context.config.tempSensor;
+			console.log('Temperature sensor: ', sensorTemp);
 			const stateRequests = sensorTemp.map(it => context.api.devices.getCapabilityStatus(
 				it.deviceConfig.deviceId,
 				it.deviceConfig.componentId,
@@ -121,10 +122,10 @@ module.exports = new SmartApp()
 
 			// Compare current temperature to target temperature
 			if (currentTemp>targetTemp) {
-				console.log('Trying to turn ON fan');
+				console.log('Turning fan on');
 				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
 			} else {
-				console.log('Trying to turn OFF fan');
+				console.log('Turning fan off');
 				await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 			}
 		
