@@ -72,10 +72,10 @@ module.exports = new SmartApp()
 		const endTime   = context.configStringValue("endTime");
 		if (startTime) {
 			console.log('Setting start time');
-			await context.api.schedules.runDaily('checkTemperature', Date(startTime))
+			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 			if (endTime) {
 				console.log('Setting end time');
-				await context.api.schedules.runDaily('fanStopHandler', Date(endTime))
+				await context.api.schedules.runDaily('fanStopHandler', new Date(endTime))
 			}
 		} else {
 			const checkInterval = context.configNumberValue("checkInterval");
