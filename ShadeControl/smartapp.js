@@ -79,7 +79,7 @@ module.exports = new SmartApp()
 	.subscribedEventHandler('shadeButtonHandler', async (context, event) => {
 		// Get session state variable to see if button was manually pressed
 		console.log("Shade Button Pushed");
-		// console.log("Event: ", event);
+		console.log("Event: ", event);
 
 		// create shade array
 		const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
