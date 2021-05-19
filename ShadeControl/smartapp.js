@@ -3,7 +3,7 @@ const stateVariable = require('@katesthings/smartstate');
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
-	.enableEventLogging()  // logs requests and responses as pretty-printed JSON
+	.enableEventLogging()   // logs requests and responses as pretty-printed JSON
 	.configureI18n()        // auto-create i18n files for localizing config pages
 
 	// Configuration page definition
@@ -79,7 +79,7 @@ module.exports = new SmartApp()
 	.subscribedEventHandler('shadeButtonHandler', async (context, event) => {
 		// Get session state variable to see if button was manually pressed
 		console.log("Shade Button Pushed");
-		console.log("Event: ", event);
+		// console.log("Event: ", event);
 
 		// create shade array
 		const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
@@ -89,7 +89,6 @@ module.exports = new SmartApp()
 		while ( shade_array[maxState] ) {
 			maxState++;
 		}
-		console.log("Maximum number of shade states: ", maxState);
 
 		// const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
 		const shadeDirection = await stateVariable.getState( context.event.appId, 'shadeDirection' );
@@ -100,32 +99,10 @@ module.exports = new SmartApp()
 		} else {
 		    	newShadeState = Math.max( oldShadeState-1, 0 );
 		}
-		console.log('Shade state - old: ', oldShadeState, ', new: ', newShadeState);
+		// console.log('Shade state - old: ', oldShadeState, ', new: ', newShadeState);
 
 		// set shade to new state and save in state settings if changed
 		if (newShadeState!=oldShadeState) {
-			/*
-			switch(newShadeState) {
-				case 0:
-					console.log("Pushing button for shade 0");
-					await context.api.devices.sendCommands(context.config.shade0, 'switch', 'on');
-					break;
-				case "1":
-					console.log("Pushing button for shade 1");
-					await context.api.devices.sendCommands(context.config.shade1, 'switch', 'on');
-					break;
-				case "2":
-					console.log("Pushing button for shade 2");
-					await context.api.devices.sendCommands(context.config.shade2, 'switch', 'on');
-					break;
-				case "3":
-					console.log("Pushing button for shade 3");
-					await context.api.devices.sendCommands(context.config.shade3, 'switch', 'on');
-					break;		
-				default:
-					console.log("We shouldn't ever get here... Old Shade State: ", oldShadeState, ", New Shade State: ", newShadeState);
-			}
-			*/
 			console.log('Pressing switch for shade state: ', newShadeState);
 			await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
 			stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
@@ -136,20 +113,16 @@ module.exports = new SmartApp()
 	// When on pressed, set shade direction state variable to "up"
     	.subscribedEventHandler('shadeUpHandler', async (context, event) => {
 		console.log("On Switch Pressed");
-		stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
-/*
-		// await context.api.devices.sendCommands(context.config.switch0, 'switch', 'on');
-		console.log("Set shade to state 2");
-		await context.api.devices.sendCommands(context.config.shade2, 'switch', 'on');
-		console.log("Shade control button pressed");
-*/
+		await stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
+		await context.api.devices.sendCommands(context.config.shadeControl, 'button', 'pushed');
 	})
 
 
 	// When off pressed, set shade direction state variable to "down"
 	.subscribedEventHandler('shadeDownHandler', async (context, event) => {
 		console.log("Off Switch Pressed");
-		stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
+		await stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
+		await context.api.devices.sendCommands(context.config.shadeControl, 'button', 'pushed');
 	});
 
 
