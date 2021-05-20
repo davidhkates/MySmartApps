@@ -1,7 +1,19 @@
 // import required node packages
 const SmartApp   = require('@smartthings/smartapp');
 const SmartState = require('@katesthings/smartstate');
-const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartSensor = require('@katesthings/smartcontrols');
+
+
+// get the state of specified switch
+async function getSwitchState( context, sensor ) {
+	try {
+		const sensorDevice = sensor.deviceConfig;
+		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
+		return sensorState.switch.value;
+	} catch (err) {
+		console.log("Error", err);
+	}	
+};
 
 
 // define shared functions
@@ -16,8 +28,10 @@ async function buttonPush(context) {
 	}
 
 	// get shade direction
-	const shadeControl = await SmartSensor.getSwitchState( context, context.config.shadeControl[0] )
-	const shadeDirection = await SmartState.getState( context.event.appId, 'shadeDirection' );
+	// const shadeControl = await SmartSensor.getSwitchState( context, context.config.shadeControl[0] );
+	const shadeControl = await getSwitchState( context, context.config.shadeControl[0] );
+	const shadeDirection = ( shadeControl == 'on' ? 'up' : 'down' );
+	// const shadeDirection = await SmartState.getState( context.event.appId, 'shadeDirection' );
 	const oldShadeState = parseInt( await SmartState.getState( context.event.appId, 'shadeState' ));
 	var newShadeState = oldShadeState;
 	if ( shadeDirection == "up" ) {
