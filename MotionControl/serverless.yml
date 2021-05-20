@@ -1,4 +1,4 @@
-service: fan-control
+service: motion-control
 
 package:
   patterns:
