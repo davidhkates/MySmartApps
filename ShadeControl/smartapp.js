@@ -3,7 +3,7 @@ const SmartApp   = require('@smartthings/smartapp');
 const stateVariable = require('@katesthings/smartstate');
 
 // define shared functions
-async function buttonPush() {
+async function buttonPush(context) {
 	// create shade array
 	const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
 
@@ -107,7 +107,7 @@ module.exports = new SmartApp()
 
 	// Update shade state in response to switch being pressed
 	.subscribedEventHandler('shadeButtonHandler', async (context, event) => {
-		await buttonPush();
+		await buttonPush(context);
 	})
 
 
@@ -115,7 +115,7 @@ module.exports = new SmartApp()
     	.subscribedEventHandler('shadeUpHandler', async (context, event) => {
 		console.log("On Switch Pressed");
 		await stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
-		await buttonPush();
+		await buttonPush(context);
 	})
 
 
@@ -123,7 +123,7 @@ module.exports = new SmartApp()
 	.subscribedEventHandler('shadeDownHandler', async (context, event) => {
 		console.log("Off Switch Pressed");
 		await stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
-		await buttonPush();
+		await buttonPush(context);
 	});
 
 
