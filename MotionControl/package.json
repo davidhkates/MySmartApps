@@ -1,7 +1,7 @@
 {
-  "name": "fan-control",
+  "name": "motion-control",
   "version": "1.0.0",
-  "description": "Turn on/off fan based in inside, outside, and target temperature",
+  "description": "Use motion sensor to turn on/off switch based on time of day and other controls",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -14,7 +14,7 @@
     "SmartThings",
     "SmartApp",
     "Control",
-    "Fan"
+    "Motion"
   ],
   "author": "David H. Kates",
   "license": "MIT",
