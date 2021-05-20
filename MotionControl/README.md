@@ -1,6 +1,6 @@
-# Fan Control
+# Motion Control
 
-Control fan switch based on room temperature, set temperature, outside temperature/humidity, and door/window sensors - updated
+Use motion control(s) to turn on/off switch based on time of day and state of other controls
 
 
 ## File Structure
