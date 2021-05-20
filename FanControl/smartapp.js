@@ -4,6 +4,38 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 // const SmartSensor = require('@katesthings/smartcontrols');
 
+async function controlFan( context ) {
+	// variable to return fan state
+	var fanState = 'off';
+	
+	// determine if fan is enabled and within time window
+	const fanEnabled = context.configBooleanValue('fanEnabled');
+	console.log('Fan enabled: ', fanEnabled);
+
+	if ( fanEnabled ) {
+		// Get the the current temperature
+		// const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
+		const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
+		const outsideTemp = await getTemperature( context, context.config.weather[0] );
+		const targetTemp = context.configNumberValue('tempTarget');
+		console.log('Indoor: ', indoorTemp, ', outside: ', outsideTemp, ', target: ', targetTemp);
+
+		// determine if any contact sensor is open
+		var contactSensors = 'open';
+		
+		// Compare current temperature to target temperature
+		fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && fanState=='open') ? 'on' : 'off' );
+		console.log('Turning fan ', fanState);
+		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
+
+		// call next temperature check after interval (in seconds) until end time (if specified)
+		console.log('Recursive call to check interval again');
+		const checkInterval = context.configNumberValue('checkInterval');
+		context.api.schedules.runIn('checkTemperature', checkInterval);	
+	}
+	return fanState;
+}
+
 async function getTemperature( context, sensor ) {
 	const sensorDevice = sensor.deviceConfig;
 	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
