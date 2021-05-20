@@ -62,12 +62,14 @@ module.exports = new SmartApp()
 				.deviceSetting('shadeControl')
 				.capabilities(['button','switch'])
 				.required(true)
-				.permissions('rx')
+				.permissions('rx');
+/*
 			section
 				.deviceSetting('shadeDirection')
 				.capabilities(['switch'])
 				.required(true)
 				.permissions('rx')
+*/
 		});
 
         	// shade states
@@ -99,7 +101,7 @@ module.exports = new SmartApp()
         
 		// initialize state variable(s)
 		SmartState.putState( context.event.appId, 'shadeState', '0' );
-		SmartState.putState( context.event.appId, 'shadeDirection', 'up' );
+		// SmartState.putState( context.event.appId, 'shadeDirection', 'up' );
 
 		// unsubscribe all previously established subscriptions
 		await context.api.subscriptions.unsubscribeAll();
@@ -126,6 +128,7 @@ module.exports = new SmartApp()
 	})
 
 
+/*
 	// When on pressed, set shade direction state variable to "up"
     	.subscribedEventHandler('shadeUpHandler', async (context, event) => {
 		console.log("On Switch Pressed");
@@ -140,7 +143,7 @@ module.exports = new SmartApp()
 		await SmartState.putState( context.event.appId, 'shadeDirection', 'down' );
 		await buttonPush(context);
 	});
-
+*/
 
 /*
 	.subscribedEventHandler('switchHandler', async (ctx, event) => {
