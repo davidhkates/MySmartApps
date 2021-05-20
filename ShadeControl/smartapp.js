@@ -1,6 +1,8 @@
 // import required node packages
 const SmartApp   = require('@smartthings/smartapp');
-const stateVariable = require('@katesthings/smartstate');
+const SmartState = require('@katesthings/smartstate');
+const SmartSensor = require('@katesthings/smartcontrols');
+
 
 // define shared functions
 async function buttonPush(context) {
@@ -13,9 +15,10 @@ async function buttonPush(context) {
 		maxState++;
 	}
 
-	// const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
-	const shadeDirection = await stateVariable.getState( context.event.appId, 'shadeDirection' );
-	const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
+	// get shade direction
+	const shadeControl = await SmartSensor.getSwitchState( context, context.config.shadeControl[0] )
+	const shadeDirection = await SmartState.getState( context.event.appId, 'shadeDirection' );
+	const oldShadeState = parseInt( await SmartState.getState( context.event.appId, 'shadeState' ));
 	var newShadeState = oldShadeState;
 	if ( shadeDirection == "up" ) {
 		newShadeState = Math.min( oldShadeState+1, maxState ); 
@@ -27,7 +30,7 @@ async function buttonPush(context) {
 	if (newShadeState!=oldShadeState) {
 		console.log('Pressing switch for shade state: ', newShadeState);
 		await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
-		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
+		SmartState.putState( context.event.appId, 'shadeState', newShadeState.toString() );
 	}	
 }
 
@@ -81,8 +84,8 @@ module.exports = new SmartApp()
 		console.log("ShadeControl: Installed/Updated");
         
 		// initialize state variable(s)
-		stateVariable.putState( context.event.appId, 'shadeState', '0' );
-		stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
+		SmartState.putState( context.event.appId, 'shadeState', '0' );
+		SmartState.putState( context.event.appId, 'shadeDirection', 'up' );
 
 		// unsubscribe all previously established subscriptions
 		await context.api.subscriptions.unsubscribeAll();
@@ -114,7 +117,7 @@ module.exports = new SmartApp()
 	// When on pressed, set shade direction state variable to "up"
     	.subscribedEventHandler('shadeUpHandler', async (context, event) => {
 		console.log("On Switch Pressed");
-		await stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
+		await SmartState.putState( context.event.appId, 'shadeDirection', 'up' );
 		await buttonPush(context);
 	})
 
@@ -122,7 +125,7 @@ module.exports = new SmartApp()
 	// When off pressed, set shade direction state variable to "down"
 	.subscribedEventHandler('shadeDownHandler', async (context, event) => {
 		console.log("Off Switch Pressed");
-		await stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
+		await SmartState.putState( context.event.appId, 'shadeDirection', 'down' );
 		await buttonPush(context);
 	});
 
