@@ -107,16 +107,14 @@ module.exports = new SmartApp()
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
 		    'button', 'button.pushed', 'shadeButtonHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
-		    'switch', 'switch.on', 'shadeUpHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
-		    'switch', 'switch.off', 'shadeDownHandler');
 /*
-		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
 		    'switch', 'switch.on', 'shadeUpHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
 		    'switch', 'switch.off', 'shadeDownHandler');
 */
+		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+		    'switch', 'switch', 'shadeButtonHandler');
 	
 		console.log('Shade Control: END CREATING SUBSCRIPTIONS')
 	})
