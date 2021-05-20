@@ -1,5 +1,35 @@
+// import required node packages
 const SmartApp   = require('@smartthings/smartapp');
 const stateVariable = require('@katesthings/smartstate');
+
+// define shared functions
+async function buttonPush() {
+	// create shade array
+	const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
+
+	// determine number of shade states specified
+	var maxState = 0;
+	while ( shade_array[maxState] ) {
+		maxState++;
+	}
+
+	// const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
+	const shadeDirection = await stateVariable.getState( context.event.appId, 'shadeDirection' );
+	const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
+	var newShadeState = oldShadeState;
+	if ( shadeDirection == "up" ) {
+		newShadeState = Math.min( oldShadeState+1, maxState ); 
+	} else {
+		newShadeState = Math.max( oldShadeState-1, 0 );
+	}
+
+	// set shade to new state and save in state settings if changed
+	if (newShadeState!=oldShadeState) {
+		console.log('Pressing switch for shade state: ', newShadeState);
+		await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
+		stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
+	}	
+}
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -77,35 +107,7 @@ module.exports = new SmartApp()
 
 	// Update shade state in response to switch being pressed
 	.subscribedEventHandler('shadeButtonHandler', async (context, event) => {
-		// Get session state variable to see if button was manually pressed
-		console.log("Shade Button Pushed");
-		// console.log("Event: ", event);
-
-		// create shade array
-		const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
-
-		// determine number of shade states specified
-		var maxState = 0;
-		while ( shade_array[maxState] ) {
-			maxState++;
-		}
-
-		// const oldShadeState = JSON.stringify(await stateVariable.getState( context.event.appId, 'shadeState' )).parseInt();
-		const shadeDirection = await stateVariable.getState( context.event.appId, 'shadeDirection' );
-		const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
-		var newShadeState = oldShadeState;
-		if ( shadeDirection == "up" ) {
-			newShadeState = Math.min( oldShadeState+1, maxState ); 
-		} else {
-		    	newShadeState = Math.max( oldShadeState-1, 0 );
-		}
-
-		// set shade to new state and save in state settings if changed
-		if (newShadeState!=oldShadeState) {
-			console.log('Pressing switch for shade state: ', newShadeState);
-			await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
-			stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
-		}	
+		await buttonPush();
 	})
 
 
@@ -113,21 +115,7 @@ module.exports = new SmartApp()
     	.subscribedEventHandler('shadeUpHandler', async (context, event) => {
 		console.log("On Switch Pressed");
 		await stateVariable.putState( context.event.appId, 'shadeDirection', 'up' );
-
-		// initialize shade array variables
-		var maxState = 0;
-		const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
-		while ( shade_array[maxState] ) { maxState++; }
-
-		const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
-		var newShadeState = Math.min( oldShadeState+1, maxState ); 
-
-		// set shade to new state and save in state settings if changed
-		if (newShadeState!=oldShadeState) {
-			console.log('Pressing switch for shade state: ', newShadeState);
-			await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
-			stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
-		}		
+		await buttonPush();
 	})
 
 
@@ -135,21 +123,7 @@ module.exports = new SmartApp()
 	.subscribedEventHandler('shadeDownHandler', async (context, event) => {
 		console.log("Off Switch Pressed");
 		await stateVariable.putState( context.event.appId, 'shadeDirection', 'down' );
-
-		// initialize shade array variables
-		var maxState = 0;
-		const shade_array = [context.config.shade0, context.config.shade1, context.config.shade2, context.config.shade3];
-		while ( shade_array[maxState] ) { maxState++; }
-
-		const oldShadeState = parseInt( await stateVariable.getState( context.event.appId, 'shadeState' ));
-		var newShadeState = Math.max( oldShadeState-11, 0 ); 
-
-		// set shade to new state and save in state settings if changed
-		if (newShadeState!=oldShadeState) {
-			console.log('Pressing switch for shade state: ', newShadeState);
-			await context.api.devices.sendCommands(shade_array[newShadeState], 'switch', 'on');
-			stateVariable.putState( context.event.appId, 'shadeState', newShadeState.toString() );
-		}		
+		await buttonPush();
 	});
 
 
