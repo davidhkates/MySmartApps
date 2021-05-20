@@ -1,0 +1,29 @@
+{
+  "name": "fan-control",
+  "version": "1.0.0",
+  "description": "Turn on/off fan based in inside, outside, and target temperature",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidhkates/MySmartThings.git"
+  },
+  "keywords": [
+    "SmartThings",
+    "SmartApp",
+    "Control",
+    "Fan"
+  ],
+  "author": "David H. Kates",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/davidhkates/MySmartThings/issues"
+  },
+  "homepage": "https://github.com/davidhkates/MySmartThings#readme",
+  "dependencies": {
+    "@katesthings/smartcontrols": "^1.0.4",
+    "@smartthings/smartapp": "^2.5.2"
+  }
+}
