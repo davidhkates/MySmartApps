@@ -6,6 +6,7 @@ const SmartApp = require('@smartthings/smartapp');
 
 
 // Utility functions
+/*
 async function getTemperature( context, sensor ) {
 	const sensorDevice = sensor.deviceConfig;
 	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
@@ -19,6 +20,7 @@ function setToday( date, today ) {
 	date.setFullYear( today.getFullYear() );
 	return date;
 }
+*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -105,7 +107,7 @@ module.exports = new SmartApp()
 	console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 })
 
-
+/*
 // Turn on lights when motion occurs during defined times if dependent lights are on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	// Get start and end times
@@ -178,3 +180,4 @@ module.exports = new SmartApp()
 .scheduledEventHandler('motionStopped', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
 });
+*/
