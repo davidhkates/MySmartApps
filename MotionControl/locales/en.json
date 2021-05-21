@@ -1,5 +1,5 @@
 {
-	"pages.mainPage.name": "Fan Control",
+	"pages.mainPage.name": "Motion Control",
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.parameters.name": "Operating parameters",
 	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
