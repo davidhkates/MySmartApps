@@ -1,6 +1,6 @@
-# Group Control
+# Motion Control
 
-Turn groups of lights on and off from main switch
+Turn light on and off using motion sensor based on time of day and state of other controls
 
 ## File Structure
 
