@@ -104,7 +104,7 @@ module.exports = new SmartApp()
 				.required(true)
 				.permissions('rx');
 			section
-				.deviceSetting('contact')
+				.deviceSetting('contacts')
 				.capabilities(['contactSensor'])
 				.required(false)
 				.multiple(true)
@@ -148,9 +148,9 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// create subscriptions for relevant devices
-	await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
 		'contactSensor', 'contactSensor.open', 'contactOpenHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
 		'contactSensor', 'contactSensor.closed', 'contactOpenHandler');
 
 	// set start and end time event handlers
@@ -197,11 +197,11 @@ module.exports = new SmartApp()
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
 	if (otherSensors) {
-	// Get the current states of the other contact sensors
-	const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
-		it.deviceConfig.deviceId,
-		it.deviceConfig.componentId,
-		'contactSensor'
+		// Get the current states of the other contact sensors
+		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'contactSensor'
 	));
 
 	// Quit if there are other contact sensors open
@@ -246,10 +246,11 @@ module.exports = new SmartApp()
 		console.log('Indoor: ', indoorTemp, ', outside: ', outsideTemp, ', target: ', targetTemp);
 
 		// determine if any contact sensor is open
-		var contactSensors = 'open';
+		// var contactSensors = 'open';
 		
 		// Compare current temperature to target temperature
-		fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && fanState=='open') ? 'on' : 'off' );
+		// const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && contactSensors=='open') ? 'on' : 'off' );
+		const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp ) ? 'on' : 'off' );
 		console.log('Turning fan ', fanState);
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
 
