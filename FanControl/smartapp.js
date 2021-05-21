@@ -5,22 +5,31 @@ const SmartApp = require('@smartthings/smartapp');
 const SmartSensor = require('@katesthings/smartcontrols');
 
 // Utility functions
-function inTimeWindow( dateStart, dateEnd ) {
-	// det
-	var currentD = new Date();
-var startHappyHourD = new Date();
-startHappyHourD.setHours(17,30,0); // 5.30 pm
-var endHappyHourD = new Date();
-endHappyHourD.setHours(18,30,0); // 6.30 pm
+function inTimeWindow( startDateTime, endDateTime ) {
+	
+	// initialize return value
+	var inTimeWindow = true;
+	
+	if ( startDateTime ) {
+		// apply current date to start and end date/time
+		const currentDate = new Date();
+		startDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
+		inTimeWindow = ( currentDate >= startDateTime );
+		
+		if ( endDateTime && inTimeWindow ) {
+			endDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
+
+			// if times cross midnight, add a day to end date/time
+			if ( startDateTime > endDateTime ) {
+				endDateTime.setDate(endDateTime.getDate() + 1);
+			}
+			inTimeWindow = ( currentDate <= endDateTime );
+		}
+	}
 	return inTimeWindow;
 }
-	
-console.log("happy hour?")
-if(currentD >= startHappyHourD && currentD < endHappyHourD ){
-    console.log("yes!");
-}else{
-    console.log("no, sorry! between 5.30pm and 6.30pm");
-}
+
+
 /*
 async function controlFan( context ) {
 	// variable to return fan state
@@ -138,33 +147,85 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
-	// Schedule fan start time, if specifies; else begin temperature check at specified interval (in seconds)
-	const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
+	// create subscriptions for relevant devices
+	await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		'contactSensor', 'contactSensor.closed', 'contactOpenHandler');
+
+	// set start and end time event handlers
+	const startTime = new Date(context.configStringValue("startTime"));
+	const endTime   = new Date(context.configStringValue("endTime"));
 	if (startTime) {
 		console.log('Setting start time');
-		await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
+		await context.api.schedules.runDaily('checkTemperature', startTime)
 		if (endTime) {
 			console.log('Setting end time');
-			await context.api.schedules.runDaily('fanStopHandler', new Date(endTime))
+			await context.api.schedules.runDaily('stopFanHandler', endTime)
 		}
-	} else {
-		const checkInterval = context.configNumberValue("checkInterval");
-		await context.api.schedules.runIn('checkTemperature', checkInterval);
+	} 
+	
+	// start fan if in time window (including if no start/end time specified)
+	if inTimeWindow( startTime, endTime ) {
+		// const checkInterval = context.configNumberValue("checkInterval");
+		// await context.api.schedules.runIn('checkTemperature', checkInterval);
+		await context.api.schedules.runIn('checkTemperature', 0);
 	}
 
 	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
 })
 
 
+// If one or more contacts open, resuming checking temperature to control fan
+.subscribedEventHandler('contactOpenHandler', async (context, event) => {
+	console.log("Contact open");
+
+	const startTime = new Date(context.configStringValue("startTime"));
+	const endTime   = new Date(context.configStringValue("endTime"));
+	if inTimeWindow( startTime, endTime ) {
+		await context.api.schedules.runIn('checkTemperature', 0);
+	}
+})
+
+
+// If contact is closed, see if they're all closed in which case stop fan
+.subscribedEventHandler('contactOpenHandler', async (context, event) => {
+	console.log("Contact closed");
+
+	// See if there are any other contact sensors defined
+	const otherSensors =  context.config.contactSensors
+	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
+
+	if (otherSensors) {
+	// Get the current states of the other contact sensors
+	const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
+		it.deviceConfig.deviceId,
+		it.deviceConfig.componentId,
+		'contactSensor'
+	));
+
+	// Quit if there are other contact sensors open
+	const states = await Promise.all(stateRequests)
+	if (states.find(it => it.motion.value === 'open')) {
+		return
+	}
+
+	// If we got here, no other contact sensors are open so turn off fan 
+	await context.api.schedules.runIn('stopFanHandler', 0);
+})
+
+
 // Handle end time if specified
-.scheduledEventHandler('fanStopHandler', async(context, event) => {
+.scheduledEventHandler('stopFanHandler', async(context, event) => {
 	console.log("Turn off fan handler");
 
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkTemperature');
+	// reschedule fan start at specified time (which must have been set if there's an end/stop time)
+	const startTime = new Date(context.configStringValue("startTime"));
+	await context.api.schedules.runDaily('checkTemperature', startTime);
 })
 
 
