@@ -4,6 +4,23 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
 
+// Utility functions
+function inTimeWindow( dateStart, dateEnd ) {
+	// det
+	var currentD = new Date();
+var startHappyHourD = new Date();
+startHappyHourD.setHours(17,30,0); // 5.30 pm
+var endHappyHourD = new Date();
+endHappyHourD.setHours(18,30,0); // 6.30 pm
+	return inTimeWindow;
+}
+	
+console.log("happy hour?")
+if(currentD >= startHappyHourD && currentD < endHappyHourD ){
+    console.log("yes!");
+}else{
+    console.log("no, sorry! between 5.30pm and 6.30pm");
+}
 /*
 async function controlFan( context ) {
 	// variable to return fan state
