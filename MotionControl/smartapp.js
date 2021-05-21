@@ -105,7 +105,7 @@ module.exports = new SmartApp()
 	    'motion', 'motion.inactive', 'motionStopHandler');
 
 	console.log('Motion Group: END CREATING SUBSCRIPTIONS')
-})
+});
 
 /*
 // Turn on lights when motion occurs during defined times if dependent lights are on
