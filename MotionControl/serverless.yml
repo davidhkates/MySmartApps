@@ -1,4 +1,4 @@
-service: group-control
+service: motion-control
 
 package:
   patterns:
@@ -12,14 +12,6 @@ provider:
   runtime: nodejs12.x
   lambdaHashingVersion: 20201221
   region: us-west-2
-  iam:
-    role:
-      statements:
-        - Effect: "Allow"
-          Action:
-            - "dynamodb:GetItem"
-            - "dynamodb:PutItem"
-          Resource: "arn:aws:dynamodb:us-west-2:674630936715:table/smartapp-context-store"
   
 functions:
   smartapp:
