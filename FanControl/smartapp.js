@@ -2,7 +2,7 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartSensor = require('@katesthings/smartcontrols');
 
 /*
 // Utility functions
@@ -154,6 +154,7 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
 		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
+	/*
 	// set start and end time event handlers
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
