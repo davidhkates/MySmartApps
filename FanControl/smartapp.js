@@ -5,13 +5,13 @@ const SmartApp = require('@smartthings/smartapp');
 const SmartSensor = require('@katesthings/smartcontrols');
 
 
-/*
+
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
 	// initialize return value
 	var inTimeWindow = true;
-	
+/*	
 	if ( startDateTime ) {
 		// apply current date to start and end date/time
 		const currentDate = new Date();
@@ -28,6 +28,7 @@ function inTimeWindow( startDateTime, endDateTime ) {
 			inTimeWindow = ( currentDate <= endDateTime );
 		}
 	}
+*/
 	return inTimeWindow;
 }
 
