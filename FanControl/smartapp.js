@@ -175,6 +175,7 @@ module.exports = new SmartApp()
 })
 
 
+/*
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
