@@ -174,7 +174,7 @@ module.exports = new SmartApp()
 	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
 })
 
-/*
+
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
@@ -223,11 +223,12 @@ module.exports = new SmartApp()
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkTemperature');
 	// reschedule fan start at specified time (which must have been set if there's an end/stop time)
-	const startTime = new Date(context.configStringValue("startTime"));
+	const startTime = new Date(context.configStringValue('startTime'));
 	await context.api.schedules.runDaily('checkTemperature', startTime);
 })
 
 
+/*
 // Check temperature and turn on/off fan as appropriate
 .scheduledEventHandler('checkTemperature', async (context, event) => {		
 	console.log("Check temperature");
