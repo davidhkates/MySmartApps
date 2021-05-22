@@ -199,7 +199,7 @@ module.exports = new SmartApp()
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
 			'contactSensor'
-	));
+	)};
 
 	// Quit if there are other contact sensors open
 	const states = await Promise.all(stateRequests)
