@@ -148,9 +148,10 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
 		'contactSensor', 'contactSensor.open', 'contactOpenHandler');
 	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
-		'contactSensor', 'contactSensor.closed', 'contactOpenHandler');
+		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 	// set start and end time event handlers
+	console.log('Setting start and end time');
 	const startTime = new Date(context.configStringValue("startTime"));
 	const endTime   = new Date(context.configStringValue("endTime"));
 	if (startTime) {
@@ -161,6 +162,7 @@ module.exports = new SmartApp()
 			await context.api.schedules.runDaily('stopFanHandler', endTime)
 		}
 	} 
+	console.log('Start and end time set');
 
 	// start fan if in time window (including if no start/end time specified)
 	if (inTimeWindow(startTime, endTime)) {
@@ -186,7 +188,7 @@ module.exports = new SmartApp()
 
 
 // If contact is closed, see if they're all closed in which case stop fan
-.subscribedEventHandler('contactOpenHandler', async (context, event) => {
+.subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log("Contact closed");
 
 	// See if there are any other contact sensors defined
