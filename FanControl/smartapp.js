@@ -4,7 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
 
-/*
+
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
@@ -129,7 +129,7 @@ module.exports = new SmartApp()
 	});
 })
 
-/*
+
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
 	console.log("FanControl: Installed/Updated");
@@ -172,7 +172,7 @@ module.exports = new SmartApp()
 	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
 })
 
-
+/*
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
