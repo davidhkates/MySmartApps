@@ -130,6 +130,7 @@ module.exports = new SmartApp()
 			if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 				console.log('Start controlling fan by checking temperature');
 				await context.api.schedules.runIn('checkTemperature', 0);
+			}
 		}		
 	} else {
 		console.log('Start controlling fan by checking temperature');
