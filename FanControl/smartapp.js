@@ -5,7 +5,6 @@ const SmartApp = require('@smartthings/smartapp');
 const SmartSensor = require('@katesthings/smartcontrols');
 
 
-
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
@@ -22,11 +21,9 @@ function inTimeWindow( startDateTime, endDateTime ) {
 			endDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
 
 			// if times cross midnight, add a day to end date/time
-/*
 			if ( startDateTime > endDateTime ) {
-				endDateTime.setDate(endDateTime.getDate() + 1);
+				// endDateTime.setDate(endDateTime.getDate() + 1);
 			}
-*/
 			inTimeWindow = ( currentDate <= endDateTime );
 		}
 	}
