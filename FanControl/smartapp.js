@@ -11,7 +11,7 @@ function inTimeWindow( startDateTime, endDateTime ) {
 	// initialize return value
 	var inTimeWindow = true;
 	
-	if ( startDateTime ) {
+	if (startDateTime != endDateTime) {
 		// apply current date to start and end date/time
 		const currentDate = new Date();
 		startDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
@@ -33,42 +33,6 @@ function inTimeWindow( startDateTime, endDateTime ) {
 }
 
 
-/*
-async function controlFan( context ) {
-	// variable to return fan state
-	var fanState = 'off';
-	
-	// determine if fan is enabled and within time window
-	const fanEnabled = context.configBooleanValue('fanEnabled');
-	console.log('Fan enabled: ', fanEnabled);
-	if ( fanEnabled ) {
-		// Get the the current temperature
-		// const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-		const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
-		const outsideTemp = await getTemperature( context, context.config.weather[0] );
-		const targetTemp = context.configNumberValue('tempTarget');
-		console.log('Indoor: ', indoorTemp, ', outside: ', outsideTemp, ', target: ', targetTemp);
-		// determine if any contact sensor is open
-		var contactSensors = 'open';
-		
-		// Compare current temperature to target temperature
-		fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && fanState=='open') ? 'on' : 'off' );
-		console.log('Turning fan ', fanState);
-		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
-		// call next temperature check after interval (in seconds) until end time (if specified)
-		console.log('Recursive call to check interval again');
-		const checkInterval = context.configNumberValue('checkInterval');
-		context.api.schedules.runIn('checkTemperature', checkInterval);	
-	}
-	return fanState;
-}
-async function getTemperature( context, sensor ) {
-	const sensorDevice = sensor.deviceConfig;
-	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
-	// console.log('Sensor state: ', sensorState);
-	return sensorState.temperature.value;
-}
-*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -155,21 +119,21 @@ module.exports = new SmartApp()
 */
 	
 	// set start and end time event handlers
-	console.log('Setting start and end time');
-	const startTime = new Date(context.configStringValue("startTime"));
-	const endTime   = new Date(context.configStringValue("endTime"));
+	const startTime = context.configStringValue("startTime");
+	const endTime   = context.configStringValue("endTime");
 	if (startTime) {
 		console.log('Setting start time');
-		await context.api.schedules.runDaily('checkTemperature', startTime)
+		await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 		if (endTime) {
 			console.log('Setting end time');
-			await context.api.schedules.runDaily('stopFanHandler', endTime)
+			await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 		}
-	} 
+		
+	}		
 	console.log('Start and end time set');
 
 	// start fan if in time window (including if no start/end time specified)
-	if (inTimeWindow(startTime, endTime)) {
+	if (inTimeWindow(new Date(startTime), new Date(endTime))) {
 		// const checkInterval = context.configNumberValue("checkInterval");
 		// await context.api.schedules.runIn('checkTemperature', checkInterval);
 		console.log('In time window');
