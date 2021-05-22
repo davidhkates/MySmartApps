@@ -11,13 +11,14 @@ function inTimeWindow( startDateTime, endDateTime ) {
 	
 	// initialize return value
 	var inTimeWindow = true;
-/*	
+	
 	if ( startDateTime ) {
 		// apply current date to start and end date/time
 		const currentDate = new Date();
 		startDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
 		inTimeWindow = ( currentDate >= startDateTime );
-		
+
+/*
 		if ( endDateTime && inTimeWindow ) {
 			endDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
 
@@ -27,8 +28,8 @@ function inTimeWindow( startDateTime, endDateTime ) {
 			}
 			inTimeWindow = ( currentDate <= endDateTime );
 		}
-	}
 */
+	}
 	return inTimeWindow;
 }
 
