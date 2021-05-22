@@ -4,7 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
 
-/*
+
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
@@ -29,7 +29,6 @@ function inTimeWindow( startDateTime, endDateTime ) {
 	}
 	return inTimeWindow;
 }
-*/
 
 
 /*
