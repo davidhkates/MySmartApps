@@ -3,22 +3,7 @@ const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
-
-
-// Utility functions
-async function getTemperature( context, sensor ) {
-	const sensorDevice = sensor.deviceConfig;
-	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
-	// console.log('Sensor state: ', sensorState);
-	return sensorState.temperature.value;
-}
-
-function setToday( date, today ) {
-	date.setDate( today.getDate() );
-	date.setMonth( today.getMonth() );
-	date.setFullYear( today.getFullYear() );
-	return date;
-}
+// const SmartUtils = require('@katesthings/smartutils');
 
 
 /* Define the SmartApp */
@@ -56,13 +41,13 @@ module.exports = new SmartApp()
 			.multiple(true)
 			.permissions('rx');
 		section
-			.deviceSetting('dependentSwitch')
+			.deviceSetting('checkSwitches')
 			.capabilities(['switch'])
 			.required(false)
 			.multiple(true)
 			.permissions('r');
 		section
-			.deviceSetting('contact')
+			.deviceSetting('contacts')
 			.capabilities(['contactSensor'])
 			.required(false)
 			.multiple(true)
@@ -115,6 +100,7 @@ module.exports = new SmartApp()
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = true;
+	/*
 	if (startTime) {
 		const currentTime = new Date();
 		if ( currentTime < setToday( startTime, currentTime ) ) {
@@ -127,14 +113,15 @@ module.exports = new SmartApp()
 			}
 		}
 	}
+	*/
 	
-	// Determine if dependent lights/switches are on
-	var bDependent = true;
+	// Determine if ANY of the switch(es) to check are on
+	var bCheckSwitch = true;
 	// if (dependentSwitch) {
-	
+	// }
 	
 	// turn on light if in time window and dependent switch(es) are on
-	if ( bTimeWindow && bDependent ) {
+	if ( bTimeWindow && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'on');
 	}
