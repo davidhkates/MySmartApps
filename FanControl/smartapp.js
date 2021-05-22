@@ -214,7 +214,6 @@ module.exports = new SmartApp()
 })
 
 
-/*
 // Handle end time if specified
 .scheduledEventHandler('stopFanHandler', async(context, event) => {
 	console.log("Turn off fan handler");
@@ -229,7 +228,6 @@ module.exports = new SmartApp()
 })
 
 
-/*
 // Check temperature and turn on/off fan as appropriate
 .scheduledEventHandler('checkTemperature', async (context, event) => {		
 	console.log("Check temperature");
@@ -261,4 +259,3 @@ module.exports = new SmartApp()
 		await context.api.schedules.runIn('checkTemperature', checkInterval);	
 	}
 });
-*/
