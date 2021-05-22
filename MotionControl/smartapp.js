@@ -3,7 +3,7 @@ const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
-// const SmartUtils = require('@katesthings/smartutils');
+const SmartUtils  = require('@katesthings/smartutils');
 
 
 /* Define the SmartApp */
@@ -99,21 +99,7 @@ module.exports = new SmartApp()
 	const endTime   = context.configStringValue("endTime");
 
 	// Determine whether current time is within start and end time window
-	var bTimeWindow = true;
-	/*
-	if (startTime) {
-		const currentTime = new Date();
-		if ( currentTime < setToday( startTime, currentTime ) ) {
-			bTimeWindow = false;
-		} else {
-			if (endTime) {
-				if ( currentTime > setToday( endTime, currentTime ) ) {
-					bTimeWindow = false;
-				}
-			}
-		}
-	}
-	*/
+	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 	
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
