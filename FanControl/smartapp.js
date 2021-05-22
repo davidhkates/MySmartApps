@@ -110,13 +110,13 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
-/*
 	// create subscriptions for relevant devices
-	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
-		'contactSensor', 'contactSensor.open', 'contactOpenHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
-		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
-*/
+	if (context.config.contacts) {
+		await context.api.subscriptions.subscribeToDevices(context.config.contacts,
+			'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.contacts,
+			'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
+	}
 	
 	// set start and end time event handlers
 	const startTime = context.configStringValue("startTime");
