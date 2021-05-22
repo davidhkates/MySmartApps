@@ -162,14 +162,12 @@ module.exports = new SmartApp()
 		}
 	} 
 
-/*
 	// start fan if in time window (including if no start/end time specified)
 	if inTimeWindow( startTime, endTime ) {
 		// const checkInterval = context.configNumberValue("checkInterval");
 		// await context.api.schedules.runIn('checkTemperature', checkInterval);
 		await context.api.schedules.runIn('checkTemperature', 0);
 	}
-*/
 	
 	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
 })
