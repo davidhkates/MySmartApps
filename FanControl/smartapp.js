@@ -4,7 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
 
-
+/*
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
@@ -129,7 +129,7 @@ module.exports = new SmartApp()
 	});
 })
 
-
+/*
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
 	console.log("FanControl: Installed/Updated");
@@ -251,20 +251,10 @@ module.exports = new SmartApp()
 		console.log('Turning fan ', fanState);
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
 
-/*
-		// Compare current temperature to target temperature
-		if (indoorTemp>targetTemp && outsideTemp<indoorTemp) {
-			console.log('Turning fan on');
-			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
-		} else {
-			console.log('Turning fan off');
-			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
-		}
-*/
-		
 		// call next temperature check after interval (in seconds) until end time (if specified)
 		console.log('Recursive call to check interval again');
 		const checkInterval = context.configNumberValue('checkInterval');
 		await context.api.schedules.runIn('checkTemperature', checkInterval);	
 	}
 });
+*/
