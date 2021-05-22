@@ -152,11 +152,11 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
 		'contactSensor', 'contactSensor.open', 'contactOpenHandler');
 	await context.api.subscriptions.subscribeToDevices(context.config.contacts,
-		'contactSensor', 'contactSensor.closed', 'contactOpenHandler');
+		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 	// set start and end time event handlers
-	const startTime = new Date(context.configStringValue("startTime"));
-	const endTime   = new Date(context.configStringValue("endTime"));
+	const startTime = new Date(context.configStringValue('startTime'));
+	const endTime   = new Date(context.configStringValue('endTime'));
 	if (startTime) {
 		console.log('Setting start time');
 		await context.api.schedules.runDaily('checkTemperature', startTime)
@@ -196,7 +196,7 @@ module.exports = new SmartApp()
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact closed");
-
+/*
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.contactSensors
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId);
@@ -214,7 +214,7 @@ module.exports = new SmartApp()
 	if (states.find(it => it.motion.value === 'open')) {
 		return
 	}
-
+*/
 	// If we got here, no other contact sensors are open so turn off fan 
 	await context.api.schedules.runIn('stopFanHandler', 0);
 })
@@ -255,7 +255,7 @@ module.exports = new SmartApp()
 		
 		// Compare current temperature to target temperature
 		// const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && contactSensors=='open') ? 'on' : 'off' );
-		const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp ) ? 'on' : 'off' );
+		const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp) ? 'on' : 'off' );
 		console.log('Turning fan ', fanState);
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
 
