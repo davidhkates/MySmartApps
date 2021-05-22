@@ -6,6 +6,7 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
+/*
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
