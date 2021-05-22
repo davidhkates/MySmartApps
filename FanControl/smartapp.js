@@ -202,19 +202,43 @@ module.exports = new SmartApp()
 	console.log('Fan enabled: ', fanEnabled);
 
 	if ( fanEnabled ) {
-		// Get the the current temperature
-		// const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
-		const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-		const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
-		const targetTemp = context.configNumberValue('tempTarget');
-		console.log('Indoor: ', indoorTemp, ', outside: ', outsideTemp, ', target: ', targetTemp);
-
+		// Initialize fan state variable
+		var fanState = 'off';
+		
 		// determine if any contact sensor is open
 		// var contactSensors = 'open';
 		
+		// Get temperature(s) and set fan state
+		// const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
+		const targetTemp = context.configNumberValue('tempTarget');
+		const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
+		if (indoorTemp>targetTemp) {
+			fanState = 'on';
+
+			// If outside temperature sensor defined, make sure it's cooler outside
+			const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
+			if (outsideTemp) {
+				if (indoorTemp<=outsideTemp) {
+					fanState = 'off';
+				} else {
+
+					// If humidity setting defined, make sure it's below that outside
+					/*
+					const targetHumidity = context.configNumberValue('humidityTarget');
+					if (outsideTemp) {
+						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
+						if (humidity<targetHumidity) { 
+							fanState = 'off'
+						}
+					}
+					*/
+				}
+			}
+		}
+		
+		
 		// Compare current temperature to target temperature
 		// const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && contactSensors=='open') ? 'on' : 'off' );
-		const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp ) ? 'on' : 'off' );
 		console.log('Turning fan ', fanState);
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
 
