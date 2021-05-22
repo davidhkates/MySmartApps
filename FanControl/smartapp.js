@@ -122,21 +122,15 @@ module.exports = new SmartApp()
 	const startTime = context.configStringValue("startTime");
 	const endTime   = context.configStringValue("endTime");
 	if (startTime) {
-		console.log('Setting start time');
 		await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 		if (endTime) {
-			console.log('Setting end time');
 			await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
-		}
-		
-	}		
-	console.log('Start and end time set');
+		}		
+	}
 
 	// start fan if in time window (including if no start/end time specified)
 	if (inTimeWindow(new Date(startTime), new Date(endTime))) {
-		// const checkInterval = context.configNumberValue("checkInterval");
-		// await context.api.schedules.runIn('checkTemperature', checkInterval);
-		console.log('In time window');
+		console.log('Start controlling fan by checking temperature');
 		await context.api.schedules.runIn('checkTemperature', 0);
 	}
 	
