@@ -170,7 +170,8 @@ module.exports = new SmartApp()
 	if (inTimeWindow(startTime, endTime)) {
 		// const checkInterval = context.configNumberValue("checkInterval");
 		// await context.api.schedules.runIn('checkTemperature', checkInterval);
-		await context.api.schedules.runIn('checkTemperature', 0);
+		console.log('In time window');
+		// await context.api.schedules.runIn('checkTemperature', 1);
 	}
 	
 	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
