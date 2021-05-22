@@ -223,7 +223,6 @@ module.exports = new SmartApp()
 				} else {
 
 					// If humidity setting defined, make sure it's below that outside
-					/*
 					const targetHumidity = context.configNumberValue('humidityTarget');
 					if (outsideTemp) {
 						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
@@ -231,7 +230,6 @@ module.exports = new SmartApp()
 							fanState = 'off'
 						}
 					}
-					*/
 				}
 			}
 		}
