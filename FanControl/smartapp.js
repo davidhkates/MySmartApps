@@ -23,6 +23,8 @@ function inTimeWindow( startDateTime, endDateTime ) {
 				endDateTime.setDate(endDateTime.getDate()+1);
 			} else {
 				startDateTime.setDate(startDateTime.getDate()-1)
+			}
+		}
 				
 		// check to see if current time is between start and end time		
 		inTimeWindow = ( (currentDate >= startDateTime) && (currentDate <= endDateTime) );
