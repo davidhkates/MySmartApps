@@ -179,14 +179,15 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
 
-	const startTime = new Date(context.configStringValue("startTime"));
-	const endTime   = new Date(context.configStringValue("endTime"));
+	const startTime = new Date(context.configStringValue('startTime'));
+	const endTime   = new Date(context.configStringValue('endTime'));
 	if inTimeWindow( startTime, endTime ) {
 		await context.api.schedules.runIn('checkTemperature', 0);
 	}
 })
 
 
+/*
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact closed");
