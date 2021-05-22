@@ -191,8 +191,9 @@ module.exports = new SmartApp()
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.contactSensors
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
+	    .filter(it => it.deviceConfig.deviceId !== event.deviceId);
 
+/*
 	if (otherSensors) {
 		// Get the current states of the other contact sensors
 		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
@@ -209,6 +210,7 @@ module.exports = new SmartApp()
 
 	// If we got here, no other contact sensors are open so turn off fan 
 	await context.api.schedules.runIn('stopFanHandler', 0);
+*/
 })
 
 
