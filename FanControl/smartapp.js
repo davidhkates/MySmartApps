@@ -73,64 +73,64 @@ async function getTemperature( context, sensor ) {
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
-	.enableEventLogging()  // logs requests and responses as pretty-printed JSON
-	.configureI18n()       // auto-create i18n files for localizing config pages
+.enableEventLogging()  // logs requests and responses as pretty-printed JSON
+.configureI18n()       // auto-create i18n files for localizing config pages
 
-	// Configuration page definition
-	.page('mainPage', (context, page, configData) => {
+// Configuration page definition
+.page('mainPage', (context, page, configData) => {
 
-		// operating switch and interval for checking temperature
-		page.section('parameters', section => {
-			section
-				.booleanSetting('fanEnabled')
-				.required(false);
-			section
-				.numberSetting('tempTarget')
-				.required(true);
-			section
-				.numberSetting('humidityTarget')
-				.required(false);
-			section
-				.numberSetting('checkInterval')
-				.defaultValue(300)
-				.required(false);
-		});
-		
-		// get controls and sensors
-		page.section('controls', section => {
-			section
-				.deviceSetting('fanSwitch')
-				.capabilities(['switch'])
-				.required(true)
-				.permissions('rx');
-			section
-				.deviceSetting('contacts')
-				.capabilities(['contactSensor'])
-				.required(false)
-				.multiple(true)
-				.permissions('r');
-			section
-				.deviceSetting('tempSensor')
-				.capabilities(['temperatureMeasurement'])
-				.required(true)		
-				.permissions('r');
-			section
-				.deviceSetting('weather')
-				.capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-				.required(false)
-				.permissions('r');
-		});
+	// operating switch and interval for checking temperature
+	page.section('parameters', section => {
+		section
+			.booleanSetting('fanEnabled')
+			.required(false);
+		section
+			.numberSetting('tempTarget')
+			.required(true);
+		section
+			.numberSetting('humidityTarget')
+			.required(false);
+		section
+			.numberSetting('checkInterval')
+			.defaultValue(300)
+			.required(false);
+	});
 
-		// get start and end time
-		page.section('time', section => {
-			section
-				.timeSetting('startTime')
-				.required(false);
-			section
-				.timeSetting('endTime')
-				.required(false);
-		});
-	})
+	// get controls and sensors
+	page.section('controls', section => {
+		section
+			.deviceSetting('fanSwitch')
+			.capabilities(['switch'])
+			.required(true)
+			.permissions('rx');
+		section
+			.deviceSetting('contacts')
+			.capabilities(['contactSensor'])
+			.required(false)
+			.multiple(true)
+			.permissions('r');
+		section
+			.deviceSetting('tempSensor')
+			.capabilities(['temperatureMeasurement'])
+			.required(true)		
+			.permissions('r');
+		section
+			.deviceSetting('weather')
+			.capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
+			.required(false)
+			.permissions('r');
+	});
+
+	// get start and end time
+	page.section('time', section => {
+		section
+			.timeSetting('startTime')
+			.required(false);
+		section
+			.timeSetting('endTime')
+			.required(false);
+	});
+})
 
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
@@ -194,7 +194,7 @@ module.exports = new SmartApp()
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.contactSensors
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
+	    .filter(it => it.deviceConfig.deviceId !== event.deviceId);
 
 	if (otherSensors) {
 		// Get the current states of the other contact sensors
@@ -202,7 +202,7 @@ module.exports = new SmartApp()
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
 			'contactSensor'
-	));
+	)};
 
 	// Quit if there are other contact sensors open
 	const states = await Promise.all(stateRequests)
