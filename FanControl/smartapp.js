@@ -22,7 +22,7 @@ function inTimeWindow( startDateTime, endDateTime ) {
 
 			// if times cross midnight, add a day to end date/time
 			if ( startDateTime > endDateTime ) {
-				// endDateTime.setDate(endDateTime.getDate() + 1);
+				endDateTime.setDate(endDateTime.getDate() + 1);
 			}
 			inTimeWindow = ( currentDate <= endDateTime );
 		}
