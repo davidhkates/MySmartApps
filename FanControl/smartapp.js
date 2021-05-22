@@ -36,7 +36,7 @@ function inTimeWindow( startDateTime, endDateTime ) {
 }
 */
 
-async function fanControl( context ) {
+async function controlFan( context ) {
 	// determine if fan is enabled and within time window
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 	console.log('Fan enabled: ', fanEnabled);
