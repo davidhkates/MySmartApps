@@ -176,9 +176,10 @@ module.exports = new SmartApp()
 	*/
 
 	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
-})
+});
 
 
+/*
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
@@ -192,7 +193,7 @@ module.exports = new SmartApp()
 	*/
 })
 
-
+/*
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact closed");
@@ -214,7 +215,7 @@ module.exports = new SmartApp()
 	if (states.find(it => it.motion.value === 'open')) {
 		return
 	}
-*/
+
 	// If we got here, no other contact sensors are open so turn off fan 
 	await context.api.schedules.runIn('stopFanHandler', 0);
 })
@@ -269,6 +270,7 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 		}
 */
+/*
 		
 		// call next temperature check after interval (in seconds) until end time (if specified)
 		console.log('Recursive call to check interval again');
@@ -276,3 +278,4 @@ module.exports = new SmartApp()
 		await context.api.schedules.runIn('checkTemperature', checkInterval);	
 	}
 });
+*/
