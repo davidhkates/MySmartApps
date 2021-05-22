@@ -173,14 +173,13 @@ module.exports = new SmartApp()
 })
 
 
-/*
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
 
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
-	if inTimeWindow( startTime, endTime ) {
+	if (inTimeWindow(startTime, endTime)) {
 		await context.api.schedules.runIn('checkTemperature', 0);
 	}
 })
