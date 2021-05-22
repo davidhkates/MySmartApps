@@ -191,26 +191,26 @@ module.exports = new SmartApp()
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.contactSensors
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId);
+	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
-/*
 	if (otherSensors) {
 		// Get the current states of the other contact sensors
 		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
 			'contactSensor'
-	)};
+		));
 
-	// Quit if there are other contact sensors open
-	const states = await Promise.all(stateRequests)
-	if (states.find(it => it.motion.value === 'open')) {
-		return
+		// Quit if there are other sensors still open
+		const states = await Promise.all(stateRequests)
+		if (states.find(it => it.motion.value === 'open')) {
+			return
+		}
 	}
+	console.log("Turn off lights after specified delay");
 
 	// If we got here, no other contact sensors are open so turn off fan 
 	await context.api.schedules.runIn('stopFanHandler', 0);
-*/
 })
 
 
