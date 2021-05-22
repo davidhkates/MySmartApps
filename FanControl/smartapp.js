@@ -185,7 +185,6 @@ module.exports = new SmartApp()
 })
 
 
-/*
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact closed");
@@ -213,6 +212,7 @@ module.exports = new SmartApp()
 })
 
 
+/*
 // Handle end time if specified
 .scheduledEventHandler('stopFanHandler', async(context, event) => {
 	console.log("Turn off fan handler");
