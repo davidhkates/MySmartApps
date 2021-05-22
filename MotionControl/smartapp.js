@@ -85,8 +85,8 @@ module.exports = new SmartApp()
 	// create subscriptions for relevant devices
 	await context.api.subscriptions.subscribeToDevices(context.config.motion,
 	    'motionSensor', 'motionSensor.active', 'motionStartHandler');
-	// await context.api.subscriptions.subscribeToDevices(context.config.motion,
-	//    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.motion,
+	    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
 	
 	console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 })
