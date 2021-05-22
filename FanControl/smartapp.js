@@ -6,13 +6,13 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
-/*
 // Utility functions
 function inTimeWindow( startDateTime, endDateTime ) {
 	
 	// initialize return value
 	var inTimeWindow = true;
-	
+
+	console.log("Start time: ", startDateTime, ", stop time: ", endDateTime, ", equal?: ", (startDateTime!=endDateTime));
 	if (startDateTime != endDateTime) {
 		// apply current date to start and end date/time
 		const currentDate = new Date();
@@ -127,11 +127,11 @@ module.exports = new SmartApp()
 		await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 		if (endTime) {
 			await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
+			if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+				console.log('Start controlling fan by checking temperature');
+				await context.api.schedules.runIn('checkTemperature', 0);
 		}		
-	}
-
-	// start fan if in time window (including if no start/end time specified)
-	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+	} else {
 		console.log('Start controlling fan by checking temperature');
 		await context.api.schedules.runIn('checkTemperature', 0);
 	}
