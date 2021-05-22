@@ -1,12 +1,20 @@
 {
 	"pages.mainPage.name": "Group Control",
 	"Tap to set": "Tap to set",
-	"pages.mainPage.sections.switches.name": "Switches to conrrol",
-	"pages.mainPage.settings.mainSwitch.name": "Main switch to control light groups",
-	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
-	"pages.mainPage.settings.offGroup.name": "Additional lights to turn off from main switch",
-	"pages.mainPage.sections.sensors.name": "Sensors to control light groups",
-	"pages.mainPage.settings.motionSensors.name": "Select motion sensors",
-	"pages.mainPage.sections.lights.name": "Turn on these devices",
+	"pages.mainPage.sections.parameters.name": "Automation parameters",
+	"pages.mainPage.sections.controlEnabled.name": "Operate control",
+	"pages.mainPage.sections.controlEnabled.description": "Turn on/off to enable/disable this automation",
 	"pages.mainPage.settings.delay.name": "Optional time delay in seconds"
+	"pages.mainPage.sections.controls.name": "Controls for this automation",
+	"pages.mainPage.settings.motion.name": "Select motion sensors",
+	"pages.mainPage.settings.motion.description": "",
+	"pages.mainPage.settings.lightSwitch.name": "Turn on these devices",
+	"pages.mainPage.settings.dependent.name": "Turn on these devices",
+	"pages.mainPage.settings.contact.name": "Turn on these devices",
+	"pages.mainPage.settings.contact.description": "",
+	"pages.mainPage.sections.time.name": "Times for this automation",
+	"pages.mainPage.settings.startTime.name": "Start time",
+	"pages.mainPage.settings.startTime.description": "",
+	"pages.mainPage.settings.endTime.name": "End time",
+	"pages.mainPage.settings.endTime.description": ""
 }
