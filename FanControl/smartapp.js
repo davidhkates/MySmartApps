@@ -64,6 +64,18 @@ async function controlFan( context ) {
 	return fanState;
 }
 
+async function stopFan( context ) {
+	// turn off fan
+	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+	// cancel any upcoming temperature check calls
+	await context.api.schedules.delete('checkTemperature');
+	// reschedule fan start at specified time, if specified
+	const startTime = context.configStringValue('startTime');
+	if (startTime) {
+		await context.api.schedules.runDaily('checkTemperature', new Date(startTime));
+	}
+}
+
 
 // Define the SmartApp
 module.exports = new SmartApp()
@@ -142,6 +154,8 @@ module.exports = new SmartApp()
 	} else {
 
 		// create subscriptions for relevant devices
+		await context.api.subscriptions.subscribeToDevices(context.config.fanSwitch,
+			'switch', 'switch.off', 'fanSwitchOffHandler');
 		if (context.config.contacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.contacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
@@ -197,6 +211,12 @@ module.exports = new SmartApp()
 })
 
 
+// If fan manually turned off, cancel subsequent check temperature calls to control fan
+.subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
+	console.log("Fan switch manually turned off");
+})
+
+
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
@@ -204,7 +224,8 @@ module.exports = new SmartApp()
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {
-		await context.api.schedules.runIn('checkTemperature', 0);
+		// await context.api.schedules.runIn('checkTemperature', 0);
+		controlFan(context);
 	}
 })
 
@@ -234,14 +255,16 @@ module.exports = new SmartApp()
 	console.log("Turn off lights after specified delay");
 
 	// If we got here, no other contact sensors are open so turn off fan 
-	await context.api.schedules.runIn('stopFanHandler', 0);
+	// await context.api.schedules.runIn('stopFanHandler', 0);
+	stopFan(context);
 })
 
 
 // Handle end time if specified
 .scheduledEventHandler('stopFanHandler', async(context, event) => {
 	console.log("Turn off fan handler");
-
+	stopFan(context);
+/*
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 	// cancel any upcoming temperature check calls
@@ -249,6 +272,7 @@ module.exports = new SmartApp()
 	// reschedule fan start at specified time (which must have been set if there's an end/stop time)
 	const startTime = new Date(context.configStringValue('startTime'));
 	await context.api.schedules.runDaily('checkTemperature', startTime);
+*/
 })
 
 
