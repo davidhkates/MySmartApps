@@ -34,6 +34,7 @@ async function controlFan( context ) {
 			const weatherSensor = context.config.weather[0];
 			if (weatherSensor) {
 				const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
+				console.log('Weather sensor specified, outside temp: ', outsideTemp);
 				if (indoorTemp<=outsideTemp) {
 					fanState = 'off';
 				} else {
