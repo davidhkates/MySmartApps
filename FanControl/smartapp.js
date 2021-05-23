@@ -35,6 +35,8 @@ function inTimeWindow( startDateTime, endDateTime ) {
 	return inTimeWindow;
 }
 */
+
+/*
 async function getTemperature( context, sensor ) {
 	try {
 		const sensorDevice = sensor.deviceConfig;
@@ -48,6 +50,14 @@ async function getTemperature( context, sensor ) {
 		console.log("Error", err);
 	}	
 };
+*/
+
+async function getTemperature( context, sensor ) {
+	const sensorDevice = sensor.deviceConfig;
+	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
+	return sensorState.temperature.value;
+}
+
 
 async function controlFan( context ) {
 	// determine if fan is enabled and within time window
