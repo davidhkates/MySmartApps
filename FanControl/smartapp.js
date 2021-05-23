@@ -29,15 +29,15 @@ async function controlFan( context ) {
 		if (indoorTemp>targetTemp) {
 			fanState = 'on';
 
-			// If outside temperature sensor defined, make sure it's cooler outside
-			const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
-			// const outsideTemp = await getTemperature( context, context.config.weather[0] );
-			if (outsideTemp) {
+			// If weather sensor defined, make sure it's cooler outside
+			const weatherSensor = context.config.weather[0];
+			if (weatherSensor) {
+				const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
 				if (indoorTemp<=outsideTemp) {
 					fanState = 'off';
 				} else {
 
-					// If humidity setting defined, make sure it's below that outside
+					// If humidity setting specified, make sure it's below that outside
 					const targetHumidity = context.configNumberValue('humidityTarget');
 					if (targetHumidity) {
 						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
