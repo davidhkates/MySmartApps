@@ -6,60 +6,7 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
-/*
-// Utility functions
-function inTimeWindow( startDateTime, endDateTime ) {
-	
-	// initialize return value
-	var inTimeWindow = true;
-
-	console.log("Start time: ", startDateTime, ", stop time: ", endDateTime, ", equal?: ", (startDateTime!=endDateTime));
-	if (startDateTime != endDateTime) {
-		// apply current date to start and end date/time
-		const currentDate = new Date();
-		startDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
-		endDateTime.setFullYear( currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate() );
-
-		// check to see if span midnight, if so, adjust basec on current time
-		if ( startDateTime > endDateTime ) {
-			if (currentDate > startDateTime) {
-				endDateTime.setDate(endDateTime.getDate()+1);
-			} else {
-				startDateTime.setDate(startDateTime.getDate()-1)
-			}
-		}
-				
-		// check to see if current time is between start and end time		
-		inTimeWindow = ( (currentDate >= startDateTime) && (currentDate <= endDateTime) );
-	}
-	return inTimeWindow;
-}
-*/
-
-/*
-async function getTemperature( context, sensor ) {
-	try {
-		const sensorDevice = sensor.deviceConfig;
-		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
-		console.log('Temperature sensor state: ', sensorState.temperature.value);
-		const returnValue = sensorState.temperatature;
-		console.log('Return value: ', returnValue);
-		// return sensorState.temperature.value;
-		return returnValue;
-	} catch (err) {
-		console.log("Error", err);
-	}	
-};
-
-
-async function getTemperature( context, sensor ) {
-	const sensorDevice = sensor.deviceConfig;
-	const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
-	return sensorState.temperature.value;
-}
-*/
-
-
+// Utility functions for this automation
 async function controlFan( context ) {
 	// determine if fan is enabled and within time window
 	const fanEnabled = context.configBooleanValue('fanEnabled');
@@ -118,7 +65,7 @@ async function controlFan( context ) {
 }
 
 
-/* Define the SmartApp */
+// Define the SmartApp
 module.exports = new SmartApp()
 .enableEventLogging()  // logs requests and responses as pretty-printed JSON
 .configureI18n()       // auto-create i18n files for localizing config pages
@@ -284,55 +231,4 @@ module.exports = new SmartApp()
 .scheduledEventHandler('checkTemperature', async (context, event) => {		
 	console.log("Check temperature");
 	controlFan(context);
-
-/*
-	// determine if fan is enabled and within time window
-	const fanEnabled = context.configBooleanValue('fanEnabled');
-	console.log('Fan enabled: ', fanEnabled);
-
-	if ( fanEnabled ) {
-		// Initialize fan state variable
-		var fanState = 'off';
-		
-		// determine if any contact sensor is open
-		// var contactSensors = 'open';
-		
-		// Get temperature(s) and set fan state
-		// const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
-		const targetTemp = context.configNumberValue('tempTarget');
-		const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-		if (indoorTemp>targetTemp) {
-			fanState = 'on';
-
-			// If outside temperature sensor defined, make sure it's cooler outside
-			const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
-			if (outsideTemp) {
-				if (indoorTemp<=outsideTemp) {
-					fanState = 'off';
-				} else {
-
-					// If humidity setting defined, make sure it's below that outside
-					const targetHumidity = context.configNumberValue('humidityTarget');
-					if (outsideTemp) {
-						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
-						if (humidity<targetHumidity) { 
-							fanState = 'off'
-						}
-					}
-				}
-			}
-		}
-		
-		
-		// Compare current temperature to target temperature
-		// const fanState = ( (indoorTemp>targetTemp && outsideTemp<indoorTemp && contactSensors=='open') ? 'on' : 'off' );
-		console.log('Turning fan ', fanState);
-		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
-
-		// call next temperature check after interval (in seconds) until end time (if specified)
-		console.log('Recursive call to check interval again');
-		const checkInterval = context.configNumberValue('checkInterval');
-		await context.api.schedules.runIn('checkTemperature', checkInterval);	
-	}
-*/
 });
