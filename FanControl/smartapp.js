@@ -76,6 +76,7 @@ async function controlFan( context ) {
 		const targetTemp = context.configNumberValue('tempTarget');
 		// const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
 		const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
+		console.log('Indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 		if (indoorTemp>targetTemp) {
 			fanState = 'on';
 
