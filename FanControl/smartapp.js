@@ -8,11 +8,13 @@ const SmartUtils  = require('@katesthings/smartutils');
 
 // Utility functions for this automation
 async function controlFan( context ) {
+/*
 	// determine if fan is enabled and within time window
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 	console.log('Fan enabled: ', fanEnabled);
 
 	if ( fanEnabled ) {
+*/
 		// Initialize fan state variable
 		var fanState = 'off';
 		
@@ -57,7 +59,7 @@ async function controlFan( context ) {
 		console.log('Recursive call to check interval again');
 		const checkInterval = context.configNumberValue('checkInterval');
 		await context.api.schedules.runIn('checkTemperature', checkInterval);	
-	}
+//	}
 	// return the state of the fan
 	return fanState;
 }
