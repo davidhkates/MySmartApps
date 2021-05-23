@@ -2,7 +2,7 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
@@ -80,7 +80,8 @@ async function controlFan( context ) {
 			fanState = 'on';
 
 			// If outside temperature sensor defined, make sure it's cooler outside
-			const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
+			// const outsideTemp = await SmartSensor.getTemperature( context, context.config.weather[0] );
+			const outsideTemp = await getTemperature( context, context.config.weather[0] );
 			if (outsideTemp) {
 				if (indoorTemp<=outsideTemp) {
 					fanState = 'off';
@@ -88,11 +89,13 @@ async function controlFan( context ) {
 
 					// If humidity setting defined, make sure it's below that outside
 					const targetHumidity = context.configNumberValue('humidityTarget');
-					if (outsideTemp) {
+					if (targetHumidity) {
+						/*
 						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
 						if (humidity<targetHumidity) { 
 							fanState = 'off'
 						}
+						*/
 					}
 				}
 			}
