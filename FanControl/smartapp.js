@@ -181,6 +181,9 @@ module.exports = new SmartApp()
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 					console.log('Start controlling fan based on temperatures');
 					controlFan(context);
+				} else {
+					// if outside time window, turn fan off
+					await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');		
 				}
 			}		
 		} else {
