@@ -175,6 +175,7 @@ module.exports = new SmartApp()
 		const startTime = context.configStringValue("startTime");
 		const endTime   = context.configStringValue("endTime");
 		if (startTime) {
+			console.log('Set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
@@ -187,7 +188,7 @@ module.exports = new SmartApp()
 				}
 			}		
 		} else {
-			console.log('Start controlling fan based on temperatures');
+			console.log('No start time set, start controlling fan based on temperatures');
 			controlFan(context);
 		}
 	}
