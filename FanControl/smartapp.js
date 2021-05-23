@@ -27,6 +27,7 @@ async function controlFan( context ) {
 		// const indoorTemp = await getTemperature( context, context.config.tempSensor[0] );
 		console.log('Indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 		if (indoorTemp>targetTemp) {
+			console.log('Default fan state to ON');
 			fanState = 'on';
 
 			// If weather sensor defined, make sure it's cooler outside
