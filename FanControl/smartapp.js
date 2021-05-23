@@ -38,12 +38,10 @@ async function controlFan( context ) {
 					// If humidity setting defined, make sure it's below that outside
 					const targetHumidity = context.configNumberValue('humidityTarget');
 					if (targetHumidity) {
-						/*
 						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
 						if (humidity<targetHumidity) { 
 							fanState = 'off'
 						}
-						*/
 					}
 				}
 			}
