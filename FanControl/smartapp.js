@@ -151,12 +151,6 @@ module.exports = new SmartApp()
 			.required(true)
 			.permissions('rx');
 		section
-			.deviceSetting('contacts')
-			.capabilities(['contactSensor'])
-			.required(false)
-			.multiple(true)
-			.permissions('r');
-		section
 			.deviceSetting('tempSensor')
 			.capabilities(['temperatureMeasurement'])
 			.required(true)		
@@ -165,6 +159,12 @@ module.exports = new SmartApp()
 			.deviceSetting('weather')
 			.capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
 			.required(false)
+			.permissions('r');
+		section
+			.deviceSetting('contacts')
+			.capabilities(['contactSensor'])
+			.required(false)
+			.multiple(true)
 			.permissions('r');
 	});
 
