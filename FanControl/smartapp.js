@@ -40,8 +40,7 @@ async function getTemperature( context, sensor ) {
 		const sensorDevice = sensor.deviceConfig;
 		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'temperatureMeasurement');
 		console.log('Temperature sensor state: ', sensorState.temperature.value);
-		// return sensorState.temperature.value;
-		return sensorState.value;
+		return sensorState.temperature.value;
 	} catch (err) {
 		console.log("Error", err);
 	}	
