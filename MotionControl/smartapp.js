@@ -72,21 +72,22 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log("MotionControl: Installed/Updated");
 
-	// get fan enabled setting and turn off fan if not
+	// unsubscribe all previously established subscriptions
+	await context.api.subscriptions.unsubscribeAll();
+
+	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (!controlEnabled) {
 		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+	} else {
+
+		// create subscriptions for relevant devices
+		await context.api.subscriptions.subscribeToDevices(context.config.motion,
+		    'motionSensor', 'motion.active', 'motionStartHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.motion,
+		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 	}
-
-	// unsubscribe all previously established subscriptions
-	await context.api.subscriptions.unsubscribeAll();
-
-	// create subscriptions for relevant devices
-	await context.api.subscriptions.subscribeToDevices(context.config.motion,
-	    'motionSensor', 'motionSensor.active', 'motionStartHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.motion,
-	    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
 	
 	console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 })
