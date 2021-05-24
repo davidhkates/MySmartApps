@@ -45,7 +45,7 @@ async function controlFan( context ) {
 					const targetHumidity = context.configNumberValue('humidityTarget');
 					if (targetHumidity) {
 						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
-						if (humidity<targetHumidity) { 
+						if (targetHumidity<humidity) { 
 							fanState = 'off'
 						}
 					}
