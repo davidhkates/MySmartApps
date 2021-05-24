@@ -1,0 +1,23 @@
+{
+	"pages.mainPage.name": "Fan Control",
+	"Tap to set": "Tap to set",
+	"pages.mainPage.sections.parameters.name": "Operating parameters",
+	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
+	"pages.mainPage.settings.fanEnabled.description": "Turn on/off to operate fan",
+	"pages.mainPage.settings.tempTarget.name": "Target temperature",
+	"pages.mainPage.settings.tempTarget.description": "Turn on fan if temperature is above this value",
+	"pages.mainPage.settings.humidityTarget.name": "Humidity level",
+	"pages.mainPage.settings.humidityTarget.description": "Relative humidity level to be below (optional)",
+	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)",
+	"pages.mainPage.settings.checkInterval.postMessage": "Interval value is required",
+	"pages.mainPage.sections.controls.name": "Fan switch and sensors",
+	"pages.mainPage.settings.fanSwitch.name": "Fan switch",
+	"pages.mainPage.settings.contact.name": "Doors/windows to check",
+	"pages.mainPage.settings.tempSensor.name": "Indoor temperature sensor",
+	"pages.mainPage.settings.weather.name": "Outside temperature and humidity",
+	"pages.mainPage.sections.time.name": "Time of day to operate",
+	"pages.mainPage.settings.startTime.name": "Start time",
+	"pages.mainPage.settings.startTime.description": "Time when fan should start operating (optional)",
+	"pages.mainPage.settings.endTime.name": "End time",
+	"pages.mainPage.settings.startTime.description": "Time when fan should stop operating (optional)"
+}
