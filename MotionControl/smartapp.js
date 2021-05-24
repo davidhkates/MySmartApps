@@ -112,7 +112,7 @@ module.exports = new SmartApp()
 		));
 		
 		//set check switch to false all switches are off
-		const switchStates = await Promise.all(stateRequests)
+		const switchStates = await Promise.all(stateRequests);
 		console.log("Switch states: ", switchStates);
 		bCheckSwitch = ( !switchStates.find(it => it.switch.value === 'on')) );		
 	}
