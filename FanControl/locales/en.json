@@ -13,7 +13,7 @@
 	"pages.mainPage.settings.fanSwitch.name": "Fan switch",
 	"pages.mainPage.settings.contacts.name": "Doors/windows to check (optional)",
 	"pages.mainPage.settings.tempSensor.name": "Indoor temperature sensor",
-	"pages.mainPage.settings.weather.name": "Weather sensor for temp/humidity (optional)",
+	"pages.mainPage.settings.weather.name": "Outdoor weather sensor (optional)",
 	"pages.mainPage.sections.time.name": "Time of day to operate",
 	"pages.mainPage.settings.startTime.name": "Start time (optional)",
 	"pages.mainPage.settings.startTime.description": "Time when fan should start operating",
