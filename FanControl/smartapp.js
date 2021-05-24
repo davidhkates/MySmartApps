@@ -149,6 +149,8 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
+	await context.api.schedules.delete('checkTemperature');
+	await context.api.schedules.delete('stopFanHandler');
 
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
