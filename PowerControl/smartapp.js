@@ -22,39 +22,27 @@ module.exports = new SmartApp()
 			.required(false);
 		section
 			.numberSetting('delay')
-			.defaultValue(300)
+			.defaultValue(60)
 			.required(false);
 	});
 
 	// controls and sensors
 	page.section('controls', section => {
 		section
-			.deviceSetting('motion')
-			.capabilities(['motionSensor'])
-			.required(true)
-			.multiple(true)
-			.permissions('r');
-		section
-			.deviceSetting('lightSwitch')
+			.deviceSetting('powerOutlets')
 			.capabilities(['switch'])
 			.required(true)
 			.multiple(true)
 			.permissions('rx');
 		section
-			.deviceSetting('checkSwitches')
+			.deviceSetting('lightSwitches')
 			.capabilities(['switch'])
-			.required(false)
+			.required(true)
 			.multiple(true)
-			.permissions('r');
-		section
-			.deviceSetting('contacts')
-			.capabilities(['contactSensor'])
-			.required(false)
-			.multiple(true)
-			.permissions('r');
+			.permissions('rx');
 	});
 
-	// start and end time (assumes daytime therefore startTime < endTime)
+	// start and end time
 	page.section('time', section => {
 		section
 			.timeSetting('startTime')
@@ -70,7 +58,7 @@ module.exports = new SmartApp()
 // Called for both INSTALLED and UPDATED lifecycle events if there is
 // no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log("MotionControl: Installed/Updated");
+	console.log("PowerControl: Installed/Updated");
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -79,58 +67,39 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (!controlEnabled) {
-		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.powerOutlets, 'switch', 'off');
 	} else {
 
 		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.active', 'motionStartHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.lightSwitches,
+		    'switch', 'lightSwitches.on', 'lightSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.lightSwitches,
+		    'switch', 'lightSwitches.off', 'lightSwitchOffHandler');
 	}
 	
-	console.log('MotionControl: END CREATING SUBSCRIPTIONS')
+	console.log('PowerControl: END CREATING SUBSCRIPTIONS')
 })
 
 
 // Turn on lights when motion occurs during defined times if dependent lights are on
-.subscribedEventHandler('motionStartHandler', async (context, event) => {
+.subscribedEventHandler('lightSwitchOnHandler', async (context, event) => {
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
 	const endTime   = context.configStringValue("endTime");
 
-	// Determine whether current time is within start and end time window
-	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
-	
-	// Determine if ANY of the switch(es) to check are on
-	var bCheckSwitch = true;
-	const checkSwitches = context.config.checkSwitches;
-	if (checkSwitches) {
-		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'switch'
-		));
-		
-		//set check switch to true if any switch is on
-		const switchStates = await Promise.all(stateRequests);
-		console.log("Switch states: ", switchStates);
-		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
-	}
-	
-	// turn on light if in time window and check switch(es) are on
-	if ( bTimeWindow && bCheckSwitch ) {
-		console.log('Turning light(s) on');
-		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'on');
+	// Turn on power outlet if in time window when any light switch turned on
+	if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+		console.log('Turning power outlet(s) on');
+		await context.api.devices.sendCommands(context.config.powerOutlets, 'switch', 'on');
 	}
 })
 
 
-// Turn off the lights only when all motion sensors become inactive
-.subscribedEventHandler('motionStopHandler', async (context, event) => {
+// Turn off the lights only when all light switch(es) are turned off
+.subscribedEventHandler('lightSwitchOffHandler', async (context, event) => {
 
-	// See if there are any other motion sensors defined
-	const otherSensors =  context.config.motion
+	// See if there are any other light switches defined
+	const otherSensors =  context.config.switch
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
 	if (otherSensors) {
@@ -138,29 +107,29 @@ module.exports = new SmartApp()
 		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
-			'motionSensor'
+			'switch'
 		));
 
 		// Quit if there are other sensor still active
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.motion.value === 'active')) {
+		if (states.find(it => it.motion.value === 'on')) {
 			return
 		}
 	}
-	console.log("Turn off lights after specified delay");
+	console.log("Turn off power outlets after specified delay");
 
 	const delay = context.configNumberValue('delay')
 	if (delay) {
 		// Schedule turn off if delay is set
-		await context.api.schedules.runIn('motionStopped', delay)
+		await context.api.schedules.runIn('lightsOffDelay', delay)
 	} else {
 		// Turn off immediately if no delay
-		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.powerOutlets, 'switch', 'off');
 	}
 })
 
 
-// Turns off lights after delay elapses
-.scheduledEventHandler('motionStopped', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+// Turns off power outlet(s) after delay elapses
+.scheduledEventHandler('lightsOffDelay', async (context, event) => {
+	await context.api.devices.sendCommands(context.config.powerOutlets, 'switch', 'off');
 });
