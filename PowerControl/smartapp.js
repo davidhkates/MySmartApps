@@ -82,10 +82,12 @@ module.exports = new SmartApp()
 	} else {
 
 		// create subscriptions for relevant devices
+		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
 		    'switch', 'controlSwitch.on', 'controlSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
 		    'switch', 'controlSwitch.off', 'controlSwitchOffHandler');
+		*/
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		const autoOffTime = context.configStringValue("autoOffTime");
