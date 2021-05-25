@@ -34,6 +34,7 @@ module.exports = new SmartApp()
 			.deviceSetting('controlSwitch')
 			.capabilities(['switch'])
 			.required(true)
+			.multiple(true)
 			.permissions('rx');
 		section
 			.deviceSetting('roomSwitches')
