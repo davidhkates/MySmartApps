@@ -8,5 +8,5 @@ Turn on/off power outlet based on light switch, time of day, day of week, and co
 * locales/en.json &mdash; English version of the app configuration page text
 
 ## Node Package Dependencies
-- npm i @smartthings/smartapp --save
-- npm i @katesthings/smartcontrols --save
+1. npm i @smartthings/smartapp --save
+2. npm i @katesthings/smartcontrols --save
