@@ -158,7 +158,7 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
 	}
-});
+})
 
 // Check to see if control switch was turned on prior to start time
 .scheduledEventHandler('checkOnHandler', async (context, event) => {
