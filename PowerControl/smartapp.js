@@ -43,7 +43,7 @@ module.exports = new SmartApp()
 			.permissions('rx');
 		section
 			.deviceSetting('motion')
-			.capbilities(['motionSensor'])
+			.capabilities(['motionSensor'])
 			.required(false)
 			.multiple(true)
 			.permissions('rx');
