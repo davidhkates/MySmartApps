@@ -1,7 +1,7 @@
 {
-  "name": "simple-motion-lighting",
+  "name": "room-control",
   "version": "1.0.0",
-  "description": "Turns lights on when motion is detected and off some time after it has stopped",
+  "description": "Turn on/off lights/outlets based on switch, time of day, day of week, motion and contact sensors",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -9,7 +9,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/SmartThingsCommunity/app-examples.git"
+    "url": "git+https://github.com/davidhkates/katesthings"
   },
   "keywords": [
     "SmartThings",
@@ -17,16 +17,16 @@
     "Motion",
     "Lighting"
   ],
-  "author": "SmartThings",
-  "license": "Apache-2.0",
+  "author": "David H. Kates",
+  "license": "MIT",
   "bugs": {
-    "url": "https://github.com/SmartThingsCommunity/app-examples/issues"
+    "url": "https://github.com/davidhkates/katesthings/issues"
   },
-  "homepage": "https://github.com/SmartThingsCommunity/app-examples#readme",
+  "homepage": "https://github.com/davidhkates/katesthings#readme",
   "dependencies": {
     "@smartthings/smartapp": "^2.4.3"
   },
   "engines": {
-    "node": "^12"
+    "node": "^14"
   }
 }
