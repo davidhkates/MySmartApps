@@ -34,7 +34,6 @@ module.exports = new SmartApp()
 			.deviceSetting('controlSwitch')
 			.capabilities(['switch'])
 			.required(true)
-			.multiple(true)
 			.permissions('rx');
 		section
 			.deviceSetting('roomSwitches')
@@ -84,10 +83,10 @@ module.exports = new SmartApp()
 
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'controlSwitch.on', 'controlSwitchOnHandler');
-		/*
+		    'switch', 'switch.on', 'controlSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'controlSwitch.off', 'controlSwitchOffHandler');
+		    'switch', 'switch.off', 'controlSwitchOffHandler');
+		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		*/
