@@ -89,7 +89,7 @@ module.exports = new SmartApp()
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 	}
 	
-	console.log('Motion Group: END CREATING SUBSCRIPTIONS')
+	console.log('MotionControl: END CREATING SUBSCRIPTIONS')
 })
 
 
@@ -104,8 +104,9 @@ module.exports = new SmartApp()
 	
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
+	const checkSwitches = context.config.checkSwitches;
 	if (checkSwitches) {
-		const stateRequests = context.config.checkSwitches.map(it => context.api.devices.getCapabilityStatus(
+		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
 			'switch'
