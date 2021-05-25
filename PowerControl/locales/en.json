@@ -19,7 +19,7 @@
 	"pages.mainPage.settings.startTime.name": "Start time",
 	"pages.mainPage.settings.startTime.description": "",
 	"pages.mainPage.settings.endTime.name": "End time",
-	"pages.mainPage.settings.endTime.description": ""
+	"pages.mainPage.settings.endTime.description": "",
 	"pages.mainPage.settings.autoOffTime.name": "Auto off time",
 	"pages.mainPage.settings.autoOffTime.description": ""
 }
