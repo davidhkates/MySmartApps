@@ -20,11 +20,12 @@ module.exports = new SmartApp()
 		section
 			.booleanSetting('controlEnabled')
 			.defaultValue(true)
-			.required(false);
+			.required(true);
 		section
 			.numberSetting('delay')
-			.defaultValue(60)
-			.required(false);
+			.min(60)
+			.defaultValue(300)
+			.required(true);
 	});
 
 	// controls and sensors
@@ -87,7 +88,7 @@ module.exports = new SmartApp()
 		    'switch', 'lightSwitches.off', 'lightSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		await context.api.schedules.runDaily('roomOffEvent');
+		await context.api.schedules.runDaily('roomOffHandler');
 	}
 	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
@@ -122,41 +123,27 @@ module.exports = new SmartApp()
 })
 
 
-// Turn off the lights only when all light switch(es) are turned off
-.subscribedEventHandler('lightSwitchOffHandler', async (context, event) => {
+// Turns off room switch(es) after delay elapses if no motion in room
+.scheduledEventHandler('roomOffHandler', async (context, event) => {
 
-	// See if there are any other light switches defined
-	const otherSensors =  context.config.switch
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
-
-	if (otherSensors) {
-		// Get the current states of the other motion sensors
-		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+	// See if there are any motion sensors defined
+	const motionSensors =  context.config.motion;
+	if (motionSensors) {
+		// Get the current states of the motion sensors
+		const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
-			'switch'
+			'motion'
 		));
 
-		// Quit if there are other sensor still active
+		// Check again after delay if there is any motion in room, if not turn off now
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.switch.value === 'on')) {
-			return
+		if (states.find(it => it.switch.value === 'active')) {
+			const delay = context.configNumberValue('delay')
+			await context.api.schedules.runIn('roomOffHandler', delay);
+		} else {
+			// Turn off now if no motion
+			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
 	}
-	console.log("Turn off room switches after specified delay");
-
-	const delay = context.configNumberValue('delay')
-	if (delay) {
-		// Schedule turn off if delay is set
-		await context.api.schedules.runIn('lightsOffDelay', delay);
-	} else {
-		// Turn off immediately if no delay
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
-	}
-})
-
-
-// Turns off room switch(es) after delay elapses
-.scheduledEventHandler('roomOffEvent', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 });
