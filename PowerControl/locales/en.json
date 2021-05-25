@@ -4,12 +4,15 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.delay.name": "Optional time delay in seconds",
+	"pages.mainPage.settings.delay.name": "Delay after motion stops (in seconds)",
 	"pages.mainPage.settings.delay.description": "",
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
-	"pages.mainPage.settings.powerOutlets.name": "Power outlets to control",
-	"pages.mainPage.settings.powerOutlets.description": "",
-	"pages.mainPage.settings.lightSwitches.name": "Light switches to control outlets",
+	"pages.mainPage.settings.controlSwitch.name": "Light switch to control room",
+	"pages.mainPage.settings.controlSwitch.description": "",
+	"pages.mainPage.settings.roomSwitches.name": "Room switches/outlets to control",
+	"pages.mainPage.settings.roomSwitches.description": "",
+	"pages.mainPage.settings.motion.name": "Motion sensors",
+	"pages.mainPage.settings.motion.description": "",
 	"pages.mainPage.settings.contacts.name": "Contacts to check whether to turn on light",
 	"pages.mainPage.settings.contacts.description": "",
 	"pages.mainPage.sections.time.name": "Times for this automation",
@@ -17,4 +20,6 @@
 	"pages.mainPage.settings.startTime.description": "",
 	"pages.mainPage.settings.endTime.name": "End time",
 	"pages.mainPage.settings.endTime.description": ""
+	"pages.mainPage.settings.autoOffTime.name": "Auto off time",
+	"pages.mainPage.settings.autoOffTime.description": ""
 }
