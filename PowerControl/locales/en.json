@@ -1,0 +1,21 @@
+{
+	"pages.mainPage.name": "Group Control",
+	"Tap to set": "Tap to set",
+	"pages.mainPage.sections.parameters.name": "Automation parameters",
+	"pages.mainPage.settings.controlEnabled.name": "Operate control",
+	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
+	"pages.mainPage.settings.delay.name": "Optional time delay in seconds",
+	"pages.mainPage.settings.delay.description": "",
+	"pages.mainPage.sections.controls.name": "Controls for this automation",
+	"pages.mainPage.settings.motion.name": "Select motion sensors",
+	"pages.mainPage.settings.motion.description": "",
+	"pages.mainPage.settings.lightSwitch.name": "Turn on these devices",
+	"pages.mainPage.settings.checkSwitches.name": "Switches to check whether to turn on light",
+	"pages.mainPage.settings.contacts.name": "Contacts to check whether to turn on light",
+	"pages.mainPage.settings.contacts.description": "",
+	"pages.mainPage.sections.time.name": "Times for this automation",
+	"pages.mainPage.settings.startTime.name": "Start time",
+	"pages.mainPage.settings.startTime.description": "",
+	"pages.mainPage.settings.endTime.name": "End time",
+	"pages.mainPage.settings.endTime.description": ""
+}
