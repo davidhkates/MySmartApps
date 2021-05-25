@@ -112,13 +112,13 @@ module.exports = new SmartApp()
 			'switch'
 		));
 		
-		//set check switch to false all switches are off
+		//set check switch to true if any switch is on
 		const switchStates = await Promise.all(stateRequests);
 		console.log("Switch states: ", switchStates);
-		bCheckSwitch = ( !switchStates.find(it => it.switch.value === 'on') );		
+		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
 	}
 	
-	// turn on light if in time window and dependent switch(es) are on
+	// turn on light if in time window and check switch(es) are on
 	if ( bTimeWindow && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'on');
