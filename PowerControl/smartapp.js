@@ -72,12 +72,10 @@ module.exports = new SmartApp()
 	} else {
 
 		// create subscriptions for relevant devices
-		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.lightSwitches,
 		    'switch', 'lightSwitches.on', 'lightSwitchOnHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.lightSwitches,
-		    'switch', 'lightSwitches.off', 'lightSwitchOffHandler');
-		*/
+//		await context.api.subscriptions.subscribeToDevices(context.config.lightSwitches,
+//		    'switch', 'lightSwitches.off', 'lightSwitchOffHandler');
 	}
 	
 	console.log('PowerControl: END CREATING SUBSCRIPTIONS')
