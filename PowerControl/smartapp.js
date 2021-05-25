@@ -46,7 +46,7 @@ module.exports = new SmartApp()
 			.capabilities(['motionSensor'])
 			.required(false)
 			.multiple(true)
-			.permissions('rx');
+			.permissions('r');
 	});
 
 	// time window and auto-off
