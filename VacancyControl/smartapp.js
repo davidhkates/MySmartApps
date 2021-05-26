@@ -38,13 +38,9 @@ module.exports = new SmartApp()
 			.multiple(true)
 			.permissions('r');
 		section.deviceSetting('mainSwitch')
-			.capabilities(['switch'])
+			.capabilities(['switch','button'])
 			.required(true)
 			.permissions('rx');
-		section.deviceSetting('mainButton')
-			.capabilities(['button'])
-			.required(false)
-			.permissions('r');
 		section.deviceSetting('roomSwitches')
 			.capabilities(['switch'])
 			.required(true)
@@ -87,8 +83,8 @@ module.exports = new SmartApp()
 		    'switch', 'switch.on', 'mainSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'switch', 'switch.off', 'mainSwitchOffHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
-		    'button', 'button.pushed', 'shadeButtonHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'button', 'button.pushed', 'mainSwitchButtonHandler');
 /
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
@@ -106,14 +102,26 @@ module.exports = new SmartApp()
 
 
 // Turns on room lights with main switch
-.scheduledEventHandler('mainSwitchOn', async (context, event) => {
+.scheduledEventHandler('mainSwitchOnHandler', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 })
 
 
 // Turns off room lights with main switch
-.scheduledEventHandler('mainSwitchOff', async (context, event) => {
+.scheduledEventHandler('mainSwitchOffHandler', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+})
+
+// Interprets button push as pressing switch
+.scheduledEventHandler('mainSwitchButtonHandler', async (context, event) => {
+	const mainSwitch = await getSwitchState( context, context.config.mainSwitch[0] );
+	if ( mainSwitch == 'on' ) {	
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+	} else {
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+	}		
 })
 
 
