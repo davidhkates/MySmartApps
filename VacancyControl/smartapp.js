@@ -114,7 +114,7 @@ module.exports = new SmartApp()
 .scheduledEventHandler('mainSwitchOff', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 });
-
+*/
 
 
 // Turn off the room switch(es) if motion stops outside of time window
@@ -164,4 +164,3 @@ module.exports = new SmartApp()
 .scheduledEventHandler('motionStopped', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 });
-*/
