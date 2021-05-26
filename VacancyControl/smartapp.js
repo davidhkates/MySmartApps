@@ -93,7 +93,7 @@ module.exports = new SmartApp()
 		    'motionSensor', 'motion.inactive', 'motionStartHandler');
 		*/
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
 		/*
 		const endTime = context.configStringValue("endTime");
 		if (endTime) {
