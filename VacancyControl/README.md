@@ -1,6 +1,6 @@
-## Power Control 
+## Vacancy Control 
 
-Turn on/off power outlet based on light switch, time of day, day of week, and contact sensors
+Use motion sensor as vacancy control during specified times/days
 
 ## File Structure
 
