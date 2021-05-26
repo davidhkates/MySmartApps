@@ -126,7 +126,7 @@ module.exports = new SmartApp()
 
 		// See if there are any motion sensors defined
 		const motionSensors =  context.config.motionSensors
-	    		.filter(it => it.deviceConfig.deviceId !== event.deviceId)
+	    		.filter(it => it.deviceConfig.deviceId !== event.deviceId);
 
 		if (motionSensors) {
 			// Get the current states of the other motion sensors
