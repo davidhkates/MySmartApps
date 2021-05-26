@@ -1,4 +1,4 @@
-service: power-control
+service: vacancy-control
 
 package:
   patterns:
