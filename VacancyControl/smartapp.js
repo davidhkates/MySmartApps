@@ -92,16 +92,13 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStartHandler');
 		*/
-		// await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		//    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
-		/*
+		await context.api.subscriptions.subscribeToDevices(context.config.motion,
+		    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
 		const endTime = context.configStringValue("endTime");
 		if (endTime) {
-			await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+			await context.api.schedules.runDaily('motionStopHandler', new Date(endTime));
 		}
-		*/
-	}
-	
+	}	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
 
