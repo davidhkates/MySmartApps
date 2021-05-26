@@ -32,6 +32,11 @@ module.exports = new SmartApp()
 
 	// controls and sensors
 	page.section('controls', section => {
+		section.deviceSetting('motion')
+			.capabilities(['motionSensor'])
+			.required(true)
+			.multiple(true)
+			.permissions('r');
 		section.deviceSetting('mainSwitch')
 			.capabilities(['switch'])
 			.required(true)
@@ -45,11 +50,6 @@ module.exports = new SmartApp()
 			.required(true)
 			.multiple(true)
 			.permissions('rx');
-		section.deviceSetting('motion')
-			.capabilities(['motionSensor'])
-			.required(true)
-			.multiple(true)
-			.permissions('r');
 	});
 
 	// time window
@@ -87,7 +87,9 @@ module.exports = new SmartApp()
 		    'switch', 'switch.on', 'mainSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'switch', 'switch.off', 'mainSwitchOffHandler');
-
+		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
+		    'button', 'button.pushed', 'shadeButtonHandler');
+/
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStartHandler');
