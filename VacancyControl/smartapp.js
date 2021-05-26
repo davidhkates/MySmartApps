@@ -31,34 +31,26 @@ module.exports = new SmartApp()
 	// controls and sensors
 	page.section('controls', section => {
 		section
-			.deviceSetting('controlSwitch')
-			.capabilities(['switch'])
+			.deviceSetting('motion')
+			.capabilities(['motionSensor'])
 			.required(true)
-			.permissions('rx');
+			.multiple(true)
+			.permissions('r');
 		section
 			.deviceSetting('roomSwitches')
 			.capabilities(['switch'])
 			.required(true)
 			.multiple(true)
 			.permissions('rx');
-		section
-			.deviceSetting('motion')
-			.capabilities(['motionSensor'])
-			.required(false)
-			.multiple(true)
-			.permissions('r');
 	});
 
-	// time window and auto-off
+	// time window
 	page.section('time', section => {
 		section
 			.timeSetting('startTime')
 			.required(false);
 		section
 			.timeSetting('endTime')
-			.required(false);
-		section
-			.timeSetting('autoOffTime')
 			.required(false);
 	});
 })
@@ -72,7 +64,7 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('lightsOffDelay');
+	await context.api.schedules.delete('roomOffHandler');
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
@@ -82,17 +74,15 @@ module.exports = new SmartApp()
 	} else {
 
 		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'switch.on', 'controlSwitchOnHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'switch.off', 'controlSwitchOffHandler');
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		    'motionSensor', 'motion.inactive', 'motionStartHandler');
 		*/
-		const autoOffTime = context.configStringValue("autoOffTime");
-		if (autoOffTime) {
-			await context.api.schedules.runDaily('roomOffHandler', new Date(autoOffTime));
+		await context.api.subscriptions.subscribeToDevices(context.config.motion,
+		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		const endTime = context.configStringValue("endTime");
+		if (endTime) {
+			await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 		}
 	}
 	
@@ -100,30 +90,21 @@ module.exports = new SmartApp()
 })
 
 
-// Turn on lights when motion occurs during defined times if dependent lights are on
-.subscribedEventHandler('controlSwitchOnHandler', async (context, event) => {
-	// Get start and end times
-	const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
-
-	// Turn on room switch(es) if in time window when light switch turned on
-	if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-		console.log('Turning room switch(es) on');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
-	}
-})
-
-
 // Turn off the room switch(es) if light turned off outside of time window
-.subscribedEventHandler('controlSwitchOffHandler', async (context, event) => {
+.subscribedEventHandler('motionStopHandler', async (context, event) => {
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
 	const endTime   = context.configStringValue("endTime");
 
 	// Turn off room switch(es) if outside time window when light switch turned off
 	if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-		console.log('Turning room switch(es) off');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+		console.log('Turning room switch(es) off after specified delay');
+		const delay = context.configDecimalValue("delay");
+		if (delay) {
+			await context.api.schedules.runIn('roomOffHandler', delay);
+		} else {
+			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+		}
 	}
 })
 
@@ -147,8 +128,7 @@ module.exports = new SmartApp()
 			const delay = context.configNumberValue('delay')
 			await context.api.schedules.runIn('roomOffHandler', delay);
 		} else {
-			// Turn off control switch and room switch(es) now if no motion
-			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
+			// Turn off room switch(es) now if no motion
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
 	}
