@@ -106,6 +106,7 @@ module.exports = new SmartApp()
 })
 
 
+/*
 // Turns on room lights with main switch
 .scheduledEventHandler('mainSwitchOn', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
@@ -118,7 +119,7 @@ module.exports = new SmartApp()
 });
 
 
-/*
+
 // Turn off the room switch(es) if motion stops outside of time window
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
 	// Get start and end times
