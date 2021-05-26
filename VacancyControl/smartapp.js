@@ -32,9 +32,13 @@ module.exports = new SmartApp()
 
 	// controls and sensors
 	page.section('controls', section => {
-		section.deviceSetting('controlSwitch')
+		section.deviceSetting('mainSwitch')
 			.capabilities(['switch'])
 			.required(true)
+			.permissions('rx');
+		section.deviceSetting('mainButton')
+			.capabilities(['button'])
+			.required(false)
 			.permissions('r');
 		section.deviceSetting('roomSwitches')
 			.capabilities(['switch'])
@@ -79,10 +83,10 @@ module.exports = new SmartApp()
 	} else {
 
 		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'switch.on', 'controlSwitchOnHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'switch.off', 'controlSwitchOffHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'switch', 'switch.on', 'mainSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'switch', 'switch.off', 'mainSwitchOffHandler');
 
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
@@ -102,15 +106,15 @@ module.exports = new SmartApp()
 })
 
 
-// Turns on room lights with control switch
-.scheduledEventHandler('controlSwitchOn', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
+// Turns on room lights with main switch
+.scheduledEventHandler('mainSwitchOn', async (context, event) => {
+	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 });
 
 
-// Turns off room lights with control switch
-.scheduledEventHandler('controlSwitchOff', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
+// Turns off room lights with main switch
+.scheduledEventHandler('mainSwitchOff', async (context, event) => {
+	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 });
 
 
