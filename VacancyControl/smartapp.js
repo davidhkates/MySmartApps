@@ -105,7 +105,7 @@ module.exports = new SmartApp()
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
 
-
+/*
 // Turns on room lights with main switch
 .scheduledEventHandler('mainSwitchOn', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
@@ -160,9 +160,10 @@ module.exports = new SmartApp()
 		}
 	}
 })
-*/
+
 
 // Turns off lights after delay elapses
 .scheduledEventHandler('motionStopped', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 });
+*/
