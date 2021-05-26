@@ -85,7 +85,7 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'mainSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'button', 'button.pushed', 'mainSwitchButtonHandler');
-/
+
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStartHandler');
@@ -113,7 +113,6 @@ module.exports = new SmartApp()
 })
 
 
-/*
 // Interprets button push as pressing switch
 .subscribedEventHandler('mainSwitchButtonHandler', async (context, event) => {
 	const mainSwitch = await getSwitchState( context, context.config.mainSwitch[0] );
@@ -125,7 +124,6 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 	}		
 })
-*/
 
 
 // Turn off the room switch(es) if motion stops outside of time window
