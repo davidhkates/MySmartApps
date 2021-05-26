@@ -92,8 +92,8 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStartHandler');
 		*/
-		// await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		//    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.motion,
+		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		/*
 		const endTime = context.configStringValue("endTime");
 		if (endTime) {
@@ -105,7 +105,7 @@ module.exports = new SmartApp()
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
 
-/*
+
 // Turns on room lights with main switch
 .scheduledEventHandler('mainSwitchOn', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
