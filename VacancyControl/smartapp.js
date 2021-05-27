@@ -105,15 +105,17 @@ module.exports = new SmartApp()
 
 // Turns on room lights with main switch
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
-	console.log('Main switch turned on')
+	console.log('Main switch turned on');
 	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+	console.log('Room switches turned on');
 })
 
 
 // Turns off room lights with main switch
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
-	console.log('Main switch turned off')
+	console.log('Main switch turned off');
 	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+	console.log('Room switches turned off');
 })
 
 
