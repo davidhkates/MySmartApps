@@ -65,7 +65,7 @@ module.exports = new SmartApp()
 // Called for both INSTALLED and UPDATED lifecycle events if there is
 // no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log("RoomControl: Installed/Updated");
+	console.log("VacancyControl: Installed/Updated");
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -96,19 +96,21 @@ module.exports = new SmartApp()
 		if (endTime) {
 			await context.api.schedules.runDaily('motionStopHandler', new Date(endTime));
 		}
-	}	
-	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
+	}
+	console.log('VacancyControl: END CREATING SUBSCRIPTIONS')
 })
 
 
 // Turns on room lights with main switch
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
+	console.log('Main switch turned on')
 	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 })
 
 
 // Turns off room lights with main switch
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
+	console.log('Main switch turned off')
 	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 })
 
@@ -116,6 +118,7 @@ module.exports = new SmartApp()
 // Interprets button push as pressing switch
 .subscribedEventHandler('mainSwitchButtonHandler', async (context, event) => {
 	const mainSwitch = await SmartSensor.getSwitchState( context, context.config.mainSwitch[0] );
+	console.log('Main button pressed: switch state:', mainSwitch)
 	if ( mainSwitch == 'on' ) {	
 		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
