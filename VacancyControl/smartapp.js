@@ -140,7 +140,7 @@ module.exports = new SmartApp()
 		console.log('Outside time window, check other motion sensors');
 
 		// See if there are any motion sensors defined
-		const motionSensors =  context.config.motionSensors
+		const motionSensors =  context.config.motion
 	    		.filter(it => it.deviceConfig.deviceId !== event.deviceId);
 
 		if (motionSensors) {
