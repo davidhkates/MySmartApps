@@ -55,7 +55,7 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime')
 			.required(false);
 		section.enumSetting('daysOfWeek')
-			.options(['everyday','weekdays','weekends'])
+			.options(['everyday','weekdays','weekend'])
 			.required(true);
 	});
 })
