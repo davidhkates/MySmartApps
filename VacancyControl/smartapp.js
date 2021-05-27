@@ -25,7 +25,7 @@ module.exports = new SmartApp()
 			.defaultValue(300)
 			.required(true);
 		section.enumSetting('mode')
-			.options(['Vacancy','Occupancy'])
+			.options(['vacancy','occupancy'])
 			.defaultValue('Vacancy')
 			.required(true);
 	});
@@ -55,7 +55,7 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime')
 			.required(false);
 		section.enumSetting('daysOfWeek')
-			.options(['EveryDay','Weekdays'])
+			.options(['everyday','weekdays','weekends'])
 			.required(true);
 	});
 })
