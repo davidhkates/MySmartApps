@@ -7,8 +7,8 @@
 	"pages.mainPage.settings.delay.name": "Delay after motion stops (in seconds)",
 	"pages.mainPage.settings.delay.description": "",
 	"pages.mainPage.settings.mode.name": "Motion switch activity mode",
-	"pages.mainPage.settings.mode.options.Vacancy.name": "Vacancy",
-	"pages.mainPage.settings.mode.options.Occupancy.name": "Occupancy",
+	"pages.mainPage.settings.mode.options.vacancy.name": "Vacancy",
+	"pages.mainPage.settings.mode.options.occupancy.name": "Occupancy",
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.settings.motion.name": "Motion sensors",
 	"pages.mainPage.settings.motion.description": "",
@@ -23,7 +23,8 @@
 	"pages.mainPage.settings.startTime.description": "",
 	"pages.mainPage.settings.endTime.name": "End time",
 	"pages.mainPage.settings.endTime.description": "",
-	"pages.mainPage.settings.daysOfWeek": "Days of week",
-	"pages.mainPage.settings.daysOfWeek.options.EveryDay.name": "Every Day",
-	"pages.mainPage.settings.daysOfWeek.options.Weekdays.name": "Weekdays"
+	"pages.mainPage.settings.daysOfWeek.name": "Days of week",
+	"pages.mainPage.settings.daysOfWeek.options.everyday.name": "Every Day",
+	"pages.mainPage.settings.daysOfWeek.options.weekdays.name": "Weekdays",
+	"pages.mainPage.settings.daysOfWeek.options.weekend.name": "Weekend",
 }
