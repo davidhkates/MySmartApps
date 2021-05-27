@@ -115,16 +115,16 @@ module.exports = new SmartApp()
 })
 
 
-// Interprets button push as pressing switch
+// Treat button push as toggling switch
 .subscribedEventHandler('mainSwitchButtonHandler', async (context, event) => {
 	const mainSwitch = await SmartSensor.getSwitchState( context, context.config.mainSwitch[0] );
 	console.log('Main button pressed: switch state:', mainSwitch)
 	if ( mainSwitch == 'on' ) {	
-		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		// await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 	} else {
-		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+		// await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 	}		
 })
 
