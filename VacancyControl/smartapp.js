@@ -103,19 +103,19 @@ module.exports = new SmartApp()
 
 // Turns on room lights with main switch
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 })
 
 
 // Turns off room lights with main switch
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 })
 
 
 // Interprets button push as pressing switch
 .subscribedEventHandler('mainSwitchButtonHandler', async (context, event) => {
-	const mainSwitch = await getSwitchState( context, context.config.mainSwitch[0] );
+	const mainSwitch = await SmartSensor.getSwitchState( context, context.config.mainSwitch[0] );
 	if ( mainSwitch == 'on' ) {	
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
