@@ -83,12 +83,14 @@ module.exports = new SmartApp()
 		    'switch', 'switch.on', 'mainSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'switch', 'switch.off', 'mainSwitchOffHandler');
+		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'button', 'button.pushed', 'mainSwitchButtonHandler');
+		*/
 
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.inactive', 'motionStartHandler');
+		    'motionSensor', 'motion.active', 'motionStartHandler');
 		*/
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
