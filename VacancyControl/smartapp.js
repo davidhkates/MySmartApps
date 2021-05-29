@@ -88,10 +88,8 @@ module.exports = new SmartApp()
 		    'button', 'button.pushed', 'mainSwitchButtonHandler');
 		*/
 
-		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
-		*/
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		const endTime = context.configStringValue("endTime");
@@ -130,6 +128,26 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 		// await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 	}		
+})
+
+
+
+// Turn on room lights if mode set to Occupancy
+.subscribedEventHandler('motionStartHandler', async (context, event) => {
+	// See if mode set to occupancy
+	const mode = context.configStringValue('mode');
+	if (mode=='occupancy') {
+
+		// Get start and end times
+		const startTime = context.configStringValue("startTime");
+		const endTime   = context.configStringValue("endTime");
+
+		// Turn on room switch(es) if in time window
+		if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+			console.log('Turn on lights since mode is occupancy and in time window');
+			await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+		}
+	}
 })
 
 
