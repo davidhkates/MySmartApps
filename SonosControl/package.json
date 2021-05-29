@@ -1,7 +1,7 @@
 {
-  "name": "vacancy-control",
+  "name": "sonos-control",
   "version": "1.0.0",
-  "description": "Use motion sensor as vacancy control during specified days/times",
+  "description": "Control Sonos speakers invoking OAuth server",
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -14,10 +14,10 @@
   "keywords": [
     "SmartThings",
     "SmartApp",
-    "Vacancy",
+    "Sonos",
     "Control"
   ],
-  "author": "SmartThings",
+  "author": "David H. Kates",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/SmartThingsCommunity/app-examples/issues"
