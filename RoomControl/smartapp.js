@@ -17,15 +17,9 @@ module.exports = new SmartApp()
 
 	// enable/disable control, motion delay setting
 	page.section('parameters', section => {
-		section
-			.booleanSetting('controlEnabled')
-			.defaultValue(true)
-			.required(true);
-		section
-			.numberSetting('delay')
-			.min(60)
-			.defaultValue(300)
-			.required(true);
+		section.booleanSetting('controlEnabled').defaultValue(true);
+		section.numberSetting('delay').min(60).defaultValue(300).required(true);
+		section.enumSetting('mode').options(['vacancy','occupancy']);
 	});
 
 	// controls and sensors
@@ -51,22 +45,16 @@ module.exports = new SmartApp()
 
 	// time window and auto-off
 	page.section('time', section => {
-		section
-			.timeSetting('startTime')
-			.required(false);
-		section
-			.timeSetting('endTime')
-			.required(false);
-		section
-			.timeSetting('autoOffTime')
-			.required(false);
+		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
+			defaultValue('everyday').required(true);
+		section.timeSetting('startTime').required(false);
+		section.timeSetting('endTime').required(false);
+		section.timeSetting('autoOffTime').required(false);
 	});
 })
 
 
-// Handler called whenever app is installed or updated
-// Called for both INSTALLED and UPDATED lifecycle events if there is
-// no separate installed() handler
+// Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
 
@@ -87,14 +75,19 @@ module.exports = new SmartApp()
 		    'switch', 'switch.on', 'controlSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
 		    'switch', 'switch.off', 'controlSwitchOffHandler');
+
+		// motion sensor handlers
+		await context.api.subscriptions.subscribeToDevices(context.config.motion,
+		    'motionSensor', 'motion.active', 'motionStartHandler');
 		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		*/
+	    	*/
+
 		// check to see if light was turned on before start time
 		const checkOnTime = context.configStringValue("startTime");
 		if (checkOnTime) {
-			await context.api.schedules.runDaily('roomOffHandler', new Date(checkOnTime));
+			await context.api.schedules.runDaily('checkOnHandler', new Date(checkOnTime));
 		}
 		const autoOffTime = context.configStringValue("autoOffTime");
 		if (autoOffTime) {
@@ -106,7 +99,7 @@ module.exports = new SmartApp()
 })
 
 
-// Turn on lights when motion occurs during defined times if dependent lights are on
+// Turn on room switches/outlets when control switch turned on during defined times
 .subscribedEventHandler('controlSwitchOnHandler', async (context, event) => {
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
@@ -134,6 +127,31 @@ module.exports = new SmartApp()
 })
 
 
+// Turn on light in occupancy mode during defined times when motion occurs
+.subscribedEventHandler('motionStartHandler', async (context, event) => {
+	if (context.getStringValue('mode')=='occupancy') {
+		// Get start and end times
+		const startTime = context.configStringValue("startTime");
+		const endTime   = context.configStringValue("endTime");
+
+		if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+			console.log('Turning control switch on');
+			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
+		}
+	}
+})
+
+
+// Check to see if control switch was turned on prior to start time
+.scheduledEventHandler('checkOnHandler', async (context, event) => {
+	// Turn on room switch(es) if control switch turned on already
+	if ( SmartSensors.getSwitchState( context, context.config.controlSwitch[0] ) ) {
+		console.log('Turning room switch(es) on');
+		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+	}
+});
+
+
 // Turns off room switch(es) after delay elapses if no motion in room
 .scheduledEventHandler('roomOffHandler', async (context, event) => {
 
@@ -159,12 +177,3 @@ module.exports = new SmartApp()
 		}
 	}
 })
-
-// Check to see if control switch was turned on prior to start time
-.scheduledEventHandler('checkOnHandler', async (context, event) => {
-	// Turn on room switch(es) if control switch turned on already
-	if ( SmartSensors.getSwitchState( context, context.config.controlSwitch[0] ) ) {
-		console.log('Turning room switch(es) on');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
-	}
-});
