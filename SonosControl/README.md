@@ -1,6 +1,6 @@
-## Vacancy Control 
+## Sonos Control 
 
-Use motion sensor as vacancy control during specified times/days
+Connnects to Sonos web server to control speaker(s)
 
 ## File Structure
 
