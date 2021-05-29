@@ -1,4 +1,4 @@
-service: vacancy-control
+service: sonos-control
 
 package:
   patterns:
@@ -17,3 +17,26 @@ functions:
   smartapp:
     handler: index.handle
     timeout: 20
+
+
+
+
+
+
+service: oauth
+
+app: helpful-oauth
+tenant: alexbass
+
+provider:
+  name: aws
+  runtime: nodejs8.10
+  profile: serverless
+
+functions:
+  callback:
+    handler: handler.callback
+    events:
+      - http:
+          path: callback
+          method: get
