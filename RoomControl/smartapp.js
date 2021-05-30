@@ -6,25 +6,6 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
-function isDayOfWeek( strDayOfWeek ) {
-	const today = new Date();
-	const nDayOfWeek = today.getDay();
-	console.log("Day of week: ", nDayOfWeek);
-	var bDayOfWeek = false;
-	switch (strDayOfWeek) {
-		case 'everyday':
-			bDayOfWeek = true;
-			break;
-		case 'weekdays':
-			bDayOfWeek = ( nDayOfWeek >= 1 && nDayOfWeek <= 5 );
-			break;
-		case 'weekend':
-			bDayOfWeek = ( nDayOfWeek==0 || nDayOfWeek==6 );
-	}
-	return bDayOfWeek;
-}
-
-
 /* Define the SmartApp */
 module.exports = new SmartApp()
 
@@ -127,8 +108,7 @@ module.exports = new SmartApp()
 
 	// Turn on room switch(es) if in time window when light switch turned on
 	console.log("Days of week: ", daysOfWeek);
-	if (isDayOfWeek(daysOfWeek)) {	
-	// if (SmartUtils.isDayOfWeek(daysOfWeek)) {
+	if (SmartUtils.isDayOfWeek(daysOfWeek)) {
 		console.log("Today is one of days of week, start time: ", startTime);
 		if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 			console.log('Turning room switch(es) on');
@@ -177,6 +157,7 @@ module.exports = new SmartApp()
 	
 	// if mode is vacancy or occupancy, schedule room switches to turn off
 	const mode = context.configStringValue('mode');
+	console.log('Motion stop handler, mode: ', mode);
 	if (mode=='vacancy' || mode=='occupancy') {
 
 		// check to see we're outside the designated day and time window
@@ -201,15 +182,17 @@ module.exports = new SmartApp()
 				if (states.find(it => it.motion.value === 'active')) {
 					return
 				}
+			}
 
-				const delay = context.configNumberValue('delay')
-				if (delay) {
-					// Schedule turn off if delay is set
-					await context.api.schedules.runIn('motionStopped', delay)
-				} else {
-					// Turn off immediately if no delay
-					await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
-				}
+			// If no other active sensore, turn off lights now or after delay
+			console.log('Motion stopped, turn off lights after delay: ', delay);
+			const delay = context.configNumberValue('delay')
+			if (delay) {
+				// Schedule turn off if delay is set
+				await context.api.schedules.runIn('motionStopped', delay)
+			} else {
+				// Turn off immediately if no delay
+				await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
 			}
 		}
     	}
