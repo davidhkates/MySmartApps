@@ -108,7 +108,7 @@ module.exports = new SmartApp()
 
 	// Turn on room switch(es) if in time window when light switch turned on
 	console.log("Days of week: ", daysOfWeek);
-	SmartUtils.isDayOfWeek(daysOfWeek)) {
+	if (SmartUtils.isDayOfWeek(daysOfWeek)) {
 		console.log("Today is one of days of week, start time: ", startTime);
 		if (!(startTime)&&!(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 			console.log('Turning room switch(es) on');
