@@ -189,7 +189,7 @@ module.exports = new SmartApp()
 			}
 		}
     	}
-});
+})
 
 
 // Check to see if control switch was turned on prior to start time
@@ -199,7 +199,7 @@ module.exports = new SmartApp()
 		console.log('Turning room switch(es) on');
 		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 	}
-});
+})
 
 
 // Turns off room switch(es) at end time if no motion in room
@@ -226,4 +226,4 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
 	}
-})
+});
