@@ -4,9 +4,7 @@ app: sonos-oauth
 # tenant: katesthings
 package:
   patterns:
-    - index.js
-    - smartapp.js
-    - locales/**
+    - handler.js
 
 provider:
   name: aws
