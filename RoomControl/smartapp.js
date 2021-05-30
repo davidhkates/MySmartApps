@@ -99,15 +99,13 @@ module.exports = new SmartApp()
 
 // Turn on room switches/outlets when control switch turned on during defined times
 .subscribedEventHandler('controlSwitchOnHandler', async (context, event) => {
-	// Get start and end times and daysOfWeek
-	const startTime  = context.configStringValue("startTime");
-	const endTime    = context.configStringValue("endTime");
-	const daysOfWeek = context.configStringValue("daysOfWeek"); 
-
-	// Turn on room switch(es) if in time window when light switch turned on
-	console.log("Days of week: ", daysOfWeek);
-	if (SmartUtils.isDayOfWeek(daysOfWeek)) {
+	// Check today is specified day of week
+	if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
+		const startTime  = context.configStringValue("startTime");
+		const endTime    = context.configStringValue("endTime");
 		console.log("Today is one of days of week, start time: ", startTime);
+
+		// Turn on room switch(es) if in time window when light switch turned on
 		if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 			console.log('Turning room switch(es) on');
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
@@ -118,14 +116,16 @@ module.exports = new SmartApp()
 
 // Turn off the room switch(es) if light turned off outside of time window
 .subscribedEventHandler('controlSwitchOffHandler', async (context, event) => {
-	// Get start and end times
-	const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
+	// Check today is specified day of week
+	if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
+		const startTime  = context.configStringValue("startTime");
+		const endTime    = context.configStringValue("endTime");
 
-	// Turn off room switch(es) if outside time window when light switch turned off
-	if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-		console.log('Turning room switch(es) off');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+		// Turn off room switch(es) if outside time window when light switch turned off
+		if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+			console.log('Turning room switch(es) off');
+			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+		}
 	}
 })
 
@@ -133,13 +133,17 @@ module.exports = new SmartApp()
 // Turn on light in occupancy mode during defined times when motion occurs
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	if (context.getStringValue('mode')=='occupancy') {
-		// Get start and end times
-		const startTime = context.configStringValue("startTime");
-		const endTime   = context.configStringValue("endTime");
 
-		if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-			console.log('Turning control switch on');
-			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
+		// Check today is specified day of week
+		if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
+			const startTime  = context.configStringValue("startTime");
+			const endTime    = context.configStringValue("endTime");
+
+			// if in time window, turn on main/control switch which, in turn, will turn on room switches
+			if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+				console.log('Turning control switch on');
+				await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
+			}
 		}
 	}
 
@@ -153,47 +157,50 @@ module.exports = new SmartApp()
 // Turn off the lights only when all motion sensors become inactive
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
 	
-	// if mode is vacancy or occupancy, schedule room switches to turn off
-	const mode = context.configStringValue('mode');
-	console.log('Motion stop handler, mode: ', mode);
-	if (mode=='vacancy' || mode=='occupancy') {
+	// check to see this is specified day of week
+	if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
+		// if mode is vacancy or occupancy, schedule room switches to turn off
+		const mode = context.configStringValue('mode');
+		console.log('Motion stop handler, mode: ', mode);
+		if (mode=='vacancy' || mode=='occupancy') {
 
-		// check to see we're outside the designated day and time window
-		const startTime = context.configStringValue("startTime");
-		const endTime   = context.configStringValue("endTime");
-		if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-		
-			// See if there are other sensors
-			const otherSensors =  context.config.motionSensor
-				.filter(it => it.deviceConfig.deviceId !== event.deviceId)
+			// check to see we're outside the designated day and time window
+			const startTime = context.configStringValue("startTime");
+			const endTime   = context.configStringValue("endTime");
+			if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
 
-			if (otherSensors) {
-				// Get the current states of the other motion sensors
-				const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
-					it.deviceConfig.deviceId,
-					it.deviceConfig.componentId,
-					'motionSensor'
-				));
+				// See if there are other sensors
+				const otherSensors =  context.config.motionSensor
+					.filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
-				// Quit if there are other sensor still active
-				const states = await Promise.all(stateRequests)
-				if (states.find(it => it.motion.value === 'active')) {
-					return
+				if (otherSensors) {
+					// Get the current states of the other motion sensors
+					const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+						it.deviceConfig.deviceId,
+						it.deviceConfig.componentId,
+						'motionSensor'
+					));
+
+					// Quit if there are other sensor still active
+					const states = await Promise.all(stateRequests)
+					if (states.find(it => it.motion.value === 'active')) {
+						return
+					}
+				}
+
+				// If no other active sensore, turn off lights now or after delay
+				console.log('Motion stopped, turn off lights after delay: ', delay);
+				const delay = context.configNumberValue('delay')
+				if (delay) {
+					// Schedule turn off if delay is set
+					await context.api.schedules.runIn('motionStopped', delay)
+				} else {
+					// Turn off immediately if no delay
+					await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
 				}
 			}
-
-			// If no other active sensore, turn off lights now or after delay
-			console.log('Motion stopped, turn off lights after delay: ', delay);
-			const delay = context.configNumberValue('delay')
-			if (delay) {
-				// Schedule turn off if delay is set
-				await context.api.schedules.runIn('motionStopped', delay)
-			} else {
-				// Turn off immediately if no delay
-				await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
-			}
 		}
-    	}
+	}
 })
 
 
