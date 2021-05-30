@@ -114,7 +114,7 @@ module.exports = new SmartApp()
 			const delay = context.configNumberValue('delay');
 			console.log('Motion stopped, turn off lights after delay: ', delay);
 			if (delay) {
-				await context.api.schedules.runIn('motionStopped', delay)
+				await context.api.schedules.runIn('roomOffHandler', delay)
 			}
 		}
 	}
@@ -200,7 +200,7 @@ module.exports = new SmartApp()
 				console.log('Motion stopped, turn off lights after delay: ', delay);
 				if (delay) {
 					// Schedule turn off if delay is set
-					await context.api.schedules.runIn('motionStopped', delay)
+					await context.api.schedules.runIn('roomOffHandler', delay)
 				} else {
 					// Turn off immediately if no delay
 					await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
