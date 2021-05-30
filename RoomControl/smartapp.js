@@ -238,7 +238,7 @@ module.exports = new SmartApp()
 		// Turn off control and room switch(es) if all motion detectors are 
 		console.log("Turn off control and room switches if all motion sensors are inactive");
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.switch.value === 'active')) {
+		if (states.find(it => it.motion.value === 'active')) {
 			// const delay = context.configNumberValue('delay')
 			// await context.api.schedules.runIn('roomOffHandler', delay);
 			return;
