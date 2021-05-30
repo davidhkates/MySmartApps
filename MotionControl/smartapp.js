@@ -105,6 +105,7 @@ module.exports = new SmartApp()
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
 	const checkSwitches = context.config.checkSwitches;
+	console.log("Check switches: ", checkSwitches);
 	if (checkSwitches) {
 		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
