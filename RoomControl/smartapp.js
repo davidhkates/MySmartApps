@@ -101,12 +101,13 @@ module.exports = new SmartApp()
 
 // Turn on room switches/outlets when control switch turned on during defined times
 .subscribedEventHandler('controlSwitchOnHandler', async (context, event) => {
-	// Get start and end times
-	const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
+	// Get start and end times and daysOfWeek
+	const startTime  = context.configStringValue("startTime");
+	const endTime    = context.configStringValue("endTime");
+	const daysOfWeek = context.configStringValue("daysOfWeek"); 
 
 	// Turn on room switch(es) if in time window when light switch turned on
-	if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+	if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) && SmartUtils.isDayOfWeek(daysOfWeek) {
 		console.log('Turning room switch(es) on');
 		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 	}
@@ -139,7 +140,56 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
 		}
 	}
+
+	// Delete any scheduled turn offs
+        if (context.configNumberValue('delay')) {
+            await context.api.schedules.delete('motionStopped');
+        }
 })
+
+
+// Turn off the lights only when all motion sensors become inactive
+.subscribedEventHandler('motionStopHandler', async (context, event) => {
+	
+	// if mode is vacancy or occupancy, schedule room switches to turn off
+	const mode = context.configStringValue('mode');
+	if (mode=='vacancy' || mode=='occupancy') {
+
+		// check to see we're outside the designated day and time window
+		const startTime = context.configStringValue("startTime");
+		const endTime   = context.configStringValue("endTime");
+		if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+		
+			// See if there are other sensors
+			const otherSensors =  context.config.motionSensor
+				.filter(it => it.deviceConfig.deviceId !== event.deviceId)
+
+			if (otherSensors) {
+				// Get the current states of the other motion sensors
+				const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+					it.deviceConfig.deviceId,
+					it.deviceConfig.componentId,
+					'motionSensor'
+				));
+
+				// Quit if there are other sensor still active
+				const states = await Promise.all(stateRequests)
+				if (states.find(it => it.motion.value === 'active')) {
+					return
+				}
+
+				const delay = context.configNumberValue('delay')
+				if (delay) {
+					// Schedule turn off if delay is set
+					await context.api.schedules.runIn('motionStopped', delay)
+				} else {
+					// Turn off immediately if no delay
+					await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
+				}
+			}
+		}
+    	}
+});
 
 
 // Check to see if control switch was turned on prior to start time
@@ -152,7 +202,7 @@ module.exports = new SmartApp()
 });
 
 
-// Turns off room switch(es) after delay elapses if no motion in room
+// Turns off room switch(es) at end time if no motion in room
 .scheduledEventHandler('roomOffHandler', async (context, event) => {
 
 	// See if there are any motion sensors defined
@@ -165,13 +215,13 @@ module.exports = new SmartApp()
 			'motion'
 		));
 
-		// Check again after delay if there is any motion in room, if not turn off now
+		// Turn off control and room switch(es) if all motion detectors are inactive
 		const states = await Promise.all(stateRequests)
 		if (states.find(it => it.switch.value === 'active')) {
-			const delay = context.configNumberValue('delay')
-			await context.api.schedules.runIn('roomOffHandler', delay);
+			// const delay = context.configNumberValue('delay')
+			// await context.api.schedules.runIn('roomOffHandler', delay);
+			return;
 		} else {
-			// Turn off control switch and room switch(es) now if no motion
 			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
