@@ -1,6 +1,6 @@
-service: oauth
+service: sonos-oauth
 
-app: sonos-oauth
+# app: sonos-oauth
 # tenant: katesthings
 package:
   patterns:
