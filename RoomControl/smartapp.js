@@ -79,10 +79,8 @@ module.exports = new SmartApp()
 		// motion sensor handlers
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
-		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-	    	*/
 
 		// check to see if light was turned on before start time
 		const checkOnTime = context.configStringValue("startTime");
