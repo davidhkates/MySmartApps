@@ -1,6 +1,10 @@
 'use strict'
 
 const callback = (event, context, callback) => {
+
+  var token = event.authorizationToken;
+  console.log('Token from Sonos API Oauth: ', token);
+
   const response = {
     statusCode: 200,
     headers: {
