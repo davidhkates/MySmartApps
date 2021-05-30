@@ -1,7 +1,12 @@
 service: oauth
 
 app: sonos-oauth
-tenant: katesthings
+# tenant: katesthings
+package:
+  patterns:
+    - index.js
+    - smartapp.js
+    - locales/**
 
 provider:
   name: aws
