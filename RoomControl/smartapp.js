@@ -109,6 +109,12 @@ module.exports = new SmartApp()
 		if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 			console.log('Turning room switch(es) on');
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+			
+			// start delay timer to turn off if delay specified
+			console.log('Motion stopped, turn off lights after delay: ', delay);
+			if (context.configNumberValue('delay')) {
+				await context.api.schedules.runIn('motionStopped', delay)
+			}
 		}
 	}
 })
@@ -132,7 +138,7 @@ module.exports = new SmartApp()
 
 // Turn on light in occupancy mode during defined times when motion occurs
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
-	if (context.getStringValue('mode')=='occupancy') {
+	if (context.configStringValue('mode')=='occupancy') {
 
 		// Check today is specified day of week
 		if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
@@ -189,8 +195,8 @@ module.exports = new SmartApp()
 				}
 
 				// If no other active sensore, turn off lights now or after delay
-				console.log('Motion stopped, turn off lights after delay: ', delay);
 				const delay = context.configNumberValue('delay')
+				console.log('Motion stopped, turn off lights after delay: ', delay);
 				if (delay) {
 					// Schedule turn off if delay is set
 					await context.api.schedules.runIn('motionStopped', delay)
