@@ -9,6 +9,8 @@
 
 exports.handler =  function(event, context, callback) {
     var token = event.authorizationToken;
+    console.log('Token from Sonos API Oauth: ', token);
+    /*
     switch (token) {
         case 'allow':
             callback(null, generatePolicy('user', 'Allow', event.methodArn));
@@ -22,6 +24,7 @@ exports.handler =  function(event, context, callback) {
         default:
             callback("Error: Invalid token"); // Return a 500 Invalid token response
     }
+    */
 };
 
 
