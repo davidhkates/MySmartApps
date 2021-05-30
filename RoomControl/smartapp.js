@@ -6,6 +6,25 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
+function isDayOfWeek( strDayOfWeek ) {
+	const today = new Date();
+	const nDayOfWeek = today.getDay();
+	console.log("Day of week: ", nDayOfWeek);
+	var bDayOfWeek = false;
+	switch (strDayOfWeek) {
+		case 'everyday':
+			bDayOfWeek = true;
+			break;
+		case 'weekdays':
+			bDayOfWeek = ( nDayOfWeek >= 1 && nDayOfWeek <= 5 );
+			break;
+		case 'weekend':
+			bDayOfWeek = ( nDayOfWeek==0 || nDayOfWeek==6 );
+	}
+	return bDayOfWeek;
+}
+
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
 
@@ -108,7 +127,8 @@ module.exports = new SmartApp()
 
 	// Turn on room switch(es) if in time window when light switch turned on
 	console.log("Days of week: ", daysOfWeek);
-	if (SmartUtils.isDayOfWeek(daysOfWeek)) {
+	if (isDayOfWeek(daysOfWeek)) {	
+	// if (SmartUtils.isDayOfWeek(daysOfWeek)) {
 		console.log("Today is one of days of week, start time: ", startTime);
 		if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 			console.log('Turning room switch(es) on');
