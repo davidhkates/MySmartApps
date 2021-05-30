@@ -107,9 +107,11 @@ module.exports = new SmartApp()
 	const daysOfWeek = context.configStringValue("daysOfWeek"); 
 
 	// Turn on room switch(es) if in time window when light switch turned on
-	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) && SmartUtils.isDayOfWeek(daysOfWeek)) {
-		console.log('Turning room switch(es) on');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+	SmartUtils.isDayOfWeek(daysOfWeek)) {
+		if (!(startTime)&&!(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+			console.log('Turning room switch(es) on');
+			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+		}
 	}
 })
 
