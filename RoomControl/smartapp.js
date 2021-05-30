@@ -110,7 +110,7 @@ module.exports = new SmartApp()
 	console.log("Days of week: ", daysOfWeek);
 	if (SmartUtils.isDayOfWeek(daysOfWeek)) {
 		console.log("Today is one of days of week, start time: ", startTime);
-		if (!(startTime)&&!(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+		if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 			console.log('Turning room switch(es) on');
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 		}
