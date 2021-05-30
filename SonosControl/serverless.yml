@@ -8,8 +8,10 @@ package:
 
 provider:
   name: aws
+  stage: dev
   runtime: nodejs14.x
-  profile: serverless
+  lambdaHashingVersion: 20201221
+  region: us-west-2
 
 functions:
   callback:
