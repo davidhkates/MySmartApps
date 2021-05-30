@@ -225,16 +225,18 @@ module.exports = new SmartApp()
 .scheduledEventHandler('roomOffHandler', async (context, event) => {
 
 	// See if there are any motion sensors defined
+	console.log("Checking status of motion sensors");
 	const motionSensors =  context.config.motion;
 	if (motionSensors) {
 		// Get the current states of the motion sensors
 		const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
-			'motion'
+			'motionSensor'
 		));
 
-		// Turn off control and room switch(es) if all motion detectors are inactive
+		// Turn off control and room switch(es) if all motion detectors are 
+		console.log("Turn off control and room switches if all motion sensors are inactive");
 		const states = await Promise.all(stateRequests)
 		if (states.find(it => it.switch.value === 'active')) {
 			// const delay = context.configNumberValue('delay')
