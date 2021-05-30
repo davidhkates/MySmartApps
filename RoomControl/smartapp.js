@@ -176,7 +176,7 @@ module.exports = new SmartApp()
 			if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
 
 				// See if there are other sensors
-				const otherSensors =  context.config.motionSensor
+				const otherSensors =  context.config.motion
 					.filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
 				if (otherSensors) {
