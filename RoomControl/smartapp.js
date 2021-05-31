@@ -112,7 +112,7 @@ module.exports = new SmartApp()
 			
 			// start delay timer to turn off if delay specified
 			const delay = context.configNumberValue('delay');
-			console.log('Motion stopped, turn off lights after delay: ', delay);
+			console.log('Set timer to turn lights off after delay: ', delay);
 			if (delay) {
 				await context.api.schedules.runIn('roomOffHandler', delay)
 			}
