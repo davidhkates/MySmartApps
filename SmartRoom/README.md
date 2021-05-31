@@ -1,4 +1,4 @@
-## Room Control 
+## Smart Room 
 
 Turn on/off lights/outlets based on light switch, time of day, day of week, motion and contact sensors
 
