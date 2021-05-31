@@ -203,7 +203,7 @@ module.exports = new SmartApp()
 					await context.api.schedules.runIn('roomOffHandler', delay)
 				} else {
 					// Turn off immediately if no delay
-					await context.api.devices.sendCommands(context.config.lights, 'switch', 'off');
+					await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 				}
 			}
 		}
@@ -238,13 +238,9 @@ module.exports = new SmartApp()
 		// Turn off control and room switch(es) if all motion detectors are 
 		console.log("Turn off control and room switches if all motion sensors are inactive");
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.motion.value === 'active')) {
-			// const delay = context.configNumberValue('delay')
-			// await context.api.schedules.runIn('roomOffHandler', delay);
-			return;
-		} else {
+		if (!states.find(it => it.motion.value === 'active')) {
 			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
-			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+			// await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
 	}
 });
