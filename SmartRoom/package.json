@@ -1,5 +1,5 @@
 {
-  "name": "room-control",
+  "name": "smart-room",
   "version": "1.0.0",
   "description": "Turn on/off lights/outlets based on switch, time of day, day of week, motion and contact sensors",
   "main": "server.js",
