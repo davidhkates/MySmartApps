@@ -19,28 +19,20 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
 		section.numberSetting('delay').min(60).defaultValue(300).required(true);
-		section.enumSetting('mode').options(['vacancy','occupancy']);
+		section.enumSetting('motionMode').options(['vacancy','occupancy','manual']);
+		section.enumSetting('mainMode').options(['toggle','control','dependent']);
 	});
 
 	// controls and sensors
 	page.section('controls', section => {
-		section
-			.deviceSetting('controlSwitch')
-			.capabilities(['switch'])
-			.required(true)
-			.permissions('rx');
-		section
-			.deviceSetting('roomSwitches')
-			.capabilities(['switch'])
-			.required(true)
-			.multiple(true)
-			.permissions('rx');
-		section
-			.deviceSetting('motion')
-			.capabilities(['motionSensor'])
-			.required(false)
-			.multiple(true)
-			.permissions('r');
+		section.deviceSetting('mainSwitch').capabilities(['switch'])
+			.required(true).permissions('rx');
+		section.deviceSetting('roomSwitches').capabilities(['switch'])
+			.required(true).multiple(true).permissions('rx');
+		section.deviceSetting('motion').capabilities(['motionSensor'])
+			.required(false).multiple(true).permissions('r');
+		section.deviceSetting('contract').capabilities(['contactSensor'])
+			.required(false).multiple(true).permissions('r');
 	});
 
 	// time window and auto-off
@@ -71,10 +63,10 @@ module.exports = new SmartApp()
 	} else {
 
 		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'switch.on', 'controlSwitchOnHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.controlSwitch,
-		    'switch', 'switch.off', 'controlSwitchOffHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'switch', 'switch.on', 'mainSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'switch', 'switch.off', 'mainSwitchOffHandler');
 
 		// motion sensor handlers
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
@@ -98,7 +90,7 @@ module.exports = new SmartApp()
 
 
 // Turn on room switches/outlets when control switch turned on during defined times
-.subscribedEventHandler('controlSwitchOnHandler', async (context, event) => {
+.subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Check today is specified day of week
 	if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
 		const startTime  = context.configStringValue("startTime");
@@ -122,7 +114,7 @@ module.exports = new SmartApp()
 
 
 // Turn off the room switch(es) if light turned off outside of time window
-.subscribedEventHandler('controlSwitchOffHandler', async (context, event) => {
+.subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Check today is specified day of week
 	if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
 		const startTime  = context.configStringValue("startTime");
@@ -139,7 +131,7 @@ module.exports = new SmartApp()
 
 // Turn on light in occupancy mode during defined times when motion occurs
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
-	if (context.configStringValue('mode')=='occupancy') {
+	if (context.configStringValue('motionMode')=='occupancy') {
 
 		// Check today is specified day of week
 		if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
@@ -149,7 +141,7 @@ module.exports = new SmartApp()
 			// if in time window, turn on main/control switch which, in turn, will turn on room switches
 			if ((!(startTime) && !(endTime)) || SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 				console.log('Turning control switch on');
-				await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
+				await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 			}
 		}
 	}
@@ -167,9 +159,9 @@ module.exports = new SmartApp()
 	// check to see this is specified day of week
 	if (SmartUtils.isDayOfWeek(context.configStringValue("daysOfWeek"))) {
 		// if mode is vacancy or occupancy, schedule room switches to turn off
-		const mode = context.configStringValue('mode');
-		console.log('Motion stop handler, mode: ', mode);
-		if (mode=='vacancy' || mode=='occupancy') {
+		const motionMode = context.configStringValue('motionMode');
+		console.log('Motion stop handler, mode: ', motionMode);
+		if (motionMode=='vacancy' || motionMode=='occupancy') {
 
 			// check to see we're outside the designated day and time window
 			const startTime = context.configStringValue("startTime");
@@ -214,7 +206,7 @@ module.exports = new SmartApp()
 // Check to see if control switch was turned on prior to start time
 .scheduledEventHandler('checkOnHandler', async (context, event) => {
 	// Turn on room switch(es) if control switch turned on already
-	if ( SmartSensors.getSwitchState( context, context.config.controlSwitch[0] ) ) {
+	if ( SmartSensors.getSwitchState( context, context.config.mainSwitch[0] ) ) {
 		console.log('Turning room switch(es) on');
 		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
 	}
@@ -243,7 +235,7 @@ module.exports = new SmartApp()
 			// await context.api.schedules.runIn('roomOffHandler', delay);
 			return;
 		} else {
-			await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
+			await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
 		}
 	}
