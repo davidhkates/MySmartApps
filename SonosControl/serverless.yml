@@ -1,10 +1,11 @@
 service: sonos-oauth
 
-# app: sonos-oauth
-# tenant: katesthings
 package:
   patterns:
     - handler.js
+    - index.js
+    - smartapp.js
+    - locales/**
 
 provider:
   name: aws
@@ -20,3 +21,6 @@ functions:
       - http:
           path: callback
           method: get
+  smartapp:
+    handler: index.handle
+    timeout: 20
