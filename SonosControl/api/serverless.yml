@@ -1,19 +1,16 @@
-service: sonos-oauth-callback-api
-
-frameworkVersion: ">=1.1.0 <2.0.0"
+service: sonos-oauth
 
 provider:
   name: aws
-  runtime: nodejs4.3
   stage: dev
-  region: us-east-1
+  runtime: nodejs14.x
+  lambdaHashingVersion: 20201221
+  region: us-west-2
 
 functions:
-  candidateSubmission:
-    handler: api/candidate.submit
-    memorySize: 128
-    description: Submit candidate information and starts interview process.
+  callback:
+    handler: api/handler.callback
     events:
       - http: 
-          path: candidates
-          method: post
+          path: callback
+          method: get
