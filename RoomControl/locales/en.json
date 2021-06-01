@@ -9,6 +9,7 @@
 	"pages.mainPage.settings.mode.name": "Motion switch activity mode",
 	"pages.mainPage.settings.mode.options.vacancy.name": "Vacancy",
 	"pages.mainPage.settings.mode.options.occupancy.name": "Occupancy",
+	"pages.mainPage.settings.mode.options.manual.name": "Manual",
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.settings.controlSwitch.name": "Light switch to control room",
 	"pages.mainPage.settings.controlSwitch.description": "",
