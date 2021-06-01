@@ -2,11 +2,11 @@ service: sonos-oauth
 
 package:
   patterns:
-    - handler.js
     - index.js
     - smartapp.js
     - locales/**
-
+    - api/handler.js
+    
 provider:
   name: aws
   stage: dev
@@ -15,12 +15,12 @@ provider:
   region: us-west-2
 
 functions:
+  smartapp:
+    handler: index.handle
+    timeout: 20
   callback:
     handler: handler.callback
     events:
       - http:
           path: callback
           method: get
-  smartapp:
-    handler: index.handle
-    timeout: 20
