@@ -2,7 +2,9 @@
 
 const callback = (event, context, callback) => {
 
-  var token = event.authorizationToken;
+  // var token = event.authorizationToken;
+  var token = event.code;
+  
   console.log('Sonos API Oauth Callback token: ', token);
   console.log('Event: ', event);
   console.log('Context: ', context);
