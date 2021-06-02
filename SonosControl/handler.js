@@ -16,7 +16,7 @@ const callback = (event, context, callback) => {
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      'message': 'Callback!'
+      'message': 'Callback%20token:%20' + token
     })
   }
 
