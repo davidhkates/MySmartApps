@@ -14,7 +14,7 @@ const authParams = '&response_type=code&state=testState&scope=playback-control-a
 const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
 const callPath = authPath + '?client_id=' + authClient + authParams + authRedirect;
 
-const options = {
+const sonosAuthRequest = {
   hostname: 'api.sonos.com',
   port: 443,
   path: callPath,
@@ -22,7 +22,7 @@ const options = {
 }
 
 function sonosCreateAuth() {
-	const req = https.request(options, res => {
+	const req = https.request(sonosAuthRequest, res => {
 		console.log(`statusCode: ${res.statusCode}`)
 
 		res.on('data', d => {
