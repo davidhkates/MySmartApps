@@ -3,11 +3,9 @@
 const callback = (event, context, callback) => {
 
   var token = event.authorizationToken;
-  /*
   console.log('Sonos API Oauth Callback token: ', token);
   console.log('Event: ', event);
   console.log('Context: ', context);
-  */
 
   const response = {
     statusCode: 200,
@@ -16,7 +14,7 @@ const callback = (event, context, callback) => {
       'Access-Control-Allow-Credentials': true
     },
     body: JSON.stringify({
-      'message': 'Callback%20token:%20' + token
+      'message': 'SONOS%20Authenticated!'
     })
   }
 
