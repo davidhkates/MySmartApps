@@ -6,6 +6,37 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
+// HTTPS get request to authenticate Sonos
+const https = require('https')
+const authPath = '/login/v3/oauth';
+const authClient = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
+const authParams = '&response_type=code&state=testState&scope=playback-control-all'
+const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
+const callPath = authPath + '?client_id=' + authClient + authParams + authRedirect;
+
+const options = {
+  hostname: 'api.sonos.com',
+  port: 443,
+  path: callPath,
+  method: 'GET'
+}
+
+function sonosCreateAuth() {
+	const req = https.request(options, res => {
+		console.log(`statusCode: ${res.statusCode}`)
+
+		res.on('data', d => {
+			console.log(d)
+		})
+	})
+
+	req.on('error', error => {
+  		console.error(error)
+	})
+
+	req.end()
+}
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
 
@@ -65,41 +96,18 @@ module.exports = new SmartApp()
 // Called for both INSTALLED and UPDATED lifecycle events if there is
 // no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log("VacancyControl: Installed/Updated");
+	console.log("SonosControl: Installed/Updated");
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('motionStopped');
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
-	if (!controlEnabled) {
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
-	} else {
-
-		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-		    'switch', 'switch.on', 'mainSwitchOnHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-		    'switch', 'switch.off', 'mainSwitchOffHandler');
-		/*
-		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-		    'button', 'button.pushed', 'mainSwitchButtonHandler');
-		*/
-
-		/*
-		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.active', 'motionStartHandler');
-		*/
-		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		const endTime = context.configStringValue("endTime");
-		if (endTime) {
-			await context.api.schedules.runDaily('motionStopHandler', new Date(endTime));
-		}
+	if (controlEnabled) {
+		sonosCreateAuth();
 	}
-	console.log('VacancyControl: END CREATING SUBSCRIPTIONS')
+	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
 
 
