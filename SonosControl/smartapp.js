@@ -25,7 +25,7 @@ const requestWeather = {
 };
 
 const requestGoogle = {
-	hostname: 'www.google.com',
+	hostname: '.google.com',
 	method: 'GET'
 };
 	
@@ -116,7 +116,7 @@ module.exports = new SmartApp()
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
 		// http.request(requestWeather, (res) => {
-		https.request('https://encrypted.google.com/', (res) => {
+		http.get('https://encrypted.google.com/', (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
 
