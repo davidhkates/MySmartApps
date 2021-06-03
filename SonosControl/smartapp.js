@@ -51,44 +51,8 @@ module.exports = new SmartApp()
 		section.booleanSetting('controlEnabled')
 			.defaultValue(true)
 			.required(true);
-		section.numberSetting('delay')
-			.min(60)
-			.defaultValue(300)
-			.required(true);
-		section.enumSetting('mode')
-			.options(['vacancy','occupancy'])
-			.defaultValue('Vacancy')
-			.required(true);
 	});
-
-	// controls and sensors
-	page.section('controls', section => {
-		section.deviceSetting('motion')
-			.capabilities(['motionSensor'])
-			.required(true)
-			.multiple(true)
-			.permissions('r');
-		section.deviceSetting('mainSwitch')
-			.capabilities(['button','switch'])
-			.required(true)
-			.permissions('rx');
-		section.deviceSetting('roomSwitches')
-			.capabilities(['switch'])
-			.required(true)
-			.multiple(true)
-			.permissions('rx');
-	});
-
-	// time window
-	page.section('time', section => {
-		section.timeSetting('startTime')
-			.required(false);
-		section.timeSetting('endTime')
-			.required(false);
-		section.enumSetting('daysOfWeek')
-			.options(['everyday','weekdays','weekend'])
-			.required(true);
-	});
+	
 })
 
 
@@ -105,7 +69,6 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		/*
 		https.get('https://encrypted.google.com/', (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
@@ -117,8 +80,7 @@ module.exports = new SmartApp()
 			}).on('error', (e) => {
   				console.error(e);
 		});
-		*/
-		sonosCreateAuth();
+		// sonosCreateAuth();
 	}
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
