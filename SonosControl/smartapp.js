@@ -25,7 +25,7 @@ const requestWeather = {
 };
 
 const requestGoogle = {
-	hostname: 'www.google.com'
+	hostname: 'www.google.com',
 	method: 'GET'
 };
 	
