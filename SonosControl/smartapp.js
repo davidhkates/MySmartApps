@@ -93,7 +93,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		https.get('https://secure.google.com/', (res) => {
+		https.get('api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52', (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
 
