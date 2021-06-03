@@ -13,12 +13,12 @@ const https = require('https');
 const requestWeather = {
 	hostname: 'api.openweathermap.org',
 	port: 80,
-  	path: '/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52'
+  	path: '/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52',
 	method: 'GET',
   	headers: {
-    		'Content-Type': 'application/json',
+    		'Content-Type': 'application/json'
     		// 'Content-Length': Buffer.byteLength(postData)
-		'Content-Length': 1024
+		// 'Content-Length': 1024
   	}
 };
 	
