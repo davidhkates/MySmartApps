@@ -67,8 +67,8 @@ module.exports = new SmartApp()
 			.capabilities(['button','switch'])
 			.required(true)
 			.permissions('rx');
-		section.soundSetting('roomSound')
-			.permissions('rx');
+		// section.soundSetting('roomSound')
+		//	.permissions('rx');
 		section.deviceSetting('roomSpeaker')
 			.capabilities(['audioVolume'])
 			.permissions('rx');
