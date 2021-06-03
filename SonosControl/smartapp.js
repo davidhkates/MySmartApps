@@ -10,6 +10,13 @@ const SmartApp = require('@smartthings/smartapp');
 const http  = require('http');
 const https = require('https');
 
+const requestWeather = {
+  hostname: 'api.openweathermap.org',
+  port: 80,
+  path: '/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52',
+  method: 'GET'
+};
+	
 /*
 var uriRequest = '/login/v3/oauth';
 var uriParams = '&response_type=code&state=testState&scope=playback-control-all'
@@ -96,7 +103,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		http.get('api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52', (res) => {
+		http.request(requestWeather, (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
 
