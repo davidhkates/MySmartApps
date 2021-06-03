@@ -110,7 +110,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		http.request(requestWeather, (res) => {
+		// http.request(requestWeather, (res) => {
 		https.get('https://encrypted.google.com/', (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
