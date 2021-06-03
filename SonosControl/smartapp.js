@@ -2,8 +2,8 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const SmartSensor = require('@katesthings/smartcontrols');
-const SmartUtils  = require('@katesthings/smartutils');
+// const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartUtils  = require('@katesthings/smartutils');
 
 
 // HTTPS get request to authenticate Sonos
@@ -109,82 +109,3 @@ module.exports = new SmartApp()
 	}
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
-
-
-// Turns on room lights with main switch
-.subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
-	console.log('Main switch turned on');
-	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
-	console.log('Room switches turned on');
-})
-
-
-// Turns off room lights with main switch
-.subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
-	console.log('Main switch turned off');
-	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
-	console.log('Room switches turned off');
-})
-
-
-// Treat button push as toggling switch
-.subscribedEventHandler('mainSwitchButtonHandler', async (context, event) => {
-	const mainSwitch = await SmartSensor.getSwitchState( context, context.config.mainSwitch[0] );
-	console.log('Main button pressed: switch state:', mainSwitch)
-	if ( mainSwitch == 'on' ) {	
-		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-		// await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
-	} else {
-		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
-		// await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
-	}		
-})
-
-
-// Turn off the room switch(es) if motion stops outside of time window
-.subscribedEventHandler('motionStopHandler', async (context, event) => {
-	// Get start and end times
-	const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
-
-	// Turn off room switch(es) if outside time window when light switch turned off
-	if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-		console.log('Outside time window, check other motion sensors');
-
-		// See if there are any motion sensors defined
-		const motionSensors =  context.config.motion
-	    		.filter(it => it.deviceConfig.deviceId !== event.deviceId);
-
-		if (motionSensors) {
-			// Get the current states of the other motion sensors
-			const stateRequests = motionSensors.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'motionSensor'
-			));
-
-			// Quit if there are other sensor still active
-			const states = await Promise.all(stateRequests)
-			if (states.find(it => it.motion.value === 'active')) {
-				return
-			}
-		}
-	
-		// All motion sensors inactive, turn off room switch(es) after delay
-		if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
-			console.log('Turning room switch(es) off after specified delay');
-			const delay = context.configDecimalValue("delay");
-			if (delay) {
-				await context.api.schedules.runIn('motionStopped', delay);
-			} else {
-				await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
-			}
-		}
-	}
-})
-
-
-// Turns off lights after delay elapses
-.scheduledEventHandler('motionStopped', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-});
