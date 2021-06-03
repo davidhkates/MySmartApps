@@ -73,7 +73,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		https.get('https://encrypted.google.com/', (res) => {
+		https.get('https://google.com/', (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
 
