@@ -105,6 +105,19 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
+		/*
+		https.get('https://encrypted.google.com/', (res) => {
+			console.log('statusCode:', res.statusCode);
+			console.log('headers:', res.headers);
+
+			res.on('data', (d) => {
+				process.stdout.write(d);
+			});
+
+			}).on('error', (e) => {
+  				console.error(e);
+		});
+		*/
 		sonosCreateAuth();
 	}
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
