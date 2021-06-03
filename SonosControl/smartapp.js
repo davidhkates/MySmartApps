@@ -51,7 +51,10 @@ module.exports = new SmartApp()
 		section.booleanSetting('controlEnabled')
 			.defaultValue(true)
 			.required(true);
-		section.
+		section.deviceSetting('mainSwitch')
+			.capabilities(['button','switch'])
+			.required(true)
+			.permissions('rx');
 	});
 	
 })
