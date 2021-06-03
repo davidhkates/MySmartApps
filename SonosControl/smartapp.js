@@ -51,6 +51,7 @@ module.exports = new SmartApp()
 		section.booleanSetting('controlEnabled')
 			.defaultValue(true)
 			.required(true);
+		section.
 	});
 	
 })
