@@ -8,20 +8,32 @@ const SmartApp = require('@smartthings/smartapp');
 
 // HTTPS get request to authenticate Sonos
 const https = require('https')
-const authPath = '/login/v3/oauth';
+
+var uriRequest = '/login/v3/oauth';
+var uriParams = '&response_type=code&state=testState&scope=playback-control-all'
 const authClient = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
-const authParams = '&response_type=code&state=testState&scope=playback-control-all'
 const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
-const callPath = authPath + '?client_id=' + authClient + authParams + authRedirect;
+var uriPath = uriRequest + '?client_id=' + authClient + uriParams + authRedirect;
 
 const sonosAuthRequest = {
   hostname: 'api.sonos.com',
   port: 443,
-  path: callPath,
+  path: uriPath,
   method: 'GET'
 }
 
-function sonosCreateAuth() {
+// Create token request parameters
+const uriRequest = '/login/v3/oauth/access';
+const uriParams = '&grant_type=authorization_code&code={auth_code}&redirect_uri={redirect_uri}
+
+const sonosCreateToken = {
+  hostname: 'api.sonos.com',
+  port: 443,
+  path: uriPath,
+  method: 'POST'
+}
+
+function sonosCall(request) {
 	const req = https.request(sonosAuthRequest, res => {
 		console.log(`statusCode: ${res.statusCode}`)
 
