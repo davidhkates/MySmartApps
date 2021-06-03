@@ -24,7 +24,7 @@ const sonosAuthRequest = {
 
 // Create token request parameters
 const uriRequest = '/login/v3/oauth/access';
-const uriParams = '&grant_type=authorization_code&code={auth_code}&redirect_uri={redirect_uri}
+const uriParams = '&grant_type=authorization_code&code={auth_code}&redirect_uri={redirect_uri}';
 
 const sonosCreateToken = {
   hostname: 'api.sonos.com',
@@ -34,7 +34,7 @@ const sonosCreateToken = {
 }
 
 function sonosCall(request) {
-	const req = https.request(sonosAuthRequest, res => {
+	const req = https.request(request, res => {
 		console.log(`statusCode: ${res.statusCode}`)
 
 		res.on('data', d => {
@@ -103,7 +103,7 @@ module.exports = new SmartApp()
 			}).on('error', (e) => {
   				console.error(e);
 		});
-		// sonosCreateAuth();
+		// sonosCall(sonosAuthRequest);
 	}
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
