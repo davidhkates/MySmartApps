@@ -7,7 +7,8 @@ const SmartApp = require('@smartthings/smartapp');
 
 
 // HTTPS get request to authenticate Sonos
-const https = require('https')
+/*
+const https = require('https');
 
 var uriRequest = '/login/v3/oauth';
 var uriParams = '&response_type=code&state=testState&scope=playback-control-all'
@@ -48,6 +49,8 @@ function sonosCall(request) {
 
 	req.end()
 }
+*/
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
