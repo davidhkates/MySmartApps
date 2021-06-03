@@ -11,8 +11,7 @@ const http  = require('http');
 const https = require('https');
 
 const requestWeather = {
-	// hostname: 'api.openweathermap.org',
-	hostname: 'secure.google.com',
+	hostname: 'api.openweathermap.org',
 	port: 80,
   	path: '/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52',
 	method: 'GET'
@@ -111,7 +110,8 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		https.request(requestWeather, (res) => {
+		http.request(requestWeather, (res) => {
+		https.get('https://encrypted.google.com/', (res) => {
 			console.log('statusCode:', res.statusCode);
 			console.log('headers:', res.headers);
 
