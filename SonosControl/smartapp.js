@@ -20,8 +20,8 @@ const requestWeather = {
     		'Content-Type': 'application/json'
     		// 'Content-Length': Buffer.byteLength(postData)
 		// 'Content-Length': 1024
-  	*/
 	}
+  	*/
 };
 	
 /*
