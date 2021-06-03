@@ -70,8 +70,8 @@ module.exports = new SmartApp()
 		// section.soundSetting('roomSound')
 		//	.permissions('rx');
 		section.deviceSetting('roomSpeaker')
-			.capabilities(['audioVolume'])
-			.permissions('rx');
+			.capabilities(['audioVolume']);
+			// .permissions('rx');
 	});
 	
 })
