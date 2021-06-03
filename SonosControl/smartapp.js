@@ -23,6 +23,11 @@ const requestWeather = {
 	}
   	*/
 };
+
+const requestGoogle = {
+	hostname: 'www.google.com'
+	method: 'GET'
+};
 	
 /*
 var uriRequest = '/login/v3/oauth';
