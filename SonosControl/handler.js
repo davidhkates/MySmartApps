@@ -54,7 +54,7 @@ const callback = (event, context, callback) => {
     console.log('Event: ', event);
     console.log('Context: ', context);
 
-    SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
+    // SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
     
     const response = {
          statusCode: 200,
