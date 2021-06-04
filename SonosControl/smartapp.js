@@ -20,17 +20,18 @@ const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authoriza
 
 function callURI( uri ) {
 	// const uri = uriRandom;
+	var responseData;
 	const getData = async uri => {
 		try {
 			const response = await axios.get(uri);
-			const data = response.data;
+			responseData = response.data;
 			console.log('Axios response: ', data);
-			// return data;
 		} catch (error) {
 			console.log(error);
 		}
 	};
-	return getData(uri);
+	getData(uri);
+	return responseData;
 };
 
 
