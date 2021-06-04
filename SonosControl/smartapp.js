@@ -15,8 +15,8 @@ const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 
 // const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
-const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
-console.log('Client ID: ', sonosClientID);
+// const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
+// console.log('Client ID: ', sonosClientID);
 
 const sonosToken = '';
 // const sonosRedirect = 'https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
@@ -39,6 +39,9 @@ instance.get('/path')
 */
 
 async function getURI( uri ) {
+	const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
+	console.log('Client ID: ', sonosClientID);
+	
 	var responseData = '';
 	await axios.get(uri).then(response => {
 		console.log('Axios response: ', response.data);
