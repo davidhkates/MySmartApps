@@ -24,11 +24,6 @@ const requestWeather = {
   	*/
 };
 
-const requestGoogle = {
-	hostname: '.google.com',
-	method: 'GET'
-};
-
 
 	
 /*
@@ -117,7 +112,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		console.log('Making http request to: ', options);
+		console.log('Making http request to: ', requestWeather);
 
 		const uri = 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
 		http.get(uri, (resp) => {
