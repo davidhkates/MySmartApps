@@ -45,7 +45,7 @@ callback = function(response) {
 
   //the whole response has been received, so we just print it out here
   response.on('end', function () {
-    console.log(str);
+    console.log('Response from random.com web service: ',str);
   });
 }
 
@@ -137,7 +137,9 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
+		console.log('Making http request to: ', options);
 		http.request(options, callback).end();
+		console.log('Http request completed');
 
 		/*
 		// http.request(requestWeather, (res) => {
