@@ -20,7 +20,8 @@ const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appi
 
 const sonosToken = '';
 // const sonosRedirect = 'https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
-const sonosRedirect = encodeURI('https://r5twrfl7nd.execute-api.us-west-2.amazonaws.com/dev/callback');
+const sonosCallbackID = 'r5twrfl7nd';
+const sonosRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/callback');
 console.log('Redirect URI: ', sonosRedirect);
 const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
 const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosToken + '&redirect_uri=' + sonosRedirect;
