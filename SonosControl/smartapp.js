@@ -12,34 +12,47 @@ const axios = require("axios");
 
 const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
-const authClient = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
-const authCode = 'abcdef';
+const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
+const sonosToken = '';
+// const sonosRedirect = 'https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
+const sonosRedirect = encodeURI('https://m4bm3s9kj5.execute-api.us-west-2.amazonaws.com/dev/callback');
 const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
-const uriSonosAuthRequest = 'https:///login/v3/oauth?response_type=code&state=testState&scope=playback-control-all&client_id=' + authClient + authRedirect;
-const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code=' + authCode + authRedirect;
+const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosToken + '&redirect_uri=' + sonosRedirect;
 
-function callURI( uri ) {
+/*
+const instance = axios.create({
+  baseURL: 'https://some-domain.com/api/',
+  timeout: 1000,
+  headers: {'Authorization': 'Bearer '+token}
+});
+
+instance.get('/path')
+.then(response => {
+    return response.data;
+})
+*/
+
+function getURI( uri ) {
 	axios.get(uri).then(resp => {
 		console.log('Axios response: ', resp.data);
 	});
 };
 	
+function postURI( uri, token ) {
+	const config = {
+    		headers: { Authorization: `Bearer ${token}` }
+	};
+	
+	const bodyParameters = {
+		key: "value"
+	};
 
-	/*
-	var responseData;
-	const getData = async uri => {
-		try {
-			const response = await axios.get(uri);
-			responseData = response.data;
-			console.log('Axios response: ', responseData);
-		} catch (error) {
-			console.log(error);
-		}
-	getData(uri);
-	return responseData;
+	axios.post(uri, bodyParameters, config).then(resp => {
+		console.log('Axios response: ', resp.data);
+	}.catch(console.log);
 };
-*/
 
+	
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -84,21 +97,8 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		const response = await callURI(uriRandom);
+		const response = await getURI(uriRandom);
 		console.log('Response from web service: ', response);
-		/*
-		const uri = uriRandom;
-		const getData = async uri => {
-  			try {
-    				const response = await axios.get(uri);
-    				// const data = response.data;
-    				console.log('Response from call to random.org: ', response.data);
-  			} catch (error) {
-    				console.log(error);
-  			}
-		};
-		getData(uri);
-		*/
 	}
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
