@@ -33,10 +33,12 @@ instance.get('/path')
 */
 
 async function getURI( uri ) {
+	var responseData = '';
 	await axios.get(uri).then(response => {
 		console.log('Axios response: ', response.data);
-		return response.data;
+		responseData = response.data;
 	});
+	return responseData;
 };
 
 function postURI( uri, token ) {
