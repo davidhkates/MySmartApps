@@ -25,7 +25,7 @@ function callURI( uri ) {
 		try {
 			const response = await axios.get(uri);
 			responseData = response.data;
-			console.log('Axios response: ', data);
+			console.log('Axios response: ', responseData);
 		} catch (error) {
 			console.log(error);
 		}
