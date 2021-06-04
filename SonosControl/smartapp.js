@@ -14,6 +14,28 @@ const axios = require("axios");
 const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 
+
+async function putValue( table, key, value ) {
+	// Set the parameters
+	const params = {
+  		TableName: table,
+  		Item: {
+    			key: { S: key },
+			keyValue: { S: value },
+  		},
+	};
+	
+	try {
+		console.log('Put value: ', params);
+    		const data = await dbclient.send(new PutItemCommand(params));
+    		console.log(data);
+  	} catch (err) {
+    		console.error(err);
+  	}
+};
+
+
+
 // const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 // const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
 // console.log('Client ID: ', sonosClientID);
@@ -114,6 +136,9 @@ module.exports = new SmartApp()
 	if (controlEnabled) {
 		const randomData = await getURI(uriRandom);
 		console.log('Response from web service: ', randomData);
+		
+		// SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
+ 		putValue( 'smartapp-sonos-speakers', 'bearerToken', token );		
 	}
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
