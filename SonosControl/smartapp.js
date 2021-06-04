@@ -19,9 +19,8 @@ const uriSonosAuthRequest = 'https:///login/v3/oauth?response_type=code&state=te
 const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code=' + authCode + authRedirect;
 
 function callURI( uri ) {
-	// const uri = uriRandom;
 	var responseData;
-	const getData = async uri => {
+	// const getData = async uri => {
 		try {
 			const response = await axios.get(uri);
 			responseData = response.data;
@@ -29,8 +28,10 @@ function callURI( uri ) {
 		} catch (error) {
 			console.log(error);
 		}
+	/*
 	};
 	getData(uri);
+	*/
 	return responseData;
 };
 
