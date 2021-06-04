@@ -11,64 +11,12 @@ const axios = require("axios");
 const http  = require('http');
 const https = require('https');
 
-const requestWeather = {
-	hostname: 'api.openweathermap.org',
-	port: 80,
-  	path: '/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52',
-	method: 'GET'
-	/*
-	headers: {
-    		'Content-Type': 'application/json'
-    		// 'Content-Length': Buffer.byteLength(postData)
-		// 'Content-Length': 1024
-	}
-  	*/
-};
-
-
-	
-/*
-var uriRequest = '/login/v3/oauth';
-var uriParams = '&response_type=code&state=testState&scope=playback-control-all'
+const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 const authClient = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
+const authCode = 'abcdef';
 const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
-var uriPath = uriRequest + '?client_id=' + authClient + uriParams + authRedirect;
-
-const sonosAuthRequest = {
-  hostname: 'api.sonos.com',
-  port: 443,
-  path: uriPath,
-  method: 'GET'
-}
-
-// Create token request parameters
-const uriRequest = '/login/v3/oauth/access';
-const uriParams = '&grant_type=authorization_code&code={auth_code}&redirect_uri={redirect_uri}';
-
-const sonosCreateToken = {
-  hostname: 'api.sonos.com',
-  port: 443,
-  path: uriPath,
-  method: 'POST'
-}
-
-function sonosCall(request) {
-	const req = https.request(request, res => {
-		console.log(`statusCode: ${res.statusCode}`)
-
-		res.on('data', d => {
-			console.log(d)
-		})
-	})
-
-	req.on('error', error => {
-  		console.error(error)
-	})
-
-	req.end()
-}
-*/
-
+const uriSonosAuthRequest = 'https:///login/v3/oauth?response_type=code&state=testState&scope=playback-control-all&client_id=' + authClient + authRedirect;
+const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code=' + authCode + authRedirect;
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
