@@ -62,9 +62,9 @@ module.exports = new SmartApp()
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
 		const uri = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
-		const getData = async uri => {
+		const getData = async url => {
   			try {
-    				const response = await axios.get(uri);
+    				const response = await axios.get(url);
     				// const data = response.data;
     				console.log('Response from call to random.org: ', response.data);
   			} catch (error) {
@@ -72,42 +72,7 @@ module.exports = new SmartApp()
   			}
 		};
 		getData(uri);
-
-		/*
-		http.get(uri, (resp) => {
-  			let data = '';
-
-  			// A chunk of data has been received.
-  			resp.on('data', (chunk) => {
-    				data += chunk;
-  			});
-
-  			// The whole response has been received. Print out the result.
-  			resp.on('end', () => {
-    				// console.log(JSON.parse(data).explanation);
-    				console.log('Response: ', data);
-  			});
-
-		}).on("error", (err) => {
-  			console.log("Error: " + err.message);
-		});		
-		*/
-		
-		/*
-		// http.request(requestWeather, (res) => {
-		https.get('https://encrypted.google.com/', (res) => {
-			console.log('statusCode:', res.statusCode);
-			console.log('headers:', res.headers);
-
-			res.on('data', (d) => {
-				process.stdout.write(d);
-			});
-
-			}).on('error', (e) => {
-  				console.error(e);
-		});
-		// sonosCall(sonosAuthRequest);
-		*/
 	}
+	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
