@@ -5,12 +5,12 @@ const SmartApp = require('@smartthings/smartapp');
 // const SmartSensor = require('@katesthings/smartcontrols');
 // const SmartUtils  = require('@katesthings/smartutils');
 
+// HTTPS get request to authenticate Sonos
+// const http  = require('http');
+// const https = require('https');
 const axios = require("axios");
 
-// HTTPS get request to authenticate Sonos
-const http  = require('http');
-const https = require('https');
-
+const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 const authClient = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 const authCode = 'abcdef';
@@ -61,7 +61,8 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		const uri = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
+		// const uri = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
+		const uri = uriRandom;
 		const getData = async uri => {
   			try {
     				const response = await axios.get(uri);
