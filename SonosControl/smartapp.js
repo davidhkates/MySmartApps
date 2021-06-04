@@ -99,8 +99,8 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		const response = await getURI(uriRandom);
-		console.log('Response from web service: ', response);
+		const randomData = await getURI(uriRandom);
+		console.log('Response from web service: ', randomData);
 	}
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
