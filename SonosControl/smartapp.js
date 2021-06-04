@@ -32,7 +32,7 @@ instance.get('/path')
 })
 */
 
-function getURI( uri ) {
+async function getURI( uri ) {
 	axios.get(uri).then(response => {
 		console.log('Axios response: ', response.data);
 		return response.data;
