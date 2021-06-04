@@ -24,12 +24,13 @@ function callURI( uri ) {
 		try {
 			const response = await axios.get(uri);
 			const data = response.data;
-			return data;
+			console.log('Axios response: ', data);
+			// return data;
 		} catch (error) {
 			console.log(error);
 		}
 	};
-	getData(uri);
+	return getData(uri);
 };
 
 
