@@ -28,6 +28,28 @@ const requestGoogle = {
 	hostname: '.google.com',
 	method: 'GET'
 };
+
+
+var options = {
+  host: 'www.random.org',
+  path: '/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
+};
+
+callback = function(response) {
+  var str = '';
+
+  //another chunk of data has been received, so append it to `str`
+  response.on('data', function (chunk) {
+    str += chunk;
+  });
+
+  //the whole response has been received, so we just print it out here
+  response.on('end', function () {
+    console.log(str);
+  });
+}
+
+http.request(options, callback).end();
 	
 /*
 var uriRequest = '/login/v3/oauth';
@@ -115,6 +137,9 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
+		http.request(options, callback).end();
+
+		/*
 		// http.request(requestWeather, (res) => {
 		https.get('https://encrypted.google.com/', (res) => {
 			console.log('statusCode:', res.statusCode);
@@ -128,6 +153,7 @@ module.exports = new SmartApp()
   				console.error(e);
 		});
 		// sonosCall(sonosAuthRequest);
+		*/
 	}
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
