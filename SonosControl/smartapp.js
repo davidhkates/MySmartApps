@@ -32,14 +32,14 @@ instance.get('/path')
 })
 */
 
-async function getURI( uri ) {
+function getURI( uri ) {
 	axios.get(uri).then(response => {
 		console.log('Axios response: ', response.data);
 		return response.data;
 	});
 };
 
-async function postURI( uri, token ) {
+function postURI( uri, token ) {
 	const config = {
     		headers: { Authorization: 'Bearer ' + token }
 	};
