@@ -5,6 +5,7 @@ const SmartApp = require('@smartthings/smartapp');
 // const SmartSensor = require('@katesthings/smartcontrols');
 // const SmartUtils  = require('@katesthings/smartutils');
 
+const axios = require("axios");
 
 // HTTPS get request to authenticate Sonos
 const http  = require('http');
@@ -115,6 +116,17 @@ module.exports = new SmartApp()
 		console.log('Making http request to: ', requestWeather);
 
 		const uri = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
+		const getData = async url => {
+  			try {
+    				const response = await axios.get(uri);
+    				const data = response.data;
+    				console.log(data);
+  			} catch (error) {
+    				console.log(error);
+  			}
+		};
+
+		/*
 		http.get(uri, (resp) => {
   			let data = '';
 
@@ -132,6 +144,7 @@ module.exports = new SmartApp()
 		}).on("error", (err) => {
   			console.log("Error: " + err.message);
 		});		
+		*/
 		
 		console.log('Http request completed');
 
