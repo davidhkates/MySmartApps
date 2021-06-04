@@ -42,14 +42,15 @@ async function getURI( uri ) {
 };
 
 function postURI( uri, token ) {
-	const config = {
-    		headers: { Authorization: 'Bearer ' + token }
-	};
-	
 	const bodyParameters = {
 		key: 'value'
 	};
 
+	const config = {
+    		headers: { Authorization: 'Bearer ' + token }
+	};
+	
+	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
 	/*
 	axios.post(uri, bodyParameters, config).then(resp => {
 		console.log('Axios response: ', resp.data);
