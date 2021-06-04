@@ -125,6 +125,7 @@ module.exports = new SmartApp()
     				console.log(error);
   			}
 		};
+		getData(uri);
 
 		/*
 		http.get(uri, (resp) => {
