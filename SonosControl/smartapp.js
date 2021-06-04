@@ -37,7 +37,8 @@ function getURI( uri ) {
 		console.log('Axios response: ', resp.data);
 	});
 };
-	
+
+/*
 function postURI( uri, token ) {
 	const config = {
     		headers: { Authorization: `Bearer ${token}` }
@@ -51,7 +52,7 @@ function postURI( uri, token ) {
 		console.log('Axios response: ', resp.data);
 	}.catch(console.log);
 };
-
+*/
 	
 
 /* Define the SmartApp */
