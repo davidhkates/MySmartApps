@@ -120,7 +120,7 @@ module.exports = new SmartApp()
   			try {
     				const response = await axios.get(uri);
     				const data = response.data;
-    				console.log(data);
+    				console.log('Response from call to random.org: ', response);
   			} catch (error) {
     				console.log(error);
   			}
