@@ -4,6 +4,7 @@
 const axios = require("axios");
 const SmartState = require('@katesthings/smartstate');
 
+/*
 const sonosToken = '';
 // const sonosRedirect = 'https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
 const sonosCallbackID = 'r5twrfl7nd';
@@ -40,7 +41,7 @@ function postURI( uri, token ) {
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
-
+*/
 
 
 
@@ -54,7 +55,7 @@ const callback = (event, context, callback) => {
     console.log('Event: ', event);
     console.log('Context: ', context);
 
-    // SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
+    SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
     
     const response = {
          statusCode: 200,
