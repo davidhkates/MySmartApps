@@ -45,12 +45,14 @@ function postURI( uri, token ) {
 	};
 	
 	const bodyParameters = {
-		key: "value"
+		key: 'value'
 	};
 
+	/*
 	axios.post(uri, bodyParameters, config).then(resp => {
 		console.log('Axios response: ', resp.data);
 	}.catch(console.log);
+	*/
 };
 	
 
