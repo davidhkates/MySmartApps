@@ -43,6 +43,24 @@ function postURI( uri, token ) {
 })
 */
 
+async function putValue( table, key, value ) {
+	// Set the parameters
+	const params = {
+  		TableName: table,
+  		Item: {
+    			key: { S: key },
+			keyValue: { S: value },
+  		},
+	};
+	
+	try {
+		console.log('Put value: ', params);
+    		const data = await dbclient.send(new PutItemCommand(params));
+    		console.log(data);
+  	} catch (err) {
+    		console.error(err);
+  	}
+};
 
 
 // Callback API code
@@ -55,6 +73,7 @@ const callback = (event, context, callback) => {
     console.log('Event: ', event);
     console.log('Context: ', context);
 
+    // SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
     SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
     
     const response = {
