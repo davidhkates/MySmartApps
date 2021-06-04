@@ -138,7 +138,7 @@ module.exports = new SmartApp()
 		console.log('Response from web service: ', randomData);
 		
 		// SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
- 		putValue( 'smartapp-sonos-speakers', 'bearerToken', token );		
+ 		putValue( 'smartapp-sonos-speakers', 'bearerToken', 'token' );		
 	}
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
