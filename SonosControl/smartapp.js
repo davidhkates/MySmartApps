@@ -62,9 +62,9 @@ module.exports = new SmartApp()
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
 		const uri = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new';
-		const getData = async url => {
+		const getData = async uri => {
   			try {
-    				const response = await axios.get(url);
+    				const response = await axios.get(uri);
     				// const data = response.data;
     				console.log('Response from call to random.org: ', response.data);
   			} catch (error) {
