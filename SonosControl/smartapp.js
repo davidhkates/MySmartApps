@@ -76,7 +76,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		const response = callURI(uriRandom);
+		const response = await callURI(uriRandom);
 		console.log('Response from web service: ', response);
 		/*
 		const uri = uriRandom;
