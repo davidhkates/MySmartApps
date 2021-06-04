@@ -33,8 +33,9 @@ instance.get('/path')
 */
 
 function getURI( uri ) {
-	axios.get(uri).then(resp => {
-		console.log('Axios response: ', resp.data);
+	axios.get(uri).then(response => {
+		console.log('Axios response: ', response.data);
+		return response.data;
 	});
 };
 
