@@ -2,7 +2,7 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const DynamoContext = require('@katesthings/dynamo-context');
+const SmartState = require('@katesthings/smartstate');
 // const SmartSensor = require('@katesthings/smartcontrols');
 // const SmartUtils  = require('@katesthings/smartutils');
 
@@ -15,7 +15,7 @@ const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 
 // const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
-const sonosClientID = DynamoContext.getValue( 'smartapp-sonos-speakers', 'clientID' );
+const sonosClientID = SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
 const sonosToken = '';
 // const sonosRedirect = 'https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
 const sonosRedirect = encodeURI('https://m4bm3s9kj5.execute-api.us-west-2.amazonaws.com/dev/callback');
