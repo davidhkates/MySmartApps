@@ -21,10 +21,10 @@ const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authoriza
 function callURI( uri ) {
 	// const uri = uriRandom;
 	const getData = async uri => {
-  	try {
-		const response = await axios.get(uri);
-		// const data = response.data;
-		console.log('Response from call to random.org: ', response.data);
+		try {
+			const response = await axios.get(uri);
+			const data = response.data;
+			return data;
 		} catch (error) {
 			console.log(error);
 		}
@@ -76,7 +76,8 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
-		callURI(uriRandom);
+		const response = callURI(uriRandom);
+		console.log('Response from web service: ', response);
 		/*
 		const uri = uriRandom;
 		const getData = async uri => {
