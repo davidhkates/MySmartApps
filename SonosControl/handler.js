@@ -95,42 +95,72 @@ async function putValue( table, key, value ) {
 */
 
 // Callback API code
-const authCallback = (event, context, callback) => {
+const auth_callback = (event, context, callback) => {
 
 	// var token = event.authorizationToken;
 	var sonosAuthCode = event.multiValueQueryStringParameters.code[0];
 	console.log('Sonos API Oauth Callback authorization code: ', sonosAuthCode);
-    
-	/*
-    console.log('Event: ', event);
-    console.log('Context: ', context);
-	*/
+	// console.log('Event: ', event);
+	// console.log('Context: ', context);
 	
 	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
-    SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
+	SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
 	
-	// Call Sonos Sonos create token
+	// Call Sonos create token API
 	const sonosCallbackID = 'r5twrfl7nd';
-	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/callback');	
+	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token_callback');	
 	const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
-    // SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );	
+	// SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );	
     
-    const response = {
-         statusCode: 200,
-         headers: {
-              'Access-Control-Allow-Origin': '*',
-              'Access-Control-Allow-Credentials': true
-         },
-         body: JSON.stringify({
-              // 'message': 'Token value: ' + authToken
-              'message': 'Authorization code: ' + sonosAuthCode
-         })
-    }
+	const response = {
+		statusCode: 200,
+ 		headers: {
+ 			'Access-Control-Allow-Origin': '*',
+ 			'Access-Control-Allow-Credentials': true
+		},
+ 		body: JSON.stringify({
+			// 'message': 'Token value: ' + authToken
+			'message': 'Authorization code: ' + sonosAuthCode
+		})
+	}
 
-	// callback(null, response);
-	authCallback(null, response);
+	callback(null, response);
+}
+
+// Create token response endpoint
+const token_callback = (event, context, callback) => {
+
+	// var token = event.authorizationToken;
+	var sonosBearerToken = event.multiValueQueryStringParameters.code[0];
+	console.log('Sonos API Oauth Callback bearer token: ', sonosBearerToken);
+	// console.log('Event: ', event);
+	// console.log('Context: ', context);
+	
+	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
+	SmartState.putValue( 'smartapp-sonos-speakers', 'bearer-token', sonosBearerToken );
+	
+	/*
+	// Call Sonos create token API
+	const sonosCallbackID = 'r5twrfl7nd';
+	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token_callback');	
+	const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	*/
+    
+	const response = {
+		statusCode: 200,
+ 		headers: {
+ 			'Access-Control-Allow-Origin': '*',
+ 			'Access-Control-Allow-Credentials': true
+		},
+ 		body: JSON.stringify({
+			'message': 'Token value: ' + sonosBearerToken
+		})
+	}
+
+	callback(null, response);
 }
 
 
 // export external modules
-module.exports.authCallback = authCallback
+module.exports.auth_callback  = auth_callback
+module.exports.token_callback = token_callback
