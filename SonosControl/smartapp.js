@@ -18,6 +18,30 @@ const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 
 
+/*
+  Get the value for a given key from a given table
+  */
+async function getValue( table, key ) {
+	// Set the parameters
+	const params = {
+  		TableName: table,
+  		Key: {
+    			key: { S: key }
+  		},
+  		ProjectionExpression: 'keyValue'
+	};
+  	
+	// Return the requested state variable
+	try {
+		const data = await dbclient.send(new GetItemCommand(params));
+		console.log("Get value: ", data);
+		return data.Item.value.S;
+	} catch (err) {
+		console.log("Error", err);
+	}	
+};
+
+
 async function putValue( table, key, value ) {
 	// Set the parameters
 	const params = {
@@ -140,8 +164,8 @@ module.exports = new SmartApp()
 		const randomData = await getURI(uriRandom);
 		console.log('Response from web service: ', randomData);
 		
-		// SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
- 		putValue( 'smartapp-sonos-speakers', 'bearerToken', 'token' );		
+		SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
+ 		// putValue( 'smartapp-sonos-speakers', 'bearerToken', 'token' );		
 	}
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
