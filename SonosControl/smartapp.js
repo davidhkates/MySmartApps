@@ -89,7 +89,8 @@ instance.get('/path')
 */
 
 async function getURI( uri ) {
-	const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
+	// const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
+	const sonosClientID = await getValue( 'smartapp-sonos-speakers', 'clientID' );
 	console.log('Client ID: ', sonosClientID);
 	
 	var responseData = '';
