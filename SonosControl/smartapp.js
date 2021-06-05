@@ -1,3 +1,6 @@
+const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const dbclient = new DynamoDBClient({ region: 'us-west-2' });
+
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
 
