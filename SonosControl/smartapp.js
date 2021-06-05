@@ -1,6 +1,3 @@
-const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-const dbclient = new DynamoDBClient({ region: 'us-west-2' });
-
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
 
@@ -86,7 +83,6 @@ instance.get('/path')
 .then(response => {
     return response.data;
 })
-*/
 
 async function getURI( uri ) {
 	// const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
@@ -117,7 +113,7 @@ function postURI( uri, token ) {
 	}.catch(console.log);
 	*/
 };
-	
+*/	
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -162,11 +158,12 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (controlEnabled) {
+		/*
 		const randomData = await getURI(uriRandom);
 		console.log('Response from web service: ', randomData);
 		
 		SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
- 		// putValue( 'smartapp-sonos-speakers', 'bearerToken', 'token' );		
+		*/
 	}
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
