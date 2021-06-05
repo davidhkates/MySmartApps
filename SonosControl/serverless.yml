@@ -18,9 +18,15 @@ functions:
   smartapp:
     handler: index.handle
     timeout: 20
-  callback:
-    handler: handler.callback
+  auth-callback:
+    handler: handler.auth-callback
     events:
       - http:
-          path: callback
+          path: auth-callback
+          method: get
+  token-callback:
+    handler: handler.token-callback
+    events:
+      - http:
+          path: token-callback
           method: get
