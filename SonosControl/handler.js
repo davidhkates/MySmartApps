@@ -3,6 +3,38 @@
 // Install relevant node packages
 const axios = require("axios");
 const SmartState = require('@katesthings/smartstate');
+// const SmartUtils = require('@katesthings/smartutils');
+
+async function getURI( uri ) {
+	// const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
+	const sonosClientID = await getValue( 'smartapp-sonos-speakers', 'clientID' );
+	console.log('Client ID: ', sonosClientID);
+	
+	var responseData = '';
+	await axios.get(uri).then(response => {
+		console.log('Axios response: ', response.data);
+		responseData = response.data;
+	});
+	return responseData;
+};
+
+function postURI( uri, token ) {
+	const bodyParameters = {
+		key: 'value'
+	};
+
+	const config = {
+    		headers: { Authorization: 'Bearer ' + token }
+	};
+	
+	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
+	/*
+	axios.post(uri, bodyParameters, config).then(resp => {
+		console.log('Axios response: ', resp.data);
+	}.catch(console.log);
+	*/
+};
+
 
 /*
 const sonosToken = '';
@@ -41,7 +73,6 @@ function postURI( uri, token ) {
 	
 	console.log('SonosControl: END CREATING SUBSCRIPTIONS')
 })
-*/
 
 async function putValue( table, key, value ) {
 	// Set the parameters
@@ -61,20 +92,28 @@ async function putValue( table, key, value ) {
     		console.error(err);
   	}
 };
-
+*/
 
 // Callback API code
-const callback = (event, context, callback) => {
+const authCallback = (event, context, callback) => {
 
-    // var token = event.authorizationToken;
-    var token = event.multiValueQueryStringParameters.code[0];
+	// var token = event.authorizationToken;
+	var sonosAuthCode = event.multiValueQueryStringParameters.code[0];
+	console.log('Sonos API Oauth Callback authorization code: ', sonosAuthCode);
     
-    console.log('Sonos API Oauth Callback token: ', token);
+	/*
     console.log('Event: ', event);
     console.log('Context: ', context);
-
-    // SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
-    SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );
+	*/
+	
+	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
+    SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
+	
+	// Call Sonos Sonos create token
+	const sonosCallbackID = 'r5twrfl7nd';
+	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/callback');	
+	const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+    // SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );	
     
     const response = {
          statusCode: 200,
@@ -83,12 +122,15 @@ const callback = (event, context, callback) => {
               'Access-Control-Allow-Credentials': true
          },
          body: JSON.stringify({
-              'message': 'Callback!'
+              // 'message': 'Token value: ' + authToken
+              'message': 'Authorization code: ' + sonosAuthCode
          })
     }
 
-  callback(null, response)
+	// callback(null, response);
+	authCallback(null, response);
 }
 
+
 // export external modules
-module.exports.callback = callback
+module.exports.authCallback = authCallback
