@@ -35,7 +35,7 @@ async function getValue( table, key ) {
 	try {
 		const data = await dbclient.send(new GetItemCommand(params));
 		console.log("Get value: ", data);
-		return data.Item.value.S;
+		return data.Item.keyValue.S;
 	} catch (err) {
 		console.log("Error", err);
 	}	
