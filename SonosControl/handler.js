@@ -95,7 +95,7 @@ async function putValue( table, key, value ) {
 */
 
 // Callback API code
-const auth_callback = (event, context, callback) => {
+const authCallback = (event, context, callback) => {
 
 	// var token = event.authorizationToken;
 	var sonosAuthCode = event.multiValueQueryStringParameters.code[0];
@@ -162,5 +162,5 @@ const token_callback = (event, context, callback) => {
 
 
 // export external modules
-module.exports.auth_callback  = auth_callback
-module.exports.token_callback = token_callback
+module.exports.authCallback  = authCallback
+module.exports.tokenCallback = tokenCallback
