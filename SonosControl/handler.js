@@ -81,7 +81,7 @@ const authCallback = (event, context, callback) => {
 }
 
 // Create token response endpoint
-const token_callback = (event, context, callback) => {
+const tokenCallback = (event, context, callback) => {
 
 	// var token = event.authorizationToken;
 	var sonosBearerToken = event.multiValueQueryStringParameters.code[0];
