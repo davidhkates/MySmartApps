@@ -19,13 +19,13 @@ functions:
     handler: index.handle
     timeout: 20
   auth-callback:
-    handler: handler.auth_callback
+    handler: handler.authCallback
     events:
       - http:
           path: auth-callback
           method: get
   token-callback:
-    handler: handler.token_callback
+    handler: handler.tokenCallback
     events:
       - http:
           path: token-callback
