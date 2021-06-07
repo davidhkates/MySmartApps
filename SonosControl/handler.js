@@ -80,6 +80,11 @@ const authCallback = (event, context, callback) => {
 	callback(null, response);
 }
 
+const authPageStart = '<!DOCTYPE html><html lang="en">
+<head><title>A simple HTML document</title></head>
+<body><p>Hello World!<p>';
+const authPageEnd = '</body></html>'
+
 // Create token response endpoint
 const tokenCallback = (event, context, callback) => {
 
@@ -105,9 +110,9 @@ const tokenCallback = (event, context, callback) => {
  			'Access-Control-Allow-Origin': '*',
  			'Access-Control-Allow-Credentials': true
 		},
- 		body: JSON.stringify({
-			'message': 'Token value: ' + sonosBearerToken
-		})
+ 		body: authPageStart + 
+			JSON.stringify({'message': 'Token value: ' + 
+			sonosBearerToken}) + authPageEnd
 	}
 
 	callback(null, response);
