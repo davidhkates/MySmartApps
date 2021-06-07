@@ -80,10 +80,14 @@ const authCallback = (event, context, callback) => {
 	callback(null, response);
 }
 
+/*
 const authPageStart = '<!DOCTYPE html><html lang="en">
 <head><title>A simple HTML document</title></head>
 <body><p>Hello World!<p>';
 const authPageEnd = '</body></html>'
+*/
+const authPageStart = '<p>Hello world!</p><ul><li>';
+const authPageEnd = '</li></ul>';
 
 // Create token response endpoint
 const tokenCallback = (event, context, callback) => {
