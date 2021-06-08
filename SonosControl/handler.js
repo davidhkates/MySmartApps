@@ -61,9 +61,9 @@ const authCallback = (event, context, callback) => {
 	
 	// Call Sonos create token API
 	const sonosCallbackID = 'r5twrfl7nd';
-	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token_callback');	
+	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');	
 	const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
-	// SmartState.putValue( 'smartapp-sonos-speakers', 'bearerToken', token );	
+	axios.post(uriSonosCreateToken).then(console.log).catch(console.log);
     
 	const response = {
 		statusCode: 200,
@@ -71,8 +71,9 @@ const authCallback = (event, context, callback) => {
  			'Access-Control-Allow-Origin': '*',
  			'Access-Control-Allow-Credentials': true
 		},
- 		body: '<p>Sonos Authorization <b>succeeded</b></p>' +
-			'<p>Authorization code: '  + sonosAuthCode</p>'
+ 		body: JSON.stringify({
+			// 'message': 'Token value: ' + authToken
+			'message': 'Authorization code: ' + sonosAuthCode
 		})
 	}
 
