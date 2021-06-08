@@ -78,9 +78,9 @@ const authCallback = (event, context, callback) => {
 			// 'message': 'Token value: ' + authToken
 			'message': 'Authorization code: ' + sonosAuthCode
 		})
-		*/
 	}
-	// callback(null, response);
+	callback(null, response);
+	*/
 	callback();
 }
 
