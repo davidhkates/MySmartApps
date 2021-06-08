@@ -71,10 +71,13 @@ const authCallback = (event, context, callback) => {
  			'Access-Control-Allow-Origin': '*',
  			'Access-Control-Allow-Credentials': true
 		},
+		/*
+		body: 'Hello world'
  		body: JSON.stringify({
 			// 'message': 'Token value: ' + authToken
 			'message': 'Authorization code: ' + sonosAuthCode
 		})
+		*/
 	}
 
 	callback(null, response);
