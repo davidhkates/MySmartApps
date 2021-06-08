@@ -99,7 +99,7 @@ const authPageEnd = '</li></ul>';
 const tokenCallback = (event, context, callback) => {
 
 	// var token = event.authorizationToken;
-	console.log('Token callback entered with event: ', event);
+	console.log('Token callback entered with event: ', event);	
 	var sonosBearerToken = event.multiValueQueryStringParameters.code[0];
 	console.log('Sonos API Oauth Callback bearer token: ', sonosBearerToken);
 	// console.log('Event: ', event);
@@ -115,6 +115,7 @@ const tokenCallback = (event, context, callback) => {
 	const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	*/
     
+	/*
 	const response = {
 		statusCode: 200,
  		headers: {
@@ -125,8 +126,9 @@ const tokenCallback = (event, context, callback) => {
 			JSON.stringify({'message': 'Token value: ' + 
 			sonosBearerToken}) + authPageEnd
 	}
-
 	callback(null, response);
+	*/
+	callback();
 }
 
 
