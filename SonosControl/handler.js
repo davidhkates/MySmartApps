@@ -71,9 +71,8 @@ const authCallback = (event, context, callback) => {
  			'Access-Control-Allow-Origin': '*',
  			'Access-Control-Allow-Credentials': true
 		},
- 		body: JSON.stringify({
-			// 'message': 'Token value: ' + authToken
-			'message': 'Authorization code: ' + sonosAuthCode
+ 		body: '<p>Sonos Authorization <b>succeeded</b></p>' +
+			'<p>Authorization code: '  + sonosAuthCode</p>'
 		})
 	}
 
