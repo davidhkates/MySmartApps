@@ -65,6 +65,7 @@ const authCallback = (event, context, callback) => {
 	const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	axios.post(uriSonosCreateToken).then(console.log).catch(console.log);
     
+	/*
 	const response = {
 		statusCode: 200,
  		headers: {
@@ -79,8 +80,8 @@ const authCallback = (event, context, callback) => {
 		})
 		*/
 	}
-
-	callback(null, response);
+	// callback(null, response);
+	callback();
 }
 
 /*
