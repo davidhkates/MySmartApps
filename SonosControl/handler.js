@@ -53,8 +53,8 @@ const authCallback = (event, context, callback) => {
 	// var token = event.authorizationToken;
 	var sonosAuthCode = event.multiValueQueryStringParameters.code[0];
 	console.log('Sonos API Oauth Callback authorization code: ', sonosAuthCode);
-	// console.log('Event: ', event);
-	// console.log('Context: ', context);
+	console.log('Event: ', event);
+	console.log('Context: ', context);
 	
 	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
 	SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
@@ -67,26 +67,23 @@ const authCallback = (event, context, callback) => {
 	const uriSonosAuth = 'https://api.sonos.com/login/v3/oauth?client_id=d313a2a0-960e-481f-9fc7-3c02e4366955&response_type=code&state=testState&scope=playback-control-all&redirect_uri=https%3A%2F%2Fr5twrfl7nd.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
 	console.log('Sonos auth request: ', uriSonosAuth);
 	// axios.post(uriSonosCreateToken).then(console.log).catch(console.log);
-	axios.get(uriSonosAuth).then(console.log).catch(console.log);
+	axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
 	console.log('Asynchronous request completed');
     
-	/*
 	const response = {
 		statusCode: 200,
  		headers: {
  			'Access-Control-Allow-Origin': '*',
  			'Access-Control-Allow-Credentials': true
 		},
-		/*
-		body: 'Hello world'
+		// body: 'Hello world'
  		body: JSON.stringify({
 			// 'message': 'Token value: ' + authToken
 			'message': 'Authorization code: ' + sonosAuthCode
 		})
 	}
 	callback(null, response);
-	*/
-	callback();
+	// callback();
 }
 
 /*
