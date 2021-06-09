@@ -89,8 +89,9 @@ const authCallback = (event, context, callback) => {
 	}
 	const config = {
     		headers: {
-			Content-Type: 'application/x-www-form-urlencoded;charset=utf-8',
-			Basic: sonosAuthToken
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+			'Authorization': 'Basic ' + sonosAuthToken
+			// Basic: sonosAuthToken
 		}
 	}
 	axios.post(uriSonosCreateToken, bodyParameters, config).then(console.log).catch(console.log);
