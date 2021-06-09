@@ -90,10 +90,9 @@ const authCallback = (event, context, callback) => {
 	const config = {
     		headers: { Basic: token }
 	}
-	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
+	axios.post(uriSonosCreateToken, bodyParameters, config).then(console.log).catch(console.log);
 
-	
-	getToken(uriSonosCreateToken, sonosAuthToken);
+	// getToken(uriSonosCreateToken, sonosAuthToken);
 	// axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
 	// const uriSonosAuth = 'https://api.sonos.com/login/v3/oauth?client_id=d313a2a0-960e-481f-9fc7-3c02e4366955&response_type=code&state=testState&scope=playback-control-all&redirect_uri=https%3A%2F%2Fr5twrfl7nd.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
 	// console.log('Sonos auth request: ', uriSonosAuth);
