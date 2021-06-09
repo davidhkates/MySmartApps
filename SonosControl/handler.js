@@ -82,14 +82,14 @@ const authCallback = (event, context, callback) => {
 	console.log('Posting Sonos create token request: ', uriSonosCreateToken);
 	
 	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access';
-	const bodyParameters{
+	const bodyParameters = {
 		grant_type: 'authorization_code',
 		code: sonosAuthCode,
 		redirect_uri: sonosTokenRedirect
 	}
 	const config = {
     		headers: { Basic: token }
-	};
+	}
 	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
 
 	
