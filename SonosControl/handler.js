@@ -63,7 +63,7 @@ function postURI( uri, token ) {
 const authCallback = (event, context, callback) => {
 
 	// var token = event.authorizationToken;
-	var sonosAuthCode = event.multiValueQueryStringParameters.code[0];
+	var sonosAuthCode = event.queryStringParameters.code;
 	console.log('Sonos API Oauth Callback authorization code: ', sonosAuthCode);
 	console.log('Event: ', event);
 	// console.log('Context: ', context);
