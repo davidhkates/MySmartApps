@@ -61,7 +61,7 @@ const authCallback = (event, context, callback) => {
 	
 	// Call Sonos create token API
 	const sonosCallbackID = 'r5twrfl7nd';
-	const sonosTokenRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');
+	const sonosTokenRedirect = encodeURIComponent('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');
 	console.log("Encoded URI: ", sonosTokenRedirect);
 	const uriSonosCreateToken = 'https://login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	console.log('Posting Sonos create token request: ', uriSonosCreateToken);
