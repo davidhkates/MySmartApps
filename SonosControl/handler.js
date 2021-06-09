@@ -88,10 +88,23 @@ const authCallback = (event, context, callback) => {
 		redirect_uri: sonosTokenRedirect
 	}
 	const config = {
-    		headers: { Basic: token }
+    		headers: {
+			Content-Type: 'application/x-www-form-urlencoded;charset=utf-8',
+			Basic: sonosAuthToken
+		}
 	}
 	axios.post(uriSonosCreateToken, bodyParameters, config).then(console.log).catch(console.log);
 
+	
+	/*
+	curl -X POST -H "Content-Type: application/x-www-form-urlencoded;charset=utf-8" \
+	-H "Authorization: Basic ZDliZTcxMmQtOTE4OC00ZmJhLThmMWYtYzAwMzX1YWMzYzg4mQ4YzgxNzU5LTQzZTAtNDNhMC1iYTkxLWRhZTY5MzAzNDdjYg==" \
+	"https://api.sonos.com/login/v3/oauth/access" \
+	-d "grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode"
+	*/
+		
+	
+	
 	// getToken(uriSonosCreateToken, sonosAuthToken);
 	// axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
 	// const uriSonosAuth = 'https://api.sonos.com/login/v3/oauth?client_id=d313a2a0-960e-481f-9fc7-3c02e4366955&response_type=code&state=testState&scope=playback-control-all&redirect_uri=https%3A%2F%2Fr5twrfl7nd.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
