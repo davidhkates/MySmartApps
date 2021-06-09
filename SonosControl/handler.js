@@ -29,6 +29,23 @@ async function getURI( uri ) {
 	return responseData;
 };
 
+function getToken( uri, token ) {
+	const bodyParameters = {
+		key: 'value'
+	};
+
+	const config = {
+    		headers: { Basic: 'Standard {' + btoa(token) + '}' }
+	};
+	
+	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
+	/*
+	axios.post(uri, bodyParameters, config).then(resp => {
+		console.log('Axios response: ', resp.data);
+	}.catch(console.log);
+	*/
+};
+
 function postURI( uri, token ) {
 	const bodyParameters = {
 		key: 'value'
@@ -61,6 +78,7 @@ const authCallback = (event, context, callback) => {
 	
 	// Call Sonos create token API
 	const sonosCallbackID = 'r5twrfl7nd';
+	const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 	const sonosTokenRedirect = encodeURIComponent('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');
 	console.log("Encoded URI: ", sonosTokenRedirect);
 	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
