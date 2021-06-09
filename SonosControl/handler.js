@@ -39,11 +39,6 @@ function getToken( uri, token ) {
 	};
 	
 	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
-	/*
-	axios.post(uri, bodyParameters, config).then(resp => {
-		console.log('Axios response: ', resp.data);
-	}.catch(console.log);
-	*/
 };
 
 function postURI( uri, token ) {
