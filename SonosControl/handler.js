@@ -103,7 +103,7 @@ const tokenCallback = (event, context, callback) => {
 	console.log('Token callback entered with event: ', event);	
 	var sonosBearerToken = event.multiValueQueryStringParameters.code[0];
 	console.log('Sonos API Oauth Callback bearer token: ', sonosBearerToken);
-	// console.log('Event: ', event);
+	console.log('Event: ', event);
 	// console.log('Context: ', context);
 	
 	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
