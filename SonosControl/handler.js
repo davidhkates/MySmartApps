@@ -71,6 +71,7 @@ const authCallback = (event, context, callback) => {
 	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
 	SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
 	
+	/*
 	// Call Sonos create token API
 	// const sonosCallbackID = 'r5twrfl7nd';
 	const sonosCallbackID = '00t156cqe1';
@@ -136,14 +137,11 @@ const authCallback = (event, context, callback) => {
  			'Access-Control-Allow-Origin': '*',
  			'Access-Control-Allow-Credentials': true
 		},
-		// body: 'Hello world'
  		body: JSON.stringify({
-			// 'message': 'Token value: ' + authToken
 			'message': 'Authorization code: ' + sonosAuthCode
 		})
 	}
 	callback(null, response);
-	// callback();
 }
 
 /*
@@ -152,9 +150,8 @@ const authPageStart = '<!DOCTYPE html><html lang="en">
 <body><p>Hello World!<p>';
 const authPageEnd = '</body></html>'
 */
-const authPageStart = '<p>Hello world!</p><ul><li>';
-const authPageEnd = '</li></ul>';
 
+/*
 // Create token response endpoint
 const tokenCallback = (event, context, callback) => {
 
@@ -187,11 +184,11 @@ const tokenCallback = (event, context, callback) => {
 			sonosBearerToken}) + authPageEnd
 	}
 	callback(null, response);
-	*/
 	callback();
 }
+*/
 
 
 // export external modules
 module.exports.authCallback  = authCallback
-module.exports.tokenCallback = tokenCallback
+// module.exports.tokenCallback = tokenCallback
