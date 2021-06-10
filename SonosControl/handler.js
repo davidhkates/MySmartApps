@@ -72,7 +72,8 @@ const authCallback = (event, context, callback) => {
 	SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
 	
 	// Call Sonos create token API
-	const sonosCallbackID = 'r5twrfl7nd';
+	// const sonosCallbackID = 'r5twrfl7nd';
+	const sonosCallbackID = '00t156cqe1';
 	// TODO - store these in environment variables or DynamoDB
 	const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 	const sonosSecret   = '3acfdfd9-27c4-4a74-978d-e27fefa45bd2';
