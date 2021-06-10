@@ -188,9 +188,9 @@ const tokenCallback = (event, context, callback) => {
 			sonosBearerToken}) + authPageEnd
 	}
 	callback(null, response);
+	*/
 	callback();
 }
-*/
 
 
 // export external modules
