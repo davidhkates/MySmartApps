@@ -82,6 +82,7 @@ const authCallback = (event, context, callback) => {
 	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	// console.log('Posting Sonos create token request: ', uriSonosCreateToken);
 	
+	/*
 	// const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access';
 	const bodyParameters = {
 		grant_type: 'authorization_code',
@@ -96,17 +97,26 @@ const authCallback = (event, context, callback) => {
 		}
 	}
 	// axios.post(uriSonosCreateToken, bodyParameters, config).then(console.log).catch(console.log);
-	axios.post(uriSonosCreateToken, null, config).then(console.log).catch(console.log);
+	// axios.post(uriSonosCreateToken, null, config).then(console.log).catch(console.log);
 
-	
+
 	/*
-	curl -X POST -H "Content-Type: application/x-www-form-urlencoded;charset=utf-8" \
-	-H "Authorization: Basic ZDliZTcxMmQtOTE4OC00ZmJhLThmMWYtYzAwMzX1YWMzYzg4mQ4YzgxNzU5LTQzZTAtNDNhMC1iYTkxLWRhZTY5MzAzNDdjYg==" \
-	"https://api.sonos.com/login/v3/oauth/access" \
-	-d "grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode"
+	const config = {
+    		'https://api.sonos.com/login/v3/oauth/access',
+		method: 'post',
+    		data: '?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect
+  	};
+	await axios(config);
+	// return () => axios(config).then(res => res.data);
 	*/
-		
 	
+	
+	axios.post(uriSonosCreateToken, {
+		headers: {
+   			Authorization: 'Basic ' + sonosAuthToken,
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+		}
+	})
 	
 	// getToken(uriSonosCreateToken, sonosAuthToken);
 	// axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
