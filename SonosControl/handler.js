@@ -90,7 +90,7 @@ const authCallback = (event, context, callback) => {
 	}
 	const config = {
     		headers: {
-			// 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
 			// 'Authorization': 'Basic ' + sonosAuthToken
 			Basic: sonosAuthToken
 		}
