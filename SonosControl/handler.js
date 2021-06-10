@@ -16,6 +16,7 @@ const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authoriza
 */
 
 
+/*
 async function getURI( uri ) {
 	// const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
 	const sonosClientID = await getValue( 'smartapp-sonos-speakers', 'clientID' );
@@ -51,13 +52,11 @@ function postURI( uri, token ) {
 	};
 	
 	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
-	/*
 	axios.post(uri, bodyParameters, config).then(resp => {
 		console.log('Axios response: ', resp.data);
 	}.catch(console.log);
-	*/
 };
-
+*/
 
 // Callback API code
 const authCallback = (event, context, callback) => {
