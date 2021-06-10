@@ -93,9 +93,7 @@ module.exports = new SmartApp()
 		});
 	})
 
-	// Handler called whenever app is installed or updated
-	// Called for both INSTALLED and UPDATED lifecycle events if there is
-	// no separate installed() handler
+	// Handler called for both INSTALLED and UPDATED if there is no separate installed() handler
 	.updated(async (context, updateData) => {
 		console.log("ShadeControl: Installed/Updated");
         
@@ -115,8 +113,11 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeDirection,
 		    'switch', 'switch.off', 'shadeDownHandler');
 */
+	
+/*
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
 		    'switch', 'switch', 'shadeButtonHandler');
+*/
 	
 		console.log('Shade Control: END CREATING SUBSCRIPTIONS')
 	})
