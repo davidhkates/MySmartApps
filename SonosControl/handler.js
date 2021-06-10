@@ -125,7 +125,11 @@ const authCallback = (event, context, callback) => {
 		.then(resp => {console.log('Axios openweather response: ', resp.data)})
 		.catch(console.log);
 	*/
-	axios.post('https://httpbin.org/post')
+	axios.post('https://httpbin.org/post'), {
+		headers: {
+   			Authorization: 'Basic ' + sonosAuthToken,
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+		}
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
 		
