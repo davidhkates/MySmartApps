@@ -120,11 +120,10 @@ const authCallback = (event, context, callback) => {
 	})
 	*/
 	axios.get('https://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52')
-		.then(resp => {
-			console.log('Axios openweather response: ', resp.data)
-		})
+		// .then(resp => {console.log('Axios openweather response: ', resp.data)});
 		.catch(console.log);
-	
+
+		
 	// getToken(uriSonosCreateToken, sonosAuthToken);
 	// axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
 	// const uriSonosAuth = 'https://api.sonos.com/login/v3/oauth?client_id=d313a2a0-960e-481f-9fc7-3c02e4366955&response_type=code&state=testState&scope=playback-control-all&redirect_uri=https%3A%2F%2Fr5twrfl7nd.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
