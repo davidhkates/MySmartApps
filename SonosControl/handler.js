@@ -194,4 +194,4 @@ const tokenCallback = (event, context, callback) => {
 
 // export external modules
 module.exports.authCallback  = authCallback
-// module.exports.tokenCallback = tokenCallback
+module.exports.tokenCallback = tokenCallback
