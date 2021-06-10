@@ -114,10 +114,8 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'shadeDownHandler');
 */
 	
-/*
 		await context.api.subscriptions.subscribeToDevices(context.config.shadeControl,
 		    'switch', 'switch', 'shadeButtonHandler');
-*/
 	
 		console.log('Shade Control: END CREATING SUBSCRIPTIONS')
 	})
