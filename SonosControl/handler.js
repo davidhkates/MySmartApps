@@ -119,10 +119,14 @@ const authCallback = (event, context, callback) => {
 		}
 	})
 	*/
-	// axios.get('https://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52');
-		// .then(resp => {console.log('Axios openweather response: ', resp.data)});
-		// .catch(console.log);
-
+	
+	axios.get('https://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52', {
+		headers: {
+   			Authorization: 'Basic ' + sonosAuthToken,
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+		})
+		.then(resp => {console.log('Axios openweather response: ', resp.data)})
+		.catch(console.log);
 		
 	// getToken(uriSonosCreateToken, sonosAuthToken);
 	// axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
@@ -150,7 +154,7 @@ const authPageStart = '<!DOCTYPE html><html lang="en">
 const authPageEnd = '</body></html>'
 */
 
-/*
+
 // Create token response endpoint
 const tokenCallback = (event, context, callback) => {
 
