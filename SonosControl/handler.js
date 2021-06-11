@@ -46,7 +46,7 @@ const authCallback = (event, context, callback) => {
 	const postData = 'grant_type=authorization_code&code=' & sonosAuthCode & 'redirect_uri=' & sonosTokenRedirect;
 	const postHeaders = {
 		headers: {
-			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
    			'Authorization': 'Basic ' + sonosAuthToken,
 		}
 	};
