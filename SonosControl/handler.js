@@ -10,9 +10,11 @@ const authCallback = (event, context, callback) => {
 
 	// var token = event.authorizationToken;
 	var sonosAuthCode = event.queryStringParameters.code;
+	var sonosRequestID = event.requestContext.requestId;
 	console.log('Sonos API Oauth Callback authorization code: ', sonosAuthCode);
-	console.log('Event: ', event);
-	console.log('Context: ', context);
+	console.log('Sonos API Oauth Callback request ID: ', sonosRequestID);
+	// console.log('Event: ', event);
+	// console.log('Context: ', context);
 	
 	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
 	SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
@@ -23,12 +25,13 @@ const authCallback = (event, context, callback) => {
 	// TODO - store these in environment variables or DynamoDB
 	const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 	const sonosSecret   = '3acfdfd9-27c4-4a74-978d-e27fefa45bd2';
-	// const sonosAuthToken = Buffer.from(sonosClientID + ':' + sonosSecret).toString('base64');
-	const sonosAuthToken = Buffer.from(sonosClientID).toString('base64') + sonosSecret;
+	const sonosAuthToken = Buffer.from(sonosClientID + ':' + sonosSecret).toString('base64');
+	// const sonosAuthToken = Buffer.from(sonosClientID).toString('base64') + sonosSecret;
 
 	// console.log('Encoded token: ', sonosAuthToken);
 	const sonosTokenRedirect = encodeURIComponent('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');
-	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	// const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
 	// console.log('Posting Sonos create token request: ', uriSonosCreateToken);
 	
 	/*
