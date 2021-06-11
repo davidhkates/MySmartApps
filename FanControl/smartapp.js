@@ -101,7 +101,6 @@ module.exports = new SmartApp()
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 
-	/*
 	// get controls and temperature/humidity sensors
 	page.section('controls', section => {
 		section.deviceSetting('fanSwitch').capabilities(['switch'])
@@ -115,6 +114,8 @@ module.exports = new SmartApp()
 			.required(false).permissions('r');
 	});
 	
+
+	/*
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
