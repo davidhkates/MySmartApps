@@ -129,7 +129,7 @@ const authCallback = (event, context, callback) => {
 		headers: {
    			Authorization: 'Basic ' + sonosAuthToken,
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-		}
+		}}
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
 		
