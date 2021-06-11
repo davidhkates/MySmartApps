@@ -11,7 +11,6 @@ async function controlFan( context ) {
 	// Initialize fan state variable
 	var fanState = 'off';
 
-	/*
 	// Get temperature(s) and set fan state
 	const tempSensor = context.config.tempSensor;
 	if (tempSensor) {
@@ -46,7 +45,6 @@ async function controlFan( context ) {
 			}
 		}
 	}
-	*/
 	
 	// If room humidity sensor specified
 	const humiditySensor = context.config.humiditySensor;
@@ -103,7 +101,6 @@ module.exports = new SmartApp()
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 
-	/*
 	// get controls and temperature/humidity sensors
 	page.section('controls', section => {
 		section.deviceSetting('fanSwitch').capabilities(['switch'])
@@ -123,7 +120,6 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactsOpenClosed').options('Open','Closed'});
 	});
-	*/
 
 	// OPTIONAL: start and end time
 	page.section('time', section => {
