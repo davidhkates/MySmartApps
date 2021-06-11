@@ -11,6 +11,7 @@ async function controlFan( context ) {
 	// Initialize fan state variable
 	var fanState = 'off';
 
+	/*
 	// Get temperature(s) and set fan state
 	const tempSensor = context.config.tempSensor;
 	if (tempSensor) {
@@ -45,6 +46,7 @@ async function controlFan( context ) {
 			}
 		}
 	}
+	*/
 	
 	// If room humidity sensor specified
 	const humiditySensor = context.config.humiditySensor;
