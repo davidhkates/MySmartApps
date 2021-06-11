@@ -103,6 +103,7 @@ module.exports = new SmartApp()
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 
+	/*
 	// get controls and temperature/humidity sensors
 	page.section('controls', section => {
 		section.deviceSetting('fanSwitch').capabilities(['switch'])
@@ -122,6 +123,7 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactsOpenClosed').options('Open','Closed'});
 	});
+	*/
 
 	// OPTIONAL: start and end time
 	page.section('time', section => {
