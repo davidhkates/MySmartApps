@@ -40,11 +40,17 @@ const authCallback = (event, context, callback) => {
 		.catch(console.log);
 	*/
 	
+	/*
 	axios.post(uriSonosCreateToken, {
 		headers: {
    			Authorization: 'Basic ' + sonosAuthToken,
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 		}})
+		.then(resp => {console.log('Echo post data: ', resp.data)})
+		.catch(console.log);
+	*/
+
+	axios.post(uriSonosCreateToken)
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
 	
