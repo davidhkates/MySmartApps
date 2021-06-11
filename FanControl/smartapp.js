@@ -109,7 +109,7 @@ module.exports = new SmartApp()
 			.required(false).permissions('r');
 		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
 			.required(false).permissions('r');
-		// section.enumSetting('humidityAboveBelow').options(['Above','Below']});
+		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
 		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
 			.required(false).permissions('r');
 	});
@@ -119,7 +119,7 @@ module.exports = new SmartApp()
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactsOpenClosed').options(['Open','Closed']});
+		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
 	});
 
 	// OPTIONAL: start and end time
