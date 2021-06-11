@@ -43,11 +43,6 @@ const authCallback = (event, context, callback) => {
 		}})
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
-		headers: {
-   			Authorization: 'Basic ' + sonosAuthToken,
-			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-		}
-	})
 	
 	/*
 	axios.post('https://httpbin.org/post', {
