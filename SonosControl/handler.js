@@ -12,7 +12,7 @@ const authCallback = (event, context, callback) => {
 	var sonosAuthCode = event.queryStringParameters.code;
 	console.log('Sonos API Oauth Callback authorization code: ', sonosAuthCode);
 	console.log('Event: ', event);
-	// console.log('Context: ', context);
+	console.log('Context: ', context);
 	
 	// Store sonos authorization code in DynamoDB (at least for now, may ultimately not be needed)
 	SmartState.putValue( 'smartapp-sonos-speakers', 'authorization-code', sonosAuthCode );
