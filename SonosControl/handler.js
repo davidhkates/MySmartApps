@@ -25,14 +25,14 @@ const authCallback = (event, context, callback) => {
 	// TODO - store these in environment variables or DynamoDB
 	const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 	const sonosSecret   = '3acfdfd9-27c4-4a74-978d-e27fefa45bd2';
-	// const sonosAuthToken = Buffer.from(sonosClientID + ':' + sonosSecret).toString('base64');
-	const sonosAuthToken = Buffer.from(sonosClientID + sonosSecret).toString('base64');
+	const sonosAuthToken = Buffer.from(sonosClientID + ':' + sonosSecret).toString('base64');
+	// const sonosAuthToken = Buffer.from(sonosClientID + sonosSecret).toString('base64');
 	// const sonosAuthToken = Buffer.from(sonosClientID).toString('base64') + sonosSecret;
 
 	// console.log('Encoded token: ', sonosAuthToken);
 	const sonosTokenRedirect = encodeURIComponent('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');
 	// const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
-	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
+	// const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
 	// console.log('Posting Sonos create token request: ', uriSonosCreateToken);
 	
 	/*
@@ -40,15 +40,21 @@ const authCallback = (event, context, callback) => {
 		.then(resp => {console.log('Axios openweather response: ', resp.data)})
 		.catch(console.log);
 	*/
-	
-	axios.post(uriSonosCreateToken, {
+	  
+
+	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access';
+	const postData = 'grant_type=authorization_code&code=' & sonosAuthCode & 'redirect_uri=' & sonosTokenRedirect;
+	const postHeaders = {
 		headers: {
-   			Authorization: 'Basic ' + sonosAuthToken,
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-		}})
+   			'Authorization': 'Basic ' + sonosAuthToken,
+		}
+	};
+
+	axios.post(uriSonosCreateToken, postData, postHeaders)
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
-	
+
 	/*
 	axios.post('https://httpbin.org/post', {
 		headers: {
