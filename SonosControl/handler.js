@@ -52,7 +52,7 @@ const authCallback = (event, context, callback) => {
 	};
 
 	// axios.post(uriSonosCreateToken + '&' + postData, null, postHeaders)
-	axios.post(uriSonosCreateToken, postData, postHeaders)
+	axios.post(uriSonosCreateToken + '&' +postData, null, postHeaders)
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
 
