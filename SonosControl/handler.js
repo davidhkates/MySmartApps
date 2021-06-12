@@ -60,8 +60,8 @@ const options = {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-    'Content-Length': data.length
-    'Authorization': 'Basic ' + sonosAuthToken,
+    'Content-Length': data.length,
+    'Authorization': 'Basic ' + sonosAuthToken
   }
 }
 
