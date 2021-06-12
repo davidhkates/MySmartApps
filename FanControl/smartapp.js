@@ -94,14 +94,13 @@ module.exports = new SmartApp()
 .page('mainPage', (context, page, configData) => {
 
 	// operating switch and interval for checking temperature
-	page.section('parameters', section => {
+	page.section('targets', section => {
 		section.booleanSetting('fanEnabled').required(false);
 		section.numberSetting('tempTarget').required(false);
 		section.numberSetting('humidityTarget').required(false);
-		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 
-	// get controls and temperature/humidity sensors
+	// controls and temperature/humidity sensors
 	page.section('controls', section => {
 		section.deviceSetting('fanSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
@@ -110,10 +109,7 @@ module.exports = new SmartApp()
 		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
 			.required(false).permissions('r');
 		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
 	});
-	
 
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
@@ -122,14 +118,14 @@ module.exports = new SmartApp()
 		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
 	});
 
-	// OPTIONAL: start and end time
+	// OPTIONAL: start and end time, outside weather, temp offset
 	page.section('time', section => {
-		section
-			.timeSetting('startTime')
-			.required(false);
-		section
-			.timeSetting('endTime')
-			.required(false);
+		section.timeSetting('startTime').required(false);
+		section.timeSetting('endTime').required(false);
+		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
+			.required(false).permissions('r');
+		section.numberSetting('tempOffset').required(false);
+		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 })
 
