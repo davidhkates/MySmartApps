@@ -40,9 +40,9 @@ const authCallback = (event, context, callback) => {
 		.then(resp => {console.log('Axios openweather response: ', resp.data)})
 		.catch(console.log);
 	*/
-	  
 
-	const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	// const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	const postData = 'grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
 	console.log('Post Data: ', postData);
 	const postHeaders = {
 		headers: {
