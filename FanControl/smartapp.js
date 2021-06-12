@@ -29,7 +29,13 @@ async function controlFan( context ) {
 				console.log('Weather sensor specified');
 				const outsideTemp = await SmartSensor.getTemperature( context, weatherSensor[0] );
 				console.log('Outside temp: ', outsideTemp);
-				if (indoorTemp<=outsideTemp) {
+				
+				// allow for outside temp to be slightly higher than inside by specified offset
+				var tempOffset = context.configNumberValue('tempOffset');
+				if (!tempOffset) {
+					tempOffset = 0
+				}
+				if (indoorTemp<=outsideTemp-tempOffset) {
 					fanState = 'off';
 				} else {
 
@@ -122,13 +128,21 @@ module.exports = new SmartApp()
 	page.section('time', section => {
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
+		/*
 		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
 			.required(false).permissions('r');
+		*/
 		section.numberSetting('tempOffset').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 })
 
+.page('weatherPage', (context, page, configData) => {
+	page.section('weather', section => {
+		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
+			.required(false).permissions('r');
+	});
+})
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
