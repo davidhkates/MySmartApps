@@ -15,14 +15,16 @@
 	"pages.mainPage.settings.weather.name": "Outdoor weather sensor (optional)",
 	"pages.mainPage.settings.tempOffset.name": "Temperature offset from inside to outside",
 
-	"pages.otpionsPage.name": "Temperature Control (Options)",
-	"pages.optionsPage.sections.contacts.name": "Door/window contacts to check",
+	"pages.optionsPage.name": "Temperature Control (Options)",
+	"pages.optionsPage.sections.contactSensors.name": "Door/window contacts to check",
 	"pages.optionsPage.settings.doorContacts.name": "Doors/windows to check (optional)",
-	"pages.optionsPage.settings.contactsOpenClosed.name": "Doors/windows to check (optional)",
+	"pages.optionsPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
+	"pages.optionsPage.settings.contactsOpenClosed.options.Open.name": "Open",
+	"pages.optionsPage.settings.contactsOpenClosed.options.Closed.name": "Closed",
 	"pages.optionsPage.sections.time.name": "Time of day to operate",
 	"pages.optionsPage.settings.startTime.name": "Start time (optional)",
 	"pages.optionsPage.settings.startTime.description": "Time when fan should start operating",
 	"pages.optionsPage.settings.endTime.name": "End time (optional)",
-	"pages.optionsPage.settings.startTime.description": "Time when fan should stop operating",
+	"pages.optionsPage.settings.endTime.description": "Time when fan should stop operating",
 	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
 }
