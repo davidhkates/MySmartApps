@@ -41,7 +41,7 @@ const authCallback = (event, context, callback) => {
 		.catch(console.log);
 	*/
 
-	const postData = '?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	// const postData = 'grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
 	// console.log('Post Data: ', postData);
 	const postHeaders = {
