@@ -2,6 +2,7 @@
 
 // Install relevant node packages
 const axios = require("axios");
+const https = require("https");
 const SmartState = require('@katesthings/smartstate');
 
 
@@ -29,11 +30,10 @@ const authCallback = (event, context, callback) => {
 	// const sonosAuthToken = Buffer.from(sonosClientID + sonosSecret).toString('base64');
 	// const sonosAuthToken = Buffer.from(sonosClientID).toString('base64') + sonosSecret;
 
-	// console.log('Encoded token: ', sonosAuthToken);
 	const sonosTokenRedirect = encodeURIComponent('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/token-callback');
 	// const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	// const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access?grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
-	// console.log('Posting Sonos create token request: ', uriSonosCreateToken);
+	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access';
 	
 	/*
 	axios.get('https://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52')
@@ -42,7 +42,6 @@ const authCallback = (event, context, callback) => {
 	*/
 	  
 
-	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access';
 	const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
 	console.log('Post Data: ', postData);
 	const postHeaders = {
@@ -52,27 +51,44 @@ const authCallback = (event, context, callback) => {
 		}
 	};
 
+const data = postData;
+
+const options = {
+  hostname: 'api.sonos.com',
+  port: 443,
+  path: '/login/v3/oauth/access',
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+    'Content-Length': data.length
+    'Authorization': 'Basic ' + sonosAuthToken,
+  }
+}
+
+const req = https.request(options, res => {
+  console.log(`statusCode: ${res.statusCode}`)
+
+  res.on('data', d => {
+    process.stdout.write(d)
+  })
+})
+
+req.on('error', error => {
+  console.error(error)
+})
+
+req.write(data)
+req.end()
+
+	/*
 	// axios.post(uriSonosCreateToken + '&' + postData, null, postHeaders)
 	axios.post(uriSonosCreateToken, postData, postHeaders)
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
-
-	/*
-	axios.post('https://httpbin.org/post', {
-		headers: {
-   			Authorization: 'Basic ' + sonosAuthToken,
-			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
-		}})
-		.then(resp => {console.log('Echo post data: ', resp.data)})
-		.catch(console.log);
+	console.log('Asynchronous create token POST request completed');
 	*/
 	
-	// getToken(uriSonosCreateToken, sonosAuthToken);
-	// axios.get(uriSonosCreateToken).then(console.log).catch(console.log);
-	// const uriSonosAuth = 'https://api.sonos.com/login/v3/oauth?client_id=d313a2a0-960e-481f-9fc7-3c02e4366955&response_type=code&state=testState&scope=playback-control-all&redirect_uri=https%3A%2F%2Fr5twrfl7nd.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
-	// console.log('Sonos auth request: ', uriSonosAuth);
-	console.log('Asynchronous create token POST request completed');
-    
+	// create response option to pass back from callback
 	const response = {
 		statusCode: 200,
  		headers: {
