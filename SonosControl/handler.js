@@ -43,7 +43,7 @@ const authCallback = (event, context, callback) => {
 	  
 
 	const uriSonosCreateToken = 'https://api.sonos.com/login/v3/oauth/access';
-	const postData = 'grant_type=authorization_code&code=' + sonosAuthToken + 'redirect_uri=' + sonosTokenRedirect;
+	const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + 'redirect_uri=' + sonosTokenRedirect;
 	console.log('Post Data: ', postData);
 	const postHeaders = {
 		headers: {
