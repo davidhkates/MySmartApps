@@ -41,9 +41,9 @@ const authCallback = (event, context, callback) => {
 		.catch(console.log);
 	*/
 
-	// const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
-	const postData = 'grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
-	console.log('Post Data: ', postData);
+	const postData = 'grant_type=authorization_code&code=' + sonosAuthCode + '&redirect_uri=' + sonosTokenRedirect;
+	// const postData = 'grant_type=authorization_code&code=' + sonosRequestID + '&redirect_uri=' + sonosTokenRedirect;
+	// console.log('Post Data: ', postData);
 	const postHeaders = {
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
@@ -51,6 +51,7 @@ const authCallback = (event, context, callback) => {
 		}
 	};
 
+/*
 const data = postData;
 
 const options = {
@@ -79,14 +80,14 @@ req.on('error', error => {
 
 req.write(data)
 req.end()
+*/
+	
 
-	/*
 	// axios.post(uriSonosCreateToken + '&' + postData, null, postHeaders)
 	axios.post(uriSonosCreateToken, postData, postHeaders)
 		.then(resp => {console.log('Echo post data: ', resp.data)})
 		.catch(console.log);
 	console.log('Asynchronous create token POST request completed');
-	*/
 	
 	// create response option to pass back from callback
 	const response = {
