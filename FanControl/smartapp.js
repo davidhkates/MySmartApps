@@ -40,10 +40,10 @@ async function controlFan( context ) {
 				} else {
 
 					// If humidity setting specified, make sure it's below that outside
-					const targetHumidity = context.configNumberValue('humidityTarget');
-					if (targetHumidity) {
-						const humidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
-						if (targetHumidity<humidity) { 
+					const maxHumidity = context.configNumberValue('maxHumidity');
+					if (maxHumidity) {
+						const outsideHumidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
+						if (maxHumidity<outsideHumidity) { 
 							fanState = 'off'
 						}
 					}
@@ -56,12 +56,14 @@ async function controlFan( context ) {
 	const humiditySensor = context.config.humiditySensor;
 	if (humiditySensor) {
 		const targetHumidity = context.configNumberValue('humidityTarget');
-		const indoorHumidity = await SmartSensor.getRelativeHumidity( context, context.config.humiditySensor[0] );
+		if (targetHumidity) {
+			const indoorHumidity = await SmartSensor.getRelativeHumidity( context, context.config.humiditySensor[0] );
 
-		console.log('Indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
-		if (indoorHumidity>targetHumidity) {
-			fanState = 'on';
-			// TODO - think about how to deal with temperature and outside weather conditions
+			console.log('Indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
+			if (indoorHumidity>targetHumidity) {
+				fanState = 'on';
+				// TODO - think about how to deal with temperature and outside weather conditions
+			}
 		}
 	}
 	
@@ -99,11 +101,11 @@ module.exports = new SmartApp()
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
 	// separate page for weather information
-	page.nextPageId('weatherPage');
+	page.nextPageId('optionsPage');
 	
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
-		section.booleanSetting('fanEnabled').required(false);
+		section.booleanSetting('fanEnabled').defaultValue(true);
 		section.numberSetting('tempTarget').required(false);
 		section.numberSetting('humidityTarget').required(false);
 	});
@@ -114,11 +116,23 @@ module.exports = new SmartApp()
 			.required(true).permissions('rx');
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 			.required(false).permissions('r');
+		// section.enumSetting('tempAboveBelow').options(['Above','Below']);
 		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
 			.required(false).permissions('r');
 		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
 	});
+	
+	page.section('weather', section => {
+		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
+			.required(false).permissions('r');
+		section.numberSetting('maxHumidity').required(false);
+	});	
+})
 
+.page('optionsPage', (context, page, configData) => {
+	// separate page for weather information
+	page.prevPageId('mainPage');
+	
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
@@ -130,20 +144,10 @@ module.exports = new SmartApp()
 	page.section('time', section => {
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
-		/*
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		*/
 		section.numberSetting('tempOffset').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
-})
 
-.page('weatherPage', (context, page, configData) => {
-	page.section('weather', section => {
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-	});
 })
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
