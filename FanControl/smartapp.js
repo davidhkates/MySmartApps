@@ -98,7 +98,9 @@ module.exports = new SmartApp()
 
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
-
+	// separate page for weather information
+	page.nextPageId('weatherPage');
+	
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
 		section.booleanSetting('fanEnabled').required(false);
@@ -135,7 +137,7 @@ module.exports = new SmartApp()
 		section.numberSetting('tempOffset').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
-}.nextPageId('weatherPage'))
+})
 
 .page('weatherPage', (context, page, configData) => {
 	page.section('weather', section => {
