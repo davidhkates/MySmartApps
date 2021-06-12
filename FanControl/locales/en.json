@@ -1,5 +1,5 @@
 {
-	"pages.mainPage.name": "Fan Control",
+	"pages.mainPage.name": "Temperature Control (Main)",
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.targets.name": "Target settings",
 	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
@@ -14,12 +14,15 @@
 	"pages.mainPage.settings.humiditySensor.name": "Indoor humidity sensor",
 	"pages.mainPage.settings.weather.name": "Outdoor weather sensor (optional)",
 	"pages.mainPage.settings.tempOffset.name": "Temperature offset from inside to outside",
-	"pages.mainPage.settings.doorContacts.name": "Doors/windows to check (optional)",
-	"pages.mainPage.settings.contactsOpenClosed.name": "Doors/windows to check (optional)",
-	"pages.mainPage.sections.time.name": "Time of day to operate",
-	"pages.mainPage.settings.startTime.name": "Start time (optional)",
-	"pages.mainPage.settings.startTime.description": "Time when fan should start operating",
-	"pages.mainPage.settings.endTime.name": "End time (optional)",
-	"pages.mainPage.settings.startTime.description": "Time when fan should stop operating",
-	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
+
+	"pages.otpionsPage.name": "Temperature Control (Options)",
+	"pages.optionsPage.sections.contacts.name": "Door/window contacts to check",
+	"pages.optionsPage.settings.doorContacts.name": "Doors/windows to check (optional)",
+	"pages.optionsPage.settings.contactsOpenClosed.name": "Doors/windows to check (optional)",
+	"pages.optionsPage.sections.time.name": "Time of day to operate",
+	"pages.optionsPage.settings.startTime.name": "Start time (optional)",
+	"pages.optionsPage.settings.startTime.description": "Time when fan should start operating",
+	"pages.optionsPage.settings.endTime.name": "End time (optional)",
+	"pages.optionsPage.settings.startTime.description": "Time when fan should stop operating",
+	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
 }
