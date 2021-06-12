@@ -126,6 +126,7 @@ module.exports = new SmartApp()
 		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
 			.required(false).permissions('r');
 		section.numberSetting('maxHumidity').required(false);
+		section.numberSetting('tempOffset').min(-5).max(5);
 	});	
 })
 
@@ -144,7 +145,6 @@ module.exports = new SmartApp()
 	page.section('time', section => {
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
-		section.numberSetting('tempOffset').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 
