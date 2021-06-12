@@ -13,6 +13,7 @@
 	"pages.mainPage.settings.tempSensor.name": "Indoor temperature sensor",
 	"pages.mainPage.settings.humiditySensor.name": "Indoor humidity sensor",
 	"pages.mainPage.settings.weather.name": "Outdoor weather sensor (optional)",
+	"pages.mainPage.settings.tempOffset.name": "Temperature offset from inside to outside",
 	"pages.mainPage.settings.doorContacts.name": "Doors/windows to check (optional)",
 	"pages.mainPage.settings.contactsOpenClosed.name": "Doors/windows to check (optional)",
 	"pages.mainPage.sections.time.name": "Time of day to operate",
@@ -22,32 +23,3 @@
 	"pages.mainPage.settings.startTime.description": "Time when fan should stop operating",
 	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
 }
-
-
-	// controls and temperature/humidity sensors
-	page.section('controls', section => {
-		section.deviceSetting('fanSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
-		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-			.required(false).permissions('r');
-		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
-	});
-
-	// OPTIONAL: contact sensors
-	page.section('contactSensors', section => {		     
-		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
-	});
-
-	// OPTIONAL: start and end time, outside weather, temp offset
-	page.section('time', section => {
-		section.timeSetting('startTime').required(false);
-		section.timeSetting('endTime').required(false);
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		section.numberSetting('tempOffset').required(false);
-		section.numberSetting('checkInterval').defaultValue(300).required(false);
-	});
