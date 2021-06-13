@@ -47,7 +47,7 @@ const authCallback = (event, context, callback) => {
 	const postHeaders = {
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-   			'Authorization': 'Bearer ' + sonosAuthToken,
+   			'Authorization': 'Basic ' + sonosAuthToken,
 		}
 	};
 
