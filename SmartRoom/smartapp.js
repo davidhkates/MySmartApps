@@ -18,21 +18,23 @@ module.exports = new SmartApp()
 	// enable/disable control, motion delay setting
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
-		section.numberSetting('delay').min(60).defaultValue(300).required(true);
-		section.enumSetting('motionMode').options(['vacancy','occupancy','manual']);
-		section.enumSetting('mainMode').options(['toggle','control','dependent']);
 	});
 
-	// controls and sensors
+	// room switches
 	page.section('controls', section => {
 		section.deviceSetting('mainSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
-		section.deviceSetting('roomSwitches').capabilities(['switch'])
+		section.deviceSetting('onGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
-		section.deviceSetting('motion').capabilities(['motionSensor'])
+		section.deviceSetting('offGroup').capabilities(['switch'])
+			.required(true).multiple(true).permissions('rx');
+	});
+
+	// room contacts
+	page.section('controls', section => {
+		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.deviceSetting('contract').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
+		section.enumSetting('contactMode').options(['allOpen', 'allClosed','anyClosed']);
 	});
 
 	// time window and auto-off
