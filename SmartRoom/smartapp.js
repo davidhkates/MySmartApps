@@ -93,7 +93,6 @@ module.exports = new SmartApp()
 })
 
 
-
 // Turn on the lights/outlets in the on group when main switch is pressed
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
@@ -168,12 +167,6 @@ module.exports = new SmartApp()
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	// stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 })
-
-
-// Turns off lights in delay group after delay elapses
-.scheduledEventHandler('motionStopped', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-});
 
 
 // Turn off the room switch(es) if light turned off outside of time window
