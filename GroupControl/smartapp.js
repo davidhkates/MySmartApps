@@ -54,19 +54,26 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
-	// create subscriptions for relevant devices
-	await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-	    'switch', 'switch.on', 'mainSwitchOnHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
-	    'switch', 'switch.off', 'mainSwitchOffHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-	    'switch', 'switch.on', 'onGroupOnHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-	    'switch', 'switch.off', 'onGroupOffHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-	    'motionSensor', 'motion.active', 'motionStartHandler');
-	await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-	    'motionSensor', 'motion.inactive', 'motionStopHandler');
+	// if control is not enabled, turn off switch
+	const controlEnabled = context.configBooleanValue('controlEnabled');
+	if (!controlEnabled) {
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	} else {
+		// create subscriptions for relevant devices
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'switch', 'switch.on', 'mainSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
+		    'switch', 'switch.off', 'mainSwitchOffHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
+		    'switch', 'switch.on', 'onGroupOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
+		    'switch', 'switch.off', 'onGroupOffHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
+		    'motionSensor', 'motion.active', 'motionStartHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
+		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+	}
+	
 	console.log('Motion Group: END CREATING SUBSCRIPTIONS')
 })
 
