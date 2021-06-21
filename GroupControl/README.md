@@ -9,4 +9,4 @@ Turn groups of lights on and off from main switch
 
 ## Node Package Dependencies
 1. npm i @smartthings/smartapp --save
-2. npm i @katesthings/smartcontrols --save
+2. npm i @katesthings/smartstate --save
