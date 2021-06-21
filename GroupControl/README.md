@@ -9,4 +9,5 @@ Turn groups of lights on and off from main switch
 
 ## Node Package Dependencies
 1. npm i @smartthings/smartapp --save
-2. npm i @katesthings/smartstate --save
+2. npm i @aws-sdk/client-dynamodb --save
+3. npm i @katesthings/smartstate --save
