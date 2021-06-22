@@ -2,8 +2,32 @@
 
 // Install relevant node packages
 const axios = require("axios");
-const https = require("https");
+// const https = require("https");
+const oauth2 = require("simple-oauth2");
 const SmartState = require('@katesthings/smartstate');
+
+
+const oauth2 = simpleOauthModule.create({
+  client: {
+    id: process.env.SONOS_CLIENT_ID,
+    secret: process.env.SONOS_CLIENT_SECRET,
+  },
+  auth: {
+    tokenHost: 'https://api.sonos.com',
+    tokenPath: '/login/v3/oauth/access',
+    authorizePath: '/login/v3/oauth',
+  },
+});
+ 
+// Authorization uri definition
+const authorizationUri = oauth2.authorizationCode.authorizeURL({
+  redirect_uri: 'http://localhost:3001/redirect',
+  scope: 'playback-control-all',
+  state: 'blahblah',
+});
+
+
+
 
 
 // Callback API code
