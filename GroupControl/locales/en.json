@@ -1,6 +1,7 @@
 {
 	"pages.mainPage.name": "Group Control",
 	"Tap to set": "Tap to set",
+	"pages.mainPage.sections.parameters.name": "General automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
 	"pages.mainPage.sections.switches.name": "Switches to conrrol",
