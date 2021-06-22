@@ -111,7 +111,7 @@ module.exports = new SmartApp()
 		console.log('Switch states: ', switchStates);
 
 		// Quit if any of the switches are already on
-		const onGroupStates = OnGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
+		const onGroupStates = onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
 			'switch'
