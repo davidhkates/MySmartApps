@@ -8,8 +8,9 @@
 	"pages.mainPage.sections.switches.name": "Switches to control room",
 	"pages.mainPage.settings.mainSwitch.name": "Main switch to control room",
 	"pages.mainPage.settings.mainSwitch.description": "",
-	"pages.mainPage.settings.onGroup.name": "Lights to turn ON from main switch",
-	"pages.mainPage.settings.offGroup.name": "Lights to turn OFF from main switch",
+	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
+	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
+	"pages.mainPage.settings.delayGroup.name": "Lights to turn off after delay",
 	
 	"pages.mainPage.settings.mode.name": "Motion switch activity mode",
 	"pages.mainPage.settings.mode.options.vacancy.name": "Vacancy",
