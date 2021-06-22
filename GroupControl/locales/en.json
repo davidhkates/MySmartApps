@@ -1,6 +1,8 @@
 {
 	"pages.mainPage.name": "Group Control",
 	"Tap to set": "Tap to set",
+	"pages.mainPage.settings.controlEnabled.name": "Operate control",
+	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
 	"pages.mainPage.sections.switches.name": "Switches to conrrol",
 	"pages.mainPage.settings.mainSwitch.name": "Main switch to control light groups",
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
