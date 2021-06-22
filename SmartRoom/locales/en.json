@@ -11,8 +11,6 @@
 	"pages.mainPage.settings.onGroup.name": "Lights to turn ON from main switch",
 	"pages.mainPage.settings.offGroup.name": "Lights to turn OFF from main switch",
 	
-	"pages.mainPage.settings.delay.name": "Delay after motion stops (in seconds)",
-	"pages.mainPage.settings.delay.description": "",
 	"pages.mainPage.settings.mode.name": "Motion switch activity mode",
 	"pages.mainPage.settings.mode.options.vacancy.name": "Vacancy",
 	"pages.mainPage.settings.mode.options.occupancy.name": "Occupancy",
@@ -32,5 +30,7 @@
 	"pages.mainPage.settings.endTime.name": "End time",
 	"pages.mainPage.settings.endTime.description": "",
 	"pages.mainPage.settings.autoOffTime.name": "Auto off time",
-	"pages.mainPage.settings.autoOffTime.description": ""
+	"pages.mainPage.settings.autoOffTime.description": "",
+	"pages.mainPage.settings.delayOff.name": "Delay (in seconds) for delay group",
+	"pages.mainPage.settings.delayOff.description": ""
 }
