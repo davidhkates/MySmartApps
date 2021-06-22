@@ -110,12 +110,13 @@ module.exports = new SmartApp()
 
 		// Quit if any of the switches are already on
 		const onGroupStates = OnGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'switch'
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'switch'
+		));	
 
-		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.motion.value === 'on')) {
+		const states = await Promise.all(onGroupStates)
+		if (states.find(it => it.switch.value === 'on')) {
 			console.log('Switch(es) in on group already on, do not turn on group')
 		} else {
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
