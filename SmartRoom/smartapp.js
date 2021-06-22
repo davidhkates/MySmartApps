@@ -98,6 +98,7 @@ module.exports = new SmartApp()
 	// Get session state variable to see if button was manually pressed
 	console.log('Checking whether all switches in on group are off');
 	const onGroupSwitches = context.config.onGroup;
+	console.log('On group switches: ', onGroupSwitches);
 	if (onGroupSwitches) {
 		// Get the current states of the switches in the on group
 		const switchStates = onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
