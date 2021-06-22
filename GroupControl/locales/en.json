@@ -4,7 +4,7 @@
 	"pages.mainPage.sections.parameters.name": "General automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.sections.switches.name": "Switches to conrrol",
+	"pages.mainPage.sections.switches.name": "Switches to control",
 	"pages.mainPage.settings.mainSwitch.name": "Main switch to control light groups",
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 	"pages.mainPage.settings.offGroup.name": "Additional lights to turn off",
