@@ -130,14 +130,14 @@ module.exports = new SmartApp()
 
 	// See if there are any other switches in the onGroup defined
 	const otherOnGroup =  context.config.onGroup
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
+	    .filter(it => it.deviceConfig.deviceId !== event.deviceId);
 
-		// Get the current states of the other motion sensors
-		if (otherOnGroup) {
-			const stateRequests = otherOnGroup.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'switch'
+	// Get the current states of the other motion sensors
+	if (otherOnGroup) {
+		const stateRequests = otherOnGroup.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'switch'
 		));	
 
 		// Quit if there are other switches still on
