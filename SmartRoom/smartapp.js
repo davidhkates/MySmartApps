@@ -29,6 +29,8 @@ module.exports = new SmartApp()
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
+		section.deviceSetting('delayGroup').capabilities(['switch'])
+			.required(true).multiple(true).permissions('rx');
 	});
 
 	// room contacts
