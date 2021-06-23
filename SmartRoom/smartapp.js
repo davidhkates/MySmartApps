@@ -102,7 +102,6 @@ module.exports = new SmartApp()
 })
 
 
-/*
 // Turn on the lights/outlets in the on group when main switch is pressed
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
 	// Get session state variable to see if button was manually pressed
@@ -134,7 +133,6 @@ module.exports = new SmartApp()
 	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 	console.log("Turn off all lights in on and off groups");
 })
-*/
 
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
@@ -149,7 +147,6 @@ module.exports = new SmartApp()
 });
 
 
-/*
 // Turn OFF main switch if ALL of the on group lights are turned off separately
 .subscribedEventHandler('onGroupOffHandler', async (context, event) => {
 	console.log("Turn off the main switch when ALL lights in the on group are turned off");
@@ -210,4 +207,3 @@ module.exports = new SmartApp()
 	// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 });
-*/
