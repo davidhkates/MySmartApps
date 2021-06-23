@@ -109,15 +109,7 @@ module.exports = new SmartApp()
 	console.log('On group switches: ', onGroupSwitches);
 	if (onGroupSwitches) {
 		// Get the current states of the switches in the on group
-		const switchStates = onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'switch'
-		));
-		console.log('Switch states: ', switchStates);
-
-		// Quit if any of the switches are already on
-		const onGroupStates = onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
+		const onGroupStates = await onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
 			it.deviceConfig.componentId,
 			'switch'
@@ -160,19 +152,19 @@ module.exports = new SmartApp()
 	console.log("Turn off the main switch when ALL lights in the on group are turned off");
 
 	// See if there are any other switches in the onGroup defined
-	const otherOnGroup =  context.config.onGroup
+	const otherOnGroup = context.config.onGroup
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
-		// Get the current states of the other motion sensors
-		if (otherOnGroup) {
-			const stateRequests = otherOnGroup.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'switch'
+	// Get the current states of the other motion sensors
+	if (otherOnGroup) {
+		const stateRequests = otherOnGroup.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'switch'
 		));	
 
 		// Quit if there are other switches still on
-		const states = await Promise.all(stateRequests)
+		const states = await Promise.all(stateRequests);
 		if (states.find(it => it.switch.value === 'on')) {
 			return
 		}
