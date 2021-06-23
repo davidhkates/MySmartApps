@@ -28,7 +28,7 @@ module.exports = new SmartApp()
 		section.deviceSetting('onGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
-			.required(falsee).multiple(true).permissions('rx');
+			.required(false).multiple(true).permissions('rx');
 		section.deviceSetting('delayGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 	});
