@@ -75,6 +75,7 @@ module.exports = new SmartApp()
 		    'switch', 'switch.on', 'mainSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'switch', 'switch.off', 'mainSwitchOffHandler');
+		
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.on', 'onGroupOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
