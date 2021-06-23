@@ -144,7 +144,7 @@ module.exports = new SmartApp()
 
 	// Turn on the main switch when a light in the on group is turned on
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
-});
+})
 
 
 // Turn OFF main switch if ALL of the on group lights are turned off separately
