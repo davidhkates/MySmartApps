@@ -81,12 +81,14 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
+		/*
 		// motion sensor handlers
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-
+		*/
+		
 		// check to see if light was turned on before start time
 		const checkOnTime = context.configStringValue("startTime");
 		if (checkOnTime) {
@@ -107,7 +109,6 @@ module.exports = new SmartApp()
 	// Get session state variable to see if button was manually pressed
 	console.log('Checking whether all switches in on group are off');
 	const onGroupSwitches = context.config.onGroup;
-	console.log('On group switches: ', onGroupSwitches);
 	if (onGroupSwitches) {
 		// Get the current states of the switches in the on group
 		const onGroupStates = await onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
@@ -129,9 +130,8 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in the on and off group
-	// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 	console.log("Turn off all lights in on and off groups");
+	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 })
 
 
@@ -166,13 +166,13 @@ module.exports = new SmartApp()
 		// Quit if there are other switches still on
 		const states = await Promise.all(stateRequests);
 		if (states.find(it => it.switch.value === 'on')) {
-			return
+			console.log('On group off handler detected other switches still on');
+		} else {
+			// If we get here, turn off the main switch and reset mainSwitchPressed state variable
+			await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+			// stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 		}
 	}
-
-	// If we get here, turn off the main switch and reset mainSwitchPressed state variable
-	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-	// stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 })
 
 
