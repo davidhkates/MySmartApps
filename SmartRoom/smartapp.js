@@ -28,9 +28,9 @@ module.exports = new SmartApp()
 		section.deviceSetting('onGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
-			.required(true).multiple(true).permissions('rx');
+			.required(falsee).multiple(true).permissions('rx');
 		section.deviceSetting('delayGroup').capabilities(['switch'])
-			.required(true).multiple(true).permissions('rx');
+			.required(false).multiple(true).permissions('rx');
 	});
 
 	// room contacts
@@ -65,7 +65,9 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('Control enabled value: ', controlEnabled);
 	if (!controlEnabled) {
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.delayGroup, 'switch', 'off');
 	} else {
 
 		// create subscriptions for relevant devices
@@ -188,7 +190,7 @@ module.exports = new SmartApp()
 		// Turn off room switch(es) if outside time window when light switch turned off
 		if ( !SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
 			console.log('Turning room switch(es) off');
-			await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 		}
 	}
 })
@@ -199,7 +201,7 @@ module.exports = new SmartApp()
 	// Turn on room switch(es) if control switch turned on already
 	if ( SmartSensors.getSwitchState( context, context.config.mainSwitch[0] ) ) {
 		console.log('Turning room switch(es) on');
-		await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'on');
+		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
 	}
 })
 
@@ -207,5 +209,5 @@ module.exports = new SmartApp()
 // Turns off room switch(es) at end time
 .scheduledEventHandler('roomOffHandler', async (context, event) => {
 	// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-	await context.api.devices.sendCommands(context.config.roomSwitches, 'switch', 'off');
+	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 });
