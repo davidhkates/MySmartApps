@@ -29,9 +29,13 @@ module.exports = new SmartApp()
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
+		section.enumSetting('offBehavior').options('off','delay','end').
+			defaultValue('off').required(true);
+		/*
 		section.deviceSetting('delayGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
+		*/
 	});
 
 	/*
@@ -43,13 +47,13 @@ module.exports = new SmartApp()
 	});
 	*/
 
-	// time window and auto-off
+	// time window and days of week
 	page.section('time', section => {
 		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
 			defaultValue('everyday').required(true);
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
-		section.booleanSetting('offAtEnd').defaultValue(false);
+		// section.booleanSetting('offAtEnd').defaultValue(false);
 	});
 })
 
@@ -96,10 +100,12 @@ module.exports = new SmartApp()
 		if (startTime) {
 			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		const endTime = context.configStringValue("autoOffTime");
-		const offAtEnd = context.configBooleanValue('offAtEnd');
-		if (endTime && offAtEnd) {
-			await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+		const endTime = context.configStringValue('endTime');
+		if (endTime) {
+			const offBehavior = context.configStringValue('offBehavior');
+			if (offBehavior == 'end') {
+				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+			}
 		}
 	}
 	
@@ -133,10 +139,20 @@ module.exports = new SmartApp()
 
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
-	// Turn on the lights in the on and off group
-	// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	// Turn on the lights in off group based on behavior setting
 	console.log("Turn off all lights in on and off groups");
+	const offGroupSwitches = context.config.offGroup;
+	if (offGroupSwitches) {
+		switch (context.configStringValue('offBehavior') {
+			case 'off':
+				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
+				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+				break;
+			case 'delay':
+				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+				break;
+		}
+	}
 })
 
 
