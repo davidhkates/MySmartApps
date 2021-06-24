@@ -31,14 +31,17 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('rx');
 		section.deviceSetting('delayGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
+		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
 
+	/*
 	// room contacts
 	page.section('controls', section => {
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactMode').options(['allOpen', 'allClosed','anyClosed']);
 	});
+	*/
 
 	// time window and auto-off
 	page.section('time', section => {
@@ -46,8 +49,7 @@ module.exports = new SmartApp()
 			defaultValue('everyday').required(true);
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
-		section.timeSetting('autoOffTime').required(false);
-		section.decimalSetting('delayOff').required(false).min(0);
+		section.booleanSetting('offAtEnd').defaultValue(false);
 	});
 })
 
@@ -81,20 +83,23 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
+		/*
 		// motion sensor handlers
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.motion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		*/
 
 		// check to see if light was turned on before start time
-		const checkOnTime = context.configStringValue("startTime");
-		if (checkOnTime) {
-			await context.api.schedules.runDaily('checkOnHandler', new Date(checkOnTime));
+		const startTime = context.configStringValue('startTime');
+		if (startTime) {
+			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		const autoOffTime = context.configStringValue("autoOffTime");
-		if (autoOffTime) {
-			await context.api.schedules.runDaily('roomOffHandler', new Date(autoOffTime));
+		const endTime = context.configStringValue("autoOffTime");
+		const offAtEnd = context.configBooleanValue('offAtEnd');
+		if (endTime && offAtEnd) {
+			await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 		}
 	}
 	
@@ -176,6 +181,7 @@ module.exports = new SmartApp()
 })
 
 
+/*
 // Turn off the room switch(es) if light turned off outside of time window
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Check today is specified day of week
@@ -190,6 +196,7 @@ module.exports = new SmartApp()
 		}
 	}
 })
+*/
 
 
 // Check to see if control switch was turned on prior to start time
