@@ -31,6 +31,7 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('rx');
 		section.deviceSetting('delayGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
+		section.decimalSetting('delayOff').required(false).defaultValue(0).min(0);
 	});
 
 	// room contacts
@@ -46,8 +47,7 @@ module.exports = new SmartApp()
 			defaultValue('everyday').required(true);
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
-		section.timeSetting('autoOffTime').required(false);
-		section.decimalSetting('delayOff').required(false).min(0);
+		section.booleanSetting('offAtEnd').defaultValue(false);
 	});
 })
 
@@ -90,13 +90,14 @@ module.exports = new SmartApp()
 		*/
 		
 		// check to see if light was turned on before start time
-		const checkOnTime = context.configStringValue("startTime");
-		if (checkOnTime) {
-			await context.api.schedules.runDaily('checkOnHandler', new Date(checkOnTime));
+		const startTime = context.configStringValue('startTime');
+		if (startTime) {
+			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		const autoOffTime = context.configStringValue("autoOffTime");
-		if (autoOffTime) {
-			await context.api.schedules.runDaily('roomOffHandler', new Date(autoOffTime));
+		const endTime = context.configStringValue('endTime');
+		const turnOff = context.configBooleanValue('offAtEnd');
+		if (endTime && turnOff) {
+			await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 		}
 	}
 	
@@ -132,6 +133,9 @@ module.exports = new SmartApp()
 	// Turn on the lights in the on and off group
 	console.log("Turn off all lights in on and off groups");
 	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	
+	// Cancel any delayed room off handler events
+	await context.api.schedules.delete('roomOffHandler');
 })
 
 
@@ -176,6 +180,7 @@ module.exports = new SmartApp()
 })
 
 
+/*
 // Turn off the room switch(es) if light turned off outside of time window
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Check today is specified day of week
@@ -190,6 +195,7 @@ module.exports = new SmartApp()
 		}
 	}
 })
+*/
 
 
 // Check to see if control switch was turned on prior to start time
