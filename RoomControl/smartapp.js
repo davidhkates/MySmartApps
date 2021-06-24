@@ -34,8 +34,8 @@ module.exports = new SmartApp()
 		/*
 		section.deviceSetting('delayGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
-		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 		*/
+		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
 
 	/*
@@ -149,7 +149,7 @@ module.exports = new SmartApp()
 				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 				break;
 			case 'delay':
-				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+				await context.api.schedules.runIn('roomOffHandler', context.configValue('offDelay'));
 				break;
 		}
 	}
