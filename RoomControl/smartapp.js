@@ -149,7 +149,8 @@ module.exports = new SmartApp()
 				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 				break;
 			case 'delay':
-				await context.api.schedules.runIn('roomOffHandler', context.configValue('offDelay'));
+				const offDelay = context.configNumberValue('offDelay');
+				await context.api.schedules.runIn('roomOffHandler', offDelay);
 				break;
 		}
 	}
