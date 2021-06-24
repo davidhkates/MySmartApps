@@ -9,4 +9,5 @@ Turn on/off lights/outlets based on light switch, time of day, day of week, and 
 
 ## Node Package Dependencies
 1. npm i @smartthings/smartapp --save
-2. npm i @katesthings/smartcontrols --save
+2. npm i @katesthings/smartutils --save
+3. npm i @katesthings/smartcontrols --save
