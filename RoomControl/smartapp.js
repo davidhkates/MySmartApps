@@ -27,7 +27,7 @@ async function getNextState( appId ) {
     			console.log("Success", data.Item);
   		}
 	});
-	return data.Item;
+	// return data.Item;
 };
 
 
