@@ -7,6 +7,31 @@ const SmartUtils  = require('@katesthings/smartutils');
 // const SmartState  = require('@katesthings/smartstate');
 
 
+// state machine routines
+var AWS = require('aws-sdk');
+AWS.config.update({region: 'us-west-2'});
+// const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+// const dbclient = new DynamoDBClient({ region: 'us-west-2' });
+
+async function getNextState( appId ) {
+	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+	var params = {
+		TableName: 'smartapp-state-machine',
+		Key: {'appId': appId}
+	};
+
+	await docClient.get(params, function(err, data) {
+		if (err) {
+    			console.log("Error", err);
+  		} else {
+    			console.log("Success", data.Item);
+  		}
+	});
+	return data.Item;
+};
+
+
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
 
@@ -61,6 +86,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
+	await getNextState('front-office');
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
