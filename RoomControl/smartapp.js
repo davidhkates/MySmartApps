@@ -30,7 +30,7 @@ module.exports = new SmartApp()
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 		section.enumSetting('offBehavior').options('off','delay','end').
-			defaultValue('off').required(true);
+			defaultValue('off').required(false);
 		/*
 		section.deviceSetting('delayGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
