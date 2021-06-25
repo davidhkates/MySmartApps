@@ -18,7 +18,8 @@ async function getNextState( appId ) {
 	var params = {
 		TableName: 'smartapp-state-machine',
   		Key: {
-    			appId: { S: appId }
+    			appId: { S: appId },
+			sequence: { N: '1' }
   		},
 	};
 
