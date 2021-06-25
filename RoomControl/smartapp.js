@@ -21,7 +21,7 @@ async function getNextState( appId, name ) {
   		Key: {
     			appId: { S: appId },
 			name: { S: name },
-  		}
+  		},
 		/*
 		TableName: 'smartapp-state-machine',
 		Key: {
