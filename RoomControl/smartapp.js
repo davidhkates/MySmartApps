@@ -20,7 +20,7 @@ async function getNextState( appId ) {
   		TableName: 'smartapp-context-store',
   		Key: {
     			appId: { S: appId },
-			name: { S: '123' },
+			name: { S: 123 },
   		}
 		/*
 		TableName: 'smartapp-state-machine',
