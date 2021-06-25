@@ -12,8 +12,13 @@
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
 	"pages.mainPage.settings.offBehavior.name": "Behavior of room lights from main switch",
 	"pages.mainPage.settings.offBehavior.options.off.name": "Off",
+	"pages.mainPage.settings.offBehavior.options.delay.name": "After Delay",
+	"pages.mainPage.settings.offBehavior.options.end.name": "At End Time",
+
 	
-	"pages.mainPage.settings.delayOff.name": "Delay (in seconds) in turning off lights",
+
+	"pages.mainPage.settings.offBehavior.options.off.name": "Off",
+"pages.mainPage.settings.delayOff.name": "Delay (in seconds) in turning off lights",
 	"pages.mainPage.settings.delayOff.description": "",
 	
 	"pages.mainPage.settings.mode.name": "Motion switch activity mode",
