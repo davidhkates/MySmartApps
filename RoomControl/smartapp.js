@@ -143,7 +143,7 @@ module.exports = new SmartApp()
 	console.log("Turn off all lights in on and off groups");
 	const offGroupSwitches = context.config.offGroup;
 	if (offGroupSwitches) {
-		switch (context.configStringValue('offBehavior') {
+		switch (context.configStringValue('offBehavior')) {
 			case 'off':
 				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
