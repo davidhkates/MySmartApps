@@ -17,7 +17,9 @@ async function getNextState( appId ) {
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	var params = {
 		TableName: 'smartapp-state-machine',
-		Key: {'appId': appId}
+  		Key: {
+    			appId: { S: appId }
+  		},
 	};
 
 	await docClient.get(params, function(err, data) {
