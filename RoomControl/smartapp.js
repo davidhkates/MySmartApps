@@ -10,20 +10,53 @@ const SmartUtils  = require('@katesthings/smartutils');
 // state machine routines
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
-// const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
-// const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 
-async function getNextState( appId ) {
+async function getNextState( appId, currentState ) {
 	var nextState = null;
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
   		TableName: 'smartapp-state-machine',
   		Key: {
     			appId: appId ,
-			sequence: 0
+			sequence: currentState
   		}
 	};
 
+	var dbEnd = false;
+	do {
+		// console.log('Params: ', params);
+		// params.Key.sequence++; 
+		await docClient.get(params, function(err, data) {
+			if (err) {
+				console.log("Error", err);
+				dbEnd = true;
+			} else {
+				// console.log('Data: ', data, Object.keys(data));
+				// if (data.Item===undefined) {
+				if (Object.keys(data).length===0) {
+					dbEnd = true;
+				} else {
+					console.log("State found", data.Item);
+				}
+			}
+		});
+	} while (nextState==null && !dbEnd && params.Key.sequence<10);
+	return nextState;	
+};
+
+
+async function getCurrentState( appId ) {
+	var currentState = 1;
+	var stateData = null;
+	do {
+		await stateData = getNextState(appId, currentState);
+		console.log('State data: ', stateData);
+		
+		// check to see if current date and time included in state data
+		
+	} while (stateData);
+	return currentState;
+}
 	var dbEnd = false;
 	do {
 		console.log('Params: ', params);
@@ -45,6 +78,8 @@ async function getNextState( appId ) {
 	} while (nextState==null && !dbEnd && params.Key.sequence<10);
 	return nextState;	
 };
+
+
 
 
 
@@ -102,7 +137,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
-	await getNextState('front-office', 1);
+	await getCurrentState('front-office');
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
