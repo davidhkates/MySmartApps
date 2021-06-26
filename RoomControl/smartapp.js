@@ -52,33 +52,21 @@ async function getCurrentState( appId ) {
 		await stateData = getNextState(appId, currentState);
 		console.log('State data: ', stateData);
 		
-		// check to see if current date and time included in state data
+		// get day of week character for today
+		const today = new Date();
+		const nDayOfWeek = today.getDay();
+		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
+		const strDayOfWeek = daysOfWeek[nDayOfWeek];
 		
+		// check to see if current date and time included in state data
+		if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
+			console.log('Day of week found in current state');
+		} else {
+			currentState++;
+		}
 	} while (stateData);
 	return currentState;
-}
-	var dbEnd = false;
-	do {
-		console.log('Params: ', params);
-		params.Key.sequence++; 
-		await docClient.get(params, function(err, data) {
-			if (err) {
-				console.log("Error", err);
-				dbEnd = true;
-			} else {
-				// console.log('Data: ', data, Object.keys(data));
-				// if (data.Item===undefined) {
-				if (Object.keys(data).length===0) {
-					dbEnd = true;
-				} else {
-					console.log("State found", data.Item);
-				}
-			}
-		});
-	} while (nextState==null && !dbEnd && params.Key.sequence<10);
-	return nextState;	
 };
-
 
 
 
