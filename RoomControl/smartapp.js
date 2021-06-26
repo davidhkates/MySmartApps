@@ -13,24 +13,31 @@ AWS.config.update({region: 'us-west-2'});
 // const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 // const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 
-async function getNextState( appId, state ) {
+async function getNextState( appId ) {
+	var nextState = null;
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
   		TableName: 'smartapp-state-machine',
   		Key: {
     			appId: appId ,
-			sequence: state
+			sequence: 0
   		}
 	};
 
-	await docClient.get(params, function(err, data) {
-		if (err) {
-    			console.log("Error", err);
-  		} else {
-    			console.log("Success", data.Item);
-  		}
-	});
-	// return data.Item;
+	var dbEnd = false;
+	do {
+		console.log('Params: ', params);
+		params.Key.sequence++; 
+		await docClient.get(params, function(err, data) {
+			if (err) {
+				console.log("Error", err);
+				dbEnd = true;
+			} else {
+				console.log("State found", data.Item);
+			}
+		});
+	} while (nextState==null && !dbEnd);
+	return nextState;	
 };
 
 
