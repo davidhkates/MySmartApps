@@ -33,7 +33,11 @@ async function getNextState( appId ) {
 				console.log("Error", err);
 				dbEnd = true;
 			} else {
-				console.log("State found", data.Item);
+				if (len(data.Item)==0) {
+					dbEnd = true;
+				} else {
+					console.log("State found", data.Item);
+				}
 			}
 		});
 	} while (nextState==null && !dbEnd && params.Key.sequence<5);
