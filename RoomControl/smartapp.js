@@ -13,13 +13,13 @@ AWS.config.update({region: 'us-west-2'});
 // const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
 // const dbclient = new DynamoDBClient({ region: 'us-west-2' });
 
-async function getNextState( appId, name ) {
+async function getNextState( appId, state ) {
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
-  		TableName: 'smartapp-context-store',
+  		TableName: 'smartapp-state-machine',
   		Key: {
     			appId: { S: appId },
-			name: { S: name },
+			sequence: { N: state },
   		}
 	};
 
@@ -89,7 +89,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
-	await getNextState('front-office', '1');
+	await getNextState('front-office', 1);
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
