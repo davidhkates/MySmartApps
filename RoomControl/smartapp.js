@@ -40,7 +40,7 @@ async function getNextState( appId ) {
 				}
 			}
 		});
-	} while (nextState==null && !dbEnd && params.Key.sequence<5);
+	} while (nextState==null && !dbEnd && params.Key.sequence<10);
 	return nextState;	
 };
 
