@@ -33,8 +33,9 @@ async function getNextState( appId ) {
 				console.log("Error", err);
 				dbEnd = true;
 			} else {
-				console.log('Data: ', data);
-				if (Object.keys(data)===0) {
+				console.log('Data: ', data, Object.keys(data));
+				if (data.Item===undefined) {
+				// if (Object.keys(data)===0) {
 					dbEnd = true;
 				} else {
 					console.log("State found", data.Item);
