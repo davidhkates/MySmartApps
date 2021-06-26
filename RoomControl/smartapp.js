@@ -15,20 +15,12 @@ AWS.config.update({region: 'us-west-2'});
 
 async function getNextState( appId, name ) {
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-	var params = {
 	const params = {
   		TableName: 'smartapp-context-store',
   		Key: {
     			appId: { S: appId },
 			name: { S: name },
-  		},
-		/*
-		TableName: 'smartapp-state-machine',
-		Key: {
-    			'appId': appId,
-			'sequence': '1',
   		}
-		*/
 	};
 
 	await docClient.get(params, function(err, data) {
