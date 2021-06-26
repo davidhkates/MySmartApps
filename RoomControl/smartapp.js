@@ -36,7 +36,7 @@ async function getNextState( appId ) {
 				console.log("State found", data.Item);
 			}
 		});
-	} while (nextState==null && !dbEnd);
+	} while (nextState==null && !dbEnd && params.Key.sequence<5);
 	return nextState;	
 };
 
