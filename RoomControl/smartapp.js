@@ -26,8 +26,8 @@ async function getNextState( appId ) {
 
 	var dbEnd = false;
 	do {
-		console.log('Params: ', params);
-		params.Key.sequence++; 
+		// console.log('Params: ', params);
+		// params.Key.sequence++; 
 		await docClient.get(params, function(err, data) {
 			if (err) {
 				console.log("Error", err);
@@ -39,6 +39,7 @@ async function getNextState( appId ) {
 					dbEnd = true;
 				} else {
 					console.log("State found", data.Item);
+					params.Key.sequence++; 
 				}
 			}
 		});
