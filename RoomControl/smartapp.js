@@ -33,7 +33,7 @@ async function getNextState( appId ) {
 				console.log("Error", err);
 				dbEnd = true;
 			} else {
-				if (len(data.Item)==0) {
+				if (data.length==0) {
 					dbEnd = true;
 				} else {
 					console.log("State found", data.Item);
