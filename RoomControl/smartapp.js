@@ -33,8 +33,8 @@ async function getStateData( appId, sequence ) {
     			console.log(data);
     			return data.Item;
 		} catch (err) {
-   			console.log("Failure", err.message)
-    			// there is no data here, you can return undefined or similar
+   			console.log("Failure", err.message);
+			return undefined;
 		}
 	
 		/*
@@ -71,7 +71,8 @@ async function getCurrentState( appId ) {
 		
 		// check to see if current date and time included in state data
 		if (stateData) {
-			if (stateData.daysofweek.find(stateData.daysOfWeek).includes(strDayOfWeek)) {
+			console.log('State data DAYSOFWEEK: ', stateData.daysofweek, strDayOfWeek);
+			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				console.log('Day of week found in current state: ', nDayOfWeek);
 			} else {
 				// sequence++;
