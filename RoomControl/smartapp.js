@@ -18,7 +18,7 @@ async function getStateData( appId, sequence ) {
   		TableName: 'smartapp-state-machine',
   		Key: {
     			appId: appId ,
-			sequence: sequence
+			sequence: '1'
   		}
 	};
 
