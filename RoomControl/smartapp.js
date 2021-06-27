@@ -24,7 +24,7 @@ async function getStateData( appId, sequence ) {
 
 	// var dbEnd = false;
 	// do {
-		// console.log('Params: ', params);
+		console.log('Params: ', params);
 		// params.Key.sequence++; 
 		await docClient.get(params, function(err, data) {
 			if (err) {
