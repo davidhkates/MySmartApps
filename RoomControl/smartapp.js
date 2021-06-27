@@ -12,7 +12,7 @@ var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
 
 async function getStateData( appId, sequence ) {
-	var stateData = null;
+	// var stateData = null;
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
   		TableName: 'smartapp-state-machine',
@@ -28,7 +28,7 @@ async function getStateData( appId, sequence ) {
 		// params.Key.sequence++; 
 	
 		try {
-    			const data = await docClient.get(paramsPut).promise();
+    			const data = await docClient.get(params).promise();
     			console.log("Success")
     			console.log(data)
     			return data
@@ -53,7 +53,7 @@ async function getStateData( appId, sequence ) {
 		});
 		*/
 	// } while (nextState==null && !dbEnd && params.Key.sequence<10);
-	return stateData;	
+	// return stateData;	
 };
 
 async function getCurrentState( appId ) {
