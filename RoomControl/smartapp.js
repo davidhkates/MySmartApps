@@ -8,12 +8,12 @@ const SmartUtils  = require('@katesthings/smartutils');
 
 
 // state machine routines
-var AWS = require('aws-sdk');
-AWS.config.update({region: 'us-west-2'});
+var aws = require('aws-sdk');
+aws.config.update({region: 'us-west-2'});
 
 async function getStateData( appId, sequence ) {
 	// var stateData = null;
-	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
   		TableName: 'smartapp-state-machine',
   		Key: {
@@ -22,38 +22,30 @@ async function getStateData( appId, sequence ) {
   		}
 	};
 
-	// var dbEnd = false;
-	// do {
-		console.log('Params: ', params);
-		// params.Key.sequence++; 
-	
-		try {
-    			const data = await docClient.get(params).promise();
-    			console.log("Success");
-    			console.log(data);
-    			return data.Item;
-		} catch (err) {
-   			console.log("Failure", err.message);
+	/*
+	await docClient.get(params, function(err, data) {
+		if (err) {
+			console.log("Error", err);
 			return undefined;
-		}
-	
-		/*
-		await docClient.get(params, function(err, data) {
-			if (err) {
-				console.log("Error", err);
-				// dbEnd = true;
-			} else {
-				console.log('Data: ', data, Object.keys(data));
-				// if (data.Item===undefined) {
-				if (Object.keys(data).length>0) {
-					console.log("State found", data.Item);
-					stateData = data.Item;
-				}
+		} else {
+			// if (data.Item===undefined) {
+			if (Object.keys(data).length>0) {
+				console.log("State found", data.Item);
+				return data.Item;
 			}
-		});
-		*/
-	// } while (nextState==null && !dbEnd && params.Key.sequence<10);
-	// return stateData;	
+		}
+	});
+	*/
+
+	try {
+		const data = await docClient.get(params).promise();
+		console.log("Success");
+		console.log(data);
+		return data.Item;
+	} catch (err) {
+		console.log("Failure", err.message);
+		return undefined;
+	}
 };
 
 async function getCurrentState( appId ) {
