@@ -51,6 +51,7 @@ async function getStateData( appId, sequence ) {
 async function getCurrentState( appId ) {
 	var sequence = 1;
 	var stateData = null;
+	var offBehavior = null;
 	do {
 		stateData = await getStateData(appId, sequence);
 		console.log('State data: ', stateData);
@@ -63,15 +64,12 @@ async function getCurrentState( appId ) {
 		
 		// check to see if current date and time included in state data
 		if (stateData) {
-			console.log('State data DAYSOFWEEK: ', stateData.daysofweek, strDayOfWeek);
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
+				offBehavior = stateData.behavior;
 				console.log('Day of week found in current state: ', nDayOfWeek);
-			} else {
-				// sequence++;
-			}
 		}
 		sequence++;
-	} while (sequence<5);
+	} while (stateData && !offBehavior && sequence<5);
 	return stateData;
 };
 
