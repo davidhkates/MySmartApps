@@ -47,10 +47,10 @@ async function getCurrentState( appId ) {
 	var sequence = 1;
 	var stateData = null;
 	// do {
-	/*
 		await stateData = getStateData(appId, sequence);
 		console.log('State data: ', stateData);
 		
+	/*
 		// get day of week character for today
 		const today = new Date();
 		const nDayOfWeek = today.getDay();
