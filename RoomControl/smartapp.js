@@ -18,7 +18,7 @@ async function getStateData( appId, sequence ) {
   		TableName: 'smartapp-state-machine',
   		Key: {
     			appId: appId ,
-			sequence: '1'
+			sequence: sequence
   		}
 	};
 
@@ -46,7 +46,7 @@ async function getStateData( appId, sequence ) {
 async function getCurrentState( appId ) {
 	var sequence = 1;
 	var stateData = null;
-	// do {
+	do {
 		stateData = await getStateData(appId, sequence);
 		console.log('State data: ', stateData);
 		
@@ -57,12 +57,14 @@ async function getCurrentState( appId ) {
 		const strDayOfWeek = daysOfWeek[nDayOfWeek];
 		
 		// check to see if current date and time included in state data
-		if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
-			console.log('Day of week found in current state: ', nDayOfWeek);
-		} else {
-			sequence++;
+		if (stateData) {
+			if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
+				console.log('Day of week found in current state: ', nDayOfWeek);
+			} else {
+				sequence++;
+			}
 		}
-	// } while (stateData);
+	} while (sequence<5);
 	return stateData;
 };
 
