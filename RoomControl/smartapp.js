@@ -29,9 +29,9 @@ async function getStateData( appId, sequence ) {
 	
 		try {
     			const data = await docClient.get(params).promise();
-    			console.log("Success")
-    			console.log(data)
-    			return data
+    			console.log("Success");
+    			console.log(data);
+    			return data.Item;
 		} catch (err) {
    			console.log("Failure", err.message)
     			// there is no data here, you can return undefined or similar
@@ -71,7 +71,7 @@ async function getCurrentState( appId ) {
 		
 		// check to see if current date and time included in state data
 		if (stateData) {
-			if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
+			if (stateData.daysofweek.find(stateData.daysOfWeek).includes(strDayOfWeek)) {
 				console.log('Day of week found in current state: ', nDayOfWeek);
 			} else {
 				// sequence++;
