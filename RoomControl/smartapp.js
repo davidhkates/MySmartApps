@@ -33,10 +33,10 @@ async function getStateData( appId, sequence ) {
 			} else {
 				// console.log('Data: ', data, Object.keys(data));
 				// if (data.Item===undefined) {
-				// if (Object.keys(data).length>0) {
-					// console.log("State found", data.Item);
+				if (Object.keys(data).length>0) {
+					console.log("State found", data.Item);
 					stateData = data.Item;
-				// }
+				}
 			}
 		});
 	// } while (nextState==null && !dbEnd && params.Key.sequence<10);
@@ -54,15 +54,17 @@ async function getCurrentState( appId ) {
 		// get day of week character for today
 		const today = new Date();
 		const nDayOfWeek = today.getDay();
+		/*
 		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 		const strDayOfWeek = daysOfWeek[nDayOfWeek];
 		
 		// check to see if current date and time included in state data
-		// if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
+		if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
 			console.log('Day of week found in current state: ', nDayOfWeek);
-		// } else {
-		//	currentState++;
-		// }
+		} else {
+			currentState++;
+		}
+		*/
 	// } while (stateData);
 	return currentState;
 };
