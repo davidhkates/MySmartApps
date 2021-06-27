@@ -47,7 +47,7 @@ async function getCurrentState( appId ) {
 	var sequence = 1;
 	var stateData = null;
 	// do {
-		await stateData = getStateData(appId, sequence);
+		// await stateData = getStateData(appId, sequence);
 		console.log('State data: ', stateData);
 		
 	/*
