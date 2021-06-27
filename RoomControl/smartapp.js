@@ -31,7 +31,7 @@ async function getStateData( appId, sequence ) {
 				console.log("Error", err);
 				// dbEnd = true;
 			} else {
-				// console.log('Data: ', data, Object.keys(data));
+				console.log('Data: ', data, Object.keys(data));
 				// if (data.Item===undefined) {
 				if (Object.keys(data).length>0) {
 					console.log("State found", data.Item);
