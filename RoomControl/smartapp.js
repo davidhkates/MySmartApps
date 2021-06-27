@@ -43,12 +43,11 @@ async function getStateData( appId, sequence ) {
 	return stateData;	
 };
 
-/*
 async function getCurrentState( appId ) {
-	var currentState = 1;
+	var sequence = 1;
 	var stateData = null;
 	// do {
-		await stateData = getNextState(appId, currentState);
+		await stateData = getStateData(appId, sequence);
 		console.log('State data: ', stateData);
 		
 		// get day of week character for today
@@ -66,8 +65,6 @@ async function getCurrentState( appId ) {
 	// } while (stateData);
 	return currentState;
 };
-*/
-
 
 
 
