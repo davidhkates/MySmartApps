@@ -26,6 +26,18 @@ async function getStateData( appId, sequence ) {
 	// do {
 		console.log('Params: ', params);
 		// params.Key.sequence++; 
+	
+		try {
+    			const data = await docClient.get(paramsPut).promise();
+    			console.log("Success")
+    			console.log(data)
+    			return data
+		} catch (err) {
+   			console.log("Failure", err.message)
+    			// there is no data here, you can return undefined or similar
+		}
+	
+		/*
 		await docClient.get(params, function(err, data) {
 			if (err) {
 				console.log("Error", err);
@@ -39,6 +51,7 @@ async function getStateData( appId, sequence ) {
 				}
 			}
 		});
+		*/
 	// } while (nextState==null && !dbEnd && params.Key.sequence<10);
 	return stateData;	
 };
