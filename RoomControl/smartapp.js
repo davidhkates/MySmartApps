@@ -11,6 +11,7 @@ const SmartUtils  = require('@katesthings/smartutils');
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
 
+/*
 async function getStateData( appId, sequence ) {
 	var stateData = null;
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
@@ -54,7 +55,6 @@ async function getCurrentState( appId ) {
 		// get day of week character for today
 		const today = new Date();
 		const nDayOfWeek = today.getDay();
-		/*
 		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 		const strDayOfWeek = daysOfWeek[nDayOfWeek];
 		
@@ -64,10 +64,10 @@ async function getCurrentState( appId ) {
 		} else {
 			currentState++;
 		}
-		*/
 	// } while (stateData);
 	return currentState;
 };
+*/
 
 
 
@@ -126,7 +126,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
-	await getCurrentState('front-office');
+	// await getCurrentState('front-office');
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
