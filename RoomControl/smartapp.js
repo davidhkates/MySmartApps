@@ -11,44 +11,43 @@ const SmartUtils  = require('@katesthings/smartutils');
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
 
-async function getNextState( appId, currentState ) {
-	var nextState = null;
+async function getStateData( appId, sequence ) {
+	var stateData = null;
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
   		TableName: 'smartapp-state-machine',
   		Key: {
     			appId: appId ,
-			sequence: currentState
+			sequence: sequence
   		}
 	};
 
-	var dbEnd = false;
-	do {
+	// var dbEnd = false;
+	// do {
 		// console.log('Params: ', params);
 		// params.Key.sequence++; 
 		await docClient.get(params, function(err, data) {
 			if (err) {
 				console.log("Error", err);
-				dbEnd = true;
+				// dbEnd = true;
 			} else {
 				// console.log('Data: ', data, Object.keys(data));
 				// if (data.Item===undefined) {
-				if (Object.keys(data).length===0) {
-					dbEnd = true;
-				} else {
-					console.log("State found", data.Item);
+				if (Object.keys(data).length>0) {
+					// console.log("State found", data.Item);
+					stateData = data.Item;
 				}
 			}
 		});
-	} while (nextState==null && !dbEnd && params.Key.sequence<10);
-	return nextState;	
+	// } while (nextState==null && !dbEnd && params.Key.sequence<10);
+	return stateData;	
 };
 
 
 async function getCurrentState( appId ) {
 	var currentState = 1;
 	var stateData = null;
-	do {
+	// do {
 		await stateData = getNextState(appId, currentState);
 		console.log('State data: ', stateData);
 		
@@ -60,11 +59,11 @@ async function getCurrentState( appId ) {
 		
 		// check to see if current date and time included in state data
 		if (stateData.daysofweek.find(daysOfWeek).includes(strDayOfWeek)) {
-			console.log('Day of week found in current state');
+			console.log('Day of week found in current state: ', nDayOfWeek);
 		} else {
 			currentState++;
 		}
-	} while (stateData);
+	// } while (stateData);
 	return currentState;
 };
 
