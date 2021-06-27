@@ -33,10 +33,10 @@ async function getStateData( appId, sequence ) {
 			} else {
 				// console.log('Data: ', data, Object.keys(data));
 				// if (data.Item===undefined) {
-				if (Object.keys(data).length>0) {
+				// if (Object.keys(data).length>0) {
 					// console.log("State found", data.Item);
 					stateData = data.Item;
-				}
+				// }
 			}
 		});
 	// } while (nextState==null && !dbEnd && params.Key.sequence<10);
