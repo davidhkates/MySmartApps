@@ -11,7 +11,6 @@ const SmartUtils  = require('@katesthings/smartutils');
 var AWS = require('aws-sdk');
 AWS.config.update({region: 'us-west-2'});
 
-/*
 async function getStateData( appId, sequence ) {
 	var stateData = null;
 	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
@@ -44,7 +43,7 @@ async function getStateData( appId, sequence ) {
 	return stateData;	
 };
 
-
+/*
 async function getCurrentState( appId ) {
 	var currentState = 1;
 	var stateData = null;
