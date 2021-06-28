@@ -142,7 +142,7 @@ module.exports = new SmartApp()
 	console.log("RoomControl: Installed/Updated");
 	console.log('Context: ', context);
 	console.log('Context API: ', context.api);
-	console.log('Context API app: ', context.api.app);
+	console.log('Context API config: ', context.api.config);
 	await getCurrentState('front-office');
 
 	// unsubscribe all previously established subscriptions
