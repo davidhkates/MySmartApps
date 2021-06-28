@@ -58,7 +58,7 @@ async function getCurrentState( appId ) {
 	// const nDayOfWeek = today.getDay();
 	
 	const today = new Date();
-	console.log(today.getTimeZoneOffset());
+	console.log(today.getTimezoneOffset());
 	/*
 	var localDate = new Date(today.getTime()+today.getTimezoneOffset()*60*1000);
 	var offset = today.getTimezoneOffset() / 60;
