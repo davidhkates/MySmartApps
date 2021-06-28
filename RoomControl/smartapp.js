@@ -39,8 +39,8 @@ async function getStateData( appId, sequence ) {
 
 	try {
 		const data = await docClient.get(params).promise();
-		console.log("Success");
-		console.log(data);
+		// console.log("Success");
+		// console.log(data);
 		return data.Item;
 	} catch (err) {
 		console.log("Failure", err.message);
@@ -54,7 +54,7 @@ async function getCurrentState( appId ) {
 	var offBehavior = null;
 	do {
 		stateData = await getStateData(appId, sequence);
-		console.log('State data: ', stateData);
+		// console.log('State data: ', stateData);
 		
 		// get day of week character for today
 		const today = new Date();
@@ -66,12 +66,15 @@ async function getCurrentState( appId ) {
 		if (stateData) {
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				offBehavior = stateData.behavior;
-				console.log('Day of week found in current state: ', nDayOfWeek);
+				// console.log('Day of week found in current state: ', nDayOfWeek);
 			}
 		}
 		sequence++;
-	// } while (stateData && !offBehavior && sequence<5);
-	} while (sequence<5);
+	} while (stateData && !offBehavior && sequence<5);
+	if (!offBehavior) {
+		offBehavior = 'none';
+	}
+	console.log('Off behavior: ', offBehavior);
 	return offBehavior;
 };
 
