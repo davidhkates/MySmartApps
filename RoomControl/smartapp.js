@@ -143,7 +143,8 @@ module.exports = new SmartApp()
 	// console.log('Context: ', context);
 	console.log('Context API: ', context.api);
 	// console.log('Context API config: ', context.api.config);
-	console.log('Context API config: ', context.api.apps);
+	console.log('Context API apps: ', context.api.apps);
+	console.log('Context API presentation: ', context.api.presentation);
 	await getCurrentState('front-office');
 
 	// unsubscribe all previously established subscriptions
