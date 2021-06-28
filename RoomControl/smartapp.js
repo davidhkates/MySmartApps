@@ -67,6 +67,7 @@ async function getCurrentState( appId ) {
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				offBehavior = stateData.behavior;
 				console.log('Day of week found in current state: ', nDayOfWeek);
+			}
 		}
 		sequence++;
 	// } while (stateData && !offBehavior && sequence<5);
