@@ -62,6 +62,7 @@ async function getCurrentState( appId ) {
 	var offset = today.getTimezoneOffset() / 60;
 	var hours = today.getHours();
 	localDate.setHours(hours - offset);
+	console.log('Dates and time offsets: ', today, offset, localDate);
 	// localDate = localDate.getTime();
 
 	/*	
