@@ -54,7 +54,7 @@ async function getCurrentState( appId ) {
 	// get day of week character for today
 	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
 	var localDate = new Date(localToday);
-
+	const localTime = localDate.getTime();
 	const nDayOfWeek = localDate.getDay();
 	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 	const strDayOfWeek = daysOfWeek[nDayOfWeek];
@@ -66,8 +66,15 @@ async function getCurrentState( appId ) {
 		if (stateData) {
 			// console.log('State data: ', stateData, strDayOfWeek, sequence);
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
-				// console.log('Day of week found in current state: ', nDayOfWeek);
-				bFound = true;
+				if (stateData.startTime && stateData.endTime) {
+					if (stateData.startTime >= localTime && stateData.endTime < localTime) { 
+						// console.log('Day of week found in current state: ', nDayOfWeek);
+						bFound = true;
+					}
+				} else {
+					bFound = true;
+				}
+			if (bFound) {
 				console.log('State data found: ', sequence, stateData);
 				return stateData;
 			}
@@ -110,10 +117,6 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('rx');
 		section.enumSetting('offBehavior').options(['off','delay','end'])
 			.defaultValue('off').required('true');
-		/*
-		section.deviceSetting('delayGroup').capabilities(['switch'])
-			.required(false).multiple(true).permissions('rx');
-		*/
 		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
 
@@ -124,7 +127,6 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactMode').options(['allOpen', 'allClosed','anyClosed']);
 	});
-	*/
 
 	// time window and days of week
 	page.section('time', section => {
@@ -134,17 +136,21 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime').required(false);
 		// section.booleanSetting('offAtEnd').defaultValue(false);
 	});
+	*/
 })
 
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
-	// console.log('Context: ', context);
+	console.log('Context: ', context);
+	console.log('Update data: ', updateData);
+	/*
 	console.log('Context API: ', context.api);
-	// console.log('Context API config: ', context.api.config);
+	console.log('Context API config: ', context.api.config);
 	console.log('Context API apps: ', context.api.apps);
 	console.log('Context API presentation: ', context.api.presentation);
+	*/
 	await getCurrentState('front-office');
 
 	// unsubscribe all previously established subscriptions
