@@ -53,33 +53,31 @@ async function getCurrentState( appId ) {
 	var stateData = null;
 	var offBehavior = null;
 
+	// get day of week character for today
+	// const today = new Date();
+	// const nDayOfWeek = today.getDay();
 	
 	const today = new Date();
 	var localDate = new Date(today.getTime()+today.getTimezoneOffset()*60*1000);
-
 	var offset = today.getTimezoneOffset() / 60;
 	var hours = today.getHours();
-
 	localDate.setHours(hours - offset);
-    	// localDate = localDate.getTime();
-	
-	/*
+	// localDate = localDate.getTime();
+
+	/*	
 	var today = new Date();
 	const localOffset = today.getTimezoneOffset() * 60000;
 	const localTime = today.getTime();
 	today = localTime - localOffset;
 	*/
 	const nDayOfWeek = localDate.getDay();
+	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
+	const strDayOfWeek = daysOfWeek[nDayOfWeek];
 
+	
 	do {
 		stateData = await getStateData(appId, sequence);
-		
-		// get day of week character for today
-		const today = new Date();
-		const nDayOfWeek = today.getDay();
-		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
-		const strDayOfWeek = daysOfWeek[nDayOfWeek];
-		
+				
 		// check to see if current date and time included in state data
 		if (stateData) {
 			console.log('State data: ', stateData, strDayOfWeek, sequence);
