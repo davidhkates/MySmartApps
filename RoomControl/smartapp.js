@@ -52,6 +52,13 @@ async function getCurrentState( appId ) {
 	var sequence = 1;
 	var stateData = null;
 	var offBehavior = null;
+	
+	var today = new Date();
+	const localOffset = today.getTimezoneOffset() * 60000;
+	const localTime = today.getTime();
+	today = localTime - localOffset;
+	const nDayOfWeek = today.getDay();
+
 	do {
 		stateData = await getStateData(appId, sequence);
 		
