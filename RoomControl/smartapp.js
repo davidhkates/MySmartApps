@@ -39,8 +39,6 @@ async function getStateData( appId, sequence ) {
 
 	try {
 		const data = await docClient.get(params).promise();
-		// console.log("Success");
-		// console.log(data);
 		return data.Item;
 	} catch (err) {
 		console.log("Failure", err.message);
