@@ -51,7 +51,7 @@ async function getStateData( appId, sequence ) {
 async function getCurrentState( appId ) {
 	var sequence = 1;
 	var stateData = null;
-	var offBehavior = null;
+	var bFound = false;
 
 	// get day of week character for today
 	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
@@ -69,13 +69,13 @@ async function getCurrentState( appId ) {
 			// console.log('State data: ', stateData, strDayOfWeek, sequence);
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				// console.log('Day of week found in current state: ', nDayOfWeek);
-				offBehavior = stateData.behavior;
-				console.log('State data found: ', sequence, offBehavior);
-				return offBehavior;
+				bFound = true;
+				console.log('State data found: ', sequence, stateData);
+				return stateData;
 			}
 		}
 		sequence++;
-	} while (stateData && !offBehavior && sequence<5);
+	} while (stateData && !bFound && sequence<5);
 	
 	/*
 	if (!offBehavior) {
