@@ -62,8 +62,8 @@ async function getCurrentState( appId ) {
 		const strDayOfWeek = daysOfWeek[nDayOfWeek];
 		
 		// check to see if current date and time included in state data
-		console.log('State data: ', stateData, strDayOfWeek, sequence);
 		if (stateData) {
+			console.log('State data: ', stateData, strDayOfWeek, sequence);
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				// console.log('Day of week found in current state: ', nDayOfWeek);
 				offBehavior = stateData.behavior;
