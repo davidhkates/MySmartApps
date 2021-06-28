@@ -59,7 +59,7 @@ async function getCurrentState( appId ) {
 	
 	var today = new Date();
 	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"})
-	console.log('Date/hours', localToday, today.getHours() );
+	console.log('Date/hours', localToday, localToday.getDay() );
 	/*
 	var localDate = new Date(today.getTime()+today.getTimezoneOffset()*60*1000);
 	var offset = today.getTimezoneOffset() / 60;
@@ -74,7 +74,7 @@ async function getCurrentState( appId ) {
 	const localTime = today.getTime();
 	today = localTime - localOffset;
 	*/
-	const nDayOfWeek = today.getDay();
+	const nDayOfWeek = localToday.getDay();
 	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 	const strDayOfWeek = daysOfWeek[nDayOfWeek];
 
