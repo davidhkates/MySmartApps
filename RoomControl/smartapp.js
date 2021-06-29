@@ -149,10 +149,10 @@ module.exports = new SmartApp()
 	console.log("RoomControl: Installed/Updated");
 	
 	console.log('Context: ', context);
-	console.log('Context.stringify: ', context.stringify());
+	// console.log('Context.stringify: ', JSON.stringify(context));
 	// assuming `json` is the data string
 	var titles = [];
-	var data = JSON.parse(json, function(key, value) {
+	var data = JSON.parse(context, function(key, value) {
     		if (value.includes('Office')) { 
 	        	titles.push(key);
 		}
