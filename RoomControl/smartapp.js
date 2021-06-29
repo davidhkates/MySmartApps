@@ -148,7 +148,7 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
 	console.log('Context: ', context);
-	console.log('Context event: ', context.event);
+	console.log('Context app: ', context.app);
 	/*
 	console.log('Update data: ', updateData);
 	console.log('Context API: ', context.api);
