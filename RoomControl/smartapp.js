@@ -54,7 +54,7 @@ async function getCurrentState( appId ) {
 	// get day of week character for today
 	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
 	var localDate = new Date(localToday);
-	const localTime = localDate.getHours();
+	const localTime = localDate.format('HHMM');
 	const nDayOfWeek = localDate.getDay();
 	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 	const strDayOfWeek = daysOfWeek[nDayOfWeek];
