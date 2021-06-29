@@ -152,7 +152,7 @@ module.exports = new SmartApp()
 	// console.log('Context.stringify: ', JSON.stringify(context));
 	// assuming `json` is the data string
 	var titles = [];
-	var data = JSON.parse(context, function(key, value) {
+	var data = JSON.parse(context.app, function(key, value) {
     		if (value.includes('Office')) { 
 	        	titles.push(key);
 		}
