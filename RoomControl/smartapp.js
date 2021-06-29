@@ -109,7 +109,7 @@ module.exports = new SmartApp()
 	// enable/disable control, key name for state machine
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
-		section.stringSetting('keyName').required(false);
+		section.textSetting('keyName').required(false);
 	});
 
 	// room switches
@@ -168,7 +168,7 @@ module.exports = new SmartApp()
 	console.log('Context API apps: ', context.api.apps);
 	console.log('Context API presentation: ', context.api.presentation);
 	*/
-	await getCurrentState(context.configStringValue('keyName'));
+	await getCurrentState(context.configTextValue('keyName'));
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
