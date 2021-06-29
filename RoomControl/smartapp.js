@@ -156,7 +156,7 @@ module.exports = new SmartApp()
     		if (value.includes('Office')) { 
 	        	titles.push(key);
 		}
-	}
+	});
 	console.log('Titles: ', titles);
 		
 	/*
