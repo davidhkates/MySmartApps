@@ -147,9 +147,20 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
+	
 	console.log('Context: ', context);
-	console.log('Context app: ', context.app);
+	console.log('Context.stringify: ', context.stringify());
+	// assuming `json` is the data string
+	var titles = [];
+	var data = JSON.parse(json, function(key, value) {
+    		if (value.includes('Office')) { 
+	        	titles.push(key);
+		}
+	}
+	console.log('Titles: ', titles);
+		
 	/*
+	console.log('Context app: ', context.app);
 	console.log('Update data: ', updateData);
 	console.log('Context API: ', context.api);
 	console.log('Context API config: ', context.api.config);
