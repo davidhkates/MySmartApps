@@ -61,10 +61,10 @@ async function getCurrentState( appId ) {
 	
 	do {
 		stateData = await getStateData(appId, sequence);
+		console.log('State data: ', stateData);
 				
 		// check to see if current date and time included in state data
 		if (stateData) {
-			// console.log('State data: ', stateData, strDayOfWeek, sequence);
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				if (stateData.startTime && stateData.endTime) {
 					if (stateData.startTime >= localTime && stateData.endTime < localTime) { 
