@@ -63,12 +63,12 @@ async function getCurrentState( appId ) {
 	
 	do {
 		stateData = await getStateData(appId, sequence);
-		console.log('State data: ', stateData);
+		// console.log('State data: ', stateData);
 				
 		// check to see if current date and time included in state data
 		if (stateData) {
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
-				console.log('Date of week found, times: ', stateData.startTime, stateData.endTime, localTime);
+				// console.log('Date of week found, times: ', stateData.startTime, stateData.endTime, localTime);
 				if (stateData.startTime && stateData.endTime) {
 					if (stateData.startTime >= localTime && stateData.endTime < localTime) { 
 						bFound = true;
@@ -147,7 +147,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
-	console.log('Context: ', context);
+	console.log('Context updateData: ', context.app.updateData);
 	console.log('Update data: ', updateData);
 	/*
 	console.log('Context API: ', context.api);
