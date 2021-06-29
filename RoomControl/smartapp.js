@@ -106,9 +106,10 @@ module.exports = new SmartApp()
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
 
-	// enable/disable control, motion delay setting
+	// enable/disable control, key name for state machine
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
+		section.stringSetting('keyName').required(false);
 	});
 
 	// room switches
@@ -148,20 +149,18 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
 	
+	/*
 	console.log('Context: ', context);
 	console.log('Context.stringify: ', JSON.stringify(context));
-	// assuming `json` is the data string
-	/*
-	var titles = [];
+
+	var names = [];
 	var data = JSON.parse(context.app, function(key, value) {
     		if (value.includes('Office')) { 
-	        	titles.push(key);
+	        	names.push(key);
 		}
 	});
-	console.log('Titles: ', titles);
-	*/
+	console.log('Names: ', names);
 	
-	/*
 	console.log('Context app: ', context.app);
 	console.log('Update data: ', updateData);
 	console.log('Context API: ', context.api);
@@ -169,7 +168,7 @@ module.exports = new SmartApp()
 	console.log('Context API apps: ', context.api.apps);
 	console.log('Context API presentation: ', context.api.presentation);
 	*/
-	await getCurrentState('front-office');
+	await getCurrentState(context.configStringValue('keyName'));
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
