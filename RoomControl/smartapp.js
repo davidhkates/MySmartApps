@@ -166,7 +166,10 @@ module.exports = new SmartApp()
 	console.log('Context API apps: ', context.api.apps);
 	console.log('Context API presentation: ', context.api.presentation);
 	*/
+	const keyName = context.configStringValue('keyName');
+	console.log('Key name: ', keyName);
 	const currentState = await getCurrentState(context.configStringValue('keyName'));
+	console.log('Current state: ', currentState);
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -209,6 +212,7 @@ module.exports = new SmartApp()
 			onBehavior  = context.configStringValue('onBehavior');
 			offBehavior = context.configStringValue('offBehavior');
 		}
+		console.log('Behaviors: ', startTime, endTime, offBehavior);
 		
 		// check to see if light was turned on before start time
 		// const startTime = context.configStringValue('startTime');
