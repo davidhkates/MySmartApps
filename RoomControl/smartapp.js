@@ -69,10 +69,8 @@ async function getCurrentState( appId ) {
 		if (stateData) {
 			console.log('State data: ', stateData);
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
-				console.log('Date of week found, times: ', stateData.startTime, stateData.endTime, localTime);
 				if (stateData.startTime && stateData.endTime) {
-					console.log('Start and end times specified, startTime>localTime? ', (stateData.startTime >= localTime), (stateData.endTime < localTime) );
-					if (stateData.startTime >= localTime && stateData.endTime < localTime) { 
+					if ( (localTime>=stateData.startTime) && (localTime<stateData.endTime) { 
 						console.log('Found state for day of week and current time');
 						bFound = true;
 					}
