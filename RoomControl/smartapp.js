@@ -126,7 +126,6 @@ module.exports = new SmartApp()
 		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
 
-	/*
 	// room contacts
 	page.section('controls', section => {
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
@@ -140,9 +139,7 @@ module.exports = new SmartApp()
 			defaultValue('everyday').required(true);
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
-		// section.booleanSetting('offAtEnd').defaultValue(false);
 	});
-	*/
 })
 
 
@@ -169,7 +166,7 @@ module.exports = new SmartApp()
 	console.log('Context API apps: ', context.api.apps);
 	console.log('Context API presentation: ', context.api.presentation);
 	*/
-	await getCurrentState(context.configStringValue('keyName'));
+	const currentState = await getCurrentState(context.configStringValue('keyName'));
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -196,22 +193,31 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
-		/*
-		// motion sensor handlers
-		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.active', 'motionStartHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.motion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		*/
-
+		// use state machine parameters if specified
+		var startTime;
+		var endTime;
+		var onBehavior;
+		var offBehavior;
+		if (currentState) {
+			startTime   = currentState.startTime;
+			endTime     = currentState.endTime;
+			onBehavior  = currentState.onBehavior;
+			offBehavior = currentState.offBehavior; 
+		} else {
+			startTime   = context.configStringValue('startTime');
+			endTime     = context.configStringValue('endTime');
+			onBehavior  = context.configStringValue('onBehavior');
+			offBehavior = context.configStringValue('offBehavior');
+		}
+		
 		// check to see if light was turned on before start time
-		const startTime = context.configStringValue('startTime');
+		// const startTime = context.configStringValue('startTime');
 		if (startTime) {
 			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		const endTime = context.configStringValue('endTime');
+		// const endTime = context.configStringValue('endTime');
 		if (endTime) {
-			const offBehavior = context.configStringValue('offBehavior');
+			// const offBehavior = context.configStringValue('offBehavior');
 			if (offBehavior == 'end') {
 				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 			}
