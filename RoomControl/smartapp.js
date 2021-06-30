@@ -169,7 +169,6 @@ module.exports = new SmartApp()
 	console.log('Context API apps: ', context.api.apps);
 	console.log('Context API presentation: ', context.api.presentation);
 	*/
-	console.log('Key name: ', context.configStringValue('keyName'));
 	await getCurrentState(context.configStringValue('keyName'));
 
 	// unsubscribe all previously established subscriptions
