@@ -71,6 +71,7 @@ async function getCurrentState( appId ) {
 			if (stateData.daysofweek.includes(strDayOfWeek)) {
 				console.log('Date of week found, times: ', stateData.startTime, stateData.endTime, localTime);
 				if (stateData.startTime && stateData.endTime) {
+					console.log('Start and end times specified, startTime>localTime? ', (stateData.startTime >= localTime) );
 					if (stateData.startTime >= localTime && stateData.endTime < localTime) { 
 						console.log('Found state for day of week and current time');
 						bFound = true;
@@ -159,18 +160,10 @@ module.exports = new SmartApp()
 		}
 	});
 	console.log('Names: ', names);
-	
-	console.log('Context app: ', context.app);
-	console.log('Update data: ', updateData);
-	console.log('Context API: ', context.api);
-	console.log('Context API config: ', context.api.config);
-	console.log('Context API apps: ', context.api.apps);
-	console.log('Context API presentation: ', context.api.presentation);
 	*/
-	const keyName = context.configStringValue('keyName');
-	console.log('Key name: ', keyName);
+
+	// TODO: Move to on and off switch to drive those behaviors
 	const currentState = await getCurrentState(context.configStringValue('keyName'));
-	console.log('Current state: ', currentState);
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
