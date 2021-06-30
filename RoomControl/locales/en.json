@@ -4,6 +4,8 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
+	"pages.mainPage.settings.keyName.name": "DyanomoDB key (optional)",
+	"pages.mainPage.settings.keyName.description": "KeyID for state machine table to control behaviors by time zone",
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.sections.switches.name": "Switches to control room",
 	"pages.mainPage.settings.mainSwitch.name": "Main switch to control room",
@@ -15,11 +17,17 @@
 	"pages.mainPage.settings.offBehavior.options.delay.name": "After Delay",
 	"pages.mainPage.settings.offBehavior.options.end.name": "At End Time",
 
-	
-
 	"pages.mainPage.settings.offBehavior.options.off.name": "Off",
-"pages.mainPage.settings.delayOff.name": "Delay (in seconds) in turning off lights",
+	"pages.mainPage.settings.delayOff.name": "Delay (in seconds) in turning off lights",
+	"pages.mainPage.settings.delayOff.postMessage": "",
 	"pages.mainPage.settings.delayOff.description": "",
+	
+	"pages.mainPage.settings.roomContacts.name": "Door/window contact sensors to control lights",
+	"pages.mainPage.settings.contactMode.name": "Contact state to turn on/off lights/switches",
+	"pages.mainPage.settings.contactMode.options.AllOpen.name": "All Open",
+	"pages.mainPage.settings.contactMode.options.AllClosed.name": "All Closed",
+	"pages.mainPage.settings.contactMode.options.AnyOpen.name": "Any Open",	
+	"pages.mainPage.settings.contactMode.options.AnyClosed.name": "Any Closed",	
 	
 	"pages.mainPage.settings.mode.name": "Motion switch activity mode",
 	"pages.mainPage.settings.mode.options.vacancy.name": "Vacancy",
