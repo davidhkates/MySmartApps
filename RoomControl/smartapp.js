@@ -11,8 +11,28 @@ const SmartUtils  = require('@katesthings/smartutils');
 var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
+async function getCurrentState( appId ) {
+	var docClient = new aws.DynamoDB.DocumentClient();
+	const params = {
+  		TableName: 'smartapp-state-machine',
+  		KeyConditionExpression: 'appId = ' + appId,
+	};
+
+	docClient.query(params, function(err, data) {
+    		if (err) {
+        		console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+    		} else {
+        		console.log("Query succeeded");
+		        data.Items.forEach(function(item) {
+            			console.log(item);
+        		});
+		}
+	});	
+};	
+	
+/*
 async function getStateData( appId, sequence ) {
-	// var stateData = null;
+
 	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const params = {
   		TableName: 'smartapp-state-machine',
@@ -21,21 +41,6 @@ async function getStateData( appId, sequence ) {
 			sequence: sequence
   		}
 	};
-
-	/*
-	await docClient.get(params, function(err, data) {
-		if (err) {
-			console.log("Error", err);
-			return undefined;
-		} else {
-			// if (data.Item===undefined) {
-			if (Object.keys(data).length>0) {
-				console.log("State found", data.Item);
-				return data.Item;
-			}
-		}
-	});
-	*/
 
 	try {
 		const data = await docClient.get(params).promise();
@@ -95,6 +100,7 @@ async function getCurrentState( appId ) {
 	return offBehavior;
 	*/
 };
+*/
 
 function getStateVariables(currentState) {
 	/*
