@@ -96,6 +96,34 @@ async function getCurrentState( appId ) {
 	*/
 };
 
+function getStateVariables(currentState) {
+	/*
+	var startTime;
+	var endTime;
+	var onBehavior;
+	var offBehavior;
+	if (currentState) {
+		startTime   = currentState.startTime;
+		endTime     = currentState.endTime;
+		onBehavior  = currentState.onBehavior;
+		offBehavior = currentState.offBehavior; 
+	} else {
+		startTime   = context.configStringValue('startTime');
+		endTime     = context.configStringValue('endTime');
+		onBehavior  = context.configStringValue('onBehavior');
+		offBehavior = context.configStringValue('offBehavior');
+	}
+	console.log('Behaviors: ', startTime, endTime, offBehavior);
+	*/
+	if (!currentState) {
+		currentState = { startTime: context.configStringValue('startTime'),
+			endTime: context.configStringValue('endTime'),
+			onBehavior: context.configStringValue('onBehavior'),
+			offBehavior: context.configStringValue('offBehavior') };
+	}
+	return currentState;
+}
+
 
 
 /* Define the SmartApp */
@@ -189,31 +217,8 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
 		// use parameters from smartApp if state machine not specified
-		/*
-		var startTime;
-		var endTime;
-		var onBehavior;
-		var offBehavior;
-		if (currentState) {
-			startTime   = currentState.startTime;
-			endTime     = currentState.endTime;
-			onBehavior  = currentState.onBehavior;
-			offBehavior = currentState.offBehavior; 
-		} else {
-			startTime   = context.configStringValue('startTime');
-			endTime     = context.configStringValue('endTime');
-			onBehavior  = context.configStringValue('onBehavior');
-			offBehavior = context.configStringValue('offBehavior');
-		}
-		console.log('Behaviors: ', startTime, endTime, offBehavior);
-		*/
-		if (!currentState) {
-			currentState = { startTime: context.configStringValue('startTime'),
-				endTime: context.configStringValue('endTime'),
-				onBehavior: context.configStringValue('onBehavior'),
-				offBehavior: context.configStringValue('offBehavior') };
-		}
-
+		currentState = getStateVariables(currentState);
+		
 		// check to see if light was turned on before start time
 		// const startTime = context.configStringValue('startTime');
 		if (startTime) {
