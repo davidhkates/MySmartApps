@@ -188,7 +188,8 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
-		// use state machine parameters if specified
+		// use parameters from smartApp if state machine not specified
+		/*
 		var startTime;
 		var endTime;
 		var onBehavior;
@@ -205,7 +206,14 @@ module.exports = new SmartApp()
 			offBehavior = context.configStringValue('offBehavior');
 		}
 		console.log('Behaviors: ', startTime, endTime, offBehavior);
-		
+		*/
+		if (!currentState) {
+			currentState = { startTime: context.configStringValue('startTime'),
+				endTime: context.configStringValue('endTime'),
+				onBehavior: context.configStringValue('onBehavior'),
+				offBehavior: context.configStringValue('offBehavior') };
+		}
+
 		// check to see if light was turned on before start time
 		// const startTime = context.configStringValue('startTime');
 		if (startTime) {
