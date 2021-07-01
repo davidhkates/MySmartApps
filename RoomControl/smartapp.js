@@ -189,7 +189,9 @@ module.exports = new SmartApp()
 	*/
 
 	// TODO: Move to on and off switch to drive those behaviors
-	const currentState = await getCurrentState(context.configStringValue('keyName'));
+	var currentState = await getCurrentState(context.configStringValue('keyName'));
+	// use parameters from smartApp if state machine not specified
+	currentState = getStateVariables(currentState);	
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -216,9 +218,11 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
-		// use parameters from smartApp if state machine not specified
-		currentState = getStateVariables(currentState);
-		
+		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
+
 		// check to see if light was turned on before start time
 		// const startTime = context.configStringValue('startTime');
 		if (startTime) {
