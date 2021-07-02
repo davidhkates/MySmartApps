@@ -137,34 +137,17 @@ async function getCurrentState( appId ) {
 	*/
 // };
 
-
-function getStateVariables(currentState) {
-	/*
-	var startTime;
-	var endTime;
-	var onBehavior;
-	var offBehavior;
+function getStateVariables(context, currentState) {
+	var stateVariables;
 	if (currentState) {
-		startTime   = currentState.startTime;
-		endTime     = currentState.endTime;
-		onBehavior  = currentState.onBehavior;
-		offBehavior = currentState.offBehavior; 
+		stateVariables = currentState
 	} else {
-		startTime   = context.configStringValue('startTime');
-		endTime     = context.configStringValue('endTime');
-		onBehavior  = context.configStringValue('onBehavior');
-		offBehavior = context.configStringValue('offBehavior');
-	}
-	console.log('Behaviors: ', startTime, endTime, offBehavior);
-	*/
-
-	if (!currentState) {
-		currentState = { startTime: context.configStringValue('startTime'),
+		stateVariables = { startTime: context.configStringValue('startTime'),
 			endTime: context.configStringValue('endTime'),
 			onBehavior: context.configStringValue('onBehavior'),
 			offBehavior: context.configStringValue('offBehavior') };
 	}
-	return currentState;
+	return stateVariables;
 };
 
 
@@ -230,11 +213,6 @@ module.exports = new SmartApp()
 	console.log('Names: ', names);
 	*/
 
-	// TODO: Move to on and off switch to drive those behaviors
-	var currentState = await getCurrentState(context.configStringValue('keyName'));
-	// use parameters from smartApp if state machine not specified
-	// currentState = getStateVariables(currentState);	
-
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete('checkOnHandler');
@@ -265,15 +243,19 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
+		// get state variables for current day/time from state machine or values in smartApp
+		const currentState = await getCurrentState(context.configStringValue('keyName'));
+		const stateVariables = getStateVariables(context, currentState);	
+
 		// check to see if light was turned on before start time
-		// const startTime = context.configStringValue('startTime');
+		const startTime = stateVariables.startTime;
 		if (startTime) {
 			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		// const endTime = context.configStringValue('endTime');
+		const endTime = stateVariables.endTime;
 		if (endTime) {
 			// const offBehavior = context.configStringValue('offBehavior');
-			if (offBehavior == 'end') {
+			if (stateVariables.offBehavior == 'end') {
 				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 			}
 		}
