@@ -11,6 +11,7 @@ const SmartUtils  = require('@katesthings/smartutils');
 var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
+/*
 async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
@@ -42,6 +43,7 @@ async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 		}
 	});	
 };
+*/
 
 async function getCurrentState( appId ) {
 	// initialize variables
