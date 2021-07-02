@@ -6,6 +6,11 @@ const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 // const SmartState  = require('@katesthings/smartstate');
 
+// SmartApp type definitions
+interface device {
+	[value: string]: any
+}
+
 
 // state machine routines
 var aws = require('aws-sdk');
@@ -274,9 +279,6 @@ module.exports = new SmartApp()
 			'switch'
 		));	
 		
-		interface device {
-    			[value: string]: any
-		}
 		const states: device = await Promise.all(onGroupStates);
 		if (states.find(it => it.switch.value === 'on')) {
 			console.log('Switch(es) in on group already on, do not turn on group')
