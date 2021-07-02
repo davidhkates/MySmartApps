@@ -274,9 +274,11 @@ module.exports = new SmartApp()
 			'switch'
 		));	
 		
-		const it:  any = null;
+		interface device {
+			switch: string;
+		}
 		const states = await Promise.all(onGroupStates);
-		if (states.find(it => it.swatch.value === 'on')) {
+		if (states.find(device => device.switch.value === 'on')) {
 			console.log('Switch(es) in on group already on, do not turn on group')
 		} else {
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
