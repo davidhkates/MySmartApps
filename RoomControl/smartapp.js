@@ -230,7 +230,7 @@ module.exports = new SmartApp()
 	// TODO: Move to on and off switch to drive those behaviors
 	var currentState = await getCurrentState(context.configStringValue('keyName'));
 	// use parameters from smartApp if state machine not specified
-	currentState = getStateVariables(currentState);	
+	// currentState = getStateVariables(currentState);	
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
