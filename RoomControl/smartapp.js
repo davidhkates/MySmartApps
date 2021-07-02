@@ -11,24 +11,58 @@ const SmartUtils  = require('@katesthings/smartutils');
 var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
-async function getCurrentState( appId ) {
+async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
   		TableName: 'smartapp-state-machine',
   		KeyConditionExpression: 'appId = ' + appId,
 	};
 
+	var bFound = false;
 	docClient.query(params, function(err, data) {
     		if (err) {
-        		console.log("Unable to query. Error:", JSON.stringify(err, null, 2));
+        		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
     		} else {
         		console.log("Query succeeded");
-		        data.Items.forEach(function(item) {
-            			console.log(item);
-        		});
+			for (const item of data.Items) {
+				if (item.daysofweek.includes(strDayOfWeek)) {
+					if (item.startTime && item.endTime) {
+						if ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) { 
+							console.log('Found state for day of week and current time');
+							bFound = true;
+						}
+					} else {
+						bFound = true;
+					}
+				}
+			}
+			
+			if (bFound) {
+				console.log('State data found: ', sequence, item);
+				return item;
+			}
 		}
 	});	
-};	
+};
+
+async function getCurrentState( appId ) {
+	// initialize variables
+	var stateData = null;
+	var bFound = false;
+
+	// get day of week character for today
+	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+	var localDate = new Date(localToday);
+	const strHours = "0" + localDate.getHours();
+	const strMinutes = "0" + localDate.getMinutes();
+	const strLocalTime = strHours.slice(-2) + strMinutes.slice(-2);
+	const nDayOfWeek = localDate.getDay();
+	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
+	const strDayOfWeek = daysOfWeek[nDayOfWeek];
+
+	// find state data for current day/time
+	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
+};
 	
 /*
 async function getStateData( appId, sequence ) {
