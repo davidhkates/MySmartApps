@@ -275,10 +275,11 @@ module.exports = new SmartApp()
 		));	
 		
 		interface device {
-			switch: string;
+			[switch: string]: any
 		}
-		let it: device;
-		const states = await Promise.all(onGroupStates);
+		let it: device = {};
+		let states: device = {};
+		states = await Promise.all(onGroupStates);
 		if (states.find(it => it.switch.value === 'on')) {
 			console.log('Switch(es) in on group already on, do not turn on group')
 		} else {
