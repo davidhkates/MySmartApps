@@ -31,13 +31,13 @@ async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 					} else {
 						bFound = true;
 					}
+								
+					if (bFound) {
+						console.log('State data found: ', item);
+						return item;
+						break;
+					}					
 				}
-			}
-			
-			if (bFound) {
-				console.log('State data found: ', sequence, item);
-				return item;
-				break;
 			}
 		}
 	});	
