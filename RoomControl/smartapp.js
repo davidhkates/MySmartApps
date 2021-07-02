@@ -12,7 +12,7 @@ var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
 
-async function findStateData( appId, strDayOfWeek, strLocalTime ) {
+async function findCurrentState( appId, strDayOfWeek, strLocalTime ) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
   		TableName: 'smartapp-state-machine',
