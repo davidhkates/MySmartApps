@@ -5,7 +5,7 @@
 		// "rootDir": "./src",
 		// "sourceMap": true,
 
-		"outDir": ".",
+		"outDir": "./.",
 		// "allowJs": true,
 		"target": "es6"
 	},
