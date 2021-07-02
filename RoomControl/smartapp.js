@@ -15,7 +15,7 @@ async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
   		TableName: 'smartapp-state-machine',
-  		KeyConditionExpression: 'appId = ' + appId,
+  		KeyConditionExpression: 'appId = ' + appId
 	};
 
 	var bFound = false;
