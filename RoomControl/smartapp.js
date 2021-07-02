@@ -24,7 +24,7 @@ async function findCurrentState( appId, strDayOfWeek, strLocalTime ) {
     		if (err) {
         		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
     		} else {
-        		console.log("Query succeeded");
+        		console.log("Query succeeded: ", data.Items);
 			for (const item of data.Items) {
 				if (item.daysofweek.includes(strDayOfWeek)) {
 					if (item.startTime && item.endTime) {
