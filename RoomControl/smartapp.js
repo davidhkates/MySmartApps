@@ -135,8 +135,7 @@ async function getCurrentState( appId ) {
 	console.log('Off behavior: ', offBehavior);
 	return offBehavior;
 	*/
-};
-*/
+// };
 
 
 // function getStateVariables(currentState) {
