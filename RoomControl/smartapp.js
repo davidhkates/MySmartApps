@@ -27,10 +27,7 @@ async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 			for (const item of data.Items) {
 				if (item.daysofweek.includes(strDayOfWeek)) {
 					if (item.startTime && item.endTime) {
-						if ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) { 
-							console.log('Found state for day of week and current time');
-							bFound = true;
-						}
+						bFound = ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) );
 					} else {
 						bFound = true;
 					}
@@ -40,6 +37,7 @@ async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 			if (bFound) {
 				console.log('State data found: ', sequence, item);
 				return item;
+				break;
 			}
 		}
 	});	
