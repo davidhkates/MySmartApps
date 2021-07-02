@@ -1,12 +1,12 @@
 {
 	"compilerOptions": {
-		"moduleResolution": "node",
-		"noImplicitAny": false,
-		"rootDir": "./src",
-		"sourceMap": true,
+		// "moduleResolution": "node",
+		// "noImplicitAny": false,
+		// "rootDir": "./src",
+		// "sourceMap": true,
 
 		"outDir": "./built",
-		"allowJs": true,
+		// "allowJs": true,
 		"target": "es6"
 	},
 	"include": ["./src/**/*"]
