@@ -134,7 +134,8 @@ async function getCurrentState( appId ) {
 };
 */
 
-function getStateVariables(currentState) {
+
+// function getStateVariables(currentState) {
 	/*
 	var startTime;
 	var endTime;
@@ -153,6 +154,8 @@ function getStateVariables(currentState) {
 	}
 	console.log('Behaviors: ', startTime, endTime, offBehavior);
 	*/
+
+	/*
 	if (!currentState) {
 		currentState = { startTime: context.configStringValue('startTime'),
 			endTime: context.configStringValue('endTime'),
@@ -160,8 +163,8 @@ function getStateVariables(currentState) {
 			offBehavior: context.configStringValue('offBehavior') };
 	}
 	return currentState;
-}
-
+};
+*/
 
 
 /* Define the SmartApp */
