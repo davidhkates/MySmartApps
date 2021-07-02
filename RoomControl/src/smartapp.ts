@@ -275,7 +275,8 @@ module.exports = new SmartApp()
 		));	
 		
 		interface device {
-    			[value: string]: any
+    			// [value: string]: any
+    			[switch: string]: any
 		}
 		const states: any = await Promise.all(onGroupStates);
 		if (states.find(it => it.switch.value === 'on')) {
@@ -336,8 +337,7 @@ module.exports = new SmartApp()
 		));	
 
 		// Quit if there are other switches still on
-		let it: any;
-		const states = await Promise.all(stateRequests);
+		const states: any = await Promise.all(stateRequests);
 		if (states.find(it => it.switch.value === 'on')) {
 			return
 		}
