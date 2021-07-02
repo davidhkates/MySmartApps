@@ -44,7 +44,6 @@ async function findStateData( appId, strDayOfWeek, strLocalTime ) {
 	});	
 };
 
-/*
 async function getCurrentState( appId ) {
 	// initialize variables
 	var stateData = null;
@@ -63,7 +62,6 @@ async function getCurrentState( appId ) {
 	// find state data for current day/time
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
-*/
 
 /*
 async function getStateData( appId, sequence ) {
