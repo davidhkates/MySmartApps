@@ -3,7 +3,7 @@ service: room-control
 package:
   patterns:
     - index.js
-    - smartapp.js
+    - built/smartapp.js
     - locales/**
 
 provider:
