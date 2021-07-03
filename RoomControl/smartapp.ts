@@ -132,7 +132,7 @@ module.exports = new SmartApp()
 
 	// behavior at turn switch off and delay, if applicable
 	page.section('behavior', section => {
-		section.enumSetting('offBehavior').options(['off','delay','end'])
+		section.enumSetting('offBehavior').options(['off','delay','end','none'])
 			.defaultValue('off').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
