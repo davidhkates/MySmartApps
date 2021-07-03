@@ -111,14 +111,17 @@ module.exports = new SmartApp()
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
-		section.enumSetting('offBehavior').options(['off','delay','end'])
-			.defaultValue('off').required('true');
-		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
 })
 
 .page('optionsPage', (context, page, configData) => {
 	
+	// behavior at turn switch off and delay, if applicable
+	page.section('behaviors', section => {
+		section.enumSetting('offBehavior').options(['off','delay','end'])
+			.defaultValue('off').required('true');
+		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
+
 	// room contacts
 	page.section('controls', section => {
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
