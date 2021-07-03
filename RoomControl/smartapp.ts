@@ -71,8 +71,15 @@ async function getCurrentState( appId ) {
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
 
-function getStateVariables(context, currentState) {
-	var stateVariables;
+function getStateVariables(context) {
+	// declare variable to return stateVariables
+	const stateVariables: any;
+	
+	// find current state in DynamoDB smartapp-option-settings
+	if ( const keyName: string = context.configStringValue('keyName') ) {
+		const currentState: any = await getCurrentState(context.configStringValue('keyName'));
+	}
+
 	if (currentState) {
 		stateVariables = currentState
 	} else {
@@ -188,8 +195,8 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// get state variables for current day/time from state machine or values in smartApp
-		const currentState = await getCurrentState(context.configStringValue('keyName'));
-		const stateVariables = getStateVariables(context, currentState);	
+		// const currentState = await getCurrentState(context.configStringValue('keyName'));
+		const stateVariables: any = getStateVariables(context);	
 
 		// check to see if light was turned on before start time
 		const startTime = stateVariables.startTime;
