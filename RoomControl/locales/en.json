@@ -21,8 +21,8 @@
 	"pages.optionsPage.settings.offBehavior.options.delay.name": "After Delay",
 	"pages.optionsPage.settings.offBehavior.options.end.name": "At End Time",
 	"pages.optionsPage.settings.offBehavior.options.off.name": "Off",
-	"pages.optionsPage.settings.delayOff.name": "Delay to turn off lights (if applicable)",
-	"pages.optionsPage.settings.delayOff.description": "",
+	"pages.optionsPage.settings.offDelay.name": "Delay to turn off lights (if applicable)",
+	"pages.optionsPage.settings.offDelay.description": "Delay in seconds",
 	
 	"pages.optionsPage.sections.sensors.name": "Room sensors",
 	"pages.optionsPage.settings.roomMotion.name": "Room motion sensor",
