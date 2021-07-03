@@ -121,7 +121,7 @@ module.exports = new SmartApp()
 	page.nextPageId('timePage');
 
 	// room motion sensor(s) and door/window contact(s)
-	page.section('contacts', section => {
+	page.section('sensors', section => {
 		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
@@ -133,7 +133,7 @@ module.exports = new SmartApp()
 	page.section('behavior', section => {
 		section.enumSetting('offBehavior').options(['off','delay','end'])
 			.defaultValue('off').required('true');
-		section.numberSetting('delayOff').required(false).min(0).defaultValue(0);
+		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
 })
 
