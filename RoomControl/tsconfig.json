@@ -6,7 +6,7 @@
 		// "sourceMap": true,
 
 		// "outDir": "./built",
-		"outDir": "../**/*",
+		"outDir": "..",
 		"allowJs": true,
 		"target": "es6"
 	},
