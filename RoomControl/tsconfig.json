@@ -8,9 +8,9 @@
 		"rootDir": ".",
 		// "outDir": "./built",
 		"outDir": ".",
-		"allowJs": true,
+		// "allowJs": true,
 		"target": "es6"
 	},
-	"include": ["./src/**/*"],
+	"include": ["./**/*"],
 	"exclude": []
 }
