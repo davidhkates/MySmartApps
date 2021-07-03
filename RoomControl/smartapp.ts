@@ -116,19 +116,31 @@ module.exports = new SmartApp()
 
 .page('optionsPage', (context, page, configData) => {
 	
+	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
+	page.prevPageId('mainPage');
+	page.nextPageId('timePage');
+
+	// room motion sensor(s) and door/window contact(s)
+	page.section('contacts', section => {
+		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
+			.required(false).multiple(true).permissions('r');
+		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
+			.required(false).multiple(true).permissions('r');
+		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
+	});
+
 	// behavior at turn switch off and delay, if applicable
 	page.section('behavior', section => {
 		section.enumSetting('offBehavior').options(['off','delay','end'])
 			.defaultValue('off').required('true');
 		section.numberSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
+})
 
-	// room contacts
-	page.section('contacts', section => {
-		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
-	});
+.page('timePage', (context, page, configData) => {
+	
+	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
+	page.prevPageId('optionsPage');
 
 	// time window and days of week
 	page.section('time', section => {
