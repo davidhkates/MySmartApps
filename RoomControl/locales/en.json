@@ -1,6 +1,6 @@
 {
-	"pages.mainPage.name": "Room Control",
 	"Tap to set": "Tap to set",
+	"pages.mainPage.name": "Room Control",
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
@@ -14,6 +14,7 @@
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
 
+	"pages.optionsPage.name": "Room Control (Additional Options)",
 	"pages.optionsPage.sections.behavior.name": "Switch off behavior",
 	"pages.optionsPage.settings.offBehavior.name": "Room light off action",
 	"pages.optionsPage.settings.offBehavior.options.off.name": "Off Immediately",
