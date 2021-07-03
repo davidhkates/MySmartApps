@@ -76,13 +76,12 @@ function getStateVariables(context) {
 	const stateVariables: any;
 	
 	// find current state in DynamoDB smartapp-option-settings
-	if ( const keyName: string = context.configStringValue('keyName') ) {
-		const currentState: any = await getCurrentState(context.configStringValue('keyName'));
+	const keyName: string = context.configStringValue('keyName');
+	if (keyName) {
+		stateVariables = await getCurrentState(context.configStringValue('keyName'));
 	}
 
-	if (currentState) {
-		stateVariables = currentState
-	} else {
+	if (!stateVariables) {
 		stateVariables = { startTime: context.configStringValue('startTime'),
 			endTime: context.configStringValue('endTime'),
 			onBehavior: context.configStringValue('onBehavior'),
