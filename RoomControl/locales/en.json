@@ -26,6 +26,8 @@
 	
 	"pages.optionsPage.sections.sensors.name": "Room sensors",
 	"pages.optionsPage.settings.roomMotion.name": "Room motion sensor",
+	"pages.optionsPage.settings.motionDelay.name": "Delay after motion stops (optional)",
+	"pages.optionsPage.settings.motionDelay.description": "Enter delay in seconds",
 	"pages.optionsPage.settings.roomContacts.name": "Door/window contact sensors",
 	"pages.optionsPage.settings.contactMode.name": "Contact state options",
 	"pages.optionsPage.settings.contactMode.options.AllOpen.name": "All Open",
