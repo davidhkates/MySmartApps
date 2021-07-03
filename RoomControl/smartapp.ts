@@ -117,13 +117,13 @@ module.exports = new SmartApp()
 .page('optionsPage', (context, page, configData) => {
 	
 	// behavior at turn switch off and delay, if applicable
-	page.section('behaviors', section => {
+	page.section('behavior', section => {
 		section.enumSetting('offBehavior').options(['off','delay','end'])
 			.defaultValue('off').required('true');
 		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 
 	// room contacts
-	page.section('controls', section => {
+	page.section('contacts', section => {
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactMode').options(['allOpen', 'allClosed','anyClosed']);
