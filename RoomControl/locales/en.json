@@ -24,7 +24,8 @@
 	"pages.optionsPage.settings.delayOff.name": "Delay to turn off lights (if applicable)",
 	"pages.optionsPage.settings.delayOff.description": "",
 	
-	"pages.optionsPage.sections.contacts.name": "Room contacts",
+	"pages.optionsPage.sections.sensors.name": "Room sensors",
+	"pages.optionsPage.settings.roomMotion.name": "Room motion sensor",
 	"pages.optionsPage.settings.roomContacts.name": "Door/window contact sensors",
 	"pages.optionsPage.settings.contactMode.name": "Contact state options",
 	"pages.optionsPage.settings.contactMode.options.AllOpen.name": "All Open",
@@ -32,13 +33,14 @@
 	"pages.optionsPage.settings.contactMode.options.AnyOpen.name": "Any Open",	
 	"pages.optionsPage.settings.contactMode.options.AnyClosed.name": "Any Closed",	
 	
-	"pages.optionsPage.sections.time.name": "Days/times for this automation",
-	"pages.optionsPage.settings.daysOfWeek.name": "Days of week",
-	"pages.optionsPage.settings.daysOfWeek.options.everyday.name": "Every Day",
-	"pages.optionsPage.settings.daysOfWeek.options.weekdays.name": "Weekdays",
-	"pages.optionsPage.settings.daysOfWeek.options.weekend.name": "Weekend",	
-	"pages.optionsPage.settings.startTime.name": "Start time",
-	"pages.optionsPage.settings.startTime.description": "",
-	"pages.optionsPage.settings.endTime.name": "End time",
-	"pages.optionsPage.settings.endTime.description": ""
+	"pages.timePage.name": "Room Control (3 of 3)",
+	"pages.timePage.sections.time.name": "Days/times for this automation",
+	"pages.timePage.settings.daysOfWeek.name": "Days of week",
+	"pages.timePage.settings.daysOfWeek.options.everyday.name": "Every Day",
+	"pages.timePage.settings.daysOfWeek.options.weekdays.name": "Weekdays",
+	"pages.timePage.settings.daysOfWeek.options.weekend.name": "Weekend",	
+	"pages.timePage.settings.startTime.name": "Start time",
+	"pages.timePage.settings.startTime.description": "",
+	"pages.timePage.settings.endTime.name": "End time",
+	"pages.timePage.settings.endTime.description": ""
 }
