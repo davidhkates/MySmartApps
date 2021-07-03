@@ -12,11 +12,12 @@
 	"pages.mainPage.settings.mainSwitch.description": "",
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
+
+	"pages.mainPage.sections.behavior.name": "Switch off behavior",
 	"pages.mainPage.settings.offBehavior.name": "Room light off action",
 	"pages.mainPage.settings.offBehavior.options.off.name": "Off Immediately",
 	"pages.mainPage.settings.offBehavior.options.delay.name": "After Delay",
 	"pages.mainPage.settings.offBehavior.options.end.name": "At End Time",
-
 	"pages.mainPage.settings.offBehavior.options.off.name": "Off",
 	"pages.mainPage.settings.delayOff.name": "Delay (in seconds) in turning off lights",
 	"pages.mainPage.settings.delayOff.postMessage": "",
