@@ -117,8 +117,8 @@ module.exports = new SmartApp()
 .page('optionsPage', (context, page, configData) => {
 	
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
-	page.prevPageId('mainPage');
-	// page.nextPageId('timePage');
+	// page.prevPageId('mainPage');
+	page.nextPageId('timePage');
 
 	// room motion sensor(s) and door/window contact(s)
 	page.section('sensors', section => {
