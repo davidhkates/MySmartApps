@@ -4,11 +4,11 @@
 		// "noImplicitAny": true,
 		"removeComments": true,
 		// "preserveConstEnums": true,
-		"sourceMap": true,
+		// "sourceMap": true,
 
-		"rootDir": ".",
+		// "rootDir": ".",
 		// "outDir": "./built",
-		"outDir": ".",
+		// "outDir": ".",
 		// "allowJs": true,
 		"skipLibCheck": true,
 		"target": "es6"
