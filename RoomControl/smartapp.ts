@@ -126,7 +126,7 @@ module.exports = new SmartApp()
 	page.section('contacts', section => {
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['allOpen', 'allClosed','anyClosed']);
+		section.enumSetting('contactMode').options(['allOpen', 'allClosed','anyOpen', 'anyClosed']);
 	});
 
 	// time window and days of week
