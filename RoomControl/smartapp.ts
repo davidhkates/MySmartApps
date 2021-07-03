@@ -124,6 +124,7 @@ module.exports = new SmartApp()
 	page.section('sensors', section => {
 		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 			.required(false).multiple(true).permissions('r');
+		section.numberSetting('motionDelay').required(false).min(0);
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
