@@ -1,16 +1,16 @@
 {
 	"compilerOptions": {
-		// "moduleResolution": "node",
-		// "noImplicitAny": false,
-		// "rootDir": "./src",
-		// "sourceMap": true,
+		// "module": "commonjs",
+		"noImplicitAny": true,
+		"removeComments": true,
+		"preserveConstEnums": true,
+		"sourceMap": true,
 
-		"rootDir": ".",
+		// "rootDir": ".",
 		// "outDir": "./built",
-		"outDir": ".",
+		// "outDir": ".",
 		// "allowJs": true,
 		"target": "es6"
 	},
-	"include": ["./**/*"],
-	"exclude": ["**/node_modules/*"]
+	"files": ["smartapp.ts"]
 }
