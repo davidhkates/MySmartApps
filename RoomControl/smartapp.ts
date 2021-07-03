@@ -71,9 +71,9 @@ async function getCurrentState( appId ) {
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
 
-function getStateVariables(context) {
+async function getStateVariables(context) {
 	// declare variable to return stateVariables
-	const stateVariables: any;
+	let stateVariables: any;
 	
 	// find current state in DynamoDB smartapp-option-settings
 	const keyName: string = context.configStringValue('keyName');
@@ -195,7 +195,7 @@ module.exports = new SmartApp()
 
 		// get state variables for current day/time from state machine or values in smartApp
 		// const currentState = await getCurrentState(context.configStringValue('keyName'));
-		const stateVariables: any = getStateVariables(context);	
+		const stateVariables: any = await getStateVariables(context);	
 
 		// check to see if light was turned on before start time
 		const startTime = stateVariables.startTime;
