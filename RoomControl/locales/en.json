@@ -21,7 +21,6 @@
 	"pages.optionsPage.settings.offBehavior.options.end.name": "At End Time",
 	"pages.optionsPage.settings.offBehavior.options.off.name": "Off",
 	"pages.optionsPage.settings.delayOff.name": "Delay (in seconds) in turning off lights",
-	"pages.optionsPage.settings.delayOff.postMessage": "",
 	"pages.optionsPage.settings.delayOff.description": "",
 	
 	"pages.optionsPage.sections.contacts.name": "Room contacts",
