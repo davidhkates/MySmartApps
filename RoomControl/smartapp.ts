@@ -112,7 +112,10 @@ module.exports = new SmartApp()
 			.defaultValue('off').required('true');
 		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
 	});
+})
 
+.page('optionsPage', (context, page, configData) => {
+	
 	// room contacts
 	page.section('controls', section => {
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
