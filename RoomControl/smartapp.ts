@@ -118,7 +118,7 @@ module.exports = new SmartApp()
 	
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
 	page.prevPageId('mainPage');
-	page.nextPageId('timePage');
+	// page.nextPageId('timePage');
 
 	// room motion sensor(s) and door/window contact(s)
 	page.section('sensors', section => {
@@ -140,7 +140,7 @@ module.exports = new SmartApp()
 .page('timePage', (context, page, configData) => {
 	
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
-	page.prevPageId('optionsPage');
+	// page.prevPageId('optionsPage');
 
 	// time window and days of week
 	page.section('time', section => {
