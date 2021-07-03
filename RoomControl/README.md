@@ -4,7 +4,7 @@ Turn on/off lights/outlets based on light switch, time of day, day of week, and 
 
 ## File Structure
 
-* smartapp.js &mdash; the SmartApp implementation
+* smartapp.js &mdash; the SmartApp implementation (also in typescript)
 * locales/en.json &mdash; English version of the app configuration page text
 
 ## Node Package Dependencies
