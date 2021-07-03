@@ -5,8 +5,9 @@
 		// "rootDir": "./src",
 		// "sourceMap": true,
 
-		"outDir": "./built",
-		// "allowJs": true,
+		// "outDir": "./built",
+		"outDir": "../**/*",
+		"allowJs": true,
 		"target": "es6"
 	},
 	"include": ["./src/**/*"]
