@@ -121,6 +121,7 @@ module.exports = new SmartApp()
 		section.enumSetting('offBehavior').options(['off','delay','end'])
 			.defaultValue('off').required('true');
 		section.decimalSetting('delayOff').required(false).min(0).defaultValue(0);
+	});
 
 	// room contacts
 	page.section('contacts', section => {
