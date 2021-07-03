@@ -94,6 +94,9 @@ module.exports = new SmartApp()
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
 
+	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
+	page.nextPageId('optionsPage');
+
 	// enable/disable control, key name for state machine
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
