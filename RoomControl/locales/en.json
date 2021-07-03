@@ -23,6 +23,7 @@
 	"pages.mainPage.settings.delayOff.postMessage": "",
 	"pages.mainPage.settings.delayOff.description": "",
 	
+	"pages.mainPage.sections.contacts.name": "Room contacts",
 	"pages.mainPage.settings.roomContacts.name": "Door/window contact sensors to control lights",
 	"pages.mainPage.settings.contactMode.name": "Contact state to turn on/off lights/switches",
 	"pages.mainPage.settings.contactMode.options.AllOpen.name": "All Open",
