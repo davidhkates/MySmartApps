@@ -71,73 +71,6 @@ async function getCurrentState( appId ) {
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
 
-/*
-async function getStateData( appId, sequence ) {
-	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-	const params = {
-  		TableName: 'smartapp-state-machine',
-  		Key: {
-    			appId: appId ,
-			sequence: sequence
-  		}
-	};
-	try {
-		const data = await docClient.get(params).promise();
-		return data.Item;
-	} catch (err) {
-		console.log("Failure", err.message);
-		return undefined;
-	}
-};
-async function getCurrentState( appId ) {
-	var sequence = 1;
-	var stateData = null;
-	var bFound = false;
-	// get day of week character for today
-	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
-	var localDate = new Date(localToday);
-	const strHours = "0" + localDate.getHours();
-	const strMinutes = "0" + localDate.getMinutes();
-	const localTime = strHours.slice(-2) + strMinutes.slice(-2);
-	const nDayOfWeek = localDate.getDay();
-	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
-	const strDayOfWeek = daysOfWeek[nDayOfWeek];
-	
-	do {
-		stateData = await getStateData(appId, sequence);
-		// console.log('State data: ', stateData);
-				
-		// check to see if current date and time included in state data
-		if (stateData) {
-			console.log('State data: ', stateData);
-			if (stateData.daysofweek.includes(strDayOfWeek)) {
-				if (stateData.startTime && stateData.endTime) {
-					if ( (localTime>=stateData.startTime) && (localTime<stateData.endTime) ) { 
-						console.log('Found state for day of week and current time');
-						bFound = true;
-					}
-				} else {
-					bFound = true;
-				}
-			}
-			
-			if (bFound) {
-				console.log('State data found: ', sequence, stateData);
-				return stateData;
-			}
-		}
-		sequence++;
-	} while (stateData && !bFound && sequence<5);
-	
-	/*
-	if (!offBehavior) {
-		offBehavior = 'none';
-	}
-	console.log('Off behavior: ', offBehavior);
-	return offBehavior;
-	*/
-// };
-
 function getStateVariables(context, currentState) {
 	var stateVariables;
 	if (currentState) {
@@ -201,18 +134,6 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
 	
-	/*
-	console.log('Context: ', context);
-	console.log('Context.stringify: ', JSON.stringify(context));
-	var names = [];
-	var data = JSON.parse(context.app, function(key, value) {
-    		if (value.includes('Office')) { 
-	        	names.push(key);
-		}
-	});
-	console.log('Names: ', names);
-	*/
-
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete('checkOnHandler');
