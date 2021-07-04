@@ -67,6 +67,14 @@ async function getCurrentSettings(context) {
 			// find state data for current day/time
 			let bFound: boolean = false;
 			for (const item of items) {
+				if (item.daysofweek.includes(strDayOfWeek) && 
+						( (!item.startTime && !item.endTime) ||
+						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
+					console.log('State data found: ', item);
+					return item;
+					break;
+				}
+				/*
 				if (item.daysofweek.includes(strDayOfWeek)) {
 					if (item.startTime && item.endTime) {
 						bFound = ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) );
@@ -80,6 +88,7 @@ async function getCurrentSettings(context) {
 						break;
 					}					
 				}
+				*/
 			}
 		}
 	}
@@ -124,7 +133,7 @@ function getSettingValue(context, settingName) {
 	if (appSettings) {
 		settingValue = appSettings.settingName;
 	}
-
+3
 	settingValue ??= context.configStringValue(settingName);
 	return settingValue;
 };
@@ -238,10 +247,12 @@ module.exports = new SmartApp()
 
 		// check to see if light was turned on before start time
 		const startTime = getSettingValue(context, 'startTime');
+		console.log('Start time: ', startTime);
 		if (startTime) {
 			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
 		const endTime = getSettingValue(context, 'endTime');
+		console.log('End time: ', endTime);
 		if (endTime) {
 			// const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue(context, 'offBehavior') === 'end') {
