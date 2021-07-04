@@ -65,22 +65,16 @@ async function getAppSettings(context) {
 	// check to see if settings database key specified
 	const keyName: string = context.configStringValue('keyName');
 	if (keyName) {
-		const stateVariables: any = await getCurrentState(context.configStringValue('keyName'));
-
 		// get day of week character for today
 		var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
 		var localDate = new Date(localToday);
-		// const strHours = "0" + localDate.getHours();
-		// const strMinutes = "0" + localDate.getMinutes();
-		// const strLocalTime = strHours.slice(-2) + strMinutes.slice(-2);
 		const strLocalTime = localDate.getHours().padStart(2,'0') + localDate.getMinutes().padStart(2,'0');
-		// const nDayOfWeek = localDate.getDay();
 		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
-		// const strDayOfWeek = daysOfWeek[nDayOfWeek];
 		const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 		// find state data for current day/time
-		appSettings = await findCurrentSettings( appId, strDayOfWeek, strLocalTime );
+		// appSettings = await getCurrentSettings( appId, strDayOfWeek, strLocalTime );
+		return await getCurrentSettings( appId, strDayOfWeek, strLocalTime );
 	}
 	// return stateData;
 };
