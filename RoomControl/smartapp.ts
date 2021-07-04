@@ -43,7 +43,7 @@ async function getAppSettings(appId) {
 	});	
 };
 
-async function getCurrenSettings(context) {
+async function getCurrentSettings(context) {
 	// initialize variables
 	// var stateData: any = null;
 	// var bFound = false;
@@ -116,13 +116,13 @@ async function getStateVariables(context) {
 };
 */
 
-async function getSettingValue(settingName) {
+async function getSettingValue(context, settingName) {
 	// declare variable to return stateVariables
 	let settingValue: string;
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
-		settingValue = stateVariables.settingName;
+		settingValue = appSettings.settingName;
 	}
 
 	settingValue ??= context.configStringValue(settingName);
@@ -237,11 +237,11 @@ module.exports = new SmartApp()
 		appSettings = await getCurrentSettings(context);
 
 		// check to see if light was turned on before start time
-		const startTime: string = getSettingValue('startTime');
+		const startTime = getSettingValue(context, 'startTime');
 		if (startTime) {
 			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		const endTime: string = getSettingValue('endTime');
+		const endTime = getSettingValue(context, 'endTime');
 		if (endTime) {
 			// const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue('offBehavior') === 'end') {
