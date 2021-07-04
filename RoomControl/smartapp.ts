@@ -22,7 +22,7 @@ var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
 
-async function getCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
+async function getAppSettings(appId) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
   		TableName: 'smartapp-state-machine',
@@ -38,6 +38,33 @@ async function getCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
         		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
     		} else {
         		console.log("Query succeeded: ", data.Items);
+			return data.Items;
+		}
+	});	
+};
+
+async function getCurrenSettings(context) {
+	// initialize variables
+	// var stateData: any = null;
+	// var bFound = false;
+	// let settings: any = null;
+	
+	// check to see if settings database key specified
+	const keyName: string = context.configStringValue('keyName');
+	if (keyName) {
+		// find settings from database for current app
+		const items: any = await getAppSettings(appId);
+
+		if (items) {
+
+			// get local time and day of week for today
+			const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
+			const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+			const localDate = new Date(localToday);
+			const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
+			const strDayOfWeek = daysOfWeek[localDate.getDay()];
+
+			// find state data for current day/time
 			for (const item of data.Items) {
 				if (item.daysofweek.includes(strDayOfWeek)) {
 					if (item.startTime && item.endTime) {
@@ -54,27 +81,6 @@ async function getCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
 				}
 			}
 		}
-	});	
-};
-
-async function getAppSettings(context) {
-	// initialize variables
-	// var stateData: any = null;
-	// var bFound = false;
-
-	// check to see if settings database key specified
-	const keyName: string = context.configStringValue('keyName');
-	if (keyName) {
-		// get day of week character for today
-		var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
-		var localDate = new Date(localToday);
-		const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
-		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
-		const strDayOfWeek = daysOfWeek[localDate.getDay()];
-
-		// find state data for current day/time
-		// appSettings = await getCurrentSettings( appId, strDayOfWeek, strLocalTime );
-		return await getCurrentSettings( appId, strDayOfWeek, strLocalTime );
 	}
 	// return stateData;
 };
