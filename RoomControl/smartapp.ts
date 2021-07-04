@@ -22,7 +22,7 @@ var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
 
-async function findCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
+async function getCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
   		TableName: 'smartapp-state-machine',
@@ -57,7 +57,7 @@ async function findCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
 	});	
 };
 
-async function getCurrentSettings( context ) {
+async function getAppSettings(context) {
 	// initialize variables
 	// var stateData: any = null;
 	// var bFound = false;
