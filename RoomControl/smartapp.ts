@@ -68,7 +68,7 @@ async function getAppSettings(context) {
 		// get day of week character for today
 		var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
 		var localDate = new Date(localToday);
-		const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().(2,'0');
+		const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
 		const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 		const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
