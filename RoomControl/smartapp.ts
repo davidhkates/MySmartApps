@@ -13,7 +13,7 @@ interface device {
 
 
 // global variables
-const appSettings: any = {}
+let appSettings: any = {}
 
 //----------------------------------------------------------------------------------------
 // TODO: move routines to get settings values from DynamoDB database to katesthings
@@ -119,13 +119,9 @@ async function getSettingValue(settingName) {
 	// declare variable to return stateVariables
 	let settingValue: string;
 	
-	// find current state in DynamoDB smartapp-option-settings
-	const keyName: string = context.configStringValue('keyName');
-	if (keyName) {
-		const stateVariables: any = await getCurrentState(context.configStringValue('keyName'));
-		if (stateVariables) {
-			settingValue = stateVariables.settingName;
-		}
+	// see if settings found in smartapp DynamoDB database
+	if (appSettings) {
+		settingValue = stateVariables.settingName;
 	}
 
 	settingValue ??= context.configStringValue(settingName);
