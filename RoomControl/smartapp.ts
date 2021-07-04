@@ -116,7 +116,7 @@ async function getStateVariables(context) {
 };
 */
 
-async function getSettingValue(context, settingName) {
+function getSettingValue(context, settingName) {
 	// declare variable to return stateVariables
 	let settingValue: string;
 	
