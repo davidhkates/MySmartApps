@@ -65,7 +65,7 @@ async function getCurrenSettings(context) {
 			const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 			// find state data for current day/time
-			const bFound: boolean = false;
+			let bFound: boolean = false;
 			for (const item of items) {
 				if (item.daysofweek.includes(strDayOfWeek)) {
 					if (item.startTime && item.endTime) {
