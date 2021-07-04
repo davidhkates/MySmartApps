@@ -81,11 +81,20 @@ async function getStateVariables(context) {
 		stateVariables = await getCurrentState(context.configStringValue('keyName'));
 	}
 
-	if (!stateVariables) {
+	if (stateVariables) {
+		stateVariables.startTime    ??= context.configStringValue('startTime');
+		stateVariables.endTime      ??= context.configStringValue('endTime');
+		stateVariables.offBehavior  ??= context.configStringValue('offBehavior');
+		stateVariables.offDelay     ??= context.configStringValue('offDelay');
+		stateVariables.motionDelay  ??= context.configStringValue('motionDelay');
+		stateVariables.contactDelay ??= context.configStringValue('contactDelay');		
+	} else {
 		stateVariables = { startTime: context.configStringValue('startTime'),
-			endTime: context.configStringValue('endTime'),
-			onBehavior: context.configStringValue('onBehavior'),
-			offBehavior: context.configStringValue('offBehavior') };
+			endTime:      context.configStringValue('endTime'),
+			offBehavior:  context.configStringValue('offBehavior'),
+			offDelay:     context.configStringValue('offDelay'),
+			motionDelay:  context.configStringValue('motionDelay'),
+			contactDelay: context.configStringValue('contactDelay') };		
 	}
 	return stateVariables;
 };
