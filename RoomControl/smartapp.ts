@@ -12,6 +12,9 @@ interface device {
 }
 
 
+// global variables
+const appSettings: any = {}
+
 // state machine routines
 var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
