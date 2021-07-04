@@ -71,6 +71,7 @@ async function getCurrentState( appId ) {
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
 
+/*
 async function getStateVariables(context) {
 	// declare variable to return stateVariables
 	let stateVariables: any;
@@ -98,6 +99,25 @@ async function getStateVariables(context) {
 	}
 	return stateVariables;
 };
+*/
+
+async function getSettingValue(context, settingName) {
+	// declare variable to return stateVariables
+	let settingValue: string;
+	
+	// find current state in DynamoDB smartapp-option-settings
+	const keyName: string = context.configStringValue('keyName');
+	if (keyName) {
+		const stateVariables: any = await getCurrentState(context.configStringValue('keyName'));
+		if (stateVariables) {
+			settingValue = stateVariables.settingName;
+		}
+	}
+
+	settingValue ??= context.configStringValue(settingName);
+	return settingValue;
+};
+
 
 
 /* Define the SmartApp */
