@@ -13,7 +13,7 @@ interface device {
 
 
 // global variables
-const appSettings: any = {}
+let appSettings: any = {}
 
 //----------------------------------------------------------------------------------------
 // TODO: move routines to get settings values from DynamoDB database to katesthings
@@ -59,7 +59,7 @@ async function findCurrentSettings( appId, strDayOfWeek, strLocalTime ) {
 
 async function getCurrentSettings( context ) {
 	// initialize variables
-	var stateData: any = null;
+	// var stateData: any = null;
 	// var bFound = false;
 
 	// check to see if settings database key specified
@@ -80,9 +80,9 @@ async function getCurrentSettings( context ) {
 		const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 		// find state data for current day/time
-		stateData = await findCurrentState( appId, strDayOfWeek, strLocalTime );
+		appSettings = await findCurrentState( appId, strDayOfWeek, strLocalTime );
 	}
-	return stateData;
+	// return stateData;
 };
 
 /*
