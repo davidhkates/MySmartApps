@@ -53,7 +53,7 @@ async function getCurrenSettings(context) {
 	const keyName: string = context.configStringValue('keyName');
 	if (keyName) {
 		// find settings from database for current app
-		const items: any = await getAppSettings(appId);
+		const items: any = await getAppSettings(keyName);
 
 		if (items) {
 
@@ -65,7 +65,8 @@ async function getCurrenSettings(context) {
 			const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 			// find state data for current day/time
-			for (const item of data.Items) {
+			const bFound: boolean = false;
+			for (const item of items) {
 				if (item.daysofweek.includes(strDayOfWeek)) {
 					if (item.startTime && item.endTime) {
 						bFound = ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) );
