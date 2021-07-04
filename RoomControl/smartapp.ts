@@ -80,7 +80,7 @@ async function getCurrentSettings( context ) {
 		const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 		// find state data for current day/time
-		appSettings = await findCurrentState( appId, strDayOfWeek, strLocalTime );
+		appSettings = await findCurrentSettings( appId, strDayOfWeek, strLocalTime );
 	}
 	// return stateData;
 };
