@@ -227,18 +227,17 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// get state variables for current day/time from state machine or values in smartApp
-		// const currentState = await getCurrentState(context.configStringValue('keyName'));
-		const stateVariables: any = await getStateVariables(context);	
+		appSettings = await getCurrentSettings(context);
 
 		// check to see if light was turned on before start time
-		const startTime = stateVariables.startTime;
+		const startTime: string = getSettingValue('startTime');
 		if (startTime) {
 			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
 		}
-		const endTime = stateVariables.endTime;
+		const endTime: string = getSettingValue('endTime');
 		if (endTime) {
 			// const offBehavior = context.configStringValue('offBehavior');
-			if (stateVariables.offBehavior == 'end') {
+			if (getSettingValue('offBehavior') === 'end') {
 				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 			}
 		}
