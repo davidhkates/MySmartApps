@@ -95,36 +95,6 @@ async function getCurrentSettings(context) {
 	// return stateData;
 };
 
-/*
-async function getStateVariables(context) {
-	// declare variable to return stateVariables
-	let stateVariables: any;
-	
-	// find current state in DynamoDB smartapp-option-settings
-	const keyName: string = context.configStringValue('keyName');
-	if (keyName) {
-		stateVariables = await getCurrentState(context.configStringValue('keyName'));
-	}
-
-	if (stateVariables) {
-		stateVariables.startTime    ??= context.configStringValue('startTime');
-		stateVariables.endTime      ??= context.configStringValue('endTime');
-		stateVariables.offBehavior  ??= context.configStringValue('offBehavior');
-		stateVariables.offDelay     ??= context.configStringValue('offDelay');
-		stateVariables.motionDelay  ??= context.configStringValue('motionDelay');
-		stateVariables.contactDelay ??= context.configStringValue('contactDelay');		
-	} else {
-		stateVariables = { startTime: context.configStringValue('startTime'),
-			endTime:      context.configStringValue('endTime'),
-			offBehavior:  context.configStringValue('offBehavior'),
-			offDelay:     context.configStringValue('offDelay'),
-			motionDelay:  context.configStringValue('motionDelay'),
-			contactDelay: context.configStringValue('contactDelay') };		
-	}
-	return stateVariables;
-};
-*/
-
 function getSettingValue(context, settingName) {
 	// declare variable to return stateVariables
 	let settingValue: string;
@@ -132,12 +102,27 @@ function getSettingValue(context, settingName) {
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
 		settingValue = appSettings.settingName;
+	} else {
+		settingValue ??= context.configStringValue(settingName);
 	}
-3
-	settingValue ??= context.configStringValue(settingName);
 	return settingValue;
 };
+/*
+function getSettingValue(context, settingName, bAppOnly) {
+	// declare variable to return stateVariables
+	let settingValue: string;
+	
+	// see if settings found in smartapp DynamoDB database
+	if (appSettings) {
+		settingValue = appSettings.settingName;
+	}
 
+	if (!bAppOnly) {
+		settingValue ??= context.configStringValue(settingName);
+	}
+	return settingValue;
+};
+*/
 
 
 /* Define the SmartApp */
