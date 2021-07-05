@@ -20,7 +20,7 @@ const oauth2 = simpleOauthModule.create({
  
 // Authorization uri definition
 const authorizationUri = oauth2.authorizationCode.authorizeURL({
-	redirect_uri: 'https://execute-api.us-west-2.amazonaws.com/dev/token-callback',
+	redirect_uri: 'https://' + process.env.LAMBDA_API_CALLBACK + '.execute-api.us-west-2.amazonaws.com/dev/token-callback',
 	scope: 'playback-control-all',
   	state: 'kateshallsonos'
 })
