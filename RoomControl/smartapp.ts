@@ -91,7 +91,6 @@ async function getAppSettings(appId) {
 
 	var bFound = false;
 	await docClient.query(params, function(err, data) {
-    		console.log('Data: ', data, err);
 		if (err) {
         		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
     		} else {
