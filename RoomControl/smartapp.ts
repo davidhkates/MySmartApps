@@ -22,7 +22,7 @@ var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
 
-
+/*
 async function findCurrentState( appId, strDayOfWeek, strLocalTime ) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
@@ -76,7 +76,7 @@ async function getCurrentState( appId ) {
 	// find state data for current day/time
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
-
+*/
 
 async function getAppSettings(appId) {
 	var docClient = new aws.DynamoDB.DocumentClient();
@@ -289,7 +289,7 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		/*-------------------------------------------------------------------------------------*/
-
+		/*
 		// get state variables for current day/time from state machine or values in smartApp
 		const currentState = await getCurrentState(context.configStringValue('keyName'));
 		// const stateVariables = getStateVariables(context, currentState);
@@ -307,7 +307,7 @@ module.exports = new SmartApp()
 				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 			}
 		}
-		/*
+		*/
 		appSettings = await getCurrentSettings(context);
 		console.log("App settings found: ", appSettings);
 		
@@ -325,7 +325,6 @@ module.exports = new SmartApp()
 				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 			}
 		}
-		*/
 	}	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
