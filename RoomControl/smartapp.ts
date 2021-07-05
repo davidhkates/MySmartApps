@@ -326,9 +326,7 @@ module.exports = new SmartApp()
 			}
 		}
 		*/
-	}
-}
-	
+	}	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
 
