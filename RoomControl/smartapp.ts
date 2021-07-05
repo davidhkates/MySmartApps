@@ -51,9 +51,11 @@ async function getCurrentSettings(context) {
 	
 	// check to see if settings database key specified
 	const keyName: string = context.configStringValue('keyName');
+	console.log('Key specified: ', keyName);
 	if (keyName) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(keyName);
+		console.log('Items: ', items);
 
 		if (items) {
 
@@ -67,6 +69,7 @@ async function getCurrentSettings(context) {
 			// find state data for current day/time
 			let bFound: boolean = false;
 			for (const item of items) {
+				consolelog('Item: ', item);
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
