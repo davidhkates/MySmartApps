@@ -229,7 +229,8 @@ module.exports = new SmartApp()
 
 		// get state variables for current day/time from state machine or values in smartApp
 		appSettings = await getCurrentSettings(context);
-
+		console.log("App settings found: ", appSettings);
+		
 		// check to see if light was turned on before start time
 		const startTime = getSettingValue(context, 'startTime');
 		console.log('Start time: ', startTime);
