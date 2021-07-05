@@ -288,10 +288,25 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
+		/*-------------------------------------------------------------------------------------*/
+
 		// get state variables for current day/time from state machine or values in smartApp
-		const appId = context.getStringValue('keyName');
-		if (appId) {
-			getCurrentState(appId);
+		const currentState = await getCurrentState(context.configStringValue('keyName'));
+		// const stateVariables = getStateVariables(context, currentState);
+		const stateVariables = currentState;
+
+		// check to see if light was turned on before start time
+		const startTime = stateVariables.startTime;
+		if (startTime) {
+			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
+		}
+		const endTime = stateVariables.endTime;
+		if (endTime) {
+			// const offBehavior = context.configStringValue('offBehavior');
+			if (stateVariables.offBehavior == 'end') {
+				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+			}
+		}
 		/*
 		appSettings = await getCurrentSettings(context);
 		console.log("App settings found: ", appSettings);
@@ -311,6 +326,7 @@ module.exports = new SmartApp()
 			}
 		}
 		*/
+	}
 }
 	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
