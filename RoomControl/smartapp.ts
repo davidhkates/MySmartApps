@@ -76,6 +76,24 @@ async function getCurrentState( appId ) {
 	// find state data for current day/time
 	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
 };
+
+async function getStateData( appId, sequence ) {
+	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+	const params = {
+  		TableName: 'smartapp-state-machine',
+  		Key: {
+    			appId: appId ,
+			sequence: sequence
+  		}
+	};
+	try {
+		const data = await docClient.get(params).promise();
+		return data.Item;
+	} catch (err) {
+		console.log("Failure", err.message);
+		return undefined;
+	}
+};
 */
 
 async function getAppSettings(appId) {
@@ -110,31 +128,6 @@ async function getAppSettings(appId) {
 	}
 
 };
-
-
-
-
-async function getStateData( appId, sequence ) {
-	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-	const params = {
-  		TableName: 'smartapp-state-machine',
-  		Key: {
-    			appId: appId ,
-			sequence: sequence
-  		}
-	};
-	try {
-		const data = await docClient.get(params).promise();
-		return data.Item;
-	} catch (err) {
-		console.log("Failure", err.message);
-		return undefined;
-	}
-};
-
-
-
-
 
 async function getCurrentSettings(context) {
 	// initialize variables
@@ -196,6 +189,7 @@ function getSettingValue(context, settingName) {
 	let settingValue: string;
 	
 	// see if settings found in smartapp DynamoDB database
+	console.log('Get setting value: ', appSettings, settingName);
 	if (appSettings) {
 		settingValue = appSettings.settingName;
 	} else {
