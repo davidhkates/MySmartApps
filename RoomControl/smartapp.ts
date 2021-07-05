@@ -89,6 +89,7 @@ async function getAppSettings(appId) {
 	};
 	console.log('Params: ', params);
 
+	/*
 	var bFound = false;
 	await docClient.query(params, function(err, data) {
 		if (err) {
@@ -97,8 +98,43 @@ async function getAppSettings(appId) {
         		console.log("Query succeeded: ", data.Items);
 			return data.Items;
 		}
-	});	
+	});
+	*/
+	
+	try {
+		const data = await docClient.query(params).promise();
+		return data.Items;
+	} catch (err) {
+		console.log("Failure", err.message);
+		return undefined;
+	}
+
 };
+
+
+
+
+async function getStateData( appId, sequence ) {
+	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+	const params = {
+  		TableName: 'smartapp-state-machine',
+  		Key: {
+    			appId: appId ,
+			sequence: sequence
+  		}
+	};
+	try {
+		const data = await docClient.get(params).promise();
+		return data.Item;
+	} catch (err) {
+		console.log("Failure", err.message);
+		return undefined;
+	}
+};
+
+
+
+
 
 async function getCurrentSettings(context) {
 	// initialize variables
