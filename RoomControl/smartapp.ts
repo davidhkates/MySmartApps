@@ -25,16 +25,18 @@ aws.config.update({region: 'us-west-2'});
 async function getAppSettings(appId) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
-  		TableName: 'smartapp-state-machine',
+  		TableName: 'smartapp-control-settings',
   		KeyConditionExpression: 'appId = :key',
 		ExpressionAttributeValues: {
     			':key': appId
 		}		
 	};
+	console.log('Params: ', params);
 
 	var bFound = false;
 	docClient.query(params, function(err, data) {
-    		if (err) {
+    		console.log('Data: ', data, err);
+		if (err) {
         		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
     		} else {
         		console.log("Query succeeded: ", data.Items);
