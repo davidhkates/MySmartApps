@@ -34,7 +34,7 @@ async function findCurrentState( appId, strDayOfWeek, strLocalTime ) {
 	};
 
 	var bFound = false;
-	docClient.query(params, function(err, data) {
+	await docClient.query(params, function(err, data) {
     		if (err) {
         		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
     		} else {
@@ -90,7 +90,7 @@ async function getAppSettings(appId) {
 	console.log('Params: ', params);
 
 	var bFound = false;
-	docClient.query(params, function(err, data) {
+	await docClient.query(params, function(err, data) {
     		console.log('Data: ', data, err);
 		if (err) {
         		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
