@@ -22,6 +22,62 @@ var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
 
+
+async function findCurrentState( appId, strDayOfWeek, strLocalTime ) {
+	var docClient = new aws.DynamoDB.DocumentClient();
+	const params = {
+  		TableName: 'smartapp-state-machine',
+  		KeyConditionExpression: 'appId = :key',
+		ExpressionAttributeValues: {
+    			':key': appId
+		}		
+	};
+
+	var bFound = false;
+	docClient.query(params, function(err, data) {
+    		if (err) {
+        		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
+    		} else {
+        		console.log("Query succeeded: ", data.Items);
+			for (const item of data.Items) {
+				if (item.daysofweek.includes(strDayOfWeek)) {
+					if (item.startTime && item.endTime) {
+						bFound = ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) );
+					} else {
+						bFound = true;
+					}
+								
+					if (bFound) {
+						console.log('State data found: ', item);
+						return item;
+						break;
+					}					
+				}
+			}
+		}
+	});	
+};
+
+async function getCurrentState( appId ) {
+	// initialize variables
+	var stateData = null;
+	var bFound = false;
+
+	// get day of week character for today
+	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+	var localDate = new Date(localToday);
+	const strHours = "0" + localDate.getHours();
+	const strMinutes = "0" + localDate.getMinutes();
+	const strLocalTime = strHours.slice(-2) + strMinutes.slice(-2);
+	const nDayOfWeek = localDate.getDay();
+	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
+	const strDayOfWeek = daysOfWeek[nDayOfWeek];
+
+	// find state data for current day/time
+	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
+};
+
+
 async function getAppSettings(appId) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
@@ -233,6 +289,10 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// get state variables for current day/time from state machine or values in smartApp
+		const appId = context.getStringValue('keyName');
+		if (appId) {
+			getCurrentState(appId);
+		/*
 		appSettings = await getCurrentSettings(context);
 		console.log("App settings found: ", appSettings);
 		
@@ -250,7 +310,8 @@ module.exports = new SmartApp()
 				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 			}
 		}
-	}
+		*/
+}
 	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
