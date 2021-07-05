@@ -69,7 +69,7 @@ async function getCurrentSettings(context) {
 			// find state data for current day/time
 			let bFound: boolean = false;
 			for (const item of items) {
-				consolelog('Item: ', item);
+				console.log('Item: ', item);
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
