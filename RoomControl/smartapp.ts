@@ -21,81 +21,6 @@ let appSettings: any = {}
 var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
-
-/*
-async function findCurrentState( appId, strDayOfWeek, strLocalTime ) {
-	var docClient = new aws.DynamoDB.DocumentClient();
-	const params = {
-  		TableName: 'smartapp-state-machine',
-  		KeyConditionExpression: 'appId = :key',
-		ExpressionAttributeValues: {
-    			':key': appId
-		}		
-	};
-
-	var bFound = false;
-	await docClient.query(params, function(err, data) {
-    		if (err) {
-        		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
-    		} else {
-        		console.log("Query succeeded: ", data.Items);
-			for (const item of data.Items) {
-				if (item.daysofweek.includes(strDayOfWeek)) {
-					if (item.startTime && item.endTime) {
-						bFound = ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) );
-					} else {
-						bFound = true;
-					}
-								
-					if (bFound) {
-						console.log('State data found: ', item);
-						return item;
-						break;
-					}					
-				}
-			}
-		}
-	});	
-};
-
-async function getCurrentState( appId ) {
-	// initialize variables
-	var stateData = null;
-	var bFound = false;
-
-	// get day of week character for today
-	var localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
-	var localDate = new Date(localToday);
-	const strHours = "0" + localDate.getHours();
-	const strMinutes = "0" + localDate.getMinutes();
-	const strLocalTime = strHours.slice(-2) + strMinutes.slice(-2);
-	const nDayOfWeek = localDate.getDay();
-	const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
-	const strDayOfWeek = daysOfWeek[nDayOfWeek];
-
-	// find state data for current day/time
-	return await findCurrentState( appId, strDayOfWeek, strLocalTime );
-};
-
-async function getStateData( appId, sequence ) {
-	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-	const params = {
-  		TableName: 'smartapp-state-machine',
-  		Key: {
-    			appId: appId ,
-			sequence: sequence
-  		}
-	};
-	try {
-		const data = await docClient.get(params).promise();
-		return data.Item;
-	} catch (err) {
-		console.log("Failure", err.message);
-		return undefined;
-	}
-};
-*/
-
 async function getAppSettings(appId) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
@@ -153,7 +78,7 @@ async function getCurrentSettings(context) {
 			const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 			// find state data for current day/time
-			let bFound: boolean = false;
+			// let bFound: boolean = false;
 			for (const item of items) {
 				console.log('Item: ', item);
 				if (item.daysofweek.includes(strDayOfWeek) && 
@@ -163,25 +88,9 @@ async function getCurrentSettings(context) {
 					return item;
 					break;
 				}
-				/*
-				if (item.daysofweek.includes(strDayOfWeek)) {
-					if (item.startTime && item.endTime) {
-						bFound = ( (strLocalTime>=item.startTime) && (strLocalTime<item.endTime) );
-					} else {
-						bFound = true;
-					}
-								
-					if (bFound) {
-						console.log('State data found: ', item);
-						return item;
-						break;
-					}					
-				}
-				*/
 			}
 		}
 	}
-	// return stateData;
 };
 
 function getSettingValue(context, settingName) {
@@ -190,8 +99,6 @@ function getSettingValue(context, settingName) {
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
-		console.log('Get setting value: ', settingName, appSettings.startTime, appSettings[settingName]);
-		// settingValue = appSettings.settingName;
 		settingValue = appSettings[settingName];
 	} else {
 		settingValue ??= context.configStringValue(settingName);
@@ -205,7 +112,7 @@ function getSettingValue(context, settingName, bAppOnly) {
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
-		settingValue = appSettings.settingName;
+		settingValue = appSettings[settingName];
 	}
 
 	if (!bAppOnly) {
@@ -312,6 +219,11 @@ module.exports = new SmartApp()
 		    'switch', 'switch.on', 'onGroupOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
+
+		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+		    'motionSensor', 'motionSensor.active', 'contactOpenHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+		    'motionSensor', 'motionSensor.inactive', 'contactClosedHandler');
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
