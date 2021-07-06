@@ -159,7 +159,7 @@ async function getCurrentSettings(context) {
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
-					console.log('State data found: ', item);
+					// console.log('Current settings found: ', item);
 					return item;
 					break;
 				}
@@ -189,8 +189,8 @@ function getSettingValue(context, settingName) {
 	let settingValue: string;
 	
 	// see if settings found in smartapp DynamoDB database
-	console.log('Get setting value: ', appSettings, settingName);
 	if (appSettings) {
+		console.log('Get setting value: ', settingName, appSettings.startTime);
 		settingValue = appSettings.settingName;
 	} else {
 		settingValue ??= context.configStringValue(settingName);
