@@ -190,8 +190,9 @@ function getSettingValue(context, settingName) {
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
-		console.log('Get setting value: ', settingName, appSettings.startTime);
-		settingValue = appSettings.settingName;
+		console.log('Get setting value: ', settingName, appSettings.startTime, appSettings.getString(settingName));
+		// settingValue = appSettings.settingName;
+		settingValue = appSettings.getString(settingName);
 	} else {
 		settingValue ??= context.configStringValue(settingName);
 	}
