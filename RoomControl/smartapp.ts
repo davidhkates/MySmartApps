@@ -14,7 +14,7 @@ interface device {
 
 // global variables
 // let appSettings: any = {}
-const appSettings;
+const appSettings: any = {};
 
 //----------------------------------------------------------------------------------------
 // TODO: move routines to get settings values from DynamoDB database to katesthings
