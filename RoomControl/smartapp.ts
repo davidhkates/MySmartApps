@@ -221,9 +221,9 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motionSensor.active', 'contactOpenHandler');
+		    'motionSensor', 'motionSensor.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motionSensor.inactive', 'contactClosedHandler');
+		    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
@@ -374,6 +374,79 @@ module.exports = new SmartApp()
 */
 
 
+// Turn on lights when motion occurs during defined times if dependent lights are on
+.subscribedEventHandler('motionStartHandler', async (context, event) => {
+	// Get start and end times
+	appSettings = await getCurrentSettings(context);
+	const startTime = getSettingValue(context, 'startTime');
+	const endTime   = getSettingValue(context, 'endTime');
+
+	// Determine whether current time is within start and end time window
+	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
+	
+	// Determine if ANY of the switch(es) to check are on
+	var bCheckSwitch = true;
+	/*
+	const checkSwitches = context.config.checkSwitches;
+	console.log("Check switches: ", checkSwitches);
+	if (checkSwitches) {
+		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'switch'
+		));
+		
+		//set check switch to true if any switch is on
+		const switchStates = await Promise.all(stateRequests);
+		console.log("Switch states: ", switchStates);
+		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
+	}
+	*/
+	
+	// turn on light if in time window and check switch(es) are on
+	if ( bTimeWindow && bCheckSwitch ) {
+		console.log('Turning light(s) on');
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+	}
+})
+
+
+// Turn off the lights only when all motion sensors become inactive
+.subscribedEventHandler('motionStopHandler', async (context, event) => {
+
+	// See if there are any other motion sensors defined
+	const otherSensors =  context.config.roomMotion
+	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
+
+	if (otherSensors) {
+		// Get the current states of the other motion sensors
+		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'motionSensor'
+		));
+
+		// Quit if there are other sensor still active
+		const states = await Promise.all(stateRequests)
+		if (states.find(it => it.motion.value === 'active')) {
+			return
+		}
+	}
+	console.log("Turn off lights after specified delay");
+
+	// const delay = context.configNumberValue('motionDelay')
+	appSettings = await getCurrentSettings(context);
+	const delay = getSettingValue(context, 'motionDelay');
+	if (delay) {
+		// Schedule turn off if delay is set
+		await context.api.schedules.runIn('motionStopped', delay)
+	} else {
+		// Turn off immediately if no delay
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	}
+})
+
+
 // Check to see if control switch was turned on prior to start time
 .scheduledEventHandler('checkOnHandler', async (context, event) => {
 	// Turn on room switch(es) if control switch turned on already
@@ -392,4 +465,10 @@ module.exports = new SmartApp()
 		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 	}
+});
+
+
+// Turns off lights after delay elapses
+.scheduledEventHandler('motionStopped', async (context, event) => {
+	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
 });
