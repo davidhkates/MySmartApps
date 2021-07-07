@@ -221,9 +221,9 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motionSensor.active', 'motionStartHandler');
+		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motionSensor.inactive', 'motionStopHandler');
+		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
@@ -376,14 +376,10 @@ module.exports = new SmartApp()
 
 // Turn on lights when motion occurs during defined times if dependent lights are on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
-	// Get start and end times
+	// Get motion behavior setting
 	appSettings = await getCurrentSettings(context);
-	const startTime = getSettingValue(context, 'startTime');
-	const endTime   = getSettingValue(context, 'endTime');
+	const motionBehavior = getSettingValue(context, 'motionBehavior');
 
-	// Determine whether current time is within start and end time window
-	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
-	
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
 	/*
@@ -404,7 +400,7 @@ module.exports = new SmartApp()
 	*/
 	
 	// turn on light if in time window and check switch(es) are on
-	if ( bTimeWindow && bCheckSwitch ) {
+	if ( motionBehavior==='motionOn' && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 	}
