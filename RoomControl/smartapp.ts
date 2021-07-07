@@ -428,7 +428,7 @@ module.exports = new SmartApp()
 
 		// Quit if there are other sensor still active
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.motion.value === 'active')) {
+		if (states.find(it => it.roomMotion.value === 'active')) {
 			return
 		}
 	}
