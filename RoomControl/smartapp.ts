@@ -465,7 +465,7 @@ module.exports = new SmartApp()
 		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 	}
-});
+})
 
 
 // Turns off lights after delay elapses
