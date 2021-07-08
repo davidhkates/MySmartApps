@@ -209,6 +209,10 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.delayGroup, 'switch', 'off');
 	} else {
 
+		// Get current appSettings to determine which devices need subscriptions 
+		appSettings = await getCurrentSettings(context);
+		console.log("App settings found: ", appSettings);
+
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
 		    'switch', 'switch.on', 'mainSwitchOnHandler');
@@ -220,10 +224,16 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'onGroupOffHandler');
 
-		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motion.active', 'motionStartHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		const motionBehavior = getSettingValue(context, 'motionBehavior');
+		console.log('Motion behavior: ', motionBehavior);
+		// if (motionBehavior==='occupancy') {
+			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+			    'motionSensor', 'motion.active', 'motionStartHandler');
+		// }
+		// if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
+			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+			    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		// }
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
@@ -232,8 +242,8 @@ module.exports = new SmartApp()
 
 		// TODO: Change scheduled activities to run once at appropriate (end) time
 		// Schedule next activities for these settings end time and upcoming start time
-		appSettings = await getCurrentSettings(context);
-		console.log("App settings found: ", appSettings);
+		// appSettings = await getCurrentSettings(context);
+		// console.log("App settings found: ", appSettings);
 		
 		// check to see if light was turned on before start time
 		const startTime = getSettingValue(context, 'startTime');
@@ -416,6 +426,11 @@ module.exports = new SmartApp()
 	// const delay = context.configNumberValue('motionDelay')
 	appSettings = await getCurrentSettings(context);
 	const delay = getSettingValue(context, 'motionDelay');
+
+	// TODO: REMOVE... included here just for testing purposes
+	const endTime = getSettingValue(context, 'endTime');
+	console.log('End time: ', endTime, new Date(endTime));
+
 	if (delay) {
 		// Schedule turn off if delay is set
 		await context.api.schedules.runIn('motionStopped', delay)
