@@ -226,14 +226,14 @@ module.exports = new SmartApp()
 
 		const motionBehavior = getSettingValue(context, 'motionBehavior');
 		console.log('Motion behavior: ', motionBehavior);
-		// if (motionBehavior==='occupancy') {
+		if (motionBehavior==='occupancy') {
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 			    'motionSensor', 'motion.active', 'motionStartHandler');
-		// }
-		// if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
+		}
+		if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 			    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		// }
+		}
 
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
