@@ -197,7 +197,7 @@ module.exports = new SmartApp()
 	
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('checkOnHandler');
+	await context.api.schedules.delete('roomOnHandler');
 	await context.api.schedules.delete('roomOffHandler');
 
 	// if control is not enabled, turn off switch
@@ -239,14 +239,15 @@ module.exports = new SmartApp()
 		const startTime = getSettingValue(context, 'startTime');
 		console.log('Start time: ', startTime);
 		if (startTime) {
-			await context.api.schedules.runDaily('checkOnHandler', new Date(startTime));
+			await context.api.schedules.runDaily('roomOnHandler', new Date(startTime));
 		}
 		const endTime = getSettingValue(context, 'endTime');
-		console.log('End time: ', endTime);
+		console.log('End time: ', endTime, new Date(endTime));
 		if (endTime) {
 			// const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue(context, 'offBehavior') === 'end') {
-				await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+				await context.api.schedules.runOnce('roomOffHandler', new Date(endTime));
 			}
 		}
 	}	
@@ -426,7 +427,7 @@ module.exports = new SmartApp()
 
 
 // Check to see if control switch was turned on prior to start time
-.scheduledEventHandler('checkOnHandler', async (context, event) => {
+.scheduledEventHandler('roomOnHandler', async (context, event) => {
 	// Turn on room switch(es) if control switch turned on already
 	if ( SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
 		console.log('Turning room switch(es) on since main switch already on');
