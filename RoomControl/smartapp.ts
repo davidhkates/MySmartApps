@@ -122,6 +122,15 @@ function getSettingValue(context, settingName, bAppOnly) {
 };
 */
 
+// convert time in hhmm format to javascript date object
+function convertDateTime( hhmm ) {
+	const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+	localToday.setHours(hhmm.substr(0,2).parseInt());
+	localToday.setMinutes(hhmm.substr(2,2).parseInt());
+	console.log('Converted date/time: ', localToday);
+	return localToday;
+}
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -251,14 +260,10 @@ module.exports = new SmartApp()
 		if (startTime) {
 			await context.api.schedules.runDaily('roomOnHandler', new Date(startTime));
 		}
-		const endTime = getSettingValue(context, 'endTime');
-		const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
-		localToday.setHours(endTime.substr(0,2).parseInt());
-		localToday.setMinutes(endTime.substr(2,2).parseInt());
-
-		console.log('End time: ', endTime, localToday);
+		const endTime = convertDateTime( getSettingValue(context, 'endTime') );
+		console.log('End time: ', endTime, new Date(endTime) );
 		if (endTime) {
-			// const offBehavior = context.configStringValue('offBehavior');
+			const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue(context, 'offBehavior') === 'end') {
 				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 				await context.api.schedules.runOnce('roomOffHandler', new Date(endTime));
