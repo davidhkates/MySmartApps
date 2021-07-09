@@ -124,7 +124,7 @@ function getSettingValue(context, settingName, bAppOnly) {
 
 // convert time in hhmm format to javascript date object
 function convertDateTime( hhmm ) {
-	const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+	const localToday: any = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
 	const nHour: number = parseInt(hhmm.substr(0.2), 10);
 	const nMinute: number = parseInt(hhmm.substr(2,2), 10);
 	localToday.setHours(nHour);
