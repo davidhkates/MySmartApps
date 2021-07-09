@@ -125,8 +125,14 @@ function getSettingValue(context, settingName, bAppOnly) {
 // convert time in hhmm format to javascript date object
 function convertDateTime( hhmm ) {
 	const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+	const nHour = parseInt(hhmm.substr(0.2), 10);
+	const nMinute = parseInt(hhmm.substr(2,2), 10);
+	localToday.setHours(nHour);
+	localToday.setMinutes(nMinute);
+	/*
 	localToday.setHours(parseInt(hhmm.substr(0,2), 10));
 	localToday.setMinutes(parseInt(hhmm.substr(2,2), 10));
+	*/
 	console.log('Converted date/time: ', localToday);
 	return localToday;
 }
