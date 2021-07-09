@@ -131,6 +131,7 @@ function convertDateTime( hhmm ) {
 	console.log('Converted date/time: ', localToday);
 	return localToday;
 	*/
+	return new Date();
 }
 
 
