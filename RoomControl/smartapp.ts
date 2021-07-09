@@ -252,7 +252,11 @@ module.exports = new SmartApp()
 			await context.api.schedules.runDaily('roomOnHandler', new Date(startTime));
 		}
 		const endTime = getSettingValue(context, 'endTime');
-		console.log('End time: ', endTime, new Date(endTime));
+		const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+		localToday.setHours(endTime.substr(0,2).parseInt());
+		localToday.setMinutes(endTime.substr(2,2).parseInt());
+
+		console.log('End time: ', endTime, localToday);
 		if (endTime) {
 			// const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue(context, 'offBehavior') === 'end') {
