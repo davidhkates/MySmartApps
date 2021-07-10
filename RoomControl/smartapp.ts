@@ -93,34 +93,20 @@ async function getCurrentSettings(context) {
 	}
 };
 
-function getSettingValue(context, settingName) {
-	// declare variable to return stateVariables
-	let settingValue: string;
-	
-	// see if settings found in smartapp DynamoDB database
-	if (appSettings) {
-		settingValue = appSettings[settingName];
-	} else {
-		settingValue ??= context.configStringValue(settingName);
-	}
-	return settingValue;
-};
-/*
 function getSettingValue(context, settingName, bAppOnly) {
 	// declare variable to return stateVariables
 	let settingValue: string;
+
+	if (bAppOnly) {
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
 		settingValue = appSettings[settingName];
-	}
-
-	if (!bAppOnly) {
+	} else if (!bAppOnly) {
 		settingValue ??= context.configStringValue(settingName);
 	}
 	return settingValue;
 };
-*/
 
 // convert time in hhmm format to javascript date object
 function convertDateTime( hhmm ) {
