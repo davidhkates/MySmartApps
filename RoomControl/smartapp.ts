@@ -128,7 +128,7 @@ function convertDateTime( hhmm ) {
 	console.log('Formatted date to convert: ', localDate);
 	const returnValue: Date = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10), parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
-	console.log('Converted date/time: ', returnValue);
+	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
 	return returnValue;
 }
 
