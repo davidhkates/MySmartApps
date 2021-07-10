@@ -128,13 +128,24 @@ function convertDateTime( hhmm ) {
 	console.log('Formatted date to convert: ', localDate);
 	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
-	const returnValue: Date = new Date(localTime + 7*60*60*1000);
+	const returnValue: Date = new Date(localTime.valueOf() + 7*60*60*1000);
 	const dt: Date = returnValue;
 	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
 	const displayValue1: Date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()));
 	console.log('Display date, convertDateFromUTC: ', displayValue1);
 	const displayValue2: Date = new Date(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate(), dt.getUTCHours(), dt.getUTCMinutes(), dt.getUTCSeconds()); 
 	console.log('Display date, convertDateToUTC: ', displayValue2);
+
+	const returnValue2: Date = new Date(localTime.valueOf());
+	const dt2: Date = returnValue2;
+	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
+	const displayValue1a: Date = new Date(Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes(), dt2.getSeconds()));
+	console.log('Display date, convertDateFromUTC: ', displayValue1a);
+	const displayValue2a: Date = new Date(dt2.getUTCFullYear(), dt2.getUTCMonth(), dt2.getUTCDate(), dt2.getUTCHours(), dt2.getUTCMinutes(), dt2.getUTCSeconds()); 
+	console.log('Display date, convertDateToUTC: ', displayValue2a);
+	return returnValue;
+	
+	
 	return returnValue;
 }
 
