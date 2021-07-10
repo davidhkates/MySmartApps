@@ -180,8 +180,7 @@ module.exports = new SmartApp()
 .page('optionsPage', (context, page, configData) => {
 	
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
-	// page.prevPageId('mainPage');
-	page.nextPageId('timePage');
+	// page.nextPageId('timePage');
 
 	// room motion sensor(s) and door/window contact(s)
 	page.section('sensors', section => {
@@ -201,6 +200,7 @@ module.exports = new SmartApp()
 	});
 })
 
+/*
 .page('timePage', (context, page, configData) => {
 	
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
@@ -214,6 +214,7 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime').required(false);
 	});
 })
+*/
 
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
