@@ -251,7 +251,7 @@ module.exports = new SmartApp()
 			const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue(context, 'offBehavior') === 'end') {
 				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
-				console.log('Run room off handler at specified end time: ', endTime.getLocaleString());
+				console.log('Run room off handler at specified end time: ', endTime.toLocaleString());
 				await context.api.schedules.runOnce('roomOffHandler', new Date(endTime));
 			}
 		}
