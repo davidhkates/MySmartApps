@@ -125,7 +125,7 @@ function getSettingValue(context, settingName, bAppOnly) {
 // convert time in hhmm format to javascript date object
 function convertDateTime( hhmm ) {
 	const now = new Date();
-	console.log('Current date/time (local): ', now.toLocaleString("en-US", {timeZone: "America/Denver", hours: "numeric"}));
+	console.log('Current date/time (local): ', now.toLocaleString("en-US", {timeZone: "America/Denver", hour: "numeric"}));
 	console.log('Current date/time (UTC): ', now.toUTCString(), now.getUTCHours());
 	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
 	console.log('Formatted date to convert: ', localDate);
