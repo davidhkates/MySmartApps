@@ -126,9 +126,9 @@ function getSettingValue(context, settingName, bAppOnly) {
 function convertDateTime( hhmm ) {
 	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
 	console.log('Formatted date to convert: ', localDate);
-	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10), parseInt(localDate.substr(3, 2), 10),
+	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
-	const returnValue: Date = new Date(localTime - 10*60*1000);
+	const returnValue: Date = new Date(localTime - 10*60*60*1000);
 	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
 	return returnValue;
 }
