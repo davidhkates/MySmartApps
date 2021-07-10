@@ -55,11 +55,6 @@ async function getAppSettings(appId) {
 };
 
 async function getCurrentSettings(context) {
-	// initialize variables
-	// var stateData: any = null;
-	// var bFound = false;
-	// let settings: any = null;
-	
 	// check to see if settings database key specified
 	const keyName: string = context.configStringValue('keyName');
 	console.log('Key specified: ', keyName);
@@ -241,9 +236,7 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// TODO: Change scheduled activities to run once at appropriate (end) time
-		// Schedule next activities for these settings end time and upcoming start time
-		// appSettings = await getCurrentSettings(context);
-		// console.log("App settings found: ", appSettings);
+		// Schedule next activities for current end time and upcoming start time
 		
 		// check to see if light was turned on before start time
 		const startTime = getSettingValue(context, 'startTime');
@@ -251,12 +244,14 @@ module.exports = new SmartApp()
 		if (startTime) {
 			await context.api.schedules.runDaily('roomOnHandler', new Date(startTime));
 		}
+		
 		const endTime = convertDateTime( getSettingValue(context, 'endTime') );
 		console.log('End time: ', endTime, new Date(endTime) );
 		if (endTime) {
 			const offBehavior = context.configStringValue('offBehavior');
 			if (getSettingValue(context, 'offBehavior') === 'end') {
 				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+				console.log('Run room off handler at specified end time: ', endTime.getLocaleString());
 				await context.api.schedules.runOnce('roomOffHandler', new Date(endTime));
 			}
 		}
