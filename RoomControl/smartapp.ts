@@ -453,12 +453,13 @@ module.exports = new SmartApp()
 
 // Turns off room switch(es) at end time
 .scheduledEventHandler('roomOffHandler', async (context, event) => {
-	// Turn on room switch(es) if control switch turned on already
-	if ( !SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
-		console.log('Turning room switch(es) off since main switch already off');
-		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	// Turn off room switch(es) when end time reached
+	// if ( !SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
+		// console.log('Turning room switch(es) off since main switch already off');
+		console.log('Turning off room switch(es) at specified end time');
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-	}
+	// }
 })
 
 
