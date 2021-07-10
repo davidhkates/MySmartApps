@@ -97,8 +97,6 @@ function getSettingValue(context, settingName, bAppOnly) {
 	// declare variable to return stateVariables
 	let settingValue: string;
 
-	if (bAppOnly) {
-	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
 		settingValue = appSettings[settingName];
