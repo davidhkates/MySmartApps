@@ -129,7 +129,12 @@ function convertDateTime( hhmm ) {
 	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
 	const returnValue: Date = new Date(localTime + 7*60*60*1000);
+	const dt: Date = returnValue;
 	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
+	const displayValue: Date = new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()));
+	console.log('Display date, convertDateFromUTC: ', displayValue);
+	const displayValue: Date = new Date(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate(), dt.getUTCHours(), dt.getUTCMinutes(), dt.getUTCSeconds()); 
+	console.log('Display date, convertDateFromUTC: ', displayValue);
 	return returnValue;
 }
 
