@@ -111,7 +111,8 @@ function convertDateTime( hhmm ) {
 	const now = new Date();
 	// const tzOffset = now.getUTCHours() - now.getHours();
 	const tzOffset = now.getUTCHours() - parseInt(now.toLocaleString("en-US", {timeZone: "America/Denver", hour12: false, hour: "numeric"}), 10);
-	const localTime: any = new Date(parseInt(now.substr(6, 4), 10), parseInt(now.substr(0, 2), 10)-1, parseInt(now.substr(3, 2), 10),
+	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
+	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
 	const returnValue: Date = new Date(localTime.valueOf() + tzOffset*60*60*1000);
 	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
