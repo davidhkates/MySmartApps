@@ -230,10 +230,14 @@ module.exports = new SmartApp()
 			    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		}
 
-		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
+		const contactBehavior = getSettingValue(context, 'motionBehavior');
+		console.log('Contact behavior: ', contactBehavior);
+		if (contactBehavior) {
+			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+			    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+			    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
+		}
 
 		// TODO: Change scheduled activities to run once at appropriate (end) time
 		// Schedule next activities for current end time and upcoming start time
@@ -249,6 +253,7 @@ module.exports = new SmartApp()
 		console.log('End time: ', endTime, new Date(endTime) );
 		if (endTime) {
 			const offBehavior = context.configStringValue('offBehavior');
+			console.log('Off behavior: ', offBehavior);
 			if (getSettingValue(context, 'offBehavior') === 'end') {
 				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
 				console.log('Run room off handler at specified end time: ', endTime.toLocaleString());
