@@ -124,6 +124,9 @@ function getSettingValue(context, settingName, bAppOnly) {
 
 // convert time in hhmm format to javascript date object
 function convertDateTime( hhmm ) {
+	const now = newDate();
+	console.log('Current date/time (local): ', now.toLocaleString("en-US", {timeZone: "America/Denver"}));
+	console.log('Current date/time (UTC): ', now.toUTCString(), now.getUTCHours());
 	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
 	console.log('Formatted date to convert: ', localDate);
 	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
@@ -136,16 +139,6 @@ function convertDateTime( hhmm ) {
 	const displayValue2: Date = new Date(dt.getUTCFullYear(), dt.getUTCMonth(), dt.getUTCDate(), dt.getUTCHours(), dt.getUTCMinutes(), dt.getUTCSeconds()); 
 	console.log('Display date, convertDateToUTC: ', displayValue2);
 
-	const returnValue2: Date = new Date(localTime.valueOf());
-	const dt2: Date = returnValue2;
-	console.log('Converted date/time: ', returnValue2.toLocaleString("en-US", {timeZone: "America/Denver"}));
-	const displayValue1a: Date = new Date(Date.UTC(dt2.getFullYear(), dt2.getMonth(), dt2.getDate(), dt2.getHours(), dt2.getMinutes(), dt2.getSeconds()));
-	console.log('Display date, convertDateFromUTC: ', displayValue1a);
-	const displayValue2a: Date = new Date(dt2.getUTCFullYear(), dt2.getUTCMonth(), dt2.getUTCDate(), dt2.getUTCHours(), dt2.getUTCMinutes(), dt2.getUTCSeconds()); 
-	console.log('Display date, convertDateToUTC: ', displayValue2a);
-	return returnValue;
-	
-	
 	return returnValue;
 }
 
