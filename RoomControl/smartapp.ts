@@ -88,6 +88,10 @@ async function getCurrentSettings(context) {
 	}
 };
 
+// Get next settings
+function getNextSettings(context) {
+}
+
 // function getSettingValue(context, settingName, bAppOnly) {
 function getSettingValue(context, settingName) {
 	// declare variable to return stateVariables
