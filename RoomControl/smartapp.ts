@@ -115,6 +115,17 @@ function convertDateTime( hhmm ) {
 	return returnValue;
 }
 
+// schedule activities for current end time
+function scheduleEndHandler() {
+	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
+	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
+	if (endTime) {
+		console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
+		SmartState.save('endBehavior', getSettingValue(context, 'endBehavior'));
+		await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
+	}
+}
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -219,6 +230,7 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'groupOffHandler');
 
+		// initialize motion behavior
 		const motionBehavior = getSettingValue(context, 'motionBehavior');
 		console.log('Motion behavior: ', motionBehavior);
 		if (motionBehavior==='occupancy') {
@@ -230,6 +242,7 @@ module.exports = new SmartApp()
 			    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		}
 
+		// initialize contact behaviors
 		const contactBehavior = getSettingValue(context, 'contactBehavior');
 		console.log('Contact behavior: ', contactBehavior);
 		if (contactBehavior) {
@@ -239,16 +252,9 @@ module.exports = new SmartApp()
 			    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 		}
 
-		// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
-		const endTime = convertDateTime( getSettingValue(context, 'endTime') );
-		if (endTime) {
-			const endBehavior = getSettingValue(context, 'endBehavior');
-			SmartState.save('endBehavior', endBehavior);
-			// if ( endBehavior.includes('off') ) {
-				console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
-				await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
-			// }
-		}
+		// Schedule endTime activities
+		scheduleEndHandler();
+		
 	}	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
 })
@@ -466,24 +472,11 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 		
-	// if ( !SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
-		// Turn off room switch(es) when end time reached
-		// console.log('Turning room switch(es) off since main switch already off');
-		console.log('Turning off room switch(es) at specified end time');
-		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-	// }		appSettings = await getCurrentSettings(context);
-		
-	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
-	appSettings = await getCurrentSettings(context);
-	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
-	if (endTime) {
-		const endBehavior = getSettingValue(context, 'endBehavior');
-		SmartState.save('endBehavior', endBehavior);
-		console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
-		await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
 	}
-
+	
+	// Schedule next endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
+	appSettings = await getCurrentSettings(context);
+	scheduleEndHandler();
 })
 
 // Turns off lights after delay elapses
