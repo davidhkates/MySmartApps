@@ -13,7 +13,7 @@ Turn on/off lights/outlets based on light switch, time of day, day of week, and 
 3. npm i @katesthings/smartcontrols --save
 
 ## DynamoDB Table Elements
-*smart-room-settings*
+**smart-room-settings**
 * _startTime_ time settings start
 * _endTime_ time settings end
 * _endBehavior_ behavior at end time (mainOff, mainCheck, groupOff)
