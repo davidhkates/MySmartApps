@@ -3,8 +3,8 @@ const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
-const SmartUtils  = require('@katesthings/smartutils');
-// const SmartState  = require('@katesthings/smartstate');
+// const SmartUtils  = require('@katesthings/smartutils');
+const SmartState  = require('@katesthings/smartstate');
 
 // SmartApp type definitions
 interface device {
@@ -51,7 +51,6 @@ async function getAppSettings(appId) {
 		console.log("Failure", err.message);
 		return undefined;
 	}
-
 };
 
 async function getCurrentSettings(context) {
@@ -202,7 +201,7 @@ module.exports = new SmartApp()
 	if (!controlEnabled) {
 		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.delayGroup, 'switch', 'off');
+		// await context.api.devices.sendCommands(context.config.delayGroup, 'switch', 'off');
 	} else {
 
 		// Get current appSettings to determine which devices need subscriptions 
@@ -216,9 +215,9 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'mainSwitchOffHandler');
 		
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-		    'switch', 'switch.on', 'onGroupOnHandler');
+		    'switch', 'switch.on', 'groupOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
-		    'switch', 'switch.off', 'onGroupOffHandler');
+		    'switch', 'switch.off', 'groupOffHandler');
 
 		const motionBehavior = getSettingValue(context, 'motionBehavior');
 		console.log('Motion behavior: ', motionBehavior);
@@ -240,23 +239,15 @@ module.exports = new SmartApp()
 			    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 		}
 
-		// TODO: Change scheduled activities to run once at appropriate (end) time
-		// Schedule next activities for current end time and upcoming start time
-		
+		// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
 		const endTime = convertDateTime( getSettingValue(context, 'endTime') );
-		console.log('End time: ', endTime, new Date(endTime) );
 		if (endTime) {
 			const endBehavior = getSettingValue(context, 'endBehavior');
-			if ( endBehavior.includes('off') ) {
-			}
-			
-			const offBehavior = context.configStringValue('offBehavior');
-			console.log('Off behavior: ', offBehavior);
-			if (getSettingValue(context, 'offBehavior') === 'end') {
-				// await context.api.schedules.runDaily('roomOffHandler', new Date(endTime));
+			SmartState.save('endBehavior', endBehavior);
+			// if ( endBehavior.includes('off') ) {
 				console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
 				await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
-			}
+			// }
 		}
 	}	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
@@ -308,7 +299,7 @@ module.exports = new SmartApp()
 
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
-.subscribedEventHandler('onGroupOnHandler', async (context, event) => {
+.subscribedEventHandler('groupOnHandler', async (context, event) => {
 	console.log("Turn on the main switch when a light in the on group is turned on");
 
 	// indicate main switch was NOT manually pressed
@@ -320,7 +311,7 @@ module.exports = new SmartApp()
 
 
 // Turn OFF main switch if ALL of the on group lights are turned off separately
-.subscribedEventHandler('onGroupOffHandler', async (context, event) => {
+.subscribedEventHandler('groupOffHandler', async (context, event) => {
 	console.log("Turn off the main switch when ALL lights in the on group are turned off");
 
 	// See if there are any other switches in the onGroup defined
@@ -454,13 +445,45 @@ module.exports = new SmartApp()
 
 // Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
-	// Turn off room switch(es) when end time reached
+	const endBehavior = SmartState.get('endBehavior');
+
+	if ( endBehavior.includes('checkMain') ) {
+		// Turn on room switch(es) if main switch already turned on
+		if ( SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
+			console.log('Turning room switch(es) on since main switch already on');
+			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
+		}
+	} else if ( endBehavior.includes('offMain') ) {
+
+		// Turn off room switch(es) when end time reached
+		console.log('Turning off main switch at specified end time');
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	} else if ( endBehavior.includes('onMain') ) {
+
+		// Turn on room switch(es) when end time reached
+		console.log('Turning on main switch at specified end time');
+		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+		
 	// if ( !SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
+		// Turn off room switch(es) when end time reached
 		// console.log('Turning room switch(es) off since main switch already off');
 		console.log('Turning off room switch(es) at specified end time');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-	// }
+	// }		appSettings = await getCurrentSettings(context);
+		
+	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
+	appSettings = await getCurrentSettings(context);
+	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
+	if (endTime) {
+		const endBehavior = getSettingValue(context, 'endBehavior');
+		SmartState.save('endBehavior', endBehavior);
+		console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
+		await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
+	}
+
 })
 
 // Turns off lights after delay elapses
