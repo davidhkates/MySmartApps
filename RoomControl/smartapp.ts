@@ -190,11 +190,11 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
 	
-	// unsubscribe all previously established subscriptions
+	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
 	// await context.api.schedules.delete('roomOnHandler');
 	// await context.api.schedules.delete('roomOffHandler');
-	await context.api.schedules.deleteAll();
+	await context.api.schedules.delete();
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
@@ -231,7 +231,7 @@ module.exports = new SmartApp()
 			    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		}
 
-		const contactBehavior = getSettingValue(context, 'motionBehavior');
+		const contactBehavior = getSettingValue(context, 'contactBehavior');
 		console.log('Contact behavior: ', contactBehavior);
 		if (contactBehavior) {
 			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
@@ -246,6 +246,10 @@ module.exports = new SmartApp()
 		const endTime = convertDateTime( getSettingValue(context, 'endTime') );
 		console.log('End time: ', endTime, new Date(endTime) );
 		if (endTime) {
+			const endBehavior = getSettingValue(context, 'endBehavior');
+			if ( endBehavior.includes('off') ) {
+			}
+			
 			const offBehavior = context.configStringValue('offBehavior');
 			console.log('Off behavior: ', offBehavior);
 			if (getSettingValue(context, 'offBehavior') === 'end') {
@@ -448,7 +452,7 @@ module.exports = new SmartApp()
 })
 */
 
-// Schedule activity(ies) to be performed at start time
+// Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
 	// Turn off room switch(es) when end time reached
 	// if ( !SmartSensor.getSwitchState( context, context.config.mainSwitch[0] ) ) {
