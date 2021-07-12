@@ -116,7 +116,7 @@ function convertDateTime( hhmm ) {
 }
 
 // schedule activities for current end time
-function scheduleEndHandler() {
+async function scheduleEndHandler(context) {
 	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
 	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
 	if (endTime) {
@@ -253,7 +253,7 @@ module.exports = new SmartApp()
 		}
 
 		// Schedule endTime activities
-		scheduleEndHandler();
+		await scheduleEndHandler(context);
 		
 	}	
 	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
@@ -476,7 +476,7 @@ module.exports = new SmartApp()
 	
 	// Schedule next endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
 	appSettings = await getCurrentSettings(context);
-	scheduleEndHandler();
+	await scheduleEndHandler(context);
 })
 
 // Turns off lights after delay elapses
