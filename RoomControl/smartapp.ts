@@ -121,7 +121,7 @@ async function scheduleEndHandler(context) {
 	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
 	if (endTime) {
 		console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
-		SmartState.save('endBehavior', getSettingValue(context, 'endBehavior'));
+		SmartState.putValue('smartapp-context-store', 'endBehavior', getSettingValue(context, 'endBehavior'));
 		await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
 	}
 }
@@ -451,7 +451,7 @@ module.exports = new SmartApp()
 
 // Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
-	const endBehavior = SmartState.get('endBehavior');
+	const endBehavior = SmartState.getValue('smartapp-context-store', 'endBehavior');
 
 	if ( endBehavior.includes('checkMain') ) {
 		// Turn on room switch(es) if main switch already turned on
