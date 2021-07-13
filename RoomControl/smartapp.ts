@@ -120,9 +120,10 @@ async function scheduleEndHandler(context) {
 	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
 	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
 	if (endTime) {
-		console.log('Run room off handler at specified end time: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
+		console.log('Run end time handler at: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
+		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
 		SmartState.putState(context, 'endBehavior', getSettingValue(context, 'endBehavior'));
-		await context.api.schedules.runOnce('endTimeHandler', new Date(endTime));
+		await context.api.schedules.runOnce('endTimeHandler', endTime);
 	}
 }
 
