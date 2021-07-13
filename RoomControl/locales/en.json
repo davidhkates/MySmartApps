@@ -4,7 +4,7 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.keyName.name": "DyanomoDB key (optional)",
+	"pages.mainPage.settings.keyName.name": "Room name for DyanomoDB settings (optional)",
 	"pages.mainPage.settings.keyName.description": "KeyID for state machine table to control behaviors by time zone",
 	
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
