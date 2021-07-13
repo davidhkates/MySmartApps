@@ -113,7 +113,7 @@ function convertDateTime( hhmm ) {
 	const returnValue: Date = new Date(localTime.valueOf() + tzOffset*60*60*1000);
 	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
 	return returnValue;
-}
+};
 
 // schedule activities for current end time
 async function scheduleEndHandler(context) {
@@ -125,7 +125,7 @@ async function scheduleEndHandler(context) {
 		SmartState.putState(context, 'endBehavior', getSettingValue(context, 'endBehavior'));
 		await context.api.schedules.runOnce('endTimeHandler', endTime);
 	}
-}
+};
 
 
 /* Define the SmartApp */
@@ -263,6 +263,9 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when main switch is pressed
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
+	// Cancel scheduled event to turn off main switch after delay
+	await context.api.schedules.delete('delayedOffSwitch');
+	
 	// Get session state variable to see if button was manually pressed
 	console.log('Checking whether all switches in on group are off');
 	const onGroupSwitches = context.config.onGroup;
@@ -291,14 +294,15 @@ module.exports = new SmartApp()
 	console.log("Turn off all lights in on and off groups");
 	const offGroupSwitches = context.config.offGroup;
 	if (offGroupSwitches) {
-		switch (context.configStringValue('offBehavior')) {
+		switch (getSettingValue(context, 'offBehavior')) {
+		// switch (context.configStringValue('offBehavior')) {
 			case 'off':
 				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 				break;
 			case 'delay':
 				const offDelay = context.configNumberValue('offDelay');
-				await context.api.schedules.runIn('endTimeHandler', offDelay);
+				await context.api.schedules.runIn('delayedOffSwitch', offDelay);
 				break;
 		}
 	}
@@ -393,6 +397,7 @@ module.exports = new SmartApp()
 	if ( motionBehavior==='on' && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+		await context.api.subscriptions.unsubscribe('motionStartHandler');	
 	}
 })
 
@@ -431,7 +436,7 @@ module.exports = new SmartApp()
 
 	if (delay) {
 		// Schedule turn off if delay is set
-		await context.api.schedules.runIn('motionStopped', delay)
+		await context.api.schedules.runIn('delayedMotionStop', delay)
 	} else {
 		// Turn off immediately if no delay
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
@@ -480,7 +485,12 @@ module.exports = new SmartApp()
 	await scheduleEndHandler(context);
 })
 
-// Turns off lights after delay elapses
-.scheduledEventHandler('motionStopped', async (context, event) => {
+// Turns off lights after delay when switch turned off
+.scheduledEventHandler('delayedSwitchOff', async (context, event) => {
+	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+});
+
+// Turns off lights after delay when motion stops
+.scheduledEventHandler('delayedMotionStop', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
 });
