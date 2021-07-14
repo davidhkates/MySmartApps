@@ -400,13 +400,8 @@ module.exports = new SmartApp()
 	if ( motionBehavior==='occupancy' && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
-		console.log('Unsubscribe from room motion sensor');
-		await context.api.subscriptions.unsubscribe(context.config.roomMotion, 'motionSensor');
-		console.log('Unsubscribe from room motion active');
-		await context.api.subscriptions.unsubscribe(context.config.roomMotion, 'motion.active');
-		console.log('Delete motion start handler');
-		await context.api.subscriptions.delete('motionStartHandler');
-		console.log('Unsubscribe from motion start handler done');
+		console.log('Unsubscribe from room motion sensor: ', context);
+		await context.api.subscriptions.unsubscribe(context.subscriptions.motionStartHandler);
 	}
 })
 
