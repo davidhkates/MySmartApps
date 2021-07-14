@@ -401,7 +401,8 @@ module.exports = new SmartApp()
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 		console.log('Unsubscribe from room motion sensor: ', context);
-		await context.api.subscriptions.unsubscribe(context.subscriptions.motionStartHandler);
+		// await context.api.subscriptions.unsubscribe(context.subscriptions.motionStartHandler);
+		await context.api.subscriptions.unsubscribe('motionStartHandler');
 	}
 })
 
