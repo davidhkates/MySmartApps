@@ -397,7 +397,7 @@ module.exports = new SmartApp()
 	*/
 	
 	// turn on light if in time window and check switch(es) are on
-	if ( motionBehavior==='on' && bCheckSwitch ) {
+	if ( motionBehavior==='occupancy' && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 		await context.api.subscriptions.unsubscribe('motionStartHandler');	
