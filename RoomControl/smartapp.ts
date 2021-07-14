@@ -488,7 +488,7 @@ module.exports = new SmartApp()
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
-});
+})
 
 // Turns off lights after delay when motion stops
 .scheduledEventHandler('delayedMotionStop', async (context, event) => {
