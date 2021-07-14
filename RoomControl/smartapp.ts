@@ -298,13 +298,13 @@ module.exports = new SmartApp()
 	const offGroupSwitches = context.config.offGroup;
 	if (offGroupSwitches) {
 		switch (getSettingValue(context, 'offBehavior')) {
-		// switch (context.configStringValue('offBehavior')) {
 			case 'off':
 				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 				break;
 			case 'delay':
-				const offDelay = context.configNumberValue('offDelay');
+				const offDelay = getSettingValue(context, 'offDelay');
+				console.log('Turn off lights after delay (seconds): ', offDelay);
 				await context.api.schedules.runIn('delayedOffSwitch', offDelay);
 				break;
 		}
