@@ -400,7 +400,9 @@ module.exports = new SmartApp()
 	if ( motionBehavior==='occupancy' && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
-		await context.api.subscriptions.unsubscribe('motionStartHandler');	
+		console.log('Unsubscribe from motion start handler begin');
+		await context.api.schedules.delete('motionStartHandler');
+		console.log('Unsubscribe from motion start handler done');
 	}
 })
 
