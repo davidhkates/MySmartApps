@@ -235,10 +235,12 @@ module.exports = new SmartApp()
 		const motionBehavior = getSettingValue(context, 'motionBehavior');
 		console.log('Motion behavior: ', motionBehavior);
 		if (motionBehavior==='occupancy') {
+			console.log('Registering subscription to motionStartHandler: ', motionBehavior);
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 			    'motionSensor', 'motion.active', 'motionStartHandler');
 		}
 		if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
+			console.log('Registering subscription to motionStopHandler: ', motionBehavior);
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 			    'motionSensor', 'motion.inactive', 'motionStopHandler');
 		}
@@ -424,15 +426,11 @@ module.exports = new SmartApp()
 			return
 		}
 	}
-	console.log("Turn off lights after specified delay");
 
 	// const delay = context.configNumberValue('motionDelay')
 	appSettings = await getCurrentSettings(context);
 	const delay = getSettingValue(context, 'motionDelay');
-
-	// TODO: REMOVE... included here just for testing purposes
-	const endTime = getSettingValue(context, 'endTime');
-	console.log('End time: ', endTime, new Date(endTime));
+	console.log("Turn off lights after specified delay: ", delay);
 
 	if (delay) {
 		// Schedule turn off if delay is set
