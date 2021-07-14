@@ -123,7 +123,8 @@ async function scheduleEndHandler(context) {
 	if (endTime) {
 		console.log('Run end time handler at: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
 		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
-		SmartState.putState(context, 'endBehavior', getSettingValue(context, 'endBehavior'));
+		console.log('End behavior: ', endBehavior);
+		SmartState.putState(context, 'endBehavior', endBehavior);
 		await context.api.schedules.runOnce('endTimeHandler', endTime);
 	}
 };
