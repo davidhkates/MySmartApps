@@ -240,7 +240,7 @@ module.exports = new SmartApp()
 			console.log('Registering subscription to motionStartHandler: ', motionBehavior);
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 			    'motionSensor', 'motion.active', 'motionStartHandler');
-			console.log('Motion start handler subscription: ', context.api.subscriptions);
+			console.log('Motion start handler subscription: ', context, JSON.stringify(context));
 		}
 		if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
 			console.log('Registering subscription to motionStopHandler: ', motionBehavior);
