@@ -205,7 +205,6 @@ module.exports = new SmartApp()
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.subscriptions.delete('mainSwitchOnHandler');
 	// await context.api.schedules.delete('roomOnHandler');
 	// await context.api.schedules.delete('roomOffHandler');
 	await context.api.schedules.delete();
@@ -220,8 +219,7 @@ module.exports = new SmartApp()
 	} else {
 
 		// Get current appSettings to determine which devices need subscriptions 
-		// appSettings = await getCurrentSettings(context);
-		// console.log("App settings found: ", appSettings);
+		appSettings = await getCurrentSettings(context);
 
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -390,7 +388,7 @@ module.exports = new SmartApp()
 	if ( motionBehavior==='occupancy' && bCheckSwitch ) {
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
-		console.log('Unsubscribe from room motion sensor: ', context);
+		// console.log('Unsubscribe from room motion sensor: ', context);
 		// await context.api.subscriptions.unsubscribe('motionStartHandler');
 	}
 })
