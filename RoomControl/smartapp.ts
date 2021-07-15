@@ -205,6 +205,7 @@ module.exports = new SmartApp()
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
+	await context.api.subscriptions.unsubscribe('mainSwitchOnHandler');
 	// await context.api.schedules.delete('roomOnHandler');
 	// await context.api.schedules.delete('roomOffHandler');
 	await context.api.schedules.delete();
@@ -219,8 +220,8 @@ module.exports = new SmartApp()
 	} else {
 
 		// Get current appSettings to determine which devices need subscriptions 
-		appSettings = await getCurrentSettings(context);
-		console.log("App settings found: ", appSettings);
+		// appSettings = await getCurrentSettings(context);
+		// console.log("App settings found: ", appSettings);
 
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
@@ -234,29 +235,16 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'groupOffHandler');
 
 		// initialize motion behavior
-		const motionBehavior = getSettingValue(context, 'motionBehavior');
-		console.log('Motion behavior: ', motionBehavior);
-		if (motionBehavior==='occupancy') {
-			console.log('Registering subscription to motionStartHandler: ', motionBehavior);
-			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-			    'motionSensor', 'motion.active', 'motionStartHandler');
-			console.log('Motion start handler subscription: ', context.app);
-		}
-		if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
-			console.log('Registering subscription to motionStopHandler: ', motionBehavior);
-			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-			    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		}
+		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+		    'motionSensor', 'motion.active', 'motionStartHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 
 		// initialize contact behaviors
-		const contactBehavior = getSettingValue(context, 'contactBehavior');
-		console.log('Contact behavior: ', contactBehavior);
-		if (contactBehavior) {
-			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-			    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
-			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-			    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
-		}
+		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// Schedule endTime activities
 		await scheduleEndHandler(context);
