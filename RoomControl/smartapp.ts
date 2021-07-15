@@ -1,3 +1,13 @@
+//---------------------------------------------------------------------------------------
+// Room Control - control lights/switches in room based on settings in in app or
+//       smartapp-room-settings DynamoDB parameter values
+//
+//       endBehavior
+//       - mainOff:			
+//---------------------------------------------------------------------------------------
+
+
+
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
 
