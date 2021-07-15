@@ -434,7 +434,7 @@ module.exports = new SmartApp()
 
 	if (delay) {
 		// Schedule turn off if delay is set
-		await context.api.schedules.runIn('delayedMotionStop', delay)
+		await context.api.schedules.runIn('delayedSwitchOff', delay)
 	} else {
 		// Turn off immediately if no delay
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
@@ -483,12 +483,14 @@ module.exports = new SmartApp()
 	await scheduleEndHandler(context);
 })
 
-// Turns off lights after delay when switch turned off
-.scheduledEventHandler('delayedSwitchOff', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
-})
-
+/*
 // Turns off lights after delay when motion stops
 .scheduledEventHandler('delayedMotionStop', async (context, event) => {
+	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+})
+*/
+
+// Turns off lights after delay when switch turned off
+.scheduledEventHandler('delayedSwitchOff', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
 });
