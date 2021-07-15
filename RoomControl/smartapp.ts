@@ -205,7 +205,7 @@ module.exports = new SmartApp()
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.subscriptions.unsubscribe('mainSwitchOnHandler');
+	await context.api.subscriptions.delete('mainSwitchOnHandler');
 	// await context.api.schedules.delete('roomOnHandler');
 	// await context.api.schedules.delete('roomOffHandler');
 	await context.api.schedules.delete();
