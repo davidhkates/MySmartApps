@@ -240,6 +240,7 @@ module.exports = new SmartApp()
 			console.log('Registering subscription to motionStartHandler: ', motionBehavior);
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 			    'motionSensor', 'motion.active', 'motionStartHandler');
+			console.log('Motion start handler subscription: ', context.api.subscriptions);
 		}
 		if (motionBehavior==='occupancy' || motionBehavior==='vacancy') {
 			console.log('Registering subscription to motionStopHandler: ', motionBehavior);
@@ -402,8 +403,7 @@ module.exports = new SmartApp()
 		console.log('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 		console.log('Unsubscribe from room motion sensor: ', context);
-		// await context.api.subscriptions.unsubscribe(context.subscriptions.motionStartHandler);
-		await context.api.subscriptions.unsubscribe('motionStartHandler');
+		// await context.api.subscriptions.unsubscribe('motionStartHandler');
 	}
 })
 
