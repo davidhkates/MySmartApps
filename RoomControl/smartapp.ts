@@ -434,6 +434,7 @@ module.exports = new SmartApp()
 
 	if (delay) {
 		// Schedule turn off if delay is set
+		console.log("Subscribing to delayedSwitch off routine");
 		await context.api.schedules.runIn('delayedSwitchOff', delay)
 	} else {
 		// Turn off immediately if no delay
@@ -492,5 +493,6 @@ module.exports = new SmartApp()
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+	console.log('Delayed switch off turning off main switch');
+	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 });
