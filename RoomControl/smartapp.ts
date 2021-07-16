@@ -1,9 +1,9 @@
 //---------------------------------------------------------------------------------------
 // Room Control - control lights/switches in room based on settings in in app or
-//       smartapp-room-settings DynamoDB parameter values
+//      smartapp-room-settings DynamoDB parameter values
 //
-//       endBehavior
-//       - mainOff:			
+//	offBehavior (delayGroup, delayMain, offMain, offGroup)
+//      endBehavior (offNow, checkMain, checkNext)			
 //---------------------------------------------------------------------------------------
 
 
@@ -293,19 +293,22 @@ module.exports = new SmartApp()
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
 	console.log("Turn off all lights in on and off groups");
-	const offGroupSwitches = context.config.offGroup;
-	if (offGroupSwitches) {
-		switch (getSettingValue(context, 'offBehavior')) {
-			case 'off':
-				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-				break;
-			case 'delay':
-				const offDelay = getSettingValue(context, 'offDelay');
-				console.log('Turn off lights after delay (seconds): ', offDelay);
-				await context.api.schedules.runIn('delayedOffSwitch', offDelay);
-				break;
-		}
+	switch (getSettingValue(context, 'offBehavior')) {
+		case 'mainOff':
+			await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+			break;
+		case 'groupOff':
+			// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
+			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+			break;
+		case 'mainDelay':
+			const offDelay = getSettingValue(context, 'offDelay');
+			await context.api.schedules.runIn('delayedMainOff', offDelay);
+			break;
+		case 'groupDelay':
+			const offDelay = getSettingValue(context, 'offDelay');
+			await context.api.schedules.runIn('delayedMainOff', offDelay);
+			break;
 	}
 })
 
