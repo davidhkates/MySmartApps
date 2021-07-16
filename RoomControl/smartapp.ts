@@ -185,9 +185,10 @@ module.exports = new SmartApp()
 	});
 
 	// behavior at turn switch off and delay, if applicable
+	// TODO: align with DynamoDB choices
 	page.section('behavior', section => {
 		section.enumSetting('offBehavior').options(['off','delay','end','none'])
-			.defaultValue('off').required('true');
+			.defaultValue('off').required('true').multiple('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
 })
@@ -295,6 +296,7 @@ module.exports = new SmartApp()
 	// console.log("Turn off all lights in on and off groups");
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay = getSettingValue(context, 'offDelay');
+	console.log('Turn off lights based on off behavior: ', offBehavior, offDelay);
 	if (offBehavior.includes('mainOff')) await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	if (offBehavior.includes('groupOff')) await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 	if (offBehavior.includes('mainDelay')) await context.api.schedules.runIn('delayedMainOff', offDelay);
