@@ -441,7 +441,8 @@ module.exports = new SmartApp()
 		await context.api.schedules.runIn('delayedSwitchOff', delay)
 	} else {
 		// Turn off immediately if no delay
-		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		// await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		await context.api.schedules.runIn('delayedSwitchOff', 60)
 	}
 })
 
