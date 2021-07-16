@@ -293,6 +293,7 @@ module.exports = new SmartApp()
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
 	console.log("Turn off all lights in on and off groups");
+	const offDelay = getSettingValue(context, 'offDelay');
 	switch (getSettingValue(context, 'offBehavior')) {
 		case 'mainOff':
 			await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
@@ -302,11 +303,11 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			break;
 		case 'mainDelay':
-			const offDelay = getSettingValue(context, 'offDelay');
+			// const offDelay = getSettingValue(context, 'offDelay');
 			await context.api.schedules.runIn('delayedMainOff', offDelay);
 			break;
 		case 'groupDelay':
-			const offDelay = getSettingValue(context, 'offDelay');
+			// const offDelay = getSettingValue(context, 'offDelay');
 			await context.api.schedules.runIn('delayedMainOff', offDelay);
 			break;
 	}
