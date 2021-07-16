@@ -292,25 +292,13 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
-	console.log("Turn off all lights in on and off groups");
+	// console.log("Turn off all lights in on and off groups");
+	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay = getSettingValue(context, 'offDelay');
-	switch (getSettingValue(context, 'offBehavior')) {
-		case 'mainOff':
-			await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-			break;
-		case 'groupOff':
-			// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-			break;
-		case 'mainDelay':
-			// const offDelay = getSettingValue(context, 'offDelay');
-			await context.api.schedules.runIn('delayedMainOff', offDelay);
-			break;
-		case 'groupDelay':
-			// const offDelay = getSettingValue(context, 'offDelay');
-			await context.api.schedules.runIn('delayedMainOff', offDelay);
-			break;
-	}
+	if (offBehavior.includes('mainOff')) await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	if (offBehavior.includes('groupOff')) await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	if (offBehavior.includes('mainDelay')) await context.api.schedules.runIn('delayedMainOff', offDelay);
+	if (offBehavior.includes('groupDelay')) await context.api.schedules.runIn('delayedGroupOff', offDelay);
 })
 
 
