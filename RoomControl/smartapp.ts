@@ -298,12 +298,14 @@ module.exports = new SmartApp()
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay = getSettingValue(context, 'offDelay');
 	console.log('Turn off lights based on off behavior: ', context.config.offBehavior, offBehavior);
-	if (delay) {
-		if (offBehavior==='main') await context.api.schedules.runIn('delayedMainOff', offDelay);
-		if (offBehavior==='groupDelay') await context.api.schedules.runIn('delayedGroupOff', offDelay);
-	} else {
-		if (offBehavior==='main') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-		if (offBehavior==='both') await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+
+	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	if (offBehavior==='group' || offBehavior==='both') {
+		if (delay) {
+			await context.api.schedules.runIn('delayedGroupOff', offDelay);
+		} else {
+			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+		}
 	}
 })
 
