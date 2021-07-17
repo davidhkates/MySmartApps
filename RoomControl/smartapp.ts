@@ -294,6 +294,7 @@ module.exports = new SmartApp()
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
 	// console.log("Turn off all lights in on and off groups");
+	console.log('Off behavior: ', getSettingValue(context, 'offBehavior'));
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay = getSettingValue(context, 'offDelay');
 	console.log('Turn off lights based on off behavior: ', offBehavior, offDelay);
