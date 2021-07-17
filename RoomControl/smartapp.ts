@@ -31,13 +31,13 @@ let appSettings: any = {}
 var aws = require('aws-sdk');
 aws.config.update({region: 'us-west-2'});
 
-async function getAppSettings(appId) {
+async function getAppSettings(room) {
 	var docClient = new aws.DynamoDB.DocumentClient();
 	const params = {
-  		TableName: 'smartapp-control-settings',
-  		KeyConditionExpression: 'appId = :key',
+  		TableName: 'smartapp-room-settings',
+  		KeyConditionExpression: 'room = :room',
 		ExpressionAttributeValues: {
-    			':key': appId
+    			':room': room
 		}		
 	};
 	console.log('Params: ', params);
@@ -64,12 +64,12 @@ async function getAppSettings(appId) {
 };
 
 async function getCurrentSettings(context) {
-	// check to see if settings database key specified
-	const keyName: string = context.configStringValue('keyName');
-	console.log('Key specified: ', keyName);
-	if (keyName) {
+	// check to see if settings database room name specified
+	const roomName: string = context.configStringValue('roomName');
+	console.log('Room name specified: ', roomName);
+	if (roomName) {
 		// find settings from database for current app
-		const items: any = await getAppSettings(keyName);
+		const items: any = await getAppSettings(roomName);
 		console.log('Items: ', items);
 
 		if (items) {
@@ -152,10 +152,10 @@ module.exports = new SmartApp()
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
 	page.nextPageId('optionsPage');
 
-	// enable/disable control, key name for state machine
+	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
-		section.textSetting('keyName').required(false);
+		section.textSetting('roomName').required(false);
 	});
 
 	// room switches
