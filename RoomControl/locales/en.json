@@ -4,8 +4,8 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.keyName.name": "Room name for settings in DyanomoDB (optional)",
-	"pages.mainPage.settings.keyName.description": "Room name value for smartapp-control-settings table with settings by time zone",
+	"pages.mainPage.settings.roomName.name": "Room name for settings in DyanomoDB table (optional)",
+	"pages.mainPage.settings.roomName.description": "Room name value for smartapp-room-settings table with settings by time zone",
 	
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.sections.switches.name": "Switches to control room",
