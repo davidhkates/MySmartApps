@@ -297,6 +297,8 @@ module.exports = new SmartApp()
 	// console.log("Turn off all lights in on and off groups");
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay = getSettingValue(context, 'offDelay');
+	const mainList = ['main', 'both'];
+	const groupList = ['group', 'both'];
 	console.log('Turn off lights based on off behavior: ', context.config.offBehavior, offBehavior);
 
 	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
@@ -491,7 +493,19 @@ module.exports = new SmartApp()
 .scheduledEventHandler('delayedMotionStop', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 })
+
+// Turns off lights after delay when switch turned off
+.scheduledEventHandler('delayedMainOff', async (context, event) => {
+	console.log('Delayed switch off turning off main switch');
+	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+})
 */
+
+// Turns off lights after delay when switch turned off
+.scheduledEventHandler('delayedGroupOff', async (context, event) => {
+	console.log('Turn off lights in offGroup after delay');
+	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+})
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
