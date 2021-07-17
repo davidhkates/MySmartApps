@@ -2,7 +2,7 @@
 // Room Control - control lights/switches in room based on settings in in app or
 //      smartapp-room-settings DynamoDB parameter values
 //
-//	offBehavior (delayGroup, delayMain, offMain, offGroup)
+//	offBehavior (main, group, both, none)
 //      endBehavior (offNow, checkMain, checkNext)			
 //---------------------------------------------------------------------------------------
 
@@ -187,8 +187,8 @@ module.exports = new SmartApp()
 	// behavior at turn switch off and delay, if applicable
 	// TODO: align with DynamoDB choices
 	page.section('behavior', section => {
-		section.enumSetting('offBehavior').options(['off','delay','end','none'])
-			.defaultValue('off').required('true').multiple('true');
+		section.enumSetting('offBehavior').options(['main','group''both','none'])
+			.defaultValue('off').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
 })
@@ -298,10 +298,13 @@ module.exports = new SmartApp()
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay = getSettingValue(context, 'offDelay');
 	console.log('Turn off lights based on off behavior: ', context.config.offBehavior, offBehavior);
-	if (offBehavior.includes('mainOff')) await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-	if (offBehavior.includes('groupOff')) await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-	if (offBehavior.includes('mainDelay')) await context.api.schedules.runIn('delayedMainOff', offDelay);
-	if (offBehavior.includes('groupDelay')) await context.api.schedules.runIn('delayedGroupOff', offDelay);
+	if (delay) {
+		if (offBehavior==='main') await context.api.schedules.runIn('delayedMainOff', offDelay);
+		if (offBehavior==='groupDelay') await context.api.schedules.runIn('delayedGroupOff', offDelay);
+	} else {
+		if (offBehavior==='main') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+		if (offBehavior==='both') await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	}
 })
 
 
