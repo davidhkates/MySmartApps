@@ -231,7 +231,7 @@ module.exports = new SmartApp()
 
 		// Get current appSettings to determine which devices need subscriptions 
 		appSettings = await getCurrentSettings(context);
-		console.log('App settings: ', appSettings);
+		// console.log('App settings: ', appSettings);
 
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.mainSwitch,
