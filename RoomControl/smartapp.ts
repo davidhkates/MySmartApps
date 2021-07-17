@@ -187,7 +187,7 @@ module.exports = new SmartApp()
 	// behavior at turn switch off and delay, if applicable
 	// TODO: align with DynamoDB choices
 	page.section('behavior', section => {
-		section.enumSetting('offBehavior').options(['main','group''both','none'])
+		section.enumSetting('offBehavior').options(['main','group','both','none'])
 			.defaultValue('off').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
