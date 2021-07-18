@@ -409,6 +409,9 @@ module.exports = new SmartApp()
 		// console.log('Unsubscribe from room motion sensor: ', context);
 		// await context.api.subscriptions.unsubscribe('motionStartHandler');
 	}
+	
+	// Cancel delayed off switch handler
+	await context.api.schedules.delete('delayedSwitchOff');
 })
 
 
