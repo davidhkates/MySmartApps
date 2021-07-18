@@ -167,11 +167,6 @@ module.exports = new SmartApp()
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 	});
-	
-	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-			.required(false).multiple(true).permissions('rx');
-	});
 })
 
 .page('optionsPage', (context, page, configData) => {
@@ -187,6 +182,11 @@ module.exports = new SmartApp()
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
+	});
+
+	page.section('speakers', section => {
+		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+			.required(false).multiple(true).permissions('rx');
 	});
 
 	// behavior at turn switch off and delay, if applicable
