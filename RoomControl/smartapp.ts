@@ -167,6 +167,9 @@ module.exports = new SmartApp()
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 	});
+	
+	page.section('speakers', section => {
+		section.deviceSetting('roomSpeakers');
 })
 
 .page('optionsPage', (context, page, configData) => {
