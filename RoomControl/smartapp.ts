@@ -170,6 +170,7 @@ module.exports = new SmartApp()
 	
 	page.section('speakers', section => {
 		section.deviceSetting('roomSpeakers');
+	});
 })
 
 .page('optionsPage', (context, page, configData) => {
