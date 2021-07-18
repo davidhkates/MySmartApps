@@ -193,7 +193,7 @@ module.exports = new SmartApp()
 	// TODO: align with DynamoDB choices
 	page.section('behavior', section => {
 		section.enumSetting('offBehavior').options(['main','group','both','none'])
-			.defaultValue('off').required('true');
+			.defaultValue('both').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
 })
