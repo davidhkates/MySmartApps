@@ -169,7 +169,7 @@ module.exports = new SmartApp()
 	});
 	
 	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers');
+		section.deviceSetting('roomSpeakers').capabilities(['websocket']);
 	});
 })
 
