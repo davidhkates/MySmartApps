@@ -21,7 +21,6 @@
 	"pages.optionsPage.settings.offBehavior.options.group.name": "Group only",
 	"pages.optionsPage.settings.offBehavior.options.both.name": "Both",
 	"pages.optionsPage.settings.offBehavior.options.none.name": "Do Nothing",
-	"pages.optionsPage.settings.offBehavior.options.off.name": "Off",
 	"pages.optionsPage.settings.offDelay.name": "Delay to turn off lights (if applicable)",
 	"pages.optionsPage.settings.offDelay.description": "Delay in seconds",
 	
