@@ -168,11 +168,9 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('rx');
 	});
 	
-	/*
 	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audio']).permissions('rx');
+		section.deviceSetting('roomSpeakers').capabilities(['playbackStatus']).permissions('rx');
 	});
-	*/
 })
 
 .page('optionsPage', (context, page, configData) => {
