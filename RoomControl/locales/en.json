@@ -14,7 +14,7 @@
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
 	"pages.mainPage.sections.speakers.name": "Speakers in room to control",
-	"pages.mainPage.setting.roomSpeakers.name": "Select speakers to turn on/off",
+	"pages.mainPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
 
 	"pages.optionsPage.name": "Room Control (2 of 2)",
 	"pages.optionsPage.sections.behavior.name": "Switch off behavior",
