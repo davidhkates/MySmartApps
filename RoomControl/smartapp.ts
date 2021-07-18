@@ -312,6 +312,7 @@ module.exports = new SmartApp()
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+			await context.api.devices.sendComments(context.config.roomSpeakers, 'playbackStatus', 'stopped');
 		}
 	}
 })
