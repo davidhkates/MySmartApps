@@ -169,7 +169,8 @@ module.exports = new SmartApp()
 	});
 	
 	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audioVolume']).permissions('rx');
+		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+			.required(false).multiple(true).permissions('rx');
 	});
 })
 
