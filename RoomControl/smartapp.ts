@@ -443,6 +443,7 @@ module.exports = new SmartApp()
 	const delay = getSettingValue(context, 'motionDelay');
 	console.log("Turn off lights after specified delay: ", delay);
 
+	/*
 	if (delay) {
 		// Schedule turn off if delay is set
 		console.log("Subscribing to delayedSwitchOff routine after specified delay: ", delay);
@@ -453,6 +454,8 @@ module.exports = new SmartApp()
 		console.log("Subscribing to delayedSwitchOff routine with 60 second delay");
 		await context.api.schedules.runIn('delayedSwitchOff', 60)
 	}
+	*/
+	await context.api.schedules.runIn('delayedSwitchOff', 900);
 })
 
 
