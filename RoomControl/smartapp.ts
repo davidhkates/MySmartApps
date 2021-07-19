@@ -411,7 +411,7 @@ module.exports = new SmartApp()
 	}
 	
 	// Cancel delayed off switch handler
-	await context.api.schedules.delete('delayedSwitchOff');
+	// await context.api.schedules.delete('delayedSwitchOff');
 })
 
 
