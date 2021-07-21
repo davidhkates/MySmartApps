@@ -142,14 +142,30 @@ async function scheduleEndHandler(context) {
 // write log entry to circular log
 async function writeLogEntry(logRecord) {
 	var docClient = new aws.DynamoDB.DocumentClient();
-	const params = {
+
+	// define parameters for query to get current circular buffer offset
+	let params = {
   		TableName: 'smartapp-circular-log',
-  		KeyConditionExpression: 'room = :room',
+  		KeyConditionExpression: 'index = :index',
 		ExpressionAttributeValues: {
-    			':room': room
+    			':index': 0
 		}		
 	};
 	
+	// write log record to next entry in circular buffer (upsert)	
+	params = {	
+	  		Item: {
+    			key: { S: key },
+			keyValue: { S: value },
+  		},
+	};
+	
+	try {
+    		const data = await dbclient.send(new PutItemCommand(params));
+    		console.log('Data stored in DynamoDB: ',data);
+  	} catch (err) {
+    		console.error(err);
+  	}
 };	
 
 
