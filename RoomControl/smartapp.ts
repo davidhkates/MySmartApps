@@ -176,17 +176,14 @@ async function writeLogEntry(logRecord) {
 					offset: { N: offset }
 				},
 			};
-			
-		
+					
 		} catch (err) {
 			console.error("Circular console write failure", err.message);
 		}
 		
-		
 	} catch (err) {
 		console.error("Circular console read failure", err.message);
 	}
-
 	
 };	
 
@@ -269,6 +266,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("RoomControl: Installed/Updated");
+	writeLogEntry("RoomControl: Installed/Updated");
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
