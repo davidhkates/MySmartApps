@@ -163,8 +163,8 @@ async function writeLogEntry(logRecord) {
 	  		TableName: tableName,
 			Item: {
 				index: { N: offset },
-				logRecord: { S: logRecord }
-			}
+				logRecord: { S: logRecord },
+			},
 		};
 
 		try {
@@ -176,8 +176,8 @@ async function writeLogEntry(logRecord) {
 				TableName: tableName,
 				Item: {
 					index: { N: 0 },
-					offset: { N: offset }
-				}
+					offset: { N: offset },
+				},
 			};
 					
 		} catch (err) {
