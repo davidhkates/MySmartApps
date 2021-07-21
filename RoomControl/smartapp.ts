@@ -145,7 +145,7 @@ async function writeLogEntry(logRecord) {
 	const tableName = 'smartapp-circular-log';
 	
 	// define parameters for query to get current circular buffer offset
-	let params = {
+	const paramsRead = {
   		TableName: tableName,
   		KeyConditionExpression: 'index = :index',
 		ExpressionAttributeValues: {
@@ -154,12 +154,12 @@ async function writeLogEntry(logRecord) {
 	};
 	
 	try {
-		const data = await docClient.query(params).promise();
+		const data = await docClient.query(paramsRead).promise();
 		const maxRecords = data.Items.maxRecords;
 		let offset: number = data.Items.offset;
 
 		// write log record to next entry in circular buffer (upsert)			
-		params = {	
+		const paramsWrite = {	
 	  		TableName: tableName,
 			Item: {
 				index: { N: offset },
@@ -168,20 +168,26 @@ async function writeLogEntry(logRecord) {
 		};
 
 		try {
-			const data = await docClient.put(params).promise();
+			await docClient.put(paramsWrite).promise();
 			
 			// increment circular log offset file to maxRecords then wrap back to beginning
 			if (offset++ == maxRecords) { offset = 1 };
-			params = {	
+			const paramsOffset = {	
 				TableName: tableName,
 				Item: {
 					index: { N: 0 },
 					offset: { N: offset },
 				},
 			};
+			
+			try {
+				await docClient.put(paramsOffset).promise();
+			} catch (err) {
+				console.error("Circular console offset write error", err.message);
+			}
 					
 		} catch (err) {
-			console.error("Circular console write failure", err.message);
+			console.error("Circular console log record write failure", err.message);
 		}
 		
 	} catch (err) {
