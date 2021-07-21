@@ -142,10 +142,11 @@ async function scheduleEndHandler(context) {
 // write log entry to circular log
 async function writeLogEntry(logRecord) {
 	var docClient = new aws.DynamoDB.DocumentClient();
-
+	const tableName = 'smartapp-circular-log';
+	
 	// define parameters for query to get current circular buffer offset
 	let params = {
-  		TableName: 'smartapp-circular-log',
+  		TableName: tableName,
   		KeyConditionExpression: 'index = :index',
 		ExpressionAttributeValues: {
     			':index': 0
@@ -157,12 +158,13 @@ async function writeLogEntry(logRecord) {
 		const offset = data.Items.offset;
 		const maxRecords = data.Items.maxRecords;
 
-		// write log record to next entry in circular buffer (upsert)	
+		// write log record to next entry in circular buffer (upsert)			
 		params = {	
+	  		TableName: tableName,
 			Item: {
 				index: { N: offset },
 				logRecord: { S: logRecord }
-			},
+			}
 		};
 
 		try {
@@ -171,10 +173,11 @@ async function writeLogEntry(logRecord) {
 			// increment circular log offset file to maxRecords then wrap back to beginning
 			if (offset++ == maxRecords) { offset = 1 };
 			params = {	
+				TableName: tableName,
 				Item: {
 					index: { N: 0 },
 					offset: { N: offset }
-				},
+				}
 			};
 					
 		} catch (err) {
