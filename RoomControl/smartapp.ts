@@ -139,6 +139,19 @@ async function scheduleEndHandler(context) {
 	}
 };
 
+// write log entry to circular log
+async function writeLogEntry(logRecord) {
+	var docClient = new aws.DynamoDB.DocumentClient();
+	const params = {
+  		TableName: 'smartapp-circular-log',
+  		KeyConditionExpression: 'room = :room',
+		ExpressionAttributeValues: {
+    			':room': room
+		}		
+	};
+	
+};	
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
