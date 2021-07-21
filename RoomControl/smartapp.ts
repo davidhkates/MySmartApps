@@ -155,8 +155,8 @@ async function writeLogEntry(logRecord) {
 	
 	try {
 		const data = await docClient.query(params).promise();
-		const offset = data.Items.offset;
 		const maxRecords = data.Items.maxRecords;
+		let offset: number = data.Items.offset;
 
 		// write log record to next entry in circular buffer (upsert)			
 		params = {	
