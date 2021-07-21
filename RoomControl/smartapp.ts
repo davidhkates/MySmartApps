@@ -152,20 +152,42 @@ async function writeLogEntry(logRecord) {
 		}		
 	};
 	
-	// write log record to next entry in circular buffer (upsert)	
-	params = {	
-	  		Item: {
-    			key: { S: key },
-			keyValue: { S: value },
-  		},
-	};
-	
 	try {
-    		const data = await dbclient.send(new PutItemCommand(params));
-    		console.log('Data stored in DynamoDB: ',data);
-  	} catch (err) {
-    		console.error(err);
-  	}
+		const data = await docClient.query(params).promise();
+		const offset = data.Items.offset;
+		const maxRecords = data.Items.maxRecords;
+
+		// write log record to next entry in circular buffer (upsert)	
+		params = {	
+			Item: {
+				index: { N: offset },
+				logRecord: { S: logRecord }
+			},
+		};
+
+		try {
+			const data = await docClient.put(params).promise();
+			
+			// increment circular log offset file to maxRecords then wrap back to beginning
+			if (offset++ == maxRecords) { offset = 1 };
+			params = {	
+				Item: {
+					index: { N: 0 },
+					offset: { N: offset }
+				},
+			};
+			
+		
+		} catch (err) {
+			console.error("Circular console write failure", err.message);
+		}
+		
+		
+	} catch (err) {
+		console.error("Circular console read failure", err.message);
+	}
+
+	
 };	
 
 
