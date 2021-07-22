@@ -148,25 +148,25 @@ async function writeLogEntry(logRecord) {
 	// define parameters for query to get current circular buffer offset
 	const paramsRead = {
   		TableName: tableName,
-  		KeyConditionExpression: 'sequence = :sequence',
+  		KeyConditionExpression: 'logItem = :logItem',
 		ExpressionAttributeValues: {
-    			':sequence': 0
+    			':logItem': 0
 		}		
 	};
 	
 	try {
 		const data = await docClient.query(paramsRead).promise();
 		console.log('Circular log data returned: ', data);
+		let logOffset = data.Items.logOffset;
 		const maxRecords = data.Items.maxRecords;
-		let offset: number = data.Items.offset;
-		console.log('Circular log offset and maxRecords: ', offset, maxRecords);
+		console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
 		
 
 		// write log record to next entry in circular buffer (upsert)			
 		const paramsWrite = {	
 	  		TableName: tableName,
 			Item: {
-				sequence: { N: offset },
+				logItem: { N: logOffset },
 				logRecord: { S: logRecord },
 			},
 		};
@@ -176,13 +176,13 @@ async function writeLogEntry(logRecord) {
 			await docClient.put(paramsWrite).promise();
 			
 			// increment circular log offset file to maxRecords then wrap back to beginning
-			if (offset++ == maxRecords) { offset = 1 };
-			console.log('Next offset: ', offset);
+			if (logOffset++ == maxRecords) { logOffset = 1 };
+			console.log('Next offset: ', logOffset);
 			const paramsOffset = {	
 				TableName: tableName,
 				Item: {
 					sequence: { N: 0 },
-					offset: { N: offset },
+					offset: { N: logOffset },
 				},
 			};
 			
