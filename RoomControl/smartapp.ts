@@ -24,7 +24,7 @@ interface device {
 
 // global variables
 let appSettings: any = {};
-const logSettings = 'db';	// 'db' logs to DynamoDB, 'cw' logs to CloudWatch console
+let logSettings = 'db';	// 'db' logs to DynamoDB, 'cw' logs to CloudWatch console
 
 //----------------------------------------------------------------------------------------
 // TODO: move routines to get settings values from DynamoDB database to katesthings
