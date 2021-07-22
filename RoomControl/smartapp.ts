@@ -172,6 +172,16 @@ async function writeLogEntry(logRecord) {
 			let logOffset: number = data.Items[0].logOffset;
 			const maxRecords: number = data.Items[0].maxRecords;
 			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
+
+			// write log record to next entry in circular table
+			docClient.put({
+				Item: {
+					logItem: 1,
+					logRecord: logRecord,
+				},
+				TableName: logTable,
+			}).promise().then( data => console.log(data.Attributes)).catch(console.error);
+		
 		})		
 		.catch(console.error);
 
