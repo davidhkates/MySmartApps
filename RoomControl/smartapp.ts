@@ -181,8 +181,8 @@ async function writeLogEntry(logRecord) {
 			const paramsOffset = {	
 				TableName: tableName,
 				Item: {
-					sequence: { N: 0 },
-					offset: { N: logOffset },
+					logItem: { N: 0 },
+					logOffset: { N: logOffset },
 				},
 			};
 			
