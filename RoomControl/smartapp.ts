@@ -174,7 +174,7 @@ async function writeLogEntry(logRecord) {
 
 		console.log('Writing to circular log: ', paramsWrite);
 		try {
-			await docClient.put(paramsWrite).promise();
+			await docClient.update(paramsWrite).promise();
 			
 			// increment circular log offset file to maxRecords then wrap back to beginning
 			if (logOffset++ == maxRecords) { logOffset = 1 };
