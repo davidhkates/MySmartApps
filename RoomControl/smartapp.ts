@@ -174,7 +174,7 @@ async function writeLogEntry(logRecord) {
 			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
 
 			// write log record to next entry in circular table
-			docClient.put({
+			dynamoDB.put({
 				Item: {
 					logItem: 1,
 					logRecord: logRecord,
