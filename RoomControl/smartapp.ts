@@ -148,9 +148,9 @@ async function writeLogEntry(logRecord) {
 	// define parameters for query to get current circular buffer offset
 	const paramsRead = {
   		TableName: tableName,
-  		KeyConditionExpression: 'index = :index',
+  		KeyConditionExpression: 'sequence = :sequence',
 		ExpressionAttributeValues: {
-    			':index': 0
+    			':sequence': 0
 		}		
 	};
 	
@@ -166,7 +166,7 @@ async function writeLogEntry(logRecord) {
 		const paramsWrite = {	
 	  		TableName: tableName,
 			Item: {
-				index: { N: offset },
+				sequence: { N: offset },
 				logRecord: { S: logRecord },
 			},
 		};
@@ -181,7 +181,7 @@ async function writeLogEntry(logRecord) {
 			const paramsOffset = {	
 				TableName: tableName,
 				Item: {
-					index: { N: 0 },
+					sequence: { N: 0 },
 					offset: { N: offset },
 				},
 			};
