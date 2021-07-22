@@ -192,10 +192,11 @@ async function writeLogEntry(logRecord) {
 				};
 
 				docClient.put(paramsOffset, function(err, data) {
-  				if (err) {
-					console.error("Circular console offset write error", err.message);
-				} else {
-    					console.log("Circular console offset write success", data);
+  					if (err) {
+						console.error("Circular console offset write error", err.message);
+					} else {
+    						console.log("Circular console offset write success", data);
+					}
 				}
 			}
 		}				      
