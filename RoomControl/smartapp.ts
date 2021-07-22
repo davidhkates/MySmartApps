@@ -158,45 +158,47 @@ async function writeLogEntry(logRecord) {
 		const data = await docClient.query(paramsRead).promise();
 		console.log('Circular log data returned: ', data);
 		let logOffset: number = data.Items[0].logOffset;
-		logOffset = 1;
 		const maxRecords: number = data.Items[0].maxRecords;
 		console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
-		
 
 		// write log record to next entry in circular buffer (upsert)			
 		const paramsWrite = {	
 	  		TableName: tableName,
 			Item: {
 				logItem: { N: logOffset },
-				logRecord: { S: logRecord },
-			},
+				logRecord: { S: logRecord }
+			}
 		};
 
 		console.log('Writing to circular log: ', paramsWrite);
 		try {
-			await docClient.update(paramsWrite).promise();
-			
-			// increment circular log offset file to maxRecords then wrap back to beginning
-			if (logOffset++ == maxRecords) { logOffset = 1 };
-			console.log('Next offset: ', logOffset);
-			const paramsOffset = {	
-				TableName: tableName,
-				Item: {
-					logItem: { N: 0 },
-					logOffset: { N: logOffset },
-				},
-			};
-			
-			try {
-				await docClient.put(paramsOffset).promise();
-			} catch (err) {
-				console.error("Circular console offset write error", err.message);
+			// await docClient.update(paramsWrite).promise();
+
+			docClient.put(paramsWrite, function(err, data) {
+  			if (err) {
+				console.error("Circular console log record write error", err.message);
+			} else {
+    				console.log("Circular console log record write success", data);
+						
+				// increment circular log offset file to maxRecords then wrap back to beginning
+				if (logOffset++ == maxRecords) { logOffset = 1 };
+				console.log('Next offset: ', logOffset);
+				const paramsOffset = {	
+					TableName: tableName,
+					Item: {
+						logItem: { N: 0 },
+						logOffset: { N: logOffset }
+					}
+				};
+
+				docClient.put(paramsOffset, function(err, data) {
+  				if (err) {
+					console.error("Circular console offset write error", err.message);
+				} else {
+    					console.log("Circular console offset write success", data);
+				}
 			}
-					
-		} catch (err) {
-			console.error("Circular console log record write failure", err.message);
-		}
-		
+		}				      
 	} catch (err) {
 		console.error("Circular console read failure", err.message);
 	}
