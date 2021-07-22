@@ -157,8 +157,9 @@ async function writeLogEntry(logRecord) {
 	try {
 		const data = await docClient.query(paramsRead).promise();
 		console.log('Circular log data returned: ', data);
-		let logOffset = data.Items[0].logOffset;
-		const maxRecords = data.Items[0].maxRecords;
+		let logOffset: number = data.Items[0].logOffset;
+		logOffset = 1;
+		const maxRecords: number = data.Items[0].maxRecords;
 		console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
 		
 
