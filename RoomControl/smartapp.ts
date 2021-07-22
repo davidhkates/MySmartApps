@@ -158,7 +158,7 @@ async function writeLogEntry(logRecord) {
 				logItem: 1,
 				logRecord: 'See if this works'
 			},
-			TableName: tableName,
+			TableName: logTable,
 		}).promise().then( data => console.log(data.Attributes)).catch(console.error);
 		*/
 
@@ -167,12 +167,29 @@ async function writeLogEntry(logRecord) {
     			Key: {
 				logItem: 0,	// record 0 contains circular log metadata
 			},
-		}).promise()
-  			.then(data => console.log(data.Item))
-  			.catch(console.error);
+		}).promise().then(function(data) {
+			console.log('Circular log data returned: ', data);
+			let logOffset: number = data.Items[0].logOffset;
+			const maxRecords: number = data.Items[0].maxRecords;
+			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
+		})		
+		.catch(console.error);
 
+/*
+doSomething()
+.then(function(result) {
+  return doSomethingElse(result);
+})
+.then(function(newResult) {
+  return doThirdThing(newResult);
+})
+.then(function(finalResult) {
+  console.log('Got the final result: ' + finalResult);
+})
+.catch(failureCallback);		
+*/		
 
-
+		/*
 		console.log('Reading current circular log offset and maxRecords');
 		// define parameters for query to get current circular buffer offset
 		const paramsRead = {
@@ -232,6 +249,7 @@ async function writeLogEntry(logRecord) {
 		} catch (err) {
 			console.error("Circular console read failure", err.message);
 		}
+		*/
 	}	
 };	
 
