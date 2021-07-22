@@ -175,30 +175,31 @@ async function writeLogEntry(logRecord) {
 			// await docClient.update(paramsWrite).promise();
 
 			docClient.put(paramsWrite, function(err, data) {
-  			if (err) {
-				console.error("Circular console log record write error", err.message);
-			} else {
-    				console.log("Circular console log record write success", data);
+				if (err) {
+					console.error("Circular console log record write error", err.message);
+				} else {
+    					console.log("Circular console log record write success", data);
 						
-				// increment circular log offset file to maxRecords then wrap back to beginning
-				if (logOffset++ == maxRecords) { logOffset = 1 };
-				console.log('Next offset: ', logOffset);
-				const paramsOffset = {	
-					TableName: tableName,
-					Item: {
-						logItem: { N: 0 },
-						logOffset: { N: logOffset }
-					}
-				};
+					// increment circular log offset file to maxRecords then wrap back to beginning
+					if (logOffset++ == maxRecords) { logOffset = 1 };
+					console.log('Next offset: ', logOffset);
+					const paramsOffset = {	
+						TableName: tableName,
+						Item: {
+							logItem: { N: 0 },
+							logOffset: { N: logOffset }
+						}
+					};
 
-				docClient.put(paramsOffset, function(err, data) {
-  					if (err) {
-						console.error("Circular console offset write error", err.message);
-					} else {
-    						console.log("Circular console offset write success", data);
-					}
+					docClient.put(paramsOffset, function(err, data) {
+						if (err) {
+							console.error("Circular console offset write error", err.message);
+						} else {
+							console.log("Circular console offset write success", data);
+						}
+					});
 				}
-			}
+			});				
 		}				      
 	} catch (err) {
 		console.error("Circular console read failure", err.message);
