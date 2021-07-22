@@ -142,7 +142,7 @@ async function scheduleEndHandler(context) {
 // write log entry to circular log
 async function writeLogEntry(logRecord) {
 	// var docClient = new aws.DynamoDB.DocumentClient();
-	var docClient = new AWS.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
+	var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
 	const tableName = 'smartapp-circular-log';
 	
 	console.log('Reading current circular log offset and maxRecords');
