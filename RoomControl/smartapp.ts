@@ -341,7 +341,7 @@ module.exports = new SmartApp()
 	const offDelay = getSettingValue(context, 'offDelay');
 	const mainList = ['main', 'both'];
 	const groupList = ['group', 'both'];
-	writeLogEntry('Turn off lights based on off behavior: $(offBehavior)');
+	writeLogEntry('Turn off lights based on off behavior: ${offBehavior}');
 
 	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	if (offBehavior==='group' || offBehavior==='both') {
