@@ -163,7 +163,7 @@ async function writeLogEntry(logRecord) {
 			// write log record to next entry in circular table
 			dynamoDB.put({
 				Item: {
-					logItem: logOffset,
+					logItem: 1,
 					logRecord: logRecord,
 				},
 				TableName: logTable,
@@ -174,7 +174,7 @@ async function writeLogEntry(logRecord) {
 					Item: {
 						logItem: 0,
 						logOffset: logOffset,
-					},
+					}
 					TableName: logTable,
 				})				
 			})
@@ -193,14 +193,12 @@ async function writeLogEntry(logRecord) {
 				':logItem': 0
 			}		
 		};
-
 		try {
 			const data = await docClient.query(paramsRead).promise();
 			console.log('Circular log data returned: ', data);
 			let logOffset: number = data.Items[0].logOffset;
 			const maxRecords: number = data.Items[0].maxRecords;
 			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
-
 			// write log record to next entry in circular buffer (upsert)			
 			const paramsWrite = {	
 				TableName: tableName,
@@ -209,17 +207,14 @@ async function writeLogEntry(logRecord) {
 					'logRecord': { S: logRecord }
 				}
 			};
-
 			console.log('Writing to circular log: ', paramsWrite);
 			// try {
 				// await docClient.update(paramsWrite).promise();
-
 			docClient.put(paramsWrite, function(err, data) {
 				if (err) {
 					console.error("Circular console log record write error", err.message);
 				} else {
 					console.log("Circular console log record write success", data);
-
 					// increment circular log offset file to maxRecords then wrap back to beginning
 					if (logOffset++ == maxRecords) { logOffset = 1 };
 					console.log('Next offset: ', logOffset);
@@ -230,7 +225,6 @@ async function writeLogEntry(logRecord) {
 							logOffset: { N: logOffset }
 						}
 					};
-
 					docClient.put(paramsOffset, function(err, data) {
 						if (err) {
 							console.error("Circular console offset write error", err.message);
@@ -311,7 +305,6 @@ module.exports = new SmartApp()
 	
 	// separate page for options that aren't needed if states set in DynamoDB (specified by keyName)
 	// page.prevPageId('optionsPage');
-
 	// time window and days of week
 	page.section('time', section => {
 		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
@@ -614,7 +607,6 @@ module.exports = new SmartApp()
 .scheduledEventHandler('delayedMotionStop', async (context, event) => {
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 })
-
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedMainOff', async (context, event) => {
 	console.log('Delayed switch off turning off main switch');
