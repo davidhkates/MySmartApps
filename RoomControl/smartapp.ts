@@ -62,81 +62,6 @@ async function getAppSettings(room) {
 	.catch(console.error);		
 };
 
-async function getCurrentSettings(context) {
-	// check to see if settings database room name specified
-	const roomName: string = context.configStringValue('roomName');
-	// console.log('Room name specified: ', roomName);
-	if (roomName) {
-		// find settings from database for current app
-		const items: any = await getAppSettings(roomName);
-		// console.log('Items: ', items);
-
-		if (items) {
-
-			// get local time and day of week for today
-			const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
-			const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
-			const localDate = new Date(localToday);
-			const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
-			const strDayOfWeek = daysOfWeek[localDate.getDay()];
-
-			// find state data for current day/time
-			// let bFound: booleean = false;
-			for (const item of items) {
-				// console.log('Item: ', item);
-				if (item.daysofweek.includes(strDayOfWeek) && 
-						( (!item.startTime && !item.endTime) ||
-						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
-					// console.log('Current settings found: ', item);
-					return item;
-					break;
-				}
-			}
-		}
-	}
-};
-
-// function getSettingValue(context, settingName, bAppOnly) {
-function getSettingValue(context, settingName) {
-	// declare variable to return stateVariables
-	let settingValue: string;
-
-	// see if settings found in smartapp DynamoDB database
-	if (appSettings) {
-		settingValue = appSettings[settingName];
-	// } else if (!bAppOnly) {
-	} else {
-		settingValue ??= context.configStringValue(settingName);
-	}
-	return settingValue;
-};
-
-// convert time in hhmm format to javascript date object
-function convertDateTime( hhmm ) {
-	const now = new Date();
-	// const tzOffset = now.getUTCHours() - now.getHours();
-	const tzOffset = now.getUTCHours() - parseInt(now.toLocaleString("en-US", {timeZone: "America/Denver", hour12: false, hour: "numeric"}), 10);
-	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
-	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
-		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
-	// console.log('Local time: ', localTime, localDate, tzOffset);
-	const returnValue: Date = new Date(localTime.valueOf() + (tzOffset>0 ? tzOffset : 24+tzOffset)*60*60*1000);
-	// console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
-	return returnValue;
-};
-
-// schedule activities for current end time
-async function scheduleEndHandler(context) {
-	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
-	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
-	if (endTime) {
-		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
-		writeLogEntry('Run end time handler at: $(endTime.toLocaleString("en-US", {timeZone: "America/Denver"})), $endBehavior');
-		SmartState.putState(context, 'endBehavior', endBehavior);
-		await context.api.schedules.runOnce('endTimeHandler', endTime);
-	}
-};
-
 // write log entry to circular log
 async function writeLogEntry(logRecord) {
 	if (logSettings=='cw') {
@@ -184,6 +109,83 @@ async function writeLogEntry(logRecord) {
 		.catch(console.error);
 	}	
 };	
+
+async function getCurrentSettings(context) {
+	// check to see if settings database room name specified
+	const roomName: string = context.configStringValue('roomName');
+	// console.log('Room name specified: ', roomName);
+	if (roomName) {
+		// find settings from database for current app
+		const items: any = await getAppSettings(roomName);
+		// console.log('Items: ', items);
+
+		if (items) {
+
+			// get local time and day of week for today
+			const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
+			const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
+			const localDate = new Date(localToday);
+			const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
+			const strDayOfWeek = daysOfWeek[localDate.getDay()];
+
+			// find state data for current day/time
+			// let bFound: booleean = false;
+			for (const item of items) {
+				// console.log('Item: ', item);
+				if (item.daysofweek.includes(strDayOfWeek) && 
+						( (!item.startTime && !item.endTime) ||
+						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
+					// console.log('Current settings found: ', item);
+					return item;
+					break;
+				}
+			}
+		}
+	}
+};
+
+// function getSettingValue(context, settingName, bAppOnly) {
+function getSettingValue(context, settingName) {
+	// declare variable to return stateVariables
+	let settingValue: string;
+
+	// see if settings found in smartapp DynamoDB database
+	if (appSettings) {
+		settingValue = appSettings[settingName];
+	// } else if (!bAppOnly) {
+	} else {
+		settingValue ??= context.configStringValue(settingName);
+		writeLogEntry('Get setting value: ' + settingName + ', ' + settingValue);
+	}
+	return settingValue;
+};
+
+// convert time in hhmm format to javascript date object
+function convertDateTime( hhmm ) {
+	const now = new Date();
+	// const tzOffset = now.getUTCHours() - now.getHours();
+	const tzOffset = now.getUTCHours() - parseInt(now.toLocaleString("en-US", {timeZone: "America/Denver", hour12: false, hour: "numeric"}), 10);
+	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
+	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
+		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
+	// console.log('Local time: ', localTime, localDate, tzOffset);
+	const returnValue: Date = new Date(localTime.valueOf() + (tzOffset>0 ? tzOffset : 24+tzOffset)*60*60*1000);
+	// console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
+	return returnValue;
+};
+
+// schedule activities for current end time
+async function scheduleEndHandler(context) {
+	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
+	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
+	if (endTime) {
+		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
+		writeLogEntry('Run end time handler at: $(endTime.toLocaleString("en-US", {timeZone: "America/Denver"})), $endBehavior');
+		SmartState.putState(context, 'endBehavior', endBehavior);
+		await context.api.schedules.runOnce('endTimeHandler', endTime);
+	}
+};
+
 
 
 /* Define the SmartApp */
