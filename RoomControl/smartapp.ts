@@ -156,16 +156,26 @@ async function writeLogEntry(logRecord) {
 			},
 		}).promise()
 		.then(function(data) {			
-			console.log('Circular log data returned: ', data);
 			let logOffset: number = data.Item.logOffset;
 			const maxRecords: number = data.Item.maxRecords;
-			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
 
 			// write log record to next entry in circular table
 			dynamoDB.put({
 				Item: {
 					logItem: logOffset,
 					logRecord: logRecord,
+				},
+				TableName: logTable,
+			}).promise()
+			.then( data => console.log(data.Attributes))
+			.catch(console.error);		
+
+			// update metadata
+			if (logOffset++ == maxRecords) { logOffset = 1 };
+			dynamoDB.put({
+				Item: {
+					logItem: 0,
+					logOffset: logOffset,
 				},
 				TableName: logTable,
 			}).promise()
