@@ -145,22 +145,8 @@ async function writeLogEntry(logRecord) {
 	if (logSettings=='cw') {
 		console.log(logRecord);
 	} else {
-	
-		// var docClient = new aws.DynamoDB.DocumentClient();
-		// var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-		// const dynamoDB = new aws.DynamoDB.DocumentClient({ region: "us-west-2" });
 		const dynamoDB = new aws.DynamoDB.DocumentClient();
 		const logTable = 'smartapp-circular-log';
-
-		/*
-		docClient.put({
-			Item: {
-				logItem: 1,
-				logRecord: 'See if this works'
-			},
-			TableName: logTable,
-		}).promise().then( data => console.log(data.Attributes)).catch(console.error);
-		*/
 
 		dynamoDB.get({
 			TableName: logTable,
@@ -169,39 +155,33 @@ async function writeLogEntry(logRecord) {
 			},
 		}).promise()
 		.then(function(data) {			
-			console.log('Circular log data returned: ', data);
-			// let logOffset: number = data.Items[0].logOffset;
-			// const maxRecords: number = data.Items[0].maxRecords;
+			// console.log('Circular log data returned: ', data);
 			let logOffset: number = data.Item.logOffset;
 			const maxRecords: number = data.Item.maxRecords;
-			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
+			// console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
 
 			// write log record to next entry in circular table
 			dynamoDB.put({
 				Item: {
-					logItem: 1,
+					logItem: logOffset,
 					logRecord: logRecord,
 				},
 				TableName: logTable,
 			}).promise()
-			.then( data => console.log(data.Attributes))
+			.then(function(data) {
+				if (logOffset++ == maxRecords) { logOffset = 1 };
+				dynamoDB.put({
+					Item: {
+						logItem: 0,
+						logOffset: logOffset,
+					}
+					TableName: logTable,
+				})				
+			})
 			.catch(console.error);		
 		})		
 		.catch(console.error);
-
-/*
-doSomething()
-.then(function(result) {
-  return doSomethingElse(result);
-})
-.then(function(newResult) {
-  return doThirdThing(newResult);
-})
-.then(function(finalResult) {
-  console.log('Got the final result: ' + finalResult);
-})
-.catch(failureCallback);		
-*/		
+	
 
 		/*
 		console.log('Reading current circular log offset and maxRecords');
