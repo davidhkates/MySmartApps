@@ -42,7 +42,6 @@ async function getAppSettings(room) {
     			':room': room
 		}		
 	};
-	console.log('Params: ', params);
 
 	try {
 		const data = await dynamoDB.query(params).promise();
@@ -56,11 +55,11 @@ async function getAppSettings(room) {
 async function getCurrentSettings(context) {
 	// check to see if settings database room name specified
 	const roomName: string = context.configStringValue('roomName');
-	console.log('Room name specified: ', roomName);
+	// console.log('Room name specified: ', roomName);
 	if (roomName) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(roomName);
-		console.log('Items: ', items);
+		// console.log('Items: ', items);
 
 		if (items) {
 
@@ -74,7 +73,7 @@ async function getCurrentSettings(context) {
 			// find state data for current day/time
 			// let bFound: booleean = false;
 			for (const item of items) {
-				console.log('Item: ', item);
+				// console.log('Item: ', item);
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
@@ -110,9 +109,9 @@ function convertDateTime( hhmm ) {
 	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
 	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
-	console.log('Local time: ', localTime, localDate, tzOffset);
+	// console.log('Local time: ', localTime, localDate, tzOffset);
 	const returnValue: Date = new Date(localTime.valueOf() + (tzOffset>0 ? tzOffset : 24+tzOffset)*60*60*1000);
-	console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
+	// console.log('Converted date/time: ', returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
 	return returnValue;
 };
 
@@ -121,9 +120,8 @@ async function scheduleEndHandler(context) {
 	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
 	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
 	if (endTime) {
-		console.log('Run end time handler at: ', endTime.toLocaleString("en-US", {timeZone: "America/Denver"}));
 		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
-		console.log('End behavior: ', endBehavior);
+		writeLogEntry('Run end time handler at: $(endTime.toLocaleString("en-US", {timeZone: "America/Denver"})), $endBehavior');
 		SmartState.putState(context, 'endBehavior', endBehavior);
 		await context.api.schedules.runOnce('endTimeHandler', endTime);
 	}
@@ -254,8 +252,8 @@ module.exports = new SmartApp()
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log("RoomControl: Installed/Updated");
-	writeLogEntry("RoomControl: Installed/Updated");
+	// console.log("RoomControl: Installed/Updated");
+	writeLogEntry("Installed/Updated - start creating subscriptions");
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
@@ -303,7 +301,8 @@ module.exports = new SmartApp()
 		await scheduleEndHandler(context);
 		
 	}	
-	console.log('RoomControl: END CREATING SUBSCRIPTIONS')
+	// console.log('RoomControl: END CREATING SUBSCRIPTIONS');
+	writeLogEntry('End creating subscriptions');
 })
 
 
@@ -342,7 +341,7 @@ module.exports = new SmartApp()
 	const offDelay = getSettingValue(context, 'offDelay');
 	const mainList = ['main', 'both'];
 	const groupList = ['group', 'both'];
-	console.log('Turn off lights based on off behavior: ', context.config.offBehavior, offBehavior);
+	writeLogEntry('Turn off lights based on off behavior: $(offBehavior)');
 
 	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	if (offBehavior==='group' || offBehavior==='both') {
