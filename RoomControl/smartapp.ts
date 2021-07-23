@@ -145,23 +145,10 @@ async function writeLogEntry(logRecord) {
 	if (logSettings=='cw') {
 		console.log(logRecord);
 	} else {
-	
-		// var docClient = new aws.DynamoDB.DocumentClient();
-		// var docClient = new aws.DynamoDB.DocumentClient({apiVersion: '2012-08-10'});
-		// const dynamoDB = new aws.DynamoDB.DocumentClient({ region: "us-west-2" });
 		const dynamoDB = new aws.DynamoDB.DocumentClient();
 		const logTable = 'smartapp-circular-log';
 
-		/*
-		docClient.put({
-			Item: {
-				logItem: 1,
-				logRecord: 'See if this works'
-			},
-			TableName: logTable,
-		}).promise().then( data => console.log(data.Attributes)).catch(console.error);
-		*/
-
+		// get metadata from circular log file
 		dynamoDB.get({
 			TableName: logTable,
     			Key: {
@@ -170,8 +157,6 @@ async function writeLogEntry(logRecord) {
 		}).promise()
 		.then(function(data) {			
 			console.log('Circular log data returned: ', data);
-			// let logOffset: number = data.Items[0].logOffset;
-			// const maxRecords: number = data.Items[0].maxRecords;
 			let logOffset: number = data.Item.logOffset;
 			const maxRecords: number = data.Item.maxRecords;
 			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
