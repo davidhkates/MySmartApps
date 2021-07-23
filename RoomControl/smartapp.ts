@@ -148,7 +148,7 @@ async function writeLogEntry(logRecord) {
 			const maxRecords: number = data.Item.maxRecords;
 
 			// write log record to next entry in circular table
-			await dynamoDB.put({
+			dynamoDB.put({
 				Item: {
 					logItem: logOffset,
 					logRecord: logRecord,
