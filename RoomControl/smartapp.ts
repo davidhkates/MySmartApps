@@ -168,6 +168,8 @@ async function writeLogEntry(logRecord) {
 				},
 				TableName: logTable,
 			}).promise()
+			.then(data => console.log(data.Attributes))
+			/*
 			.then(function(data) {
 				if (logOffset++ == maxRecords) { logOffset = 1 };
 				dynamoDB.put({
@@ -178,6 +180,7 @@ async function writeLogEntry(logRecord) {
 					TableName: logTable,
 				})				
 			})
+			*/
 			.catch(console.error);		
 		})		
 		.catch(console.error);
