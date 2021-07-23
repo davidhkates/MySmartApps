@@ -152,7 +152,7 @@ async function writeLogEntry(logRecord) {
 				Item: {
 					logItem: logOffset,
 					logRecord: logRecord,
-					timestamp: new Date(),
+					timestamp: new Date().toLocaleString("en-US", {timeZone: "America/Denver"}),
 				},
 				TableName: logTable,
 			}).promise();
