@@ -25,6 +25,7 @@ interface device {
 // global variables
 let appSettings: any = {};
 let logSettings = 'db';	// 'db' logs to DynamoDB, 'cw' logs to CloudWatch console
+const logCategory = 'RoomControl';
 
 //----------------------------------------------------------------------------------------
 // TODO: move routines to get settings values from DynamoDB database to katesthings
@@ -151,6 +152,7 @@ async function writeLogEntry(logRecord) {
 			dynamoDB.put({
 				Item: {
 					logItem: logOffset,
+					logCategory: logCategory,
 					logRecord: logRecord,
 					timestamp: new Date().toLocaleString("en-US", {timeZone: "America/Denver"}),
 				},
