@@ -179,7 +179,7 @@ async function writeLogEntry(logRecord) {
 			// write log record to next entry in circular table
 			dynamoDB.put({
 				Item: {
-					logItem: 1,
+					logItem: logOffset,
 					logRecord: logRecord,
 				},
 				TableName: logTable,
