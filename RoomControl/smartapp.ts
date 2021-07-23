@@ -71,7 +71,7 @@ async function getCurrentSettings(context) {
 			const strDayOfWeek = daysOfWeek[localDate.getDay()];
 
 			// find state data for current day/time
-			// let bFound: boolean = false;
+			// let bFound: booleean = false;
 			for (const item of items) {
 				console.log('Item: ', item);
 				if (item.daysofweek.includes(strDayOfWeek) && 
@@ -152,6 +152,7 @@ async function writeLogEntry(logRecord) {
 				Item: {
 					logItem: logOffset,
 					logRecord: logRecord,
+					timestamp: new Date(),
 				},
 				TableName: logTable,
 			}).promise();
