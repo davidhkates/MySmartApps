@@ -43,18 +43,6 @@ async function getAppSettings(room) {
 	};
 	console.log('Params: ', params);
 
-	/*
-	var bFound = false;
-	await docClient.query(params, function(err, data) {
-		if (err) {
-        		console.log("Error querying state machine: ", JSON.stringify(err, null, 2));
-    		} else {
-        		console.log("Query succeeded: ", data.Items);
-			return data.Items;
-		}
-	});
-	*/
-	
 	try {
 		const data = await docClient.query(params).promise();
 		return data.Items;
@@ -160,15 +148,15 @@ async function writeLogEntry(logRecord) {
 			const maxRecords: number = data.Item.maxRecords;
 
 			// write log record to next entry in circular table
-			dynamoDB.put({
+			await dynamoDB.put({
 				Item: {
 					logItem: logOffset,
 					logRecord: logRecord,
 				},
 				TableName: logTable,
-			}).promise()
-			.then( data => console.log(data.Attributes))
-			.catch(console.error);		
+			}).promise();
+			// .then( data => console.log(data.Attributes))
+			// .catch(console.error);		
 
 			// update metadata
 			if (logOffset++ == maxRecords) { logOffset = 1 };
@@ -183,76 +171,6 @@ async function writeLogEntry(logRecord) {
 			.catch(console.error);		
 		})		
 		.catch(console.error);
-
-/*
-doSomething()
-.then(function(result) {
-  return doSomethingElse(result);
-})
-.then(function(newResult) {
-  return doThirdThing(newResult);
-})
-.then(function(finalResult) {
-  console.log('Got the final result: ' + finalResult);
-})
-.catch(failureCallback);		
-*/		
-
-		/*
-		console.log('Reading current circular log offset and maxRecords');
-		// define parameters for query to get current circular buffer offset
-		const paramsRead = {
-			TableName: tableName,
-			KeyConditionExpression: 'logItem = :logItem',
-			ExpressionAttributeValues: {
-				':logItem': 0
-			}		
-		};
-		try {
-			const data = await docClient.query(paramsRead).promise();
-			console.log('Circular log data returned: ', data);
-			let logOffset: number = data.Items[0].logOffset;
-			const maxRecords: number = data.Items[0].maxRecords;
-			console.log('Circular log offset and maxRecords: ', logOffset, maxRecords);
-			// write log record to next entry in circular buffer (upsert)			
-			const paramsWrite = {	
-				TableName: tableName,
-				Item: {
-					'logItem': { N: '1' },  // logOffset },
-					'logRecord': { S: logRecord }
-				}
-			};
-			console.log('Writing to circular log: ', paramsWrite);
-			// try {
-				// await docClient.update(paramsWrite).promise();
-			docClient.put(paramsWrite, function(err, data) {
-				if (err) {
-					console.error("Circular console log record write error", err.message);
-				} else {
-					console.log("Circular console log record write success", data);
-					// increment circular log offset file to maxRecords then wrap back to beginning
-					if (logOffset++ == maxRecords) { logOffset = 1 };
-					console.log('Next offset: ', logOffset);
-					const paramsOffset = {	
-						TableName: tableName,
-						Item: {
-							logItem: { N: 0 },
-							logOffset: { N: logOffset }
-						}
-					};
-					docClient.put(paramsOffset, function(err, data) {
-						if (err) {
-							console.error("Circular console offset write error", err.message);
-						} else {
-							console.log("Circular console offset write success", data);
-						}
-					});
-				}
-			});				
-		} catch (err) {
-			console.error("Circular console read failure", err.message);
-		}
-		*/
 	}	
 };	
 
