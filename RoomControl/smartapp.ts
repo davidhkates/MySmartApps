@@ -35,6 +35,7 @@ aws.config.update({region: 'us-west-2'});
 
 async function getAppSettings(room) {
 	var dynamoDB = new aws.DynamoDB.DocumentClient();
+	/*	
 	const params = {
   		TableName: 'smartapp-room-settings',
   		KeyConditionExpression: 'room = :room',
@@ -50,6 +51,15 @@ async function getAppSettings(room) {
 		console.log("Failure", err.message);
 		return undefined;
 	}
+	*/
+	dynamoDB.get({
+		TableName: 'smartapp-room-settings',
+		Key: {
+			room: room,
+		},
+	}).promise()
+	.then(data => return data.Items)
+	.catch(console.error);		
 };
 
 async function getCurrentSettings(context) {
