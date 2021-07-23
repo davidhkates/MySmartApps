@@ -183,7 +183,7 @@ async function writeLogEntry(logRecord) {
 					logRecord: logRecord,
 				},
 				TableName: logTable,
-			}).promise()
+			})
 			.then( data => console.log(data.Attributes))
 			.catch(console.error);		
 		})		
