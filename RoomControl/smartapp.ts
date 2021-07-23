@@ -58,7 +58,9 @@ async function getAppSettings(room) {
 			room: room,
 		},
 	}).promise()
-	.then(data => return data.Items)
+	.then(function(data) {
+		return data.Items;
+	})
 	.catch(console.error);		
 };
 
