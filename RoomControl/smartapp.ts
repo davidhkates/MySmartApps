@@ -174,7 +174,7 @@ async function writeLogEntry(logRecord) {
 					Item: {
 						logItem: 0,
 						logOffset: logOffset,
-					}
+					},
 					TableName: logTable,
 				})				
 			})
