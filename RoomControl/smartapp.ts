@@ -167,7 +167,8 @@ async function writeLogEntry(logRecord) {
     			Key: {
 				logItem: 0,	// record 0 contains circular log metadata
 			},
-		}).promise().then(function(data) {
+		}).promise()
+		.then(function(data) {			
 			console.log('Circular log data returned: ', data);
 			// let logOffset: number = data.Items[0].logOffset;
 			// const maxRecords: number = data.Items[0].maxRecords;
@@ -182,8 +183,9 @@ async function writeLogEntry(logRecord) {
 					logRecord: logRecord,
 				},
 				TableName: logTable,
-			}).promise().then( data => console.log(data.Attributes)).catch(console.error);
-		
+			}).promise()
+			.then( data => console.log(data.Attributes))
+			.catch(console.error);		
 		})		
 		.catch(console.error);
 
