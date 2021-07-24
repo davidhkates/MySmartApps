@@ -355,6 +355,7 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
+	appSettings = await getCurrentSettings(context);
 	// console.log("Turn off all lights in on and off groups");
 	const offBehavior = await getSettingValue(context, 'offBehavior');
 	const offDelay = await getSettingValue(context, 'offDelay');
