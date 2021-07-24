@@ -104,7 +104,7 @@ async function writeLogEntry(logRecord) {
 				},				
 				AttributeUpdates: {
 					'logOffset': {
-						Action: PUT,
+						Action: 'PUT',
 						Value: logOffset
 					},
 				},
