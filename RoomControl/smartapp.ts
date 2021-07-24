@@ -139,6 +139,7 @@ async function getCurrentSettings(context) {
 			// let bFound: booleean = false;
 			for (const item of items) {
 				// console.log('Item: ', item);
+				writeLogEntry('Searching through room settings: ' + JSON.stringify(item) + ', ' + strLocalTime + ', ' item.daysofweek);
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
