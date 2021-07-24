@@ -125,11 +125,11 @@ async function writeLogEntry(logRecord, type="INFO") {
 async function getCurrentSettings(context) {
 	// check to see if settings database room name specified
 	const roomName: string = context.configStringValue('roomName');
-	writeLogRecord('Room name specified: ' + roomName);
+	writeLogEntry('Room name specified: ' + roomName);
 	if (roomName) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(roomName);
-		writeLogRecord('Room setting found, count: ' + items.length());
+		writeLogEntry('Room setting found, count: ' + items.length());
 
 		if (items) {
 
@@ -180,9 +180,9 @@ function convertDateTime( hhmm ) {
 	const localDate: string = new Date().toLocaleString("en-US", {timeZone: "America/Denver", year: "numeric", month: "2-digit", day: "2-digit"});
 	const localTime: any = new Date(parseInt(localDate.substr(6, 4), 10), parseInt(localDate.substr(0, 2), 10)-1, parseInt(localDate.substr(3, 2), 10),
 		parseInt(hhmm.substr(0, 2), 10), parseInt(hhmm.substr(2, 2), 10));
-	writeLogRecord('Local time: ' + localTime + " " + localDate + ', time zone offset: ' + tzOffset);
+	writeLogEntry('Local time: ' + localTime + " " + localDate + ', time zone offset: ' + tzOffset);
 	const returnValue: Date = new Date(localTime.valueOf() + (tzOffset>0 ? tzOffset : 24+tzOffset)*60*60*1000);
-	writeLogRecord('Converted date/time: ' + returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
+	writeLogEntry('Converted date/time: ' + returnValue.toLocaleString("en-US", {timeZone: "America/Denver"}));
 	return returnValue;
 };
 
