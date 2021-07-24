@@ -366,9 +366,10 @@ module.exports = new SmartApp()
 	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	if (offBehavior==='group' || offBehavior==='both') {
 		if (offDelay) {
+			writeLogEntry('Turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
-			writeLogEntry('Turning off on group and off group');
+			writeLogEntry('Turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'playbackStatus', 'stopped');
 		}
