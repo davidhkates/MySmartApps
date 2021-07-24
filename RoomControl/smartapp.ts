@@ -66,9 +66,9 @@ async function getAppSettings(room) {
 };
 
 // write log entry to circular log
-async function writeLogEntry(logRecord, recordType="INFO") {
+async function writeLogEntry(logRecord) {	// , recordType="INFO") {
 	// check to make sure message type should be logged
-	if (logMessageTypes.includes(recordType)) {
+	// if (logMessageTypes.includes(recordType)) {
 		
 		// send log to destination specified in logSettings
 		// TODO: make logSettings a JSON object
@@ -119,7 +119,7 @@ async function writeLogEntry(logRecord, recordType="INFO") {
 			})		
 			.catch(console.error);
 		}
-	}
+	// }
 };	
 
 async function getCurrentSettings(context) {
