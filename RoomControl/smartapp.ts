@@ -129,7 +129,8 @@ async function getCurrentSettings(context) {
 	if (roomName) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(roomName);
-		writeLogEntry('Room setting found, count: ' + Object.keys(items).length);
+		// writeLogEntry('Room setting found, count: ' + Object.keys(items).length);
+		writeLogEntry('Room settings found');
 
 		if (items) {
 
