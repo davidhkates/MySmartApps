@@ -66,9 +66,9 @@ async function getAppSettings(room) {
 };
 
 // write log entry to circular log
-async function writeLogEntry(logRecord) {	// , recordType="INFO") {
+async function writeLogEntry(logRecord, recordType="INFO") {
 	// check to make sure message type should be logged
-	// if (logMessageTypes.includes(recordType)) {
+	if (logMessageTypes.includes(recordType)) {
 		
 		// send log to destination specified in logSettings
 		// TODO: make logSettings a JSON object
@@ -119,7 +119,7 @@ async function writeLogEntry(logRecord) {	// , recordType="INFO") {
 			})		
 			.catch(console.error);
 		}
-	// }
+	}
 };	
 
 async function getCurrentSettings(context) {
@@ -129,7 +129,7 @@ async function getCurrentSettings(context) {
 	if (roomName) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(roomName);
-		writeLogEntry('Room setting found, count: ' + items.length());
+		writeLogEntry('Room setting found, count: ' + items.length);   // Object.keys(data.name_data).length;
 
 		if (items) {
 
@@ -359,8 +359,7 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
-	// writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
-	writeLogEntry("Turn off all lights in on and off groups");
+	writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
 
 	// get app settings from room settings table, if specified
 	appSettings = await getCurrentSettings(context);
