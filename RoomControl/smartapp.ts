@@ -26,7 +26,7 @@ interface device {
 let appSettings: any = {};
 let logSettings = 'console';	// console to log to CloudWatch console, dynamo to log to DynamoDB log, else don't log
 const logCategory = 'RoomControl';
-const logMessageTypes = ['INFO', 'ERROR', 'DEBUG'];
+const logMessageTypes = ['INFO', 'ERROR', 'DEBUG', 'ENTRY', 'EXIT'];
 
 //----------------------------------------------------------------------------------------
 // TODO: move routines to get settings values from DynamoDB database to katesthings
@@ -359,8 +359,10 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
+	writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
+
+	// get app settings from room settings table, if specified
 	appSettings = await getCurrentSettings(context);
-	// console.log("Turn off all lights in on and off groups");
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
 	// const mainList = ['main', 'both'];
