@@ -358,7 +358,7 @@ module.exports = new SmartApp()
 	appSettings = await getCurrentSettings(context);
 	// console.log("Turn off all lights in on and off groups");
 	const offBehavior = getSettingValue(context, 'offBehavior');
-	const offDelay: number = getSettingValue(context, 'offDelay').parseInt();
+	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
 	// const mainList = ['main', 'both'];
 	// const groupList = ['group', 'both'];
 	writeLogEntry('Turn off lights based on off behavior: ' + offBehavior);
