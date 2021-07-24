@@ -98,7 +98,7 @@ async function writeLogEntry(logRecord) {
 
 			// update metadata
 			if (logOffset++ == maxRecords) { logOffset = 1 };
-			dynamoDB.put({
+			dynamoDB.update({
 				Item: {
 					logItem: 0,
 					logOffset: logOffset,
