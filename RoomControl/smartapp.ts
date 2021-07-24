@@ -101,9 +101,12 @@ async function writeLogEntry(logRecord) {
 			dynamoDB.update({
 				Key: {
 					'logItem': 0
-				},
+				},				
 				AttributeUpdates: {
-					'logOffset': logOffset
+					'logOffset': {
+						Action: PUT,
+						Value: logOffset
+					},
 				},
 				TableName: logTable,
 			}).promise()
