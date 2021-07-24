@@ -359,7 +359,8 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
-	writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
+	// writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
+	writeLogEntry("Turn off all lights in on and off groups");
 
 	// get app settings from room settings table, if specified
 	appSettings = await getCurrentSettings(context);
