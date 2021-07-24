@@ -365,7 +365,7 @@ module.exports = new SmartApp()
 
 	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 	if (offBehavior==='group' || offBehavior==='both') {
-		if (offDelay && offDelay>0) {
+		if (offDelay>0) {
 			writeLogEntry('Turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
