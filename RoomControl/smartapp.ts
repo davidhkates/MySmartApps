@@ -357,8 +357,8 @@ module.exports = new SmartApp()
 	// Turn on the lights in off group based on behavior setting
 	appSettings = await getCurrentSettings(context);
 	// console.log("Turn off all lights in on and off groups");
-	const offBehavior = await getSettingValue(context, 'offBehavior');
-	const offDelay = await getSettingValue(context, 'offDelay');
+	const offBehavior = getSettingValue(context, 'offBehavior');
+	const offDelay = getSettingValue(context, 'offDelay');
 	// const mainList = ['main', 'both'];
 	// const groupList = ['group', 'both'];
 	writeLogEntry('Turn off lights based on off behavior: ' + offBehavior);
@@ -368,6 +368,7 @@ module.exports = new SmartApp()
 		if (offDelay) {
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
+			writeLogEntry('Turning off on group and off group');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'playbackStatus', 'stopped');
 		}
