@@ -143,6 +143,7 @@ async function getCurrentSettings(context) {
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
 					// console.log('Current settings found: ', item);
+					writeLogEntry('Current settings found: ' + JSON.stringify(item));
 					return item;
 					break;
 				}
