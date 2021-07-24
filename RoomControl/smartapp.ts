@@ -351,10 +351,10 @@ module.exports = new SmartApp()
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
 	// console.log("Turn off all lights in on and off groups");
-	const offBehavior = getSettingValue(context, 'offBehavior');
-	const offDelay = getSettingValue(context, 'offDelay');
-	const mainList = ['main', 'both'];
-	const groupList = ['group', 'both'];
+	const offBehavior = await getSettingValue(context, 'offBehavior');
+	const offDelay = await getSettingValue(context, 'offDelay');
+	// const mainList = ['main', 'both'];
+	// const groupList = ['group', 'both'];
 	writeLogEntry('Turn off lights based on off behavior: ' + offBehavior);
 
 	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
