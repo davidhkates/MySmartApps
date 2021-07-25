@@ -2,7 +2,7 @@
 // Room Control - control lights/switches in room based on settings in in app or
 //      smartapp-room-settings DynamoDB parameter values
 //
-//	offBehavior (group, all, none)
+//	offBehavior (group, speakers, all, none)
 //      endBehavior (offNow, checkMain, checkNext)			
 //---------------------------------------------------------------------------------------
 
@@ -263,7 +263,7 @@ module.exports = new SmartApp()
 	// behavior at turn switch off and delay, if applicable
 	// TODO: align with DynamoDB choices
 	page.section('behavior', section => {
-		section.enumSetting('offBehavior').options(['group','all','none'])
+		section.enumSetting('offBehavior').options(['group','speakers', 'all','none'])
 			.defaultValue('both').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
