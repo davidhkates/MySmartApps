@@ -161,6 +161,7 @@ async function getCurrentSettings(context) {
 				}
 			}
 		}
+		writeLogEntry('Room settings retrieved');
 	}
 };
 
