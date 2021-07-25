@@ -143,6 +143,7 @@ async function getCurrentSettings(context) {
 			const daysOfWeek = ['U', 'M', 'T', 'W', 'R', 'F', 'S'];
 			const localToday = new Date().toLocaleString("en-US", {timeZone: "America/Denver"});
 			const localDate = new Date(localToday);
+			writeLogEntry('Current settings assigne local date constants: ' + localDate.toString());
 			const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
 			const strDayOfWeek = daysOfWeek[localDate.getDay()];
 			writeLogEntry('Current settings constants assigned: day: ' + strDayOfWeek + ', time: ' + strLocalTime);
