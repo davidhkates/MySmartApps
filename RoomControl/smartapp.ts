@@ -168,7 +168,7 @@ function getSettingValue(context, settingName) {
 	let settingValue: string;
 
 	// get current settings if not already checked
-	if (bCheckSettings) {
+	if (!bCheckSettings) {
 		getCurrentSettings(context);
 	}
 	
@@ -305,7 +305,7 @@ module.exports = new SmartApp()
 	} else {
 
 		// Get current appSettings to determine which devices need subscriptions 
-		appSettings = await getCurrentSettings(context);
+		// appSettings = await getCurrentSettings(context);
 		// console.log('App settings: ', appSettings);
 
 		// create subscriptions for relevant devices
@@ -373,7 +373,7 @@ module.exports = new SmartApp()
 	writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
 
 	// get app settings from room settings table, if specified
-	appSettings = await getCurrentSettings(context);
+	// appSettings = await getCurrentSettings(context);
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
 	// const mainList = ['main', 'both'];
@@ -456,7 +456,7 @@ module.exports = new SmartApp()
 // TODO: turn off handler once lights are turned on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	// Get motion behavior setting
-	appSettings = await getCurrentSettings(context);
+	// appSettings = await getCurrentSettings(context);
 	const motionBehavior = getSettingValue(context, 'motionBehavior');
 
 	// Determine if ANY of the switch(es) to check are on
@@ -515,7 +515,7 @@ module.exports = new SmartApp()
 	}
 
 	// const delay = context.configNumberValue('motionDelay')
-	appSettings = await getCurrentSettings(context);
+	// appSettings = await getCurrentSettings(context);
 	const delay = getSettingValue(context, 'motionDelay');
 	writeLogEntry("Turn off lights after specified delay: " + delay);
 
@@ -572,7 +572,7 @@ module.exports = new SmartApp()
 	}
 	
 	// Schedule next endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
-	appSettings = await getCurrentSettings(context);
+	// appSettings = await getCurrentSettings(context);
 	await scheduleEndHandler(context);
 })
 
