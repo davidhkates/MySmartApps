@@ -375,7 +375,7 @@ module.exports = new SmartApp()
 	// get app settings from room settings table, if specified
 	// appSettings = await getCurrentSettings(context);
 	const offBehavior = getSettingValue(context, 'offBehavior');
-	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
+	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10) || 0;
 	// const mainList = ['main', 'both'];
 	// const groupList = ['group', 'both'];
 	writeLogEntry('Turn off lights based on off behavior: ' + offBehavior);
