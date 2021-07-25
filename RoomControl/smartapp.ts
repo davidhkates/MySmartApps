@@ -2,7 +2,7 @@
 // Room Control - control lights/switches in room based on settings in in app or
 //      smartapp-room-settings DynamoDB parameter values
 //
-//	offBehavior (main, group, both, none)
+//	offBehavior (group, all, none)
 //      endBehavior (offNow, checkMain, checkNext)			
 //---------------------------------------------------------------------------------------
 
@@ -263,7 +263,7 @@ module.exports = new SmartApp()
 	// behavior at turn switch off and delay, if applicable
 	// TODO: align with DynamoDB choices
 	page.section('behavior', section => {
-		section.enumSetting('offBehavior').options(['main','group','both','none'])
+		section.enumSetting('offBehavior').options(['group','all','none'])
 			.defaultValue('both').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
@@ -380,8 +380,9 @@ module.exports = new SmartApp()
 	// const groupList = ['group', 'both'];
 	writeLogEntry('Turn off lights based on off behavior: ' + offBehavior);
 
-	if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
-	if (offBehavior==='group' || offBehavior==='both') {
+	// if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
+	// if (offBehavior==='group' || offBehavior==='all') {
+	if (offBehavior!='none') {
 		if (offDelay>0) {
 			writeLogEntry('Turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
