@@ -135,7 +135,7 @@ async function getCurrentSettings(context) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(roomName);
 		// writeLogEntry('Room setting found, count: ' + Object.keys(items).length);
-		writeLogEntry('Room settings found');
+		writeLogEntry('Room settings found: ' + bCheckSettings);
 
 		if (items) {
 
@@ -145,6 +145,7 @@ async function getCurrentSettings(context) {
 			const localDate = new Date(localToday);
 			const strLocalTime = localDate.getHours().toString().padStart(2,'0') + localDate.getMinutes().toString().padStart(2,'0');
 			const strDayOfWeek = daysOfWeek[localDate.getDay()];
+			writeLogEntry('Current settings constants assigned: day: ' + strDayOfWeek + ', time: ' + strLocalTime);
 
 			// find state data for current day/time
 			// let bFound: booleean = false;
