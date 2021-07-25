@@ -149,7 +149,7 @@ async function getCurrentSettings(context) {
 			// find state data for current day/time
 			// let bFound: booleean = false;
 			for (const item of items) {
-				writeLogEntry('Searching through room settings: ' + JSON.stringify(item) + ', ' + strLocalTime + ', ' + item.daysofweek);
+				// writeLogEntry('Searching through room settings: ' + JSON.stringify(item) + ', ' + strLocalTime + ', ' + item.daysofweek);
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
@@ -375,7 +375,7 @@ module.exports = new SmartApp()
 	// get app settings from room settings table, if specified
 	// appSettings = await getCurrentSettings(context);
 	const offBehavior = getSettingValue(context, 'offBehavior');
-	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10) || 0;
+	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
 	// const mainList = ['main', 'both'];
 	// const groupList = ['group', 'both'];
 	writeLogEntry('Turn off lights based on off behavior: ' + offBehavior);
