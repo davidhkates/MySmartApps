@@ -153,7 +153,7 @@ async function getCurrentSettings(context) {
 				if (item.daysofweek.includes(strDayOfWeek) && 
 						( (!item.startTime && !item.endTime) ||
 						(strLocalTime>=item.startTime) && (strLocalTime<item.endTime) ) ) {
-					writeLogEntry('Current settings found: ' + JSON.stringify(item));
+					// writeLogEntry('Current settings found: ' + JSON.stringify(item));
 					return item;
 					break;
 				}
