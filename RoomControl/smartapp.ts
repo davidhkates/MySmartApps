@@ -93,7 +93,7 @@ async function writeLogEntry(logRecord, recordType="INFO") {
 				dynamoDB.put({
 					Item: {
 						logItem: logOffset,
-						logCategory: logCategory,
+						logCategory: recordType,
 						logRecord: logRecord,
 						timestamp: new Date().toLocaleString("en-US", {timeZone: "America/Denver"}),
 					},
