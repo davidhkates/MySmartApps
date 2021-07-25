@@ -24,6 +24,7 @@ interface device {
 
 // global variables
 let appSettings: any = {};
+let bCheckSettings: boolean = false;
 let logSettings = 'console';	// console to log to CloudWatch console, dynamo to log to DynamoDB log, else don't log
 const logCategory = 'RoomControl';
 const logMessageTypes = ['INFO', 'ERROR', 'DEBUG', 'ENTRY', 'EXIT'];
@@ -123,9 +124,13 @@ async function writeLogEntry(logRecord, recordType="INFO") {
 };	
 
 async function getCurrentSettings(context) {
+	// mark bCheckSettings true regardless of outcome
+	bCheckSettings = true;
+	
 	// check to see if settings database room name specified
 	const roomName: string = context.configStringValue('roomName');
 	writeLogEntry('Room name specified: ' + roomName);
+	
 	if (roomName) {
 		// find settings from database for current app
 		const items: any = await getAppSettings(roomName);
@@ -162,6 +167,11 @@ function getSettingValue(context, settingName) {
 	// declare variable to return stateVariables
 	let settingValue: string;
 
+	// get current settings if not already checked
+	if (bCheckSettings) {
+		getCurrentSettings(context);
+	}
+	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
 		settingValue = appSettings[settingName];
