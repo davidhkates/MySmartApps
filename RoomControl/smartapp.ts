@@ -37,24 +37,6 @@ aws.config.update({region: 'us-west-2'});
 
 async function getAppSettings(room) {
 	var dynamoDB = new aws.DynamoDB.DocumentClient();
-	/*	
-	const params = {
-  		TableName: 'smartapp-room-settings',
-  		KeyConditionExpression: 'room = :room',
-		ExpressionAttributeValues: {
-    			':room': room
-		}		
-	};
-
-	try {
-		const data = await dynamoDB.query(params).promise();
-		return data.Items;
-	} catch (error) {
-		console.log("Failure", error.message);
-		return undefined;
-	}
-	*/
-	console.log('getAppSettings room: ' + room);
 	dynamoDB.get({
 		TableName: 'smartapp-room-settings',
 		Key: {
@@ -349,6 +331,7 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when main switch is pressed
 .subscribedEventHandler('mainSwitchOnHandler', async (context, event) => {
+	writeLogEntry('ENTRY mainSwitchOnHandler', 'ENTRY');
 	// Cancel scheduled event to turn off main switch after delay
 	await context.api.schedules.delete('delayedOffSwitch');
 	
@@ -377,7 +360,7 @@ module.exports = new SmartApp()
 // Turn off the lights when main switch is pressed
 .subscribedEventHandler('mainSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
-	writeLogEntry("Turn off all lights in on and off groups", 'ENTRY');
+	writeLogEntry('ENTRY mainSwitchOffHandler', 'ENTRY');
 
 	// get app settings from room settings table, if specified
 	// appSettings = await getCurrentSettings(context);
@@ -404,7 +387,7 @@ module.exports = new SmartApp()
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
-	writeLogEntry("Turn on the main switch when a light in the on group is turned on");
+	writeLogEntry('ENTRY groupOnHandler', 'ENTRY');
 
 	// indicate main switch was NOT manually pressed
 	// stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'false' );
@@ -416,7 +399,7 @@ module.exports = new SmartApp()
 
 // Turn OFF main switch if ALL of the on group lights are turned off separately
 .subscribedEventHandler('groupOffHandler', async (context, event) => {
-	writeLogEntry("Turn off the main switch when ALL lights in the on group are turned off");
+	writeLogEntry('ENTRY groupOffHandler', 'ENTRY');
 
 	// See if there are any other switches in the onGroup defined
 	const otherOnGroup = context.config.onGroup
@@ -463,6 +446,7 @@ module.exports = new SmartApp()
 // Turn on lights when motion occurs during defined times if dependent lights are on
 // TODO: turn off handler once lights are turned on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
+	writeLogEntry('ENTRY motionStartHandler', 'ENTRY');
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
 	const motionBehavior = getSettingValue(context, 'motionBehavior');
@@ -502,6 +486,7 @@ module.exports = new SmartApp()
 // Turn off the lights only when all motion sensors become inactive
 // TODO: Turn on motion handler handler if being used to turn on lights
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
+	writeLogEntry('ENTRY motionStopHandler', 'ENTRY');
 
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
@@ -556,6 +541,7 @@ module.exports = new SmartApp()
 
 // Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
+	writeLogEntry('ENTRY endTimeHandler', 'ENTRY');
 	const endBehavior = SmartState.getValue(context, 'endBehavior');
 
 	if ( endBehavior.includes('checkMain') ) {
@@ -598,12 +584,12 @@ module.exports = new SmartApp()
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedGroupOff', async (context, event) => {
-	writeLogEntry('Turn off lights in offGroup after delay');
+	writeLogEntry('ENTRY delayedGroupOff', 'ENTRY');
 	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 })
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
-	writeLogEntry('Delayed switch off turning off main switch');
+	writeLogEntry('ENTRY delayedSwitchOff', 'ENTRY');
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'off');
 });
