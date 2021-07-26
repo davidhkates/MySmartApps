@@ -25,7 +25,7 @@ interface device {
 // global variables
 let appSettings: any = {};
 let bCheckSettings: boolean = false;
-let logSettings = 'console';	// console to log to CloudWatch console, dynamo to log to DynamoDB log, else don't log
+let logSettings = 'dynamo';	// console to log to CloudWatch console, dynamo to log to DynamoDB log, else don't log
 const logCategory = 'RoomControl';
 const logMessageTypes = ['INFO', 'ERROR', 'DEBUG', 'ENTRY', 'EXIT'];
 
