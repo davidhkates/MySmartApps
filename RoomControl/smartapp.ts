@@ -206,7 +206,7 @@ async function scheduleEndHandler(context) {
 		const endDateTime = convertDateTime(endTime);
 		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
 		writeLogEntry('Run end time handler at: ' + endDateTime.toLocaleString("en-US", {timeZone: "America/Denver"}) + ', behavior: ' + endBehavior);
-		// SmartState.putState(context, 'endBehavior', endBehavior);
+		SmartState.putState(context, 'endBehavior', endBehavior);
 		await context.api.schedules.runOnce('endTimeHandler', endDateTime);
 	}
 };
@@ -484,6 +484,7 @@ module.exports = new SmartApp()
 	*/
 	
 	// turn on light if in time window and check switch(es) are on
+	writeLogEntry('Checking motionBehavior and check switch values: ' + motionBehavior);
 	if ( motionBehavior==='occupancy' && bCheckSwitch ) {
 		writeLogEntry('Turning light(s) on');
 		await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
