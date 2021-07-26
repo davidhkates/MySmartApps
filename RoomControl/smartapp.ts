@@ -160,11 +160,19 @@ function getSettingValue(context, settingName) {
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
-		settingValue = appSettings[settingName];
+		try {
+			settingValue = appSettings[settingName];
+		} catch (error) {
+  			console.error('Error getting appSetting: ', settingname, error);
+		}
 	// } else if (!bAppOnly) {
 	} else {
-		settingValue ??= context.configStringValue(settingName);
-		writeLogEntry('Get setting value: ' + settingName + ', ' + settingValue);
+		try {
+			settingValue ??= context.configStringValue(settingName);
+			writeLogEntry('Get setting value: ' + settingName + ', ' + settingValue);
+		} catch (error) {
+  			console.error('Error getting configStringValue: ', settingname, error);
+		}
 	}
 	return settingValue;
 };
