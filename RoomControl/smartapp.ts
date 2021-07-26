@@ -316,6 +316,7 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'groupOffHandler');
 
+		/*
 		// initialize motion behavior
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
@@ -330,6 +331,7 @@ module.exports = new SmartApp()
 
 		// Schedule endTime activities
 		await scheduleEndHandler(context);
+		*/
 		
 	}	
 	// console.log('RoomControl: END CREATING SUBSCRIPTIONS');
