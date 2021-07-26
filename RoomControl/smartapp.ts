@@ -160,19 +160,23 @@ function getSettingValue(context, settingName) {
 	
 	// see if settings found in smartapp DynamoDB database
 	if (appSettings) {
-		try {
+		// try {
 			settingValue = appSettings[settingName];
+		/*
 		} catch (error) {
   			console.error('Error getting appSetting: ', settingName, error);
 		}
+		*/
 	// } else if (!bAppOnly) {
 	} else {
-		try {
+		// try {
 			settingValue ??= context.configStringValue(settingName);
 			writeLogEntry('Get setting value: ' + settingName + ', ' + settingValue);
+		/*
 		} catch (error) {
   			console.error('Error getting configStringValue: ', settingName, error);
 		}
+		*/
 	}
 	return settingValue;
 };
@@ -316,7 +320,6 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.onGroup,
 		    'switch', 'switch.off', 'groupOffHandler');
 
-		/*
 		// initialize motion behavior
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
@@ -330,8 +333,7 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// Schedule endTime activities
-		await scheduleEndHandler(context);
-		*/
+		// await scheduleEndHandler(context);
 		
 	}	
 	// console.log('RoomControl: END CREATING SUBSCRIPTIONS');
