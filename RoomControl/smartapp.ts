@@ -54,6 +54,7 @@ async function getAppSettings(room) {
 		return undefined;
 	}
 	*/
+	console.log('getAppSettings room: ' + room);
 	dynamoDB.get({
 		TableName: 'smartapp-room-settings',
 		Key: {
@@ -86,7 +87,7 @@ async function writeLogEntry(logRecord, recordType="INFO") {
 					logItem: 0,	// record 0 contains circular log metadata
 				},
 			}).promise()
-			.then(function(data) {			
+			.then(function(data) {		
 				let logOffset: number = data.Item.logOffset;
 				const maxRecords: number = data.Item.maxRecords;
 
@@ -105,10 +106,10 @@ async function writeLogEntry(logRecord, recordType="INFO") {
 				if (logOffset++ == maxRecords) { logOffset = 1 };
 				dynamoDB.update({
 					Key: {
-						'logItem': 0
+						logItem: 0
 					},				
 					AttributeUpdates: {
-						'logOffset': {
+						logOffset: {
 							Action: 'PUT',
 							Value: logOffset
 						},
