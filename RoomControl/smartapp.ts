@@ -200,13 +200,14 @@ function convertDateTime( hhmm ) {
 
 // schedule activities for current end time
 async function scheduleEndHandler(context) {
-	// Schedule endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'motionOn')	
-	const endTime = convertDateTime( getSettingValue(context, 'endTime') );
+	// Schedule endTime activities based on specified endBehavior setting
+	const endTime = getSettingValue(context, 'endTime');
 	if (endTime) {
+		const endDateTime = convertDateTime(endTime);
 		const endBehavior = getSettingValue(context, 'endBehavior') ?? 'checkNext';
-		writeLogEntry('Run end time handler at: $(endTime.toLocaleString("en-US", {timeZone: "America/Denver"})), $endBehavior');
-		SmartState.putState(context, 'endBehavior', endBehavior);
-		await context.api.schedules.runOnce('endTimeHandler', endTime);
+		writeLogEntry('Run end time handler at: ' + endDateTime.toLocaleString("en-US", {timeZone: "America/Denver"}) + ', behavior: ' + endBehavior);
+		// SmartState.putState(context, 'endBehavior', endBehavior);
+		await context.api.schedules.runOnce('endTimeHandler', endDateTime);
 	}
 };
 
