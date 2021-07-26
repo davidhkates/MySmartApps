@@ -334,7 +334,7 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// Schedule endTime activities
-		// await scheduleEndHandler(context);
+		await scheduleEndHandler(context);
 		
 	}	
 	// console.log('RoomControl: END CREATING SUBSCRIPTIONS');
