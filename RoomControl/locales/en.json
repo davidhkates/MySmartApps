@@ -19,7 +19,7 @@
 	"pages.optionsPage.settings.offBehavior.name": "Room light off action",
 	"pages.optionsPage.settings.offBehavior.options.group.name": "Group Lights",
 	"pages.optionsPage.settings.offBehavior.options.speakers.name": "Room Speakers",
-	"pages.optionsPage.settings.offBehavior.options.both.name": "All Lights and Speakers",
+	"pages.optionsPage.settings.offBehavior.options.all.name": "All Lights and Speakers",
 	"pages.optionsPage.settings.offBehavior.options.none.name": "Do Nothing (Main Only)",
 	"pages.optionsPage.settings.offDelay.name": "Delay to turn off lights (if applicable)",
 	"pages.optionsPage.settings.offDelay.description": "Delay in seconds",
