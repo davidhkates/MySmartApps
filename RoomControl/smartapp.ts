@@ -163,7 +163,7 @@ function getSettingValue(context, settingName) {
 		try {
 			settingValue = appSettings[settingName];
 		} catch (error) {
-  			console.error('Error getting appSetting: ', settingname, error);
+  			console.error('Error getting appSetting: ', settingName, error);
 		}
 	// } else if (!bAppOnly) {
 	} else {
@@ -171,7 +171,7 @@ function getSettingValue(context, settingName) {
 			settingValue ??= context.configStringValue(settingName);
 			writeLogEntry('Get setting value: ' + settingName + ', ' + settingValue);
 		} catch (error) {
-  			console.error('Error getting configStringValue: ', settingname, error);
+  			console.error('Error getting configStringValue: ', settingName, error);
 		}
 	}
 	return settingValue;
