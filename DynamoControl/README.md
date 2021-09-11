@@ -17,9 +17,10 @@ Control room based on settings in specified DynamoDB table
 * _startTime_: time settings start
 * _endTime_: time settings end (if not specified, treated as event timer)
 * _daysOfWeek_: days of week for time settings (R=THURSDAY, U=SUNDAY)
+* _switchBehavior_: behavior of other controls when main switch pressed ('on', 'off')
 * _onBehavior_: what to do when room switch is turned on (groupOn)
 * _offBehavior_: what to do when room switch is turned off (groupOff)
-* _offDelay_: delay after room switch is turned off for offBehavior (in seconds)
+* _switchDelay_: delay after room switch is turned off for switch off behavior (in seconds)
 * _startBehavior_: what to do when motion in room starts (roomOn)
 * _stopBehavior_: what to do when motion in room stops (roomOff)
 * _stopDelay_: delay after motion stops for stopBehavior (in seconds)

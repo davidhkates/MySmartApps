@@ -328,10 +328,8 @@ module.exports = new SmartApp()
 	// Cancel scheduled event to turn off main switch after delay
 	await context.api.schedules.delete('delayedOffSwitch');
 	
-	// Get session state variable to see if button was manually pressed
-	// console.log('Checking whether all switches in on group are off');
+	// Only turn on switches in the on group if none have already been turned on
 	const onGroupSwitches = context.config.onGroup;
-	// console.log('On group switches: ', onGroupSwitches);
 	if (onGroupSwitches) {
 		// Get the current states of the switches in the on group
 		const onGroupStates = await onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
@@ -341,6 +339,7 @@ module.exports = new SmartApp()
 		));	
 		
 		const states: device = await Promise.all(onGroupStates);
+		// If any switches in the on group are already on, don't turn on others
 		if (states.find(it => it.switch.value === 'on')) {
 			writeLogEntry('Switch(es) in on group already on, do not turn on group')
 		} else {
@@ -356,7 +355,6 @@ module.exports = new SmartApp()
 	writeLogEntry('ENTRY roomSwitchOffHandler', 'ENTRY');
 
 	// get app settings from room settings table, if specified
-	// appSettings = await getCurrentSettings(context);
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
 	// const mainList = ['main', 'both'];
