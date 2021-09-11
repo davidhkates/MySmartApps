@@ -1,10 +1,10 @@
-## Room Control 
+## Dynamo Control 
 
-Turn on/off lights/outlets based on light switch, time of day, day of week, and contact sensors
+Control room based on settings in specified DynamoDB table
 
 ## File Structure
 
-* smartapp.js &mdash; the SmartApp implementation (also in typescript)
+* smartapp.ts &mdash; the SmartApp implementation
 * locales/en.json &mdash; English version of the app configuration page text
 
 ## Node Package Dependencies
@@ -15,5 +15,12 @@ Turn on/off lights/outlets based on light switch, time of day, day of week, and 
 ## DynamoDB Table Elements
 **smart-room-settings**
 * _startTime_: time settings start
-* _endTime_: time settings end
-* _endBehavior_: behavior at end time (mainOff, mainCheck, groupOff)
+* _endTime_: time settings end (if not specified, treated as event timer)
+* _daysOfWeek_: days of week for time settings (R=THURSDAY, U=SUNDAY)
+* _onBehavior_: what to do when room switch is turned on (groupOn)
+* _offBehavior_: what to do when room switch is turned off (groupOff, motionOff)
+* _startBehavior_: what to do when motion in room starts (roomOn)
+* _stopBehavior_: what to do when motion in room stops (roomOff)
+* _stopDelay_: delay after motion stops for stopBehavior (in seconds)
+* _openBehavior_: what to do when contacts in room are opened
+* _closeBehavior_: what to do when contacts in room are closed
