@@ -1,6 +1,6 @@
-## Dynamo Control 
+## SmartControl 
 
-Control room based on settings in specified DynamoDB table
+Control room based on settings in smart_room_settings DynamoDB table
 
 ## File Structure
 
