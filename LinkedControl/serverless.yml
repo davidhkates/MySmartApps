@@ -1,4 +1,4 @@
-service: dynamo-control
+service: linked-control
 
 package:
   patterns:

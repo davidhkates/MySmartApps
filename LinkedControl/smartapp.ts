@@ -269,7 +269,6 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime').required(false);
 	});
 })
-*/
 
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
