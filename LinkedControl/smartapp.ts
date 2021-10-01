@@ -318,7 +318,7 @@ module.exports = new SmartApp()
 		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 
 		// Schedule endTime activities
-		await scheduleEndHandler(context);
+		// await scheduleEndHandler(context);
 		
 	}	
 	// console.log('RoomControl: END CREATING SUBSCRIPTIONS');
@@ -358,12 +358,16 @@ module.exports = new SmartApp()
 	// Turn on the lights in off group based on behavior setting
 	console.log('ENTRY roomSwitchOffHandler', 'ENTRY');
 
+/*
 	// get app settings from room settings table, if specified
 	const offBehavior = getSettingValue(context, 'offBehavior');
 	const offDelay: number = parseInt(getSettingValue(context, 'offDelay'), 10);
 	// const mainList = ['main', 'both'];
 	// const groupList = ['group', 'both'];
 	console.log('Turn off lights based on off behavior: ' + offBehavior);
+*/
+	const offBehavior = context.configStringValue('offBehavior');
+	const offDelay = parseInt(context.configStringValue('offDelay'), 10);
 
 	// if (offBehavior==='main' || offBehavior==='both') await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	// if (offBehavior==='group' || offBehavior==='all') {
@@ -427,7 +431,8 @@ module.exports = new SmartApp()
 	console.log('ENTRY motionStartHandler', 'ENTRY');
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
-	const motionBehavior = getSettingValue(context, 'motionBehavior');
+	// const motionBehavior = getSettingValue(context, 'motionBehavior');
+	const motionBehavior = config.getStringValue('motionBehavior');
 
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
@@ -488,8 +493,10 @@ module.exports = new SmartApp()
 
 	// const delay = context.configNumberValue('motionDelay')
 	// appSettings = await getCurrentSettings(context);
-	const delay = getSettingValue(context, 'motionDelay');
+	// const delay = getSettingValue(context, 'motionDelay');
+	const delay = context.getStringValue('motionDelay');
 	console.log("Turn off lights after specified delay: " + delay);
+	
 
 	/*
 	if (delay) {
