@@ -432,7 +432,7 @@ module.exports = new SmartApp()
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
 	// const motionBehavior = getSettingValue(context, 'motionBehavior');
-	const motionBehavior = config.getStringValue('motionBehavior');
+	const motionBehavior = context.getStringValue('motionBehavior');
 
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
@@ -553,7 +553,7 @@ module.exports = new SmartApp()
 	
 	// Schedule next endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
 	// appSettings = await getCurrentSettings(context);
-	await scheduleEndHandler(context);
+	// await scheduleEndHandler(context);
 })
 
 /*
