@@ -222,7 +222,7 @@ module.exports = new SmartApp()
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
-		section.numberSetting('offDelay').required(false).min(0);
+		// section.numberSetting('offDelay').required(false).min(0);
 	});
 
 	// specify next (second) options page
