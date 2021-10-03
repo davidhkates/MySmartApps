@@ -260,7 +260,7 @@ module.exports = new SmartApp()
 .page('timePage', (context, page, configData) => {
 	
 	// pointer to previous (second) configuration page
-	page.prevPageId('optionsPage');
+	// page.prevPageId('optionsPage');
 	
 	// time window and days of week
 	page.section('time', section => {
