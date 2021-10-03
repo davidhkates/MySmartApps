@@ -222,6 +222,7 @@ module.exports = new SmartApp()
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
+		section.numberSetting('offDelay').required(false).min(0);
 	});
 
 	// specify next (second) options page
@@ -376,7 +377,8 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 		
-	if (!bTimeWindow) {		
+	if (!bTimeWindow) {	
+		const offDelay = context.configNumberValue('offDelay')
 		if (offDelay>0) {
 			console.log('Turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
