@@ -265,8 +265,8 @@ module.exports = new SmartApp()
 	page.section('time', section => {
 		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
 			defaultValue('everyday').required(true);
-		section.timeSetting('startTime').required(false);
-		section.timeSetting('endTime').required(false);
+		section.timeSetting('onTime').required(false);
+		section.timeSetting('offTime').required(false);
 	});
 })
 
