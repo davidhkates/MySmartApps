@@ -246,15 +246,24 @@ module.exports = new SmartApp()
 	});
 
 	// behavior at turn switch off and delay, if applicable
+	/*
 	page.section('behavior', section => {
 		section.enumSetting('offBehavior').options(['group','speakers', 'all','none'])
 			.defaultValue('both').required('true');
 		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
 	});
-	
+	*/
+
+	// time window and days of week
+	page.section('time', section => {
+		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
+			defaultValue('everyday').required(true);
+		section.timeSetting('startTime').required(false);
+		section.timeSetting('endTime').required(false);
+	});
+
 	// specify next (third) options page
 	// page.nextPageId('timePage');
-
 })
 
 /*
