@@ -10,7 +10,7 @@
 	"pages.mainPage.settings.mainSwitch.description": "",
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
-	"pages.mainPage.settings.offDelay.name": "Delay for turning off other lights (seconds)",
+	"pages.mainPage.settings.offDelay.name": "Delay to turn off lights (seconds)",
 
 	"pages.optionsPage.name": "Room Control (2 of 3)",
 	"pages.optionsPage.sections.behavior.name": "Switch off behavior",
