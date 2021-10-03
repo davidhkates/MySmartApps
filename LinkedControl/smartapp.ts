@@ -253,10 +253,11 @@ module.exports = new SmartApp()
 	});
 	
 	// specify next (third) options page
-	page.nextPageId('timePage');
+	// page.nextPageId('timePage');
 
 })
 
+/*
 .page('timePage', (context, page, configData) => {
 	
 	// pointer to previous (second) configuration page
@@ -270,6 +271,7 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime').required(false);
 	});
 })
+*/
 
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
