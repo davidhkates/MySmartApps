@@ -349,7 +349,7 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 		
-	if (bTimeWindow) {		
+	// if (bTimeWindow) {		
 	
 		// Cancel scheduled event to turn off main switch after delay
 		await context.api.schedules.delete('delayedOffSwitch');
@@ -372,7 +372,7 @@ module.exports = new SmartApp()
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			}
 		}
-	}
+	// }
 })
 
 
