@@ -388,7 +388,7 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 		
-	if (!bTimeWindow) {	
+	if (!startTime || !bTimeWindow) {	
 		const offDelay = context.configNumberValue('offDelay')
 		if (offDelay>0) {
 			console.log('Turning off group after delay, ' + offDelay);
