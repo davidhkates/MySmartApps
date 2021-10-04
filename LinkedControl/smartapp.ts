@@ -387,7 +387,9 @@ module.exports = new SmartApp()
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
-		
+	
+	console.log('Start time', startTime);
+	console.log('In time window', bTimeWindow);
 	if (!startTime || !bTimeWindow) {	
 		const offDelay = context.configNumberValue('offDelay')
 		if (offDelay>0) {
