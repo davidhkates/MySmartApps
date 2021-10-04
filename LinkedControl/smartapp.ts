@@ -379,7 +379,7 @@ module.exports = new SmartApp()
 // Turn off the lights in the offGroup when room switch is turned off
 .subscribedEventHandler('roomSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
-	console.log('ENTRY roomSwitchOffHandler', 'ENTRY');
+	console.log('BEGIN roomSwitchOffHandler');
 	
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
@@ -388,9 +388,10 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 	
-	console.log('Start time', startTime);
-	console.log('In time window', bTimeWindow);
-	if (!startTime || !bTimeWindow) {	
+	// console.log('Start time', startTime);
+	// console.log('In time window', bTimeWindow);
+	// if (!startTime || !bTimeWindow) {	
+	if (!bTimeWindow) {	
 		const offDelay = context.configNumberValue('offDelay')
 		if (offDelay>0) {
 			console.log('Turning off group after delay, ' + offDelay);
