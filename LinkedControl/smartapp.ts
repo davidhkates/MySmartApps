@@ -220,6 +220,7 @@ module.exports = new SmartApp()
 			.required(true).permissions('rx');
 		section.deviceSetting('onGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
+		section.enumSetting('onBehavior').options(['onBefore', 'onAfter', 'onAlways']);
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 		section.numberSetting('offDelay').required(false).min(0);
