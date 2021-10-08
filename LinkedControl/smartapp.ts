@@ -288,6 +288,7 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log("Installed/Updated - start creating subscriptions");
 	console.log('Context, room speakers: ', context.config.roomSpeakers);
+	console.log('Context, room speakers: ', context.config.onGroup);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
