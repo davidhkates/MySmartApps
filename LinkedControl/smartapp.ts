@@ -287,7 +287,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("Installed/Updated - start creating subscriptions");
-	console.log('Context: ', context);
+	console.log('Context, room speakers: ', context.config.roomSpeakers);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
