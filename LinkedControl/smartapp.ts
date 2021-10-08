@@ -406,7 +406,7 @@ module.exports = new SmartApp()
 			console.log('Turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'playback', 'stop');
-			await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
+			// await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
 		}
 	}
 
@@ -454,7 +454,7 @@ module.exports = new SmartApp()
 
 // Turn OFF main switch if ALL of the on group lights are turned off separately
 .subscribedEventHandler('groupOffHandler', async (context, event) => {
-	console.log('groupOffHandler starting');
+	console.log('groupOffHandler - starting');
 
 	// See if there are any other switches in the onGroup defined
 	const otherOnGroup = context.config.onGroup
@@ -476,6 +476,7 @@ module.exports = new SmartApp()
 	}
 
 	// If we get here, turn off the main switch and reset roomSwitchPressed state variable
+	console.log('groupOffHandler - turning off lights/switches');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	// stateVariable.putState( context.event.appId, 'roomSwitchPressed', 'true' );
 })
