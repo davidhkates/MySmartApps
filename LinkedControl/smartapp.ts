@@ -341,7 +341,7 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	console.log('ENTRY roomSwitchOnHandler', 'ENTRY');
+	console.log('roomSwitchOnHandler starting');
 	
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
@@ -380,7 +380,7 @@ module.exports = new SmartApp()
 // Turn off the lights in the offGroup when room switch is turned off
 .subscribedEventHandler('roomSwitchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
-	console.log('BEGIN roomSwitchOffHandler');
+	console.log('roomSwitchOffHandler - starting');
 	
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
@@ -390,10 +390,13 @@ module.exports = new SmartApp()
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 	
 	// console.log('Start time', startTime);
-	// console.log('In time window', bTimeWindow);
+	console.log('roomSwitchOffHandler - in time window: ', bTimeWindow);
 	// if (!startTime || !bTimeWindow) {	
 	if (!bTimeWindow) {	
+		console.log('roomSwitchOffHandler - outside time window');
 		const offDelay = context.configNumberValue('offDelay')
+		console.log('roomSwitchOffHandler - off delay: ', offDelay);
+		
 		if (offDelay>0) {
 			console.log('Turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
@@ -436,7 +439,7 @@ module.exports = new SmartApp()
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
-	console.log('ENTRY groupOnHandler', 'ENTRY');
+	console.log('groupOnHandler starting');
 
 	// indicate main switch was NOT manually pressed
 	// stateVariable.putState( context.event.appId, 'roomSwitchPressed', 'false' );
@@ -448,7 +451,7 @@ module.exports = new SmartApp()
 
 // Turn OFF main switch if ALL of the on group lights are turned off separately
 .subscribedEventHandler('groupOffHandler', async (context, event) => {
-	console.log('ENTRY groupOffHandler', 'ENTRY');
+	console.log('groupOffHandler starting');
 
 	// See if there are any other switches in the onGroup defined
 	const otherOnGroup = context.config.onGroup
@@ -478,7 +481,7 @@ module.exports = new SmartApp()
 // Turn on lights when motion occurs during defined times if dependent lights are on
 // TODO: turn off handler once lights are turned on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
-	console.log('ENTRY motionStartHandler', 'ENTRY');
+	console.log('motionStartHandler starting');
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
 	// const motionBehavior = getSettingValue(context, 'motionBehavior');
@@ -520,7 +523,7 @@ module.exports = new SmartApp()
 // Turn off the lights only when all motion sensors become inactive
 // TODO: Turn on motion handler handler if being used to turn on lights
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
-	console.log('ENTRY motionStopHandler', 'ENTRY');
+	console.log('motionStopHandler starting');
 
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
@@ -565,37 +568,6 @@ module.exports = new SmartApp()
 
 
 /*
-'use strict';
-
-import axios from 'axios'
-
-exports.handler = (event, context, callback) => {
-    console.log('Received event:', event.clickType);
-
-    var auth = {
-        username: process.env.AUTH_USERNAME,
-        password: process.env.AUTH_PASSWORD
-    };
-
-    var options = {
-        auth: auth
-    };
-
-    console.log("Playing via Sonos API server...");
-    axios.get(`${process.env.SONOS_API_SERVER}/playpause`, options)
-        .then(response => {
-            console.log("SUCCESS.");
-            return callback();
-        })
-        .catch(error => {
-            console.error("ERROR");
-            return callback();
-        });
-};
-*/
-
-
-/*
 // Schedule activity(ies) to be performed at start time
 .scheduledEventHandler('startTimeHandler', async (context, event) => {
 	// Turn on room switch(es) if control switch turned on already
@@ -608,7 +580,7 @@ exports.handler = (event, context, callback) => {
 
 // Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
-	console.log('ENTRY endTimeHandler', 'ENTRY');
+	console.log('endTimeHandler starting');
 	const endBehavior = SmartState.getValue(context, 'endBehavior');
 
 	if ( endBehavior.includes('checkMain') ) {
@@ -651,12 +623,12 @@ exports.handler = (event, context, callback) => {
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedGroupOff', async (context, event) => {
-	console.log('ENTRY delayedGroupOff', 'ENTRY');
+	console.log('delayedGroupOff starting');
 	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 })
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
-	console.log('ENTRY delayedSwitchOff', 'ENTRY');
+	console.log('delayedSwitchOff starting');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 });
