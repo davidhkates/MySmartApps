@@ -242,8 +242,7 @@ module.exports = new SmartApp()
 	});
 
 	page.section('speakers', section => {
-		// section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-		section.deviceSetting('roomSpeakers').capabilities(['audioStream'])
+		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 			.required(false).multiple(true).permissions('rx');
 	});
 
@@ -288,6 +287,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("Installed/Updated - start creating subscriptions");
+	console.log('Context: ', context);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
