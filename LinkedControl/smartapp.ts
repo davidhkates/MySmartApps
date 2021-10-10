@@ -220,7 +220,7 @@ module.exports = new SmartApp()
 			.required(true).permissions('rx');
 		section.deviceSetting('onGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
-		section.enumSetting('onBehavior').options(['onBefore', 'onAfter', 'onAlways']);
+		// section.enumSetting('onBehavior').options(['onBefore', 'onAfter', 'onAlways']);
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 		section.numberSetting('offDelay').required(false).min(0);
@@ -262,6 +262,7 @@ module.exports = new SmartApp()
 			defaultValue('everyday').required(true);
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
+		section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
 	});
 
 	// specify next (third) options page
@@ -322,10 +323,12 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'groupOffHandler');
 
 		// initialize motion behavior
+		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		*/
 
 		// initialize contact behaviors
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
@@ -344,16 +347,18 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	console.log('roomSwitchOnHandler starting');
+	console.log('roomSwitchOnHandler - starting');
 	
 	// Get start and end times
 	const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
+	const endTime = context.configStringValue("endTime");
+	const onTimeCheck = context.configStringValue("onTimeCheck");
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
+	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
 		
-	// if (bTimeWindow) {		
+	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
 		// Cancel scheduled event to turn off main switch after delay
 		await context.api.schedules.delete('delayedOffSwitch');
@@ -371,12 +376,13 @@ module.exports = new SmartApp()
 			const states: device = await Promise.all(onGroupStates);
 			// If any switches in the on group are already on, don't turn on others
 			if (states.find(it => it.switch.value === 'on')) {
-				console.log('Switch(es) in on group already on, do not turn on group')
+				console.log('roomSwitchOnHandler - switch(es) in on group already on, do not turn on group')
 			} else {
+				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			}
 		}
-	// }
+	}
 })
 
 

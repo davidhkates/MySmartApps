@@ -48,6 +48,9 @@
 	"pages.optionsPage.settings.startTime.description": "",
 	"pages.optionsPage.settings.endTime.name": "End time",
 	"pages.optionsPage.settings.endTime.description": "",
+	"pages.optionsPage.settings.onTimeCheck.name": "If time specified, when to turn on room",
+	"pages.optionsPage.settings.onBehavior.options.onWindow.name": "Time Window Only",
+	"pages.optionsPage.settings.onBehavior.options.onAlways.name": "Always",
 	
 	
 	"pages.timePage.name": "Room Control (3 of 3)",
