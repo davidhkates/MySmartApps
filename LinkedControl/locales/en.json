@@ -12,6 +12,10 @@
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
 	"pages.mainPage.settings.offDelay.name": "Delay to turn off lights (seconds)",
+	"pages.mainPage.settings.onBehavior.name": "Room light on action(s)",
+	"pages.mainPage.settings.onBehavior.options.onBefore.name": "Before Only",
+	"pages.mainPage.settings.onBehavior.options.onAfter.name": "After Only",
+	"pages.mainPage.settings.onBehavior.options.onAlways.name": "Always",
 
 	"pages.optionsPage.name": "Room Control (2 of 3)",
 	"pages.optionsPage.sections.behavior.name": "Switch off behavior",

@@ -242,7 +242,8 @@ module.exports = new SmartApp()
 	});
 
 	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+		// section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+		section.deviceSetting('roomSpeakers').capabilities(['audioMute'])
 			.required(false).multiple(true).permissions('rx');
 	});
 
@@ -287,8 +288,8 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log("Installed/Updated - start creating subscriptions");
-	console.log('Context, room speakers: ', context.config.roomSpeakers);
-	console.log('Context, on group: ', context.config.onGroup);
+	// console.log('Context, room speakers: ', context.config.roomSpeakers);
+	// console.log('Context, on group: ', context.config.onGroup);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
@@ -485,7 +486,7 @@ module.exports = new SmartApp()
 // Turn on lights when motion occurs during defined times if dependent lights are on
 // TODO: turn off handler once lights are turned on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
-	console.log('motionStartHandler starting');
+	console.log('motionStartHandler - starting');
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
 	// const motionBehavior = getSettingValue(context, 'motionBehavior');
