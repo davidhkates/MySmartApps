@@ -407,13 +407,14 @@ module.exports = new SmartApp()
 		console.log('roomSwitchOffHandler - off delay: ', offDelay);
 		
 		if (offDelay>0) {
-			console.log('Turning off group after delay, ' + offDelay);
+			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
-			console.log('Turning off group immediately');
+			console.log('roomSwitchOffHandler - turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			await context.api.devices.sendComments(context.config.roomSpeakers, 'mute', 'setMute');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
+			console.log('roomSwitchOffHandler - turning off group complete');
 		}
 	}
 
