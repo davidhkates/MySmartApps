@@ -1,6 +1,7 @@
 {
 	"Tap to set": "Tap to set",
 	"pages.mainPage.name": "Room Control (1 of 2)",
+
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
@@ -62,11 +63,5 @@
 	"pages.timePage.settings.startTime.description": "",
 	"pages.timePage.settings.endTime.name": "End time",
 	"pages.timePage.settings.endTime.description": ""
-	
-	"pages.mainPage.settings.onBehavior.name": "Room light on action(s)",
-	"pages.mainPage.settings.onBehavior.options.onBefore.name": "Before Only",
-	"pages.mainPage.settings.onBehavior.options.onAfter.name": "After Only",
-	"pages.mainPage.settings.onBehavior.options.onAlways.name": "Always
-	
 
 }
