@@ -1,15 +1,6 @@
 {
 	"compilerOptions": {
-		// "module": "commonjs",
-		// "noImplicitAny": true,
 		"removeComments": true,
-		// "preserveConstEnums": true,
-		// "sourceMap": true,
-
-		// "rootDir": ".",
-		// "outDir": "./built",
-		// "outDir": ".",
-		// "allowJs": true,
 		"skipLibCheck": true,
 		"target": "es6"
 	},

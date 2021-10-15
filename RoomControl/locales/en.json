@@ -4,15 +4,20 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.roomName.name": "Room name for settings in DyanomoDB table (optional)",
-	"pages.mainPage.settings.roomName.description": "Room name value for smartapp-room-settings table with settings by time zone",
 	
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.sections.switches.name": "Switches to control room",
-	"pages.mainPage.settings.mainSwitch.name": "Main switch to control room",
-	"pages.mainPage.settings.mainSwitch.description": "",
+	"pages.mainPage.settings.roomSwitch.name": "Main switch to control room",
+	"pages.mainPage.settings.roomSwitch.description": "",
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
+
+	"pages.mainPage.settings.onTimeCheck.name": "Times to turn on other lights",
+	"pages.mainPage.settings.onTimeCheck.options.onWindow.name": "Time Window Only",
+	"pages.mainPage.settings.onTimeCheck.options.onAlways.name": "Always",
+	
 	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
+	"pages.mainPage.settings.offDelay.name": "Delay to turn off lights (seconds)",
+	
 
 	"pages.optionsPage.name": "Room Control (2 of 2)",
 	"pages.optionsPage.sections.behavior.name": "Switch off behavior",
@@ -37,6 +42,16 @@
 	"pages.optionsPage.settings.contactMode.options.AnyOpen.name": "Any Open",	
 	"pages.optionsPage.settings.contactMode.options.AnyClosed.name": "Any Closed",	
 	
+	"pages.optionsPage.settings.daysOfWeek.name": "Days of week",
+	"pages.optionsPage.settings.daysOfWeek.options.everyday.name": "Every Day",
+	"pages.optionsPage.settings.daysOfWeek.options.weekdays.name": "Weekdays",
+	"pages.optionsPage.settings.daysOfWeek.options.weekend.name": "Weekend",	
+	"pages.optionsPage.settings.startTime.name": "Start time",
+	"pages.optionsPage.settings.startTime.description": "",
+	"pages.optionsPage.settings.endTime.name": "End time",
+	"pages.optionsPage.settings.endTime.description": "",
+	
+	
 	"pages.timePage.name": "Room Control (3 of 3)",
 	"pages.timePage.sections.time.name": "Days/times for this automation",
 	"pages.timePage.settings.daysOfWeek.name": "Days of week",
@@ -47,4 +62,11 @@
 	"pages.timePage.settings.startTime.description": "",
 	"pages.timePage.settings.endTime.name": "End time",
 	"pages.timePage.settings.endTime.description": ""
+	
+	"pages.mainPage.settings.onBehavior.name": "Room light on action(s)",
+	"pages.mainPage.settings.onBehavior.options.onBefore.name": "Before Only",
+	"pages.mainPage.settings.onBehavior.options.onAfter.name": "After Only",
+	"pages.mainPage.settings.onBehavior.options.onAlways.name": "Always
+	
+
 }

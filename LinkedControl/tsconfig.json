@@ -1,8 +1,0 @@
-{
-	"compilerOptions": {
-		"removeComments": true,
-		"skipLibCheck": true,
-		"target": "es6"
-	},
-	"files": ["smartapp.ts"]
-}

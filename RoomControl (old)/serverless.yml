@@ -1,4 +1,4 @@
-service: linked-control
+service: room-control
 
 package:
   patterns:
