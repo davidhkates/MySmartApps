@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------------------------
-// Linked Control - control lights/switches in room based on sensors, time of day, 
+// Room Control - control lights/switches in room based on sensors, time of day, 
 //     and day of week
 //---------------------------------------------------------------------------------------
 
@@ -10,7 +10,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
-const SmartState  = require('@katesthings/smartstate');
+// const SmartState  = require('@katesthings/smartstate');
 
 // SmartApp type definitions
 interface device {
@@ -593,6 +593,8 @@ module.exports = new SmartApp()
 // Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
 	console.log('endTimeHandler starting');
+	
+	/*
 	const endBehavior = SmartState.getValue(context, 'endBehavior');
 
 	if ( endBehavior.includes('checkMain') ) {
@@ -614,6 +616,13 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 		
+	}
+	*/
+
+	// Turn off room switch(es) if main switch already turned off
+	if ( !SmartSensor.getSwitchState( context, context.config.roomSwitch[0] ) ) {
+		console.log('Turning room switch(es) off since main switch already off');
+		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 	}
 	
 	// Schedule next endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
