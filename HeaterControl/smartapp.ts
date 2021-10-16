@@ -14,6 +14,7 @@ interface device {
 // Utility functions for this automation
 async function controlHeater( context ) {
 	// default heater state to ON
+	console.log('controlHeater - starting, default heater state to ON');
 	var heaterState = 'on';
 	
 	// Get temperature(s) and set heater state
@@ -70,7 +71,7 @@ module.exports = new SmartApp()
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-			.required(true).permissions('r');
+			.required(false).permissions('r');
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
 	});
