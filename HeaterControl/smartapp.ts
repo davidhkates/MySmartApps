@@ -7,88 +7,36 @@ const SmartUtils  = require('@katesthings/smartutils');
 
 
 // Utility functions for this automation
-async function controlFan( context ) {
-	// Initialize fan state variable
-	var fanState = 'off';
+async function controlHeater( context ) {
+	// Get temperature(s) and set heater state
+	const targetTemp = context.configNumberValue('tempTarget');
+	const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
 
-	// Get temperature(s) and set fan state
-	const tempSensor = context.config.tempSensor;
-	if (tempSensor) {
-		const targetTemp = context.configNumberValue('tempTarget');
-		const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-
-		console.log('Indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
-		if (indoorTemp>targetTemp) {
-			console.log('Default fan state to ON');
-			fanState = 'on';
-
-			// If weather sensor defined, make sure it's cooler outside
-			const weatherSensor = context.config.weather;
-			// console.log('Weather sensor: ', weatherSensor);
-			if (weatherSensor) {
-				console.log('Weather sensor specified');
-				const outsideTemp = await SmartSensor.getTemperature( context, weatherSensor[0] );
-				console.log('Outside temp: ', outsideTemp);
-				
-				// allow for outside temp to be slightly higher than inside by specified offset
-				var tempOffset = context.configNumberValue('tempOffset');
-				if (!tempOffset) {
-					tempOffset = 0
-				}
-				if (indoorTemp<=outsideTemp-tempOffset) {
-					fanState = 'off';
-				} else {
-
-					// If humidity setting specified, make sure it's below that outside
-					const maxHumidity = context.configNumberValue('maxHumidity');
-					if (maxHumidity) {
-						const outsideHumidity = await SmartSensor.getHumidity( context, context.config.weather[0] );
-						if (maxHumidity<outsideHumidity) { 
-							fanState = 'off'
-						}
-					}
-				}
-			}
-		}
-	}
-	
-	// If room humidity sensor specified
-	const humiditySensor = context.config.humiditySensor;
-	if (humiditySensor) {
-		const targetHumidity = context.configNumberValue('humidityTarget');
-		if (targetHumidity) {
-			const indoorHumidity = await SmartSensor.getRelativeHumidity( context, context.config.humiditySensor[0] );
-
-			console.log('Indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
-			if (indoorHumidity>targetHumidity) {
-				fanState = 'on';
-				// TODO - think about how to deal with temperature and outside weather conditions
-			}
-		}
-	}
+	console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
+	const heaterState = ( indoorTemp>targetTemp ? 'on' : 'off' );
 	
 	// Control fan based on determined fan state
-	console.log('Turning fan ', fanState);
-	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
+	console.log('controlHeater - turning heater ', heaterState);
+	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', heaterState);
 
 	// call next temperature check after interval (in seconds) until end time (if specified)
 	console.log('Recursive call to check interval again');
 	const checkInterval = context.configNumberValue('checkInterval');
-	await context.api.schedules.runIn('checkTemperature', checkInterval);	
+	await context.api.schedules.runIn('checkTempHandler', checkInterval);	
 
 	// return the state of the fan
-	return fanState;
+	return heaterState;
 }
 
-async function stopFan( context ) {
+async function stopHeater( context ) {
 	// turn off fan
-	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	// cancel any upcoming temperature check calls
-	await context.api.schedules.delete('checkTemperature');
+	await context.api.schedules.delete('checkTempHandler');
 	// reschedule fan start at specified time, if specified
 	const startTime = context.configStringValue('startTime');
 	if (startTime) {
-		await context.api.schedules.runDaily('checkTemperature', new Date(startTime));
+		await context.api.schedules.runDaily('checkTempHandler', new Date(startTime));
 	}
 }
 
@@ -105,34 +53,17 @@ module.exports = new SmartApp()
 	
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
-		section.booleanSetting('fanEnabled').defaultValue(true);
-		section.numberSetting('tempTarget').required(false);
-		section.numberSetting('humidityTarget').required(false);
+		section.booleanSetting('heaterEnabled').defaultValue(true);
+		section.numberSetting('tempTarget').required(true);
 	});
 
 	// controls and temperature/humidity sensors
 	page.section('controls', section => {
-		section.deviceSetting('fanSwitch').capabilities(['switch'])
+		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-			.required(false).permissions('r');
-		// section.enumSetting('tempAboveBelow').options(['Above','Below']);
-		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
+			.required(true).permissions('r');
 	});
-	
-	page.section('weather', section => {
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		section.numberSetting('maxHumidity').required(false);
-		section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
-	});	
-})
-
-.page('optionsPage', (context, page, configData) => {
-	// separate page for weather information
-	// page.prevPageId('mainPage');
 	
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
@@ -152,23 +83,23 @@ module.exports = new SmartApp()
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
-	console.log("FanControl: Installed/Updated");
+	console.log("Installed/Updated - start creating subscriptions");
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('checkTemperature');
-	await context.api.schedules.delete('stopFanHandler');
+	await context.api.schedules.delete('checkTempHandler');
+	await context.api.schedules.delete('stopHeaterHandler');
 
 	// get fan enabled setting and turn off fan if not
-	const fanEnabled = context.configBooleanValue('fanEnabled');
-	console.log('Fan enabled value: ', fanEnabled);
-	if (!fanEnabled) {
-		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+	const heaterEnabled = context.configBooleanValue('heaterEnabled');
+	console.log('Installed/Updated - heater enabled value: ', heaterEnabled);
+	if (!heaterEnabled) {
+		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	} else {
 
 		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.fanSwitch,
-			'switch', 'switch.off', 'fanSwitchOffHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
+			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
@@ -202,50 +133,54 @@ module.exports = new SmartApp()
 		const startTime = context.configStringValue("startTime");
 		const endTime   = context.configStringValue("endTime");
 		if (startTime) {
-			console.log('Set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
-			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
+			console.log('Installed/Updated - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
+			await context.api.schedules.runDaily('checkTempHandler', new Date(startTime))
 			if (endTime) {
-				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
+				await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-					console.log('Start controlling fan based on temperatures');
-					controlFan(context);
+					console.log('Installed/Updated - start controlling heater based on temperatures');
+					controlHeater(context);
 				} else {
 					// if outside time window, turn fan off
-					await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');		
+					await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');		
 				}
 			}		
 		} else {
-			console.log('No start time set, start controlling fan based on temperatures');
-			controlFan(context);
+			console.log('Installed/Updated - no start time set, start controlling heater immediately');
+			controlHeater(context);
 		}
 	}
 	
-	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
+	console.log('Installed/Updated - end creating subscriptions')
 })
 
 
 // If fan manually turned off, cancel subsequent check temperature calls to control fan
-.subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
-	console.log("Fan switch manually turned off");
+.subscribedEventHandler('heaterSwitchOffHandler', async (context, event) => {
+	console.log('heaterSwitchOffHandler - started, heater switch turned off manually');
+	await context.api.schedules.delete('checkTempHandler');
+	await context.api.schedules.delete('stopHeaterHandler');	
+	console.log('heaterSwitchOffHandler - finished, subsequent temperate check calls cancelled');
 })
 
 
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log("Contact open");
+	console.log('contactOpenHandler - started');
 
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {
-		// await context.api.schedules.runIn('checkTemperature', 0);
+		// await context.api.schedules.runIn('checkTempHandler', 0);
 		controlFan(context);
 	}
+	console.log('contactOpenHandler - finished');
 })
 
 
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log("Contact closed");
+	console.log('contactClosedHandler - started');
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.contactSensors
@@ -269,18 +204,21 @@ module.exports = new SmartApp()
 
 	// If we got here, no other contact sensors are open so turn off fan 
 	stopFan(context);
+	console.log('contactClosedHandler - finished');
 })
 
 
 // Handle end time if specified
-.scheduledEventHandler('stopFanHandler', async(context, event) => {
-	console.log("Turn off fan handler");
+.scheduledEventHandler('stopHeaterHandler', async(context, event) => {
+	console.log('stopHeaterHandler - started');
 	stopFan(context);
+	console.log('stopHeaterHandler - finished');
 })
 
 
 // Check temperature and turn on/off fan as appropriate
-.scheduledEventHandler('checkTemperature', async (context, event) => {		
-	console.log("Check temperature");
-	controlFan(context);
+.scheduledEventHandler('checkTempHandler', async (context, event) => {		
+	console.log('checkTempHandler - started');
+	controlHeater(context);
+	console.log('checkTempHandler - finished');
 });
