@@ -5,6 +5,11 @@ const SmartApp = require('@smartthings/smartapp');
 const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
 
+// SmartApp type definitions
+interface device {
+	[value: string]: any
+}
+
 
 // Utility functions for this automation
 async function controlHeater( context ) {
@@ -195,7 +200,7 @@ module.exports = new SmartApp()
 		));
 
 		// Quit if there are other sensors still open
-		const states = await Promise.all(stateRequests)
+		const states: device = await Promise.all(stateRequests);
 		if (states.find(it => it.contact.value === 'open')) {
 			return
 		}
