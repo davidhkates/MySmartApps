@@ -13,12 +13,21 @@ interface device {
 
 // Utility functions for this automation
 async function controlHeater( context ) {
+	// default heater state to ON
+	var heaterState = 'on';
+	
 	// Get temperature(s) and set heater state
 	const targetTemp = context.configNumberValue('tempTarget');
-	const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
-
-	console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
-	const heaterState = ( indoorTemp>targetTemp ? 'on' : 'off' );
+	if (targetTemp) {
+		const indoorTemp = await SmartSensor.getTemperature( context, context.config.tempSensor[0] );
+		if (indoorTemp) {
+			console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
+			if ( indoorTemp>targetTemp ) {
+				heaterState = 'off';
+				// heaterState = ( indoorTemp>targetTemp ? 'off' : 'on' );
+			}
+		}
+	}
 	
 	// Control fan based on determined fan state
 	console.log('controlHeater - turning heater ', heaterState);
@@ -57,19 +66,15 @@ module.exports = new SmartApp()
 	page.nextPageId('optionsPage');
 	
 	// operating switch and interval for checking temperature
-	page.section('targets', section => {
-		section.booleanSetting('heaterEnabled').defaultValue(true);
-		section.numberSetting('tempTarget').required(true);
-	});
-
-	// controls and temperature/humidity sensors
 	page.section('controls', section => {
-		section.deviceSetting('heaterSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
+		section.booleanSetting('heaterEnabled').defaultValue(true);
+		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 			.required(true).permissions('r');
+		section.deviceSetting('heaterSwitch').capabilities(['switch'])
+			.required(true).permissions('rx');
 	});
-	
+
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])

@@ -1,6 +1,6 @@
 # Heater Control
 
-Control heater based on room temperature, set temperature, door/window sensors, and time of day/day(s) of week.
+Control heater based on room temperature, set temperature, door/window sensors, and time of day/day(s) of week
 
 
 ## File Structure
