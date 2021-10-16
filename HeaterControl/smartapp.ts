@@ -196,7 +196,7 @@ module.exports = new SmartApp()
 
 		// Quit if there are other sensors still open
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.doorContacts.value === 'open')) {
+		if (states.find(it => it.contact.value === 'open')) {
 			return
 		}
 	}
