@@ -172,7 +172,7 @@ module.exports = new SmartApp()
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {
 		// await context.api.schedules.runIn('checkTempHandler', 0);
-		controlFan(context);
+		controlHeater(context);
 	}
 	console.log('contactOpenHandler - finished');
 })
@@ -196,14 +196,14 @@ module.exports = new SmartApp()
 
 		// Quit if there are other sensors still open
 		const states = await Promise.all(stateRequests)
-		if (states.find(it => it.motion.value === 'open')) {
+		if (states.find(it => it.contactSensor.value === 'open')) {
 			return
 		}
 	}
 	console.log("Turn off lights after specified delay");
 
 	// If we got here, no other contact sensors are open so turn off fan 
-	stopFan(context);
+	stopHeater(context);
 	console.log('contactClosedHandler - finished');
 })
 
@@ -211,7 +211,7 @@ module.exports = new SmartApp()
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - started');
-	stopFan(context);
+	stopHeater(context);
 	console.log('stopHeaterHandler - finished');
 })
 

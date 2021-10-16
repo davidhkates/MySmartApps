@@ -1,4 +1,4 @@
-service: fan-control
+service: heater-control
 
 package:
   patterns:
