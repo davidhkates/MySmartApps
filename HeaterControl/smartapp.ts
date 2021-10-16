@@ -64,7 +64,7 @@ module.exports = new SmartApp()
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
 	// separate page for weather information
-	page.nextPageId('optionsPage');
+	// page.nextPageId('optionsPage');
 	
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {

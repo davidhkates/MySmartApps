@@ -1,5 +1,5 @@
 {
-	"pages.mainPage.name": "Temperature Control (Main)",
+	"pages.mainPage.name": "Heater Control",
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.controls.name": "Heater controls and settings",
 	"pages.mainPage.settings.heaterEnabled.name": "Heater enabled?",
