@@ -35,9 +35,12 @@ async function controlHeater( context ) {
 	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', heaterState);
 
 	// call next temperature check after interval (in seconds) until end time (if specified)
-	console.log('Recursive call to check interval again');
-	const checkInterval = context.configNumberValue('checkInterval');
-	await context.api.schedules.runIn('checkTempHandler', checkInterval);	
+	const endTime   = context.configStringValue("endTime");
+	if (endTime) {
+		console.log('controlHeater - recursive call to check interval again until endTime');
+		const checkInterval = context.configNumberValue('checkInterval');
+		await context.api.schedules.runIn('checkTempHandler', checkInterval);	
+	}
 
 	// return the state of the fan
 	return heaterState;
@@ -144,7 +147,7 @@ module.exports = new SmartApp()
 		const startTime = context.configStringValue("startTime");
 		const endTime   = context.configStringValue("endTime");
 		if (startTime) {
-			console.log('Installed/Updated - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
+			console.log('Installed/Updated - set start time for heater: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('checkTempHandler', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
