@@ -67,7 +67,7 @@ module.exports = new SmartApp()
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
 	// separate page for weather information
-	// page.nextPageId('optionsPage');
+	page.nextPageId('optionsPage');
 	
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {
@@ -85,6 +85,9 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
 	});
+})
+
+.page('optionsPage', (context, page, configData) => {
 
 	// OPTIONAL: start and end time, outside weather, temp offset
 	page.section('time', section => {
@@ -92,7 +95,6 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
-
 })
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)

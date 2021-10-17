@@ -14,10 +14,11 @@
 	"pages.mainPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
 	"pages.mainPage.settings.contactsOpenClosed.options.Open.name": "Open",
 	"pages.mainPage.settings.contactsOpenClosed.options.Closed.name": "Closed",
-	"pages.mainPage.sections.time.name": "Time of day to operate",
-	"pages.mainPage.settings.startTime.name": "Start time (optional)",
-	"pages.mainPage.settings.startTime.description": "Time when heater should start operating",
-	"pages.mainPage.settings.endTime.name": "End time (optional)",
-	"pages.mainPage.settings.endTime.description": "Time when heater should stop operating",
-	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
+	
+	"pages.optionsPage.sections.time.name": "Time of day to operate",
+	"pages.optionsPage.settings.startTime.name": "Start time (optional)",
+	"pages.optionsPage.settings.startTime.description": "Time when heater should start operating",
+	"pages.optionsPage.settings.endTime.name": "End time (optional)",
+	"pages.optionsPage.settings.endTime.description": "Time when heater should stop operating",
+	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
 }
