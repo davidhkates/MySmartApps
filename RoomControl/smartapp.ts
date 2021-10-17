@@ -415,6 +415,7 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'mute', 'setMute');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
+			await context.api.devices.sendComments(context.config.roomSpeakers, 'action', 'pause');
 			console.log('roomSwitchOffHandler - turning off group complete');
 		}
 	}
