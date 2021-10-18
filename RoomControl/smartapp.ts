@@ -243,8 +243,7 @@ module.exports = new SmartApp()
 	});
 
 	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['musicPlayer'])
-		// section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 		// section.deviceSetting('roomSpeakers').capabilities(['audioMute'])
 			.required(false).multiple(true).permissions('rx');
 	});
