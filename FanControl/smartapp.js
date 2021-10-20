@@ -68,9 +68,10 @@ async function controlFan( context ) {
 		}
 	}
 	
-	// Control fan based on determined fan state
+	// Control fan based on determined fan state, set state variable
 	console.log('Turning fan ', fanState);
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
+	SmartState.putState(context.event.appId, 'fanState', fanState);
 
 	// call next temperature check after interval (in seconds) until end time (if specified)
 	console.log('Recursive call to check interval again');
@@ -84,6 +85,8 @@ async function controlFan( context ) {
 async function stopFan( context ) {
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+	// set fan state to 'off'
+	SmartState.putState(context.event.api, 'fanState', 'off');
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkTemperature');
 	// reschedule fan start at specified time, if specified
@@ -167,6 +170,9 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 	} else {
 
+		// initialize state variable with current state of fan switch
+		SmartState.putState( context.event.appId, 'fanState', 'off' );
+
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.fanSwitch,
 			'switch', 'switch.off', 'fanSwitchOffHandler');
@@ -227,8 +233,15 @@ module.exports = new SmartApp()
 
 // If fan manually turned off, cancel subsequent check temperature calls to control fan
 .subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
-	console.log('fanSwitchOffHeandler - fan switch manually turned off');
+	console.log('fanSwitchOffHeandler - started, fan switch manually turned off');
 	
+	// get fan state previously set by SmartApp
+	var fanState = const SmartState.getState(context.event.appId, 'fanState');
+	if (fanState === 'on') {
+		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
+		stopFan(context);
+	}
+	console.log('fanSwitchOffHeandler - finished');
 })
 
 
