@@ -4,6 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartSensor = require('@katesthings/smartcontrols');
 const SmartUtils  = require('@katesthings/smartutils');
+const SmartState  = require('@katesthings/smartstate');
 
 
 // Utility functions for this automation
@@ -226,7 +227,8 @@ module.exports = new SmartApp()
 
 // If fan manually turned off, cancel subsequent check temperature calls to control fan
 .subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
-	console.log("Fan switch manually turned off");
+	console.log('fanSwitchOffHeandler - fan switch manually turned off');
+	
 })
 
 
