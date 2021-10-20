@@ -200,7 +200,7 @@ module.exports = new SmartApp()
 			));
 
 			// Set contactOpen to true if at least one contact is open
-			const states = await Promise.all(stateRequests);
+			const states: device = await Promise.all(stateRequests);
 			if (states.find(it => it.motion.value === 'open')) {
 				contactOpen = true;
 			}
@@ -279,7 +279,7 @@ module.exports = new SmartApp()
 		));
 
 		// Quit if there are other sensors still open
-		const states = await Promise.all(stateRequests)
+		const states: device = await Promise.all(stateRequests)
 		if (states.find(it => it.motion.value === 'open')) {
 			return
 		}
