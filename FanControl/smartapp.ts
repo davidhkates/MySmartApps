@@ -2,10 +2,14 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const SmartDevices = require('@katesthings/smartdevices');
-const SmartUtils   = require('@katesthings/smartutils');
-const SmartState   = require('@katesthings/smartstate');
+const SmartDevice = require('@katesthings/smartdevice');
+const SmartUtils  = require('@katesthings/smartutils');
+const SmartState  = require('@katesthings/smartstate');
 
+// SmartApp type definitions
+interface device {
+	[value: string]: any
+}
 
 // Utility functions for this automation
 async function controlFan( context ) {
