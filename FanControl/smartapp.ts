@@ -236,7 +236,7 @@ module.exports = new SmartApp()
 	console.log('fanSwitchOffHeandler - started, fan switch manually turned off');
 	
 	// get fan state previously set by SmartApp
-	var fanState = const SmartState.getState(context.event.appId, 'fanState');
+	var fanState = const SmartState.getState(context, 'fanState');
 	if (fanState === 'on') {
 		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
 		stopFan(context);
