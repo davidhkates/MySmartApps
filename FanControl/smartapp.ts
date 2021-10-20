@@ -20,7 +20,7 @@ async function controlFan( context ) {
 	const tempSensor = context.config.tempSensor;
 	if (tempSensor) {
 		const targetTemp = context.configNumberValue('tempTarget');
-		const indoorTemp = await SmartDevices.getTemperature( context, context.config.tempSensor[0] );
+		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
 
 		console.log('Indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 		if (indoorTemp>targetTemp) {
@@ -32,7 +32,7 @@ async function controlFan( context ) {
 			// console.log('Weather sensor: ', weatherSensor);
 			if (weatherSensor) {
 				console.log('Weather sensor specified');
-				const outsideTemp = await SmartDevices.getTemperature( context, weatherSensor[0] );
+				const outsideTemp = await SmartDevice.getTemperature( context, weatherSensor[0] );
 				console.log('Outside temp: ', outsideTemp);
 				
 				// allow for outside temp to be slightly higher than inside by specified offset
@@ -47,7 +47,7 @@ async function controlFan( context ) {
 					// If humidity setting specified, make sure it's below that outside
 					const maxHumidity = context.configNumberValue('maxHumidity');
 					if (maxHumidity) {
-						const outsideHumidity = await SmartDevices.getHumidity( context, context.config.weather[0] );
+						const outsideHumidity = await SmartDevice.getHumidity( context, context.config.weather[0] );
 						if (maxHumidity<outsideHumidity) { 
 							fanState = 'off'
 						}
@@ -62,7 +62,7 @@ async function controlFan( context ) {
 	if (humiditySensor) {
 		const targetHumidity = context.configNumberValue('humidityTarget');
 		if (targetHumidity) {
-			const indoorHumidity = await SmartDevices.getRelativeHumidity( context, context.config.humiditySensor[0] );
+			const indoorHumidity = await SmartDevice.getRelativeHumidity( context, context.config.humiditySensor[0] );
 
 			console.log('Indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
 			if (indoorHumidity>targetHumidity) {
