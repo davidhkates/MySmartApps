@@ -71,7 +71,7 @@ async function controlFan( context ) {
 	// Control fan based on determined fan state, set state variable
 	console.log('Turning fan ', fanState);
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
-	SmartState.putState(context.event.appId, 'fanState', fanState);
+	SmartState.putState(context, 'fanState', fanState);
 
 	// call next temperature check after interval (in seconds) until end time (if specified)
 	console.log('Recursive call to check interval again');
@@ -86,7 +86,7 @@ async function stopFan( context ) {
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 	// set fan state to 'off'
-	SmartState.putState(context.event.api, 'fanState', 'off');
+	SmartState.putState(context, 'fanState', 'off');
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkTemperature');
 	// reschedule fan start at specified time, if specified
@@ -171,7 +171,7 @@ module.exports = new SmartApp()
 	} else {
 
 		// initialize state variable with current state of fan switch
-		SmartState.putState( context.event.appId, 'fanState', 'off' );
+		SmartState.putState( context, 'fanState', 'off' );
 
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.fanSwitch,
@@ -236,7 +236,7 @@ module.exports = new SmartApp()
 	console.log('fanSwitchOffHeandler - started, fan switch manually turned off');
 	
 	// get fan state previously set by SmartApp
-	var fanState = const SmartState.getState(context, 'fanState');
+	const fanState = SmartState.getState(context, 'fanState');
 	if (fanState === 'on') {
 		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
 		stopFan(context);
