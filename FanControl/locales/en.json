@@ -1,5 +1,5 @@
 {
-	"pages.mainPage.name": "Temperature Control (Main)",
+	"pages.mainPage.name": "Fan Control (Main)",
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.targets.name": "Target settings",
 	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
@@ -15,7 +15,7 @@
 	"pages.mainPage.settings.weather.name": "Outdoor weather sensor (optional)",
 	"pages.mainPage.settings.tempOffset.name": "Temperature offset from inside to outside",
 
-	"pages.optionsPage.name": "Temperature Control (Options)",
+	"pages.optionsPage.name": "Fan Control (Options)",
 	"pages.optionsPage.sections.contactSensors.name": "Door/window contacts to check",
 	"pages.optionsPage.settings.doorContacts.name": "Doors/windows to check (optional)",
 	"pages.optionsPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",

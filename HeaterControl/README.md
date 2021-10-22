@@ -10,6 +10,6 @@ Control heater based on room temperature, set temperature, door/window sensors, 
 
 ## Node Package Dependencies
 
-1. npm i @smartthings/SmartApp --save
+1. npm i @smartthings/smartapp --save
 2. npm i @katesthings/smartcontrols --save
 3. npm i @katesthings/smartutils --save
