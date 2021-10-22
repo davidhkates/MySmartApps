@@ -1,6 +1,6 @@
-# Temperature Control
+# Fan Control
 
-Control heater or fan switch based on room temperature/humidity, set temperature/humidity, outside temperature/humidity, door/window sensors, and time of day/day(s) of week.
+Control fan switch based on room temperature, door/window sensors, and time of day/day(s) of week
 
 
 ## File Structure
