@@ -2,7 +2,7 @@
 const SmartApp = require('@smartthings/smartapp');
 
 // Install relevant SmartApp utilities
-const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartDevice = require('@katesthings/smartdevice');
 const SmartUtils  = require('@katesthings/smartutils');
 
 
