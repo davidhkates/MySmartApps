@@ -1,5 +1,5 @@
 {
-	"pages.mainPage.name": "Heater Control",
+	"pages.mainPage.name": "Heater Control (main)",
 	"Tap to set": "Tap to set",
 	"pages.mainPage.sections.controls.name": "Heater controls and settings",
 	"pages.mainPage.settings.heaterEnabled.name": "Heater enabled?",
@@ -15,6 +15,7 @@
 	"pages.mainPage.settings.contactsOpenClosed.options.Open.name": "Open",
 	"pages.mainPage.settings.contactsOpenClosed.options.Closed.name": "Closed",
 	
+	"pages.optionsPage.name": "Heater Control (options)",
 	"pages.optionsPage.sections.time.name": "Time of day to operate",
 	"pages.optionsPage.settings.startTime.name": "Start time (optional)",
 	"pages.optionsPage.settings.startTime.description": "Time when heater should start operating",
