@@ -11,6 +11,7 @@ Control heater or fan switch based on room temperature/humidity, set temperature
 ## Node Package Dependencies
 
 * npm i @smartthings/smartapp --save
+* npm i @aws-sdk/client-dynamodb --save
 * npm i @katesthings/smartdevice --save
 * npm i @katesthings/smartutils --save
 * npm i @katesthings/smartstate --save
