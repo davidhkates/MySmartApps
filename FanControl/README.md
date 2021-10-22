@@ -10,6 +10,7 @@ Control heater or fan switch based on room temperature/humidity, set temperature
 
 ## Node Package Dependencies
 
-* npm i @smartthings/SmartApp --save
-* npm i @katesthings/smartcontrols
-* npm i @katesthings/smartutils
+* npm i @smartthings/smartapp --save
+* npm i @katesthings/smartdevice --save
+* npm i @katesthings/smartutils --save
+* npm i @katesthings/smartstate --save
