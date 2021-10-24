@@ -20,7 +20,7 @@ async function controlHeater( context ) {
 	// Get temperature(s) and set heater state
 	const targetTemp = context.configNumberValue('tempTarget');
 	if (targetTemp) {
-		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
+		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor );
 		if (indoorTemp) {
 			console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 			if ( indoorTemp>targetTemp ) {
@@ -30,7 +30,7 @@ async function controlHeater( context ) {
 		}
 	}
 	
-	// Control fan based on determined fan state
+	// Control heater based on determined heater state
 	console.log('controlHeater - turning heater ', heaterState);
 	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', heaterState);
 
@@ -42,16 +42,21 @@ async function controlHeater( context ) {
 		await context.api.schedules.runIn('checkTempHandler', checkInterval);	
 	}
 
-	// return the state of the fan
+	// return the state of the heater
 	return heaterState;
 }
 
 async function stopHeater( context ) {
-	// turn off fan
-	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
+	// turn off heater
+	const heaterOffSwitch = context.config.heaterOffSwitch;
+	if (heaterOffSwitch) {
+		await context.api.devices.sendCommands(context.config.heaterOffSwitch, 'switch', 'on');
+	} else {
+		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
+	}
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkTempHandler');
-	// reschedule fan start at specified time, if specified
+	// reschedule heater start at specified time, if specified
 	const startTime = context.configStringValue('startTime');
 	if (startTime) {
 		await context.api.schedules.runDaily('checkTempHandler', new Date(startTime));
@@ -63,11 +68,6 @@ async function stopHeater( context ) {
 module.exports = new SmartApp()
 .enableEventLogging()  // logs requests and responses as pretty-printed JSON
 .configureI18n()       // auto-create i18n files for localizing config pages
-
-
-// Turn heater off
-heaterOff() {
-}
 
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
@@ -113,15 +113,17 @@ heaterOff() {
 	await context.api.schedules.delete('checkTempHandler');
 	await context.api.schedules.delete('stopHeaterHandler');
 
-	// get fan enabled setting and turn off fan if not
+	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
 	console.log('Installed/Updated - heater enabled value: ', heaterEnabled);
 	if (!heaterEnabled) {
+		const heaterOffSwitch = context.config.heaterOffSwitch;
 		if (heaterOffSwitch) {
-		
-		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
+			await context.api.devices.sendCommands(context.config.heaterOffSwitch, 'switch', 'on');
+		} else {
+			await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
+		}
 	} else {
-
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
@@ -166,7 +168,7 @@ heaterOff() {
 					console.log('Installed/Updated - start controlling heater based on temperatures');
 					controlHeater(context);
 				} else {
-					// if outside time window, turn fan off
+					// if outside time window, turn heater off
 					await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');		
 				}
 			}		
@@ -180,7 +182,7 @@ heaterOff() {
 })
 
 
-// If fan manually turned off, cancel subsequent check temperature calls to control fan
+// If heater manually turned off, cancel subsequent check temperature calls to control heater
 .subscribedEventHandler('heaterSwitchOffHandler', async (context, event) => {
 	console.log('heaterSwitchOffHandler - started, heater switch turned off manually');
 	await context.api.schedules.delete('checkTempHandler');
@@ -189,7 +191,7 @@ heaterOff() {
 })
 
 
-// If one or more contacts open, resuming checking temperature to control fan
+// If one or more contacts open, resuming checking temperature to control heater
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - started');
 
@@ -203,7 +205,7 @@ heaterOff() {
 })
 
 
-// If contact is closed, see if they're all closed in which case stop fan
+// If contact is closed, see if they're all closed in which case stop heater
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - started');
 
@@ -227,7 +229,7 @@ heaterOff() {
 	}
 	console.log("Turn off lights after specified delay");
 
-	// If we got here, no other contact sensors are open so turn off fan 
+	// If we got here, no other contact sensors are open so turn off heater 
 	stopHeater(context);
 	console.log('contactClosedHandler - finished');
 })
@@ -241,7 +243,7 @@ heaterOff() {
 })
 
 
-// Check temperature and turn on/off fan as appropriate
+// Check temperature and turn on/off heater as appropriate
 .scheduledEventHandler('checkTempHandler', async (context, event) => {		
 	console.log('checkTempHandler - started');
 	controlHeater(context);
