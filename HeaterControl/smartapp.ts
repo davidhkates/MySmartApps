@@ -91,7 +91,7 @@ module.exports = new SmartApp()
 	// OPTIONAL: location mode values to control heater
 	page.section('locationMode', section => {
 		section.deviceSetting('homeStatus').capabilities(['locationMode'])
-			required(false).permissions('r');
+			.required(false).permissions('r');
 		section.enumSetting('modeValues').options('Daytime','Nighttime');
 	});
 
