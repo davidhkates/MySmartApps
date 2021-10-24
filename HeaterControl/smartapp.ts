@@ -64,6 +64,11 @@ module.exports = new SmartApp()
 .enableEventLogging()  // logs requests and responses as pretty-printed JSON
 .configureI18n()       // auto-create i18n files for localizing config pages
 
+
+// Turn heater off
+heaterOff() {
+}
+
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
 	// separate page for weather information
@@ -73,10 +78,12 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.numberSetting('tempTarget').required(false);
+		section.deviceSetting('heaterOnSwitch').capabilities(['switch'])
+			.required(true).permissions('rx');
+		section.deviceSetting('heaterOffSwitch').capabilities(['switch'])
+			.required(false).permissions('rx');
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 			.required(false).permissions('r');
-		section.deviceSetting('heaterSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
 	});
 
 	// OPTIONAL: contact sensors
@@ -110,6 +117,8 @@ module.exports = new SmartApp()
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
 	console.log('Installed/Updated - heater enabled value: ', heaterEnabled);
 	if (!heaterEnabled) {
+		if (heaterOffSwitch) {
+		
 		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	} else {
 
