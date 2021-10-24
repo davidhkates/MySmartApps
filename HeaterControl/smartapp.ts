@@ -88,6 +88,12 @@ module.exports = new SmartApp()
 })
 
 .page('optionsPage', (context, page, configData) => {
+	// OPTIONAL: location mode values to control heater
+	page.section('locationMode', section => {
+		section.deviceSetting('homeStatus').capabilities(['locationMode'])
+			required(false).permissions('r');
+		section.enumSetting('modeValues').options('Daytime','Nighttime');
+	});
 
 	// OPTIONAL: start and end time, outside weather, temp offset
 	page.section('time', section => {
