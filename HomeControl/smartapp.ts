@@ -49,7 +49,7 @@ module.exports = new SmartApp()
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
-	console.log("FanControl: Installed/Updated");
+	console.log("HomeControl: Installed/Updated");
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
