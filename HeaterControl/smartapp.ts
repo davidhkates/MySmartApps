@@ -48,12 +48,7 @@ async function controlHeater( context ) {
 
 async function stopHeater( context ) {
 	// turn off heater
-	const heaterOffSwitch = context.config.heaterOffSwitch;
-	if (heaterOffSwitch) {
-		await context.api.devices.sendCommands(context.config.heaterOffSwitch, 'switch', 'on');
-	} else {
-		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
-	}
+	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkTempHandler');
 	// reschedule heater start at specified time, if specified
@@ -78,10 +73,8 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.numberSetting('tempTarget').required(false);
-		section.deviceSetting('heaterOnSwitch').capabilities(['switch'])
+		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
-		section.deviceSetting('heaterOffSwitch').capabilities(['switch'])
-			.required(false).permissions('rx');
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 			.required(false).permissions('r');
 	});
@@ -117,12 +110,7 @@ module.exports = new SmartApp()
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
 	console.log('Installed/Updated - heater enabled value: ', heaterEnabled);
 	if (!heaterEnabled) {
-		const heaterOffSwitch = context.config.heaterOffSwitch;
-		if (heaterOffSwitch) {
-			await context.api.devices.sendCommands(context.config.heaterOffSwitch, 'switch', 'on');
-		} else {
-			await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
-		}
+		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	} else {
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
