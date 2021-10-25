@@ -53,74 +53,12 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('checkTemperature');
-	await context.api.schedules.delete('stopFanHandler');
-
-	// get fan enabled setting and turn off fan if not
-	const fanEnabled = context.configBooleanValue('fanEnabled');
-	console.log('Fan enabled value: ', fanEnabled);
-	if (!fanEnabled) {
-		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
-	} else {
-
-		// initialize state variable with current state of fan switch
-		SmartState.putState( context, 'fanState', 'off' );
-
-		// create subscriptions for relevant devices
-		await context.api.subscriptions.subscribeToDevices(context.config.fanSwitch,
-			'switch', 'switch.off', 'fanSwitchOffHandler');
-		if (context.config.doorContacts) {
-			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
-				'contactSensor', 'contact.open', 'contactOpenHandler');
-			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
-				'contactSensor', 'contact.closed', 'contactClosedHandler');
-		}
-
-		// check contact(s) state and turn off if all are closed
-		/*
-		var contactOpen = false;
-		const contactSensors =  context.config.doorContacts;
-		if (contactSensors) {
-			// Get the current states of the contact sensors
-			const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'contactSensor'
-			));
-
-			// Set contactOpen to true if at least one contact is open
-			const states: device = await Promise.all(stateRequests);
-			if (states.find(it => it.motion.value === 'open')) {
-				contactOpen = true;
-			}
-		} else {
-			contactOpen = true;
-		}
-		*/
-		
-		// set start and end time event handlers
-		const startTime = context.configStringValue("startTime");
-		const endTime   = context.configStringValue("endTime");
-		if (startTime) {
-			console.log('Set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
-			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
-			if (endTime) {
-				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
-				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-					console.log('Start controlling fan based on temperatures');
-					controlFan(context);
-				} else {
-					// if outside time window, turn fan off
-					await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');		
-				}
-			}		
-		} else {
-			console.log('No start time set, start controlling fan based on temperatures');
-			controlFan(context);
-		}
-	}
 	
-	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
+	// check current home status
+	console.log('Location mode: ', context.location);
+
+	
+	console.log('Home Control: Finished creating subscriptions')
 })
 
 
