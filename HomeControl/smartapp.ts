@@ -12,7 +12,7 @@ interface device {
 }
 
 // Utility functions for this automation
-async function controlHome( context ) {
+async function setHomeMode( context ) {
 }
 
 
@@ -70,7 +70,7 @@ module.exports = new SmartApp()
 	const fanState = SmartState.getState(context, 'fanState');
 	if (fanState === 'on') {
 		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
-		stopFan(context);
+		// stopFan(context);
 	}
 	console.log('fanSwitchOffHeandler - finished');
 })
@@ -84,7 +84,7 @@ module.exports = new SmartApp()
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {
 		// await context.api.schedules.runIn('checkTemperature', 0);
-		controlFan(context);
+		setHomeMode(context);
 	}
 })
 
@@ -114,19 +114,19 @@ module.exports = new SmartApp()
 	console.log("Turn off lights after specified delay");
 
 	// If we got here, no other contact sensors are open so turn off fan 
-	stopFan(context);
+	// stopFan(context);
 })
 
 
 // Handle end time if specified
 .scheduledEventHandler('stopFanHandler', async(context, event) => {
 	console.log("Turn off fan handler");
-	stopFan(context);
+	// stopFan(context);
 })
 
 
 // Check temperature and turn on/off fan as appropriate
 .scheduledEventHandler('checkTemperature', async (context, event) => {		
 	console.log("Check temperature");
-	controlFan(context);
+	setHomeMode(context);
 });
