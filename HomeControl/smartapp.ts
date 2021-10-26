@@ -55,7 +55,8 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 	
 	// check current home status
-	console.log('Location mode: ', context);
+	console.log('Locations: ', context.api.locations);
+	console.log('Modes: ', context.api.modes);
 	
 	console.log('Home Control: Finished creating subscriptions')
 })
