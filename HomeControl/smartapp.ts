@@ -64,15 +64,11 @@ module.exports = new SmartApp()
 
 // If fan manually turned off, cancel subsequent check temperature calls to control fan
 .subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
-	console.log('fanSwitchOffHeandler - started, fan switch manually turned off');
+	console.log('homeSwitchOffHeandler - started, fan switch manually turned off');
 	
 	// get fan state previously set by SmartApp
 	// const fanState = SmartState.getState(context, 'fanState');
-	if (fanState === 'on') {
-		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
-		// stopFan(context);
-	}
-	console.log('fanSwitchOffHeandler - finished');
+	console.log('homeSwitchOffHeandler - finished');
 })
 
 
