@@ -52,11 +52,10 @@ module.exports = new SmartApp()
 	console.log("HomeControl: Installed/Updated");
 
 	// unsubscribe all previously established subscriptions
-	await context.api.subscriptions.unsubscribeAll();
+	// await context.api.subscriptions.unsubscribeAll();
 	
 	// check current home status
 	console.log('Location mode: ', context);
-
 	
 	console.log('Home Control: Finished creating subscriptions')
 })
