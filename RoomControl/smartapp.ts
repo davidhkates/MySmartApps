@@ -357,13 +357,14 @@ module.exports = new SmartApp()
 // Turn off the lights only when all motion sensors become inactive
 // TODO: Turn on motion handler handler if being used to turn on lights
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
-	console.log('motionStopHandler starting');
+	console.log('motionStopHandler - starting');
 
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
 	if (otherSensors) {
+		console.log('motionStopeHandler - other sensors found');
 		// Get the current states of the other motion sensors
 		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
@@ -374,9 +375,11 @@ module.exports = new SmartApp()
 		// Quit if there are other sensor still active
 		const states: any = await Promise.all(stateRequests)
 		if (states.find(it => it.motion.value === 'active')) {
-			return
+			console.log('motionStopHandler - other motion sensors active');
+			return;
 		}
 	}
+	console.log('motionStopHandler - all other motion sensors inactive');
 
 	// const delay = context.configNumberValue('motionDelay')
 	// appSettings = await getCurrentSettings(context);
@@ -397,7 +400,7 @@ module.exports = new SmartApp()
 		await context.api.schedules.runIn('delayedSwitchOff', 60)
 	}
 	*/
-	await context.api.schedules.runIn('delayedSwitchOff', 900);
+	await context.api.schedules.runIn('delayedSwitchOff', delay);
 })
 
 
