@@ -4,7 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
 // const SmartUtils  = require('@katesthings/smartutils');
-const SmartState  = require('@katesthings/smartstate');
+// const SmartState  = require('@katesthings/smartstate');
 
 // SmartApp type definitions
 interface device {
@@ -67,7 +67,7 @@ module.exports = new SmartApp()
 	console.log('fanSwitchOffHeandler - started, fan switch manually turned off');
 	
 	// get fan state previously set by SmartApp
-	const fanState = SmartState.getState(context, 'fanState');
+	// const fanState = SmartState.getState(context, 'fanState');
 	if (fanState === 'on') {
 		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
 		// stopFan(context);
@@ -79,13 +79,7 @@ module.exports = new SmartApp()
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log("Contact open");
-
-	const startTime = new Date(context.configStringValue('startTime'));
-	const endTime   = new Date(context.configStringValue('endTime'));
-	if (SmartUtils.inTimeWindow(startTime, endTime)) {
-		// await context.api.schedules.runIn('checkTemperature', 0);
-		setHomeMode(context);
-	}
+	setHomeMode(context);
 })
 
 
