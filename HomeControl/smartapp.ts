@@ -4,7 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
 // const SmartUtils  = require('@katesthings/smartutils');
-// const SmartState  = require('@katesthings/smartstate');
+const SmartState  = require('@katesthings/smartstate');
 
 // SmartApp type definitions
 interface device {
@@ -49,16 +49,18 @@ module.exports = new SmartApp()
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
-	console.log("HomeControl: Installed/Updated");
+	console.log('homeControl - starting install/update');
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 	
 	// check current home status
+	SmartState.getState(context, 'smartapp-home-settings', 'Niwot');
+	
 	console.log('Locations: ', context.api.locations);
 	console.log('Modes: ', context.api.modes);
 	
-	console.log('Home Control: Finished creating subscriptions')
+	console.log('homeControl - finished creating subscriptions')
 })
 
 

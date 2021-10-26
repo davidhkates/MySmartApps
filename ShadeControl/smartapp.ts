@@ -1,7 +1,7 @@
 // import required node packages
 const SmartApp   = require('@smartthings/smartapp');
 const SmartState = require('@katesthings/smartstate');
-// const SmartSensor = require('@katesthings/smartcontrols');
+// const SmartDevice = require('@katesthings/smartdevice');
 
 
 // get the state of specified switch
