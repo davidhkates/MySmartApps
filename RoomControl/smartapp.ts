@@ -204,7 +204,7 @@ module.exports = new SmartApp()
 	}
 	
 	// Schedule turning off room switch if delay specified
-	const delay = context.getStringValue('motionDelay');
+	const delay = context.configNumberValue('motionDelay');
 	console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
 	if (delay) {
 		await context.api.schedules.runIn('delayedSwitchOff', delay);
