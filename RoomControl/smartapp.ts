@@ -394,7 +394,7 @@ module.exports = new SmartApp()
 	// const delay = context.configNumberValue('motionDelay')
 	// appSettings = await getCurrentSettings(context);
 	// const delay = getSettingValue(context, 'motionDelay');
-	const delay = context.getStringValue('motionDelay');
+	const delay = context.configNumberValue('motionDelay');
 	console.log('motionStopHandler - turn off lights after specified delay: ' + delay);	
 
 	if (delay) {
