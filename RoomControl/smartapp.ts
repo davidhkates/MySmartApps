@@ -110,7 +110,7 @@ module.exports = new SmartApp()
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log("Installed/Updated - start creating subscriptions");
+	console.log('roomControl - start install/update');
 	// console.log('Context, room speakers: ', context.config.roomSpeakers);
 	// console.log('Context, on group: ', context.config.onGroup);
 	
@@ -128,12 +128,12 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 		// await context.api.devices.sendCommands(context.config.delayGroup, 'switch', 'off');
 	} else {
-
 		// Get current appSettings to determine which devices need subscriptions 
 		// appSettings = await getCurrentSettings(context);
 		// console.log('App settings: ', appSettings);
 
 		// create subscriptions for relevant devices
+		console.log('roomControl - create subscriptions');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomSwitch,
 		    'switch', 'switch.on', 'roomSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomSwitch,
@@ -145,12 +145,10 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'groupOffHandler');
 
 		// initialize motion behavior
-		/*
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
-		*/
 
 		// initialize contact behaviors
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
@@ -162,8 +160,7 @@ module.exports = new SmartApp()
 		// await scheduleEndHandler(context);
 		
 	}	
-	// console.log('RoomControl: END CREATING SUBSCRIPTIONS');
-	console.log('End creating subscriptions');
+	console.log('roomControl - end creating subscriptions');
 })
 
 
@@ -204,6 +201,13 @@ module.exports = new SmartApp()
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			}
 		}
+	}
+	
+	// Schedule turning off room switch if delay specified
+	const delay = context.getStringValue('motionDelay');
+	console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
+	if (delay) {
+		await context.api.schedules.runIn('delayedSwitchOff', delay);
 	}
 })
 
@@ -272,7 +276,7 @@ module.exports = new SmartApp()
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
-	console.log('groupOnHandler starting');
+	console.log('groupOnHandler - starting');
 
 	// indicate main switch was NOT manually pressed
 	// stateVariable.putState( context.event.appId, 'roomSwitchPressed', 'false' );
@@ -315,7 +319,13 @@ module.exports = new SmartApp()
 // Turn on lights when motion occurs during defined times if dependent lights are on
 // TODO: turn off handler once lights are turned on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
-	console.log('motionStartHandler - starting');
+	console.log('motionStartHandler - start');
+
+	// turn on room switch
+	console.log('motionStartHandler - turning room light(s) on');
+	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
+	
+	/*
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
 	// const motionBehavior = getSettingValue(context, 'motionBehavior');
@@ -323,7 +333,6 @@ module.exports = new SmartApp()
 
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
-	/*
 	const checkSwitches = context.config.checkSwitches;
 	console.log("Check switches: " + checkSwitches);
 	if (checkSwitches) {
@@ -338,7 +347,6 @@ module.exports = new SmartApp()
 		console.log("Switch states: " + switchStates);
 		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
 	}
-	*/
 	
 	// turn on light if in time window and check switch(es) are on
 	console.log('Checking motionBehavior and check switch values: ' + motionBehavior);
@@ -348,9 +356,11 @@ module.exports = new SmartApp()
 		// console.log('Unsubscribe from room motion sensor: ', context);
 		// await context.api.subscriptions.unsubscribe('motionStartHandler');
 	}
+	*/
 	
 	// Cancel delayed off switch handler
-	// await context.api.schedules.delete('delayedSwitchOff');
+	await context.api.schedules.delete('delayedSwitchOff');
+	console.log('motionStartHandler - end');
 })
 
 
@@ -385,22 +395,18 @@ module.exports = new SmartApp()
 	// appSettings = await getCurrentSettings(context);
 	// const delay = getSettingValue(context, 'motionDelay');
 	const delay = context.getStringValue('motionDelay');
-	console.log("Turn off lights after specified delay: " + delay);
-	
+	console.log('motionStopHandler - turn off lights after specified delay: ' + delay);	
 
-	/*
 	if (delay) {
-		// Schedule turn off if delay is set
-		console.log("Subscribing to delayedSwitchOff routine after specified delay: ", delay);
+		// Schedule turning off room switch if delay is set
+		console.log('motionStopHandler - run delayedSwitchOff after specified delay: ', delay);
 		await context.api.schedules.runIn('delayedSwitchOff', delay)
 	} else {
-		// Turn off immediately if no delay
-		// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-		console.log("Subscribing to delayedSwitchOff routine with 60 second delay");
-		await context.api.schedules.runIn('delayedSwitchOff', 60)
+		// Turn room switch off immediately if no delay
+		console.log('motionStopHandler - turn room switch off immediately');
+		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	}
-	*/
-	await context.api.schedules.runIn('delayedSwitchOff', delay);
+	// await context.api.schedules.runIn('delayedSwitchOff', delay);
 })
 
 
@@ -469,12 +475,12 @@ module.exports = new SmartApp()
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedGroupOff', async (context, event) => {
-	console.log('delayedGroupOff starting');
+	console.log('delayedGroupOff - starting');
 	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 })
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
-	console.log('delayedSwitchOff starting');
+	console.log('delayedSwitchOff - starting');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 });
