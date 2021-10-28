@@ -90,7 +90,7 @@ module.exports = new SmartApp()
 	// Schedule turning off room switch if delay specified
 	const duration = context.configNumberValue('onDuration');
 	console.log('homeSwitchOnHandler - set home status/mode after specified duration: ' + duration);	
-	if (delay) {
+	if (duration) {
 		await context.api.schedules.runIn('delayedSetMode', duration);
 	}
 	
