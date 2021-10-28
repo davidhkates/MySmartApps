@@ -30,7 +30,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		// section.booleanSetting('controlEnabled').defaultValue(true);
 		section.deviceSetting('homeSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
+			.required(true).permissions('r');
 		section.deviceSetting('homeMotion').capabilities(['motionSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
@@ -53,24 +53,51 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
+
+	// register activities of home control sensors
+	await context.api.subscriptions.subscribeToDevices(context.config.homeSwitch,
+		'switch', 'switch.on', 'homeSwitchOnHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.homeSwitch,
+		'switch', 'switch.off', 'homeSwitchOffHandler');
 	
-	// check current home status
-	SmartState.getState(context, 'smartapp-home-settings', 'Niwot');
-	
-	console.log('Locations: ', context.api.locations);
-	console.log('Modes: ', context.api.modes);
+	// initialize motion behavior
+	await context.api.subscriptions.subscribeToDevices(context.config.homeMotion,
+		'motionSensor', 'motion.active', 'motionStartHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.homeMotion,
+		'motionSensor', 'motion.inactive', 'motionStopHandler');
+
+	// initialize contact behaviors
+	await context.api.subscriptions.subscribeToDevices(context.config.homeContacts,
+		'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+	await context.api.subscriptions.subscribeToDevices(context.config.homeContacts,
+		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 	
 	console.log('homeControl - finished creating subscriptions')
 })
 
 
-// If fan manually turned off, cancel subsequent check temperature calls to control fan
-.subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
-	console.log('homeSwitchOffHeandler - started, fan switch manually turned off');
+// When home control switch turned on, set timer to update home status/mode
+.subscribedEventHandler('homeSwitchOnHandler', async (context, event) => {
+	console.log('homeSwitchOnHandler - started');
+
+	// Schedule turning off room switch if delay specified
+	const delay = context.configNumberValue('onDuration');
+	console.log('homeSwitchOnHandler - set home status/mode after specified delay: ' + delay);	
+	if (delay) {
+		await context.api.schedules.runIn('delayedSetMode', delay);
+	}
 	
-	// get fan state previously set by SmartApp
-	// const fanState = SmartState.getState(context, 'fanState');
-	console.log('homeSwitchOffHeandler - finished');
+	console.log('homeSwitchOnHandler - finished');
+})
+
+
+// If home switch turned off, cancel call to delayedSetMode
+.subscribedEventHandler('homeSwitchOffHandler', async (context, event) => {
+	console.log('homeSwitchOffHandler - starting');
+	
+	await context.api.subscriptions.delete('delayedSetMode');
+		
+	console.log('homeSwitchOffHandler - finished');
 })
 
 
@@ -111,14 +138,15 @@ module.exports = new SmartApp()
 
 
 // Handle end time if specified
-.scheduledEventHandler('stopFanHandler', async(context, event) => {
-	console.log("Turn off fan handler");
-	// stopFan(context);
+.scheduledEventHandler('delayedSetMode', async(context, event) => {
+	console.log('delayedSetMode - starting set home status/mode');
+	// check current home status
+	SmartState.putValue('smartapp-home-settings', 'Niwot', 'awake');
 })
 
 
 // Check temperature and turn on/off fan as appropriate
-.scheduledEventHandler('checkTemperature', async (context, event) => {		
-	console.log("Check temperature");
-	setHomeMode(context);
+.scheduledEventHandler('resetHomeMode', async (context, event) => {		
+	console.log('resetHomeMode - starting reset home status/mode');
+	SmartState.putValue('smartapp-home-settings', 'Niwot', 'asleep');
 });
