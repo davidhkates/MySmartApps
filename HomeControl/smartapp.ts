@@ -29,6 +29,7 @@ module.exports = new SmartApp()
 	// operating switch and controls to set home status
 	page.section('controls', section => {
 		// section.booleanSetting('controlEnabled').defaultValue(true);
+		section.stringSetting('homeName').required(true);
 		section.deviceSetting('homeSwitch').capabilities(['switch'])
 			.required(true).permissions('r');
 		section.deviceSetting('homeMotion').capabilities(['motionSensor'])
@@ -54,6 +55,10 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
+	const homeName = context.configStringValue('homeName');
+	const returnValue = SmartState.getValue('smartapp-home-settings', homeName);
+	console.log('homeControl - current mode for home: ', homeName, ' = ', returnValue);
+	
 	// register activities of home control sensors
 	await context.api.subscriptions.subscribeToDevices(context.config.homeSwitch,
 		'switch', 'switch.on', 'homeSwitchOnHandler');
@@ -108,16 +113,16 @@ module.exports = new SmartApp()
 })
 
 
-// If one or more contacts open, resuming checking temperature to control fan
+// If one or more contacts open, set home mode to AWAY
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log("Contact open");
-	setHomeMode(context);
+	console.log('contactOpenHandler - trigger to change home mode to AWAY');
+	// setHomeMode(context);
 })
 
 
-// If contact is closed, see if they're all closed in which case stop fan
+// If contact is closed, see if they're all closed in which case set home mode to HOME
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log("Contact closed");
+	console.log('contactClosedHandler - check other selected contacts, if any');
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.contactSensors
@@ -137,7 +142,7 @@ module.exports = new SmartApp()
 			return
 		}
 	}
-	console.log("Turn off lights after specified delay");
+	console.log('contactClosedHandler - change home mode to HOME');
 
 	// If we got here, no other contact sensors are open so turn off fan 
 	// stopFan(context);
@@ -148,12 +153,14 @@ module.exports = new SmartApp()
 .scheduledEventHandler('delayedSetMode', async(context, event) => {
 	console.log('delayedSetMode - starting set home status/mode');
 	// check current home status
-	SmartState.putValue('smartapp-home-settings', 'Niwot', 'awake');
+	const homeName = context.configStringValue('homeName');
+	SmartState.putValue('smartapp-home-settings', homeName, 'awake');
 })
 
 
 // Check temperature and turn on/off fan as appropriate
 .scheduledEventHandler('resetHomeMode', async (context, event) => {		
 	console.log('resetHomeMode - starting reset home status/mode');
-	SmartState.putValue('smartapp-home-settings', 'Niwot', 'asleep');
+	const homeName = context.configStringValue('homeName');
+	SmartState.putValue('smartapp-home-settings', homeName, 'asleep');
 });
