@@ -72,6 +72,13 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.subscribeToDevices(context.config.homeContacts,
 		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 	
+	// set end time event handler
+	// const startTime = context.configStringValue("startTime");
+	const endTime   = context.configStringValue("endTime");
+	if (endTime) {
+		await context.api.schedules.runDaily('resetHomeMode', new Date(endTime));
+	}		
+	
 	console.log('homeControl - finished creating subscriptions')
 })
 
@@ -81,10 +88,10 @@ module.exports = new SmartApp()
 	console.log('homeSwitchOnHandler - started');
 
 	// Schedule turning off room switch if delay specified
-	const delay = context.configNumberValue('onDuration');
-	console.log('homeSwitchOnHandler - set home status/mode after specified delay: ' + delay);	
+	const duration = context.configNumberValue('onDuration');
+	console.log('homeSwitchOnHandler - set home status/mode after specified duration: ' + duration);	
 	if (delay) {
-		await context.api.schedules.runIn('delayedSetMode', delay);
+		await context.api.schedules.runIn('delayedSetMode', duration);
 	}
 	
 	console.log('homeSwitchOnHandler - finished');

@@ -13,10 +13,10 @@
 	"pages.optionsPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
 	"pages.optionsPage.settings.contactsOpenClosed.options.Open.name": "Open",
 	"pages.optionsPage.settings.contactsOpenClosed.options.Closed.name": "Closed",
-	"pages.optionsPage.sections.time.name": "Time of day to operate",
-	"pages.optionsPage.settings.startTime.name": "Start time (optional)",
-	"pages.optionsPage.settings.startTime.description": "Time when fan should start operating",
-	"pages.optionsPage.settings.endTime.name": "End time (optional)",
-	"pages.optionsPage.settings.endTime.description": "Time when fan should stop operating",
-	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
+	"pages.mainPage.sections.time.name": "Time of day to monitor home status",
+	"pages.mainPage.settings.startTime.name": "Start time (optional)",
+	"pages.mainPage.settings.startTime.description": "Time to start monitoring home status",
+	"pages.mainPage.settings.endTime.name": "End time (optional)",
+	"pages.mainPage.settings.endTime.description": "Time to stop monitoring home status",
+	"pages.mainPage.settings.onDuration.name": "Duration for switch to be on to set awake"
 }
