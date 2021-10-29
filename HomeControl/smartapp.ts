@@ -29,7 +29,7 @@ module.exports = new SmartApp()
 	// operating switch and controls to set home status
 	page.section('controls', section => {
 		// section.booleanSetting('controlEnabled').defaultValue(true);
-		section.stringSetting('homeName').required(true);
+		section.textSetting('homeName').required(true);
 		section.deviceSetting('homeSwitch').capabilities(['switch'])
 			.required(true).permissions('r');
 		section.deviceSetting('homeMotion').capabilities(['motionSensor'])
