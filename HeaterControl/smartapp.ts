@@ -229,9 +229,9 @@ module.exports = new SmartApp()
 			return
 		}
 	}
-	console.log("Turn off lights after specified delay");
 
 	// If we got here, no other contact sensors are open so turn off heater 
+	console.log('contactClosedHandler - one or more contacts closed, turn off heater');
 	stopHeater(context);
 	console.log('contactClosedHandler - finished');
 })
@@ -239,15 +239,13 @@ module.exports = new SmartApp()
 
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
-	console.log('stopHeaterHandler - starting');
+	console.log('stopHeaterHandler - turn off heater');
 	stopHeater(context);
-	console.log('stopHeaterHandler - finished');
 })
 
 
 // Check temperature and turn on/off heater as appropriate
 .scheduledEventHandler('checkTempHandler', async (context, event) => {		
-	console.log('checkTempHandler - started');
+	console.log('checkTempHandler - start controlling heater');
 	controlHeater(context);
-	console.log('checkTempHandler - finished');
 });
