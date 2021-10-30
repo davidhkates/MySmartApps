@@ -55,9 +55,11 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
+/*
 	const homeName = context.configStringValue('homeName');
 	const returnValue = await SmartState.getHomeMode(homeName, 'occupancy');
 	console.log('homeControl - current mode for home occupancy: ', homeName, ' = ', returnValue);
+*/
 	
 	// register activities of home control sensors
 	await context.api.subscriptions.subscribeToDevices(context.config.homeSwitch,
@@ -113,10 +115,10 @@ module.exports = new SmartApp()
 })
 
 
-// If one or more contacts open, set home mode to AWAY
+// If one or more contacts open, set home occupancy mode to awake
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log('contactOpenHandler - trigger to change home mode to AWAY');
-	// setHomeMode(context);
+	console.log('contactOpenHandler - trigger to change home occupancy mode to AWAY');
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'awake');
 })
 
 
@@ -142,10 +144,10 @@ module.exports = new SmartApp()
 			return
 		}
 	}
-	console.log('contactClosedHandler - change home mode to HOME');
 
-	// If we got here, no other contact sensors are open so turn off fan 
-	// stopFan(context);
+	// If we got here, no set home occupancy mode to active 
+	console.log('contactClosedHandler - change home occupancy mode to active');
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
 })
 
 
@@ -153,14 +155,12 @@ module.exports = new SmartApp()
 .scheduledEventHandler('delayedSetMode', async(context, event) => {
 	console.log('delayedSetMode - starting set home status/mode');
 	// check current home status
-	const homeName = context.configStringValue('homeName');
-	SmartState.putHomeMode(homeName, 'occupancy', 'awake');
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'awake');
 })
 
 
 // Check temperature and turn on/off fan as appropriate
 .scheduledEventHandler('resetHomeMode', async (context, event) => {		
 	console.log('resetHomeMode - starting reset home status/mode');
-	const homeName = context.configStringValue('homeName');
-	SmartState.putHomeMode(homeName, 'occupancy', 'asleep');
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'asleep');
 });
