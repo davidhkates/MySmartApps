@@ -28,8 +28,8 @@ async function controlHeater( context ) {
 		
 	// Get temperature(s) and set heater state
 	const targetTemp = context.configNumberValue('tempTarget');
-	console.log('controlHeater - target temperature: ', targetTemp);
-	if (targetTemp && (homeName==='awake')) {
+	console.log('controlHeater - target temperature: ', targetTemp, ' home mode: ', homeMode);
+	if (targetTemp && (homeMode==='awake')) {
 		// const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
 
 
