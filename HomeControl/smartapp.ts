@@ -34,7 +34,7 @@ module.exports = new SmartApp()
 			.required(true).permissions('r');
 		section.deviceSetting('homeMotion').capabilities(['motionSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
+		section.deviceSetting('homeContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
 	});
@@ -56,7 +56,7 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	const homeName = context.configStringValue('homeName');
-	const returnValue = SmartState.getHomeMode(homeName, 'occupancy');
+	const returnValue = await SmartState.getHomeMode(homeName, 'occupancy');
 	console.log('homeControl - current mode for home occupancy: ', homeName, ' = ', returnValue);
 	
 	// register activities of home control sensors
