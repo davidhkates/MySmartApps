@@ -56,7 +56,7 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	const homeName = context.configStringValue('homeName');
-	const returnValue = SmartState.getHomeMode(context, homeName, 'occupancy');
+	const returnValue = SmartState.getHomeMode(homeName, 'occupancy');
 	console.log('homeControl - current mode for home occupancy: ', homeName, ' = ', returnValue);
 	
 	// register activities of home control sensors
@@ -154,7 +154,7 @@ module.exports = new SmartApp()
 	console.log('delayedSetMode - starting set home status/mode');
 	// check current home status
 	const homeName = context.configStringValue('homeName');
-	SmartState.putHomeMode(context, homeName, 'occupancy', 'awake');
+	SmartState.putHomeMode(homeName, 'occupancy', 'awake');
 })
 
 
@@ -162,5 +162,5 @@ module.exports = new SmartApp()
 .scheduledEventHandler('resetHomeMode', async (context, event) => {		
 	console.log('resetHomeMode - starting reset home status/mode');
 	const homeName = context.configStringValue('homeName');
-	SmartState.putHomeMode(context, homeName, 'occupancy', 'asleep');
+	SmartState.putHomeMode(homeName, 'occupancy', 'asleep');
 });
