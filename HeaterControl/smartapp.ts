@@ -4,6 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
 const SmartUtils  = require('@katesthings/smartutils');
+const SmartState  = require('@katesthings/smartstate');
 
 // SmartApp type definitions
 interface device {
@@ -79,23 +80,20 @@ module.exports = new SmartApp()
 			.required(false).permissions('r');
 	});
 
+	// OPTIONAL: location mode values to control heater
+	page.section('locationMode', section => {
+		section.textSetting('homeName').required(false);
+		section.textSetting('modeType').required(false);
+	});
+})
+
+.page('optionsPage', (context, page, configData) => {
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
 	});
-})
-
-.page('optionsPage', (context, page, configData) => {
-	/*
-	// OPTIONAL: location mode values to control heater
-	page.section('locationMode', section => {
-		section.deviceSetting('homeStatus').capabilities(['locationMode'])
-			.required(false).permissions('r');
-		section.enumSetting('modeValues').options('Daytime','Nighttime');
-	});
-	*/
 
 	// OPTIONAL: start and end time, outside weather, temp offset
 	page.section('time', section => {

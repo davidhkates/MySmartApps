@@ -9,11 +9,15 @@
 	"pages.mainPage.settings.tempSensor.name": "Indoor temperature sensor (optional)",
 	"pages.mainPage.settings.heaterSwitch.name": "Heater switch",
 
-	"pages.mainPage.sections.contactSensors.name": "Door/window contacts to check",
-	"pages.mainPage.settings.doorContacts.name": "Doors/windows to check (optional)",
-	"pages.mainPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
-	"pages.mainPage.settings.contactsOpenClosed.options.Open.name": "Open",
-	"pages.mainPage.settings.contactsOpenClosed.options.Closed.name": "Closed",
+	"pages.mainPage.sections.locationMode.name": "Enter values to control heater based on location",
+	"pages.mainPage.sections.homeName.name": "Name of home to check (optional)",
+	"pages.mainPage.settings.modeType.name": "Mode type to establish occupancy",
+
+	"pages.optionsPage.sections.contactSensors.name": "Door/window contacts to check",
+	"pages.optionsPage.settings.doorContacts.name": "Doors/windows to check (optional)",
+	"pages.optionsPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
+	"pages.optionsPage.settings.contactsOpenClosed.options.Open.name": "Open",
+	"pages.optionsPage.settings.contactsOpenClosed.options.Closed.name": "Closed",
 	
 	"pages.optionsPage.name": "Heater Control (options)",
 	"pages.optionsPage.sections.time.name": "Time of day to operate",

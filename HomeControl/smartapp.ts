@@ -12,8 +12,6 @@ interface device {
 }
 
 // Utility functions for this automation
-async function setHomeMode( context ) {
-}
 
 
 // Define the SmartApp
