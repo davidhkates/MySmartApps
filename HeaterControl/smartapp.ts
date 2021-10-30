@@ -15,17 +15,25 @@ interface device {
 // Utility functions for this automation
 async function controlHeater( context ) {
 	// default heater state to ON
-	console.log('controlHeater - starting, default heater state to ON');
-	var heaterState = 'on';
+	console.log('controlHeater - starting, default heater state to OFF');
+	var heaterState = 'off';
+	var homeMode = 'awake';
 	
+	// Check home status if specified
+	const homeName = context.configStringValue('homeName');
+	if (homeName) {
+		homeMode = await SmartState.getHomeMode(homeName, 'occupancy');
+		console.log('controlHeater - current mode for home occupancy: ', homeName, ' = ', homeMode);
+	}
+		
 	// Get temperature(s) and set heater state
 	const targetTemp = context.configNumberValue('tempTarget');
-	if (targetTemp) {
+	if (targetTemp && (homeName==='awake')) {
 		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor );
 		if (indoorTemp) {
 			console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
-			if ( indoorTemp>targetTemp ) {
-				heaterState = 'off';
+			if ( indoorTemp<targetTemp ) {
+				heaterState = 'on';
 				// heaterState = ( indoorTemp>targetTemp ? 'off' : 'on' );
 			}
 		}
