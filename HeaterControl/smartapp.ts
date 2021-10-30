@@ -239,7 +239,7 @@ module.exports = new SmartApp()
 
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
-	console.log('stopHeaterHandler - started');
+	console.log('stopHeaterHandler - starting');
 	stopHeater(context);
 	console.log('stopHeaterHandler - finished');
 })
