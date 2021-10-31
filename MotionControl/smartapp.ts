@@ -4,6 +4,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 // const SmartDevice = require('@katesthings/smartdevice');
 const SmartUtils  = require('@katesthings/smartutils');
+const SmartState  = require('@katesthings/smartstate');
 
 
 /* Define the SmartApp */
@@ -17,51 +18,29 @@ module.exports = new SmartApp()
 
 	// enable/disable control, motion delay setting
 	page.section('parameters', section => {
-		section
-			.booleanSetting('controlEnabled')
-			.required(false);
-		section
-			.numberSetting('delay')
-			.defaultValue(300)
-			.required(false);
+		section.booleanSetting('controlEnabled').required(false);
+		section.textSetting('homeName').required(false);
+		section.deviceSetting('homeLocation').capabilities(['locationMode'])
+			.required(false).permissions('rx');
+		section.numberSetting('delay').defaultValue(300).required(false);
 	});
 
 	// controls and sensors
 	page.section('controls', section => {
-		section
-			.deviceSetting('motion')
-			.capabilities(['motionSensor'])
-			.required(true)
-			.multiple(true)
-			.permissions('r');
-		section
-			.deviceSetting('lightSwitch')
-			.capabilities(['switch'])
-			.required(true)
-			.multiple(true)
-			.permissions('rx');
-		section
-			.deviceSetting('checkSwitches')
-			.capabilities(['switch'])
-			.required(false)
-			.multiple(true)
-			.permissions('r');
-		section
-			.deviceSetting('contacts')
-			.capabilities(['contactSensor'])
-			.required(false)
-			.multiple(true)
-			.permissions('r');
+		section.deviceSetting('motion').capabilities(['motionSensor'])
+			.required(true).multiple(true).permissions('r');
+		section.deviceSetting('lightSwitch').capabilities(['switch'])
+			.required(true).multiple(true).permissions('rx');
+		section.deviceSetting('checkSwitches').capabilities(['switch'])
+			.required(false).multiple(true).permissions('r');
+		section.deviceSetting('contacts').capabilities(['contactSensor'])
+			.required(false).multiple(true).permissions('r');
 	});
 
 	// start and end time (assumes daytime therefore startTime < endTime)
 	page.section('time', section => {
-		section
-			.timeSetting('startTime')
-			.required(false);
-		section
-			.timeSetting('endTime')
-			.required(false);
+		section.timeSetting('startTime').required(false);
+		section.timeSetting('endTime').required(false);
 	});
 })
 
@@ -70,14 +49,14 @@ module.exports = new SmartApp()
 // Called for both INSTALLED and UPDATED lifecycle events if there is
 // no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log("MotionControl: Installed/Updated");
+	console.log('motionControl: Installed/Updated');
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
-	console.log('Control enabled value: ', controlEnabled);
+	console.log('motionControl - control enabled value: ', controlEnabled);
 	if (!controlEnabled) {
 		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
 	} else {
@@ -89,7 +68,7 @@ module.exports = new SmartApp()
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
 	}
 	
-	console.log('MotionControl: END CREATING SUBSCRIPTIONS')
+	console.log('motionControl - END CREATING SUBSCRIPTIONS')
 })
 
 
@@ -105,7 +84,7 @@ module.exports = new SmartApp()
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
 	const checkSwitches = context.config.checkSwitches;
-	console.log("Check switches: ", checkSwitches);
+	console.log('motionStartHandler - check switches: ', checkSwitches);
 	if (checkSwitches) {
 		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
@@ -115,13 +94,18 @@ module.exports = new SmartApp()
 		
 		//set check switch to true if any switch is on
 		const switchStates = await Promise.all(stateRequests);
-		console.log("Switch states: ", switchStates);
 		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
+		console.log('motionStartHandler - are any of check switch(es) on?: ', bCheckSwitch);
 	}
-	
+
+	// check to see if home is active
+	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
+	console.log('controlHeater - home is active: ', bHomeActive);
+	bCheckSwitch = bCheckSwitch || bHomeActive;
+
 	// turn on light if in time window and check switch(es) are on
 	if ( bTimeWindow && bCheckSwitch ) {
-		console.log('Turning light(s) on');
+		console.log('motionStartHandler - turning light(s) on');
 		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'on');
 	}
 })

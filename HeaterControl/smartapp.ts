@@ -14,24 +14,24 @@ interface device {
 
 // Utility functions for this automation
 async function controlHeater( context ) {
-	// default heater state to ON
-	console.log('controlHeater - starting, default heater state to OFF');
-	var heaterState = 'off';
-	var homeMode = 'awake';
-	
 	// Check home status if specified
+	/*
+	var homeMode = 'awake';
 	const homeName = context.configStringValue('homeName');
 	if (homeName) {
 		homeMode = await SmartState.getHomeMode(homeName, 'occupancy');
 		console.log('controlHeater - current mode for home occupancy: ', homeName, ' = ', homeMode);
 	}
-	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	*/
+	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
 	console.log('controlHeater - home is active: ', bHomeActive);
 		
-	// Get temperature(s) and set heater state
+	// Get temperature(s) and set heater state, default heater state to off
+	var heaterState = 'off';	
 	const targetTemp = context.configNumberValue('tempTarget');
 	console.log('controlHeater - target temperature: ', targetTemp, ' home mode: ', homeMode);
-	if (targetTemp && (homeMode==='awake')) {
+	// if (targetTemp && (homeMode==='awake')) 
+	if (targetTemp && bHomeActive) {
 		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
 		if (indoorTemp) {
 			console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
@@ -84,17 +84,12 @@ module.exports = new SmartApp()
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
+		section.textSetting('homeName').required(false);
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 			.required(false).permissions('r');
-	});
-
-	// OPTIONAL: location mode values to control heater
-	page.section('locationMode', section => {
-		section.textSetting('homeName').required(false);
-		section.textSetting('modeType').required(false);
 	});
 })
 
