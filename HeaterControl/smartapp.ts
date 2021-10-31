@@ -25,8 +25,8 @@ async function controlHeater( context ) {
 		homeMode = await SmartState.getHomeMode(homeName, 'occupancy');
 		console.log('controlHeater - current mode for home occupancy: ', homeName, ' = ', homeMode);
 	}
-	const bOccupied: boolean = await SmartState.isHomeOccupied(homeName);
-	console.log('controlHeater - home is occupied: ', bOccupied);
+	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	console.log('controlHeater - home is active: ', bHomeActive);
 		
 	// Get temperature(s) and set heater state
 	const targetTemp = context.configNumberValue('tempTarget');
@@ -125,7 +125,7 @@ module.exports = new SmartApp()
 
 	// test the new isOccupied function
 	const homeName = context.configStringValue('homeName');
-	const bOccupied: boolean = await SmartState.isHomeOccupied(homeName);
+	const bOccupied: boolean = await SmartState.isHomeActive(homeName);
 	console.log('Test isOccupied: ', bOccupied);	
 	
 	// get heater enabled setting and turn off heater if not
