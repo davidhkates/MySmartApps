@@ -126,7 +126,7 @@ module.exports = new SmartApp()
 	// test the new isOccupied function
 	const homeName = context.configStringValue('homeName');
 	const bOccupied: boolean = await SmartState.isHomeOccupied(homeName);
-	console.log('Test isOccupied: ', isOccupied( homeName ));	
+	console.log('Test isOccupied: ', bOccupied);	
 	
 	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
