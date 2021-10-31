@@ -98,7 +98,7 @@ module.exports = new SmartApp()
 		));
 		
 		//set check switch to true if any switch is on
-		const switchStates = await Promise.all(stateRequests);
+		const switchStates: any = await Promise.all(stateRequests);
 		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
 		console.log('motionStartHandler - are any of check switch(es) on?: ', bCheckSwitch);
 	}
