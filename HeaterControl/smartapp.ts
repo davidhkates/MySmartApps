@@ -123,6 +123,11 @@ module.exports = new SmartApp()
 	await context.api.schedules.delete('checkTempHandler');
 	await context.api.schedules.delete('stopHeaterHandler');
 
+	// test the new isOccupied function
+	const homeName = context.configStringValue('homeName');
+	const bOccupied: boolean = await SmartState.isHomeOccupied(homeName);
+	console.log('Test isOccupied: ', isOccupied( homeName ));	
+	
 	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
 	console.log('Installed/Updated - heater enabled value: ', heaterEnabled);
