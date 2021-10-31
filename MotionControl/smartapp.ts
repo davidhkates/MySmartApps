@@ -6,6 +6,11 @@ const SmartApp = require('@smartthings/smartapp');
 const SmartUtils  = require('@katesthings/smartutils');
 const SmartState  = require('@katesthings/smartstate');
 
+// SmartApp type definitions
+interface device {
+	[value: string]: any
+}
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
