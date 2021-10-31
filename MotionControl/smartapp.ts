@@ -25,8 +25,6 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').required(false);
 		section.textSetting('homeName').required(false);
-		section.deviceSetting('homeLocation').capabilities(['locationMode'])
-			.required(false).permissions('rx');
 		section.numberSetting('delay').defaultValue(300).required(false);
 	});
 
