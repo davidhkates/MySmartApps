@@ -47,9 +47,10 @@ async function controlHeater( context ) {
 	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', heaterState);
 
 	// call next temperature check after interval (in seconds) if target temp set until end time (if specified)
-	const endTime   = context.configStringValue("endTime");
-	if (endTime && targetTemp) {
-		console.log('controlHeater - recursive call to check interval again until endTime');
+	// const endTime = context.configStringValue('endTime');
+	// if (endTime && targetTemp) {
+	if (targetTemp) {
+		console.log('controlHeater - recursive call to check temperature');
 		const checkInterval = context.configNumberValue('checkInterval');
 		await context.api.schedules.runIn('checkTempHandler', checkInterval);	
 	}
