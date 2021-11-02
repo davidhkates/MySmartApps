@@ -10,7 +10,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
 const SmartUtils  = require('@katesthings/smartutils');
-// const SmartState  = require('@katesthings/smartstate');
+const SmartState  = require('@katesthings/smartstate');
 
 // SmartApp type definitions
 interface device {
@@ -209,6 +209,10 @@ module.exports = new SmartApp()
 	if (delay) {
 		await context.api.schedules.runIn('delayedSwitchOff', delay);
 	}
+	
+	// save state variable to indicate room should be turned off immediately
+	SmartState.putState(context, 'roomOff', 'immediate');		
+	
 })
 
 
@@ -224,15 +228,16 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 	
-	// console.log('Start time', startTime);
 	console.log('roomSwitchOffHandler - in time window: ', bTimeWindow);
-	// if (!startTime || !bTimeWindow) {	
 	if (!bTimeWindow) {	
 		console.log('roomSwitchOffHandler - outside time window');
 		const offDelay = context.configNumberValue('offDelay')
 		console.log('roomSwitchOffHandler - off delay: ', offDelay);
 		
-		if (offDelay>0) {
+		// get state variable to see if room switch was turned off by delay
+		const roomState = await SmartState.putState(context, 'roomOff');
+
+		if (offDelay>0 && roomState!=='delay') {
 			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
@@ -401,6 +406,8 @@ module.exports = new SmartApp()
 		// Schedule turning off room switch if delay is set
 		console.log('motionStopHandler - run delayedSwitchOff after specified delay: ', delay);
 		await context.api.schedules.runIn('delayedSwitchOff', delay)
+		// save state variable to indicate room switch was turned off by delay
+		SmartState.putState(context, 'roomOff', 'delay');	
 	} else {
 		// Turn room switch off immediately if no delay
 		console.log('motionStopHandler - turn room switch off immediately');

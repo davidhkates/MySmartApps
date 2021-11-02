@@ -81,10 +81,12 @@ module.exports = new SmartApp()
 	// separate page for weather information
 	page.nextPageId('optionsPage');
 	
+	// 
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.textSetting('homeName').required(false);
+		section.modeSetting('homeMode').multiple(true).style('COMPLETE');
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
@@ -119,9 +121,15 @@ module.exports = new SmartApp()
 	await context.api.schedules.delete('stopHeaterHandler');
 
 	// test the new isOccupied function
+	/*
 	const homeName = context.configStringValue('homeName');
 	const bOccupied: boolean = await SmartState.isHomeActive(homeName);
 	console.log('Test isOccupied: ', bOccupied);	
+	*/
+
+	// debug statements
+	const homeMode = context.configModeValue('homeMode');
+	console.log('Current home mode: ', homeMode);	
 	
 	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
