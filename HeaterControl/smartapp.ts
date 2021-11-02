@@ -86,12 +86,14 @@ module.exports = new SmartApp()
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
-		section.textSetting('homeName').required(false);
-		// section.modeSetting('homeMode').multiple(true).style('COMPLETE');
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
 		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
+			.required(false).permissions('r');
+		section.textSetting('homeName').required(false);
+		// section.modeSetting('homeMode').multiple(true).style('COMPLETE');
+		section.deviceSetting('checkSwitch').capabilities(['switch'])
 			.required(false).permissions('r');
 	});
 })
