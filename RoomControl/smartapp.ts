@@ -235,7 +235,7 @@ module.exports = new SmartApp()
 		console.log('roomSwitchOffHandler - off delay: ', offDelay);
 		
 		// get state variable to see if room switch was turned off by delay
-		const roomState = await SmartState.putState(context, 'roomOff');
+		const roomState = await SmartState.getState(context, 'roomOff');
 
 		if (offDelay>0 && roomState!=='delay') {
 			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
