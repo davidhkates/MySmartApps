@@ -238,7 +238,7 @@ module.exports = new SmartApp()
 		const roomState = await SmartState.getState(context, 'roomOff');
 		console.log('roomSwitchOffHandler - room off context value: ', roomState);
 
-		if (offDelay>0 && roomState!=='delay') {
+		if (offDelay>0 && roomState==='delay') {
 			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
 		} else {
