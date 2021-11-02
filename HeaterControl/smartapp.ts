@@ -25,13 +25,30 @@ async function controlHeater( context ) {
 	*/
 	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
 	console.log('controlHeater - home is active: ', bHomeActive);
+
+	// Determine if ANY of the switch(es) to check are on
+	var bCheckSwitch = true;
+	const checkSwitches = context.config.checkSwitches;
+	console.log('controlHeater - check switches: ', checkSwitches);
+	if (checkSwitches) {
+		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId,
+			'switch'
+		));
+		
+		//set check switch to true if any switch is on
+		const switchStates: any = await Promise.all(stateRequests);
+		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
+		console.log('controlHeater - are any of check switch(es) on?: ', bCheckSwitch);
+	}
 		
 	// Get temperature(s) and set heater state, default heater state to off
 	var heaterState = 'off';	
 	const targetTemp = context.configNumberValue('tempTarget');
 	// console.log('controlHeater - target temperature: ', targetTemp, ' home mode: ', homeMode);
 	// if (targetTemp && (homeMode==='awake')) 
-	if (targetTemp && bHomeActive) {
+	if (targetTemp && bHomeActive && bCheckSwitch) {
 		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
 		if (indoorTemp) {
 			console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
@@ -93,8 +110,8 @@ module.exports = new SmartApp()
 			.required(false).permissions('r');
 		section.textSetting('homeName').required(false);
 		// section.modeSetting('homeMode').multiple(true).style('COMPLETE');
-		section.deviceSetting('checkSwitch').capabilities(['switch'])
-			.required(false).permissions('r');
+		section.deviceSetting('checkSwitches').capabilities(['switch'])
+			.required(false).multiple(true).permissions('r');
 	});
 })
 
