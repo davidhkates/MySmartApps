@@ -128,7 +128,7 @@ module.exports = new SmartApp()
 	*/
 
 	// debug statements
-	console.log('Context variable: ', context.config.modeType);
+	console.log('Context variable mode type: ', context.config.modeType);
 	const homeMode = context.configStringValue('homeMode');
 	console.log('Current home mode: ', homeMode);	
 	
