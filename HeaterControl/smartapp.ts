@@ -86,7 +86,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.textSetting('homeName').required(false);
-		section.modeSetting('homeMode').multiple(true);
+		section.modeSetting('homeModes').multiple(true);
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
@@ -129,7 +129,7 @@ module.exports = new SmartApp()
 	
 	// debug statements
 	console.log('get home mode');
-	const homeMode = context.configTextValue('homeMode');
+	const homeMode = context.configStringValue('homeModes');
 	console.log('got home mode');
 	console.log('Current home mode: ', homeMode);	
 	
@@ -172,8 +172,8 @@ module.exports = new SmartApp()
 		*/
 		
 		// set start and end time event handlers
-		const startTime = context.configTextValue('startTime');
-		const endTime   = context.configTextValue('endTime');
+		const startTime = context.configStringValue('startTime');
+		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
 			console.log('Installed/Updated - set start time for heater: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('checkTempHandler', new Date(startTime))
