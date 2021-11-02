@@ -86,7 +86,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.textSetting('homeName').required(false);
-		section.modeSetting('homeMode').multiple(true).style('COMPLETE');
+		section.modeSetting('homeMode').style('COMPLETE');
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
