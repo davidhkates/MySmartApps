@@ -129,10 +129,9 @@ module.exports = new SmartApp()
 	
 	// debug statements
 	console.log('get home mode');
-	const homeMode = 
-	const locationMode = context.configTextValue('homeMode');
+	const homeMode = context.configTextValue('homeMode');
 	console.log('got home mode');
-	console.log('Current home mode: ', locationMode);	
+	console.log('Current home mode: ', homeMode);	
 	
 	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
