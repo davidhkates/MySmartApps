@@ -126,9 +126,8 @@ module.exports = new SmartApp()
 	const bOccupied: boolean = await SmartState.isHomeActive(homeName);
 	console.log('Test isOccupied: ', bOccupied);	
 	*/
-
+	
 	// debug statements
-	console.log('Context variable mode type: ', context.config.modeType);
 	const homeMode = context.configStringValue('homeMode');
 	console.log('Current home mode: ', homeMode);	
 	
