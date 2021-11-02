@@ -107,7 +107,11 @@ module.exports = new SmartApp()
 .subscribedEventHandler('homeSwitchOffHandler', async (context, event) => {
 	console.log('homeSwitchOffHandler - starting');
 	
-	await context.api.subscriptions.delete('delayedSetMode');
+	try {
+		await context.api.subscriptions.delete('delayedSetMode');
+	} catch(err) {
+		console.error('Error canceling delayed set mode subscription: ', err);
+	};
 		
 	console.log('homeSwitchOffHandler - finished');
 })
