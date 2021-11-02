@@ -86,7 +86,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.booleanSetting('heaterEnabled').defaultValue(true);
 		section.textSetting('homeName').required(false);
-		section.modeSetting('homeMode').style('COMPLETE');
+		section.modeSetting('homeMode').multiple(true).style('COMPLETE');
 		section.numberSetting('tempTarget').required(false);
 		section.deviceSetting('heaterSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
@@ -128,7 +128,7 @@ module.exports = new SmartApp()
 	*/
 	
 	// debug statements
-	const homeMode = context.configStringValue('homeMode');
+	const homeMode = await context.configStringValue('homeMode');
 	console.log('Current home mode: ', homeMode);	
 	
 	// get heater enabled setting and turn off heater if not
