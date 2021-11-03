@@ -407,8 +407,6 @@ module.exports = new SmartApp()
 		// Schedule turning off room switch if delay is set
 		console.log('motionStopHandler - run delayedSwitchOff after specified delay: ', delay);
 		await context.api.schedules.runIn('delayedSwitchOff', delay)
-		// save state variable to indicate room switch was turned off by delay
-		SmartState.putState(context, 'roomOff', 'delay');	
 	} else {
 		// Turn room switch off immediately if no delay
 		console.log('motionStopHandler - turn room switch off immediately');
@@ -490,5 +488,11 @@ module.exports = new SmartApp()
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
 	console.log('delayedSwitchOff - starting');
+	
+	// save state variable to indicate room switch was turned off by delay
+	console.log('delayedSwitchOff - setting roomOff state variable to delay');
+	SmartState.putState(context, 'roomOff', 'delay');	
+	
+	console.log('delayedSwitchOff - turning off room switch');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 });
