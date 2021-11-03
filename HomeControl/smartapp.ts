@@ -109,7 +109,7 @@ module.exports = new SmartApp()
 	
 	try {
 		await context.api.subscriptions.unsubscribe('delayedSetMode');
-		await context.api.subscriptions.delete('delayedSetMode');
+		// await context.api.subscriptions.delete('delayedSetMode');
 	} catch(err) {
 		console.error('Error canceling delayed set mode subscription: ', err);
 	};
