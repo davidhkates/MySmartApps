@@ -282,14 +282,13 @@ module.exports = new SmartApp()
 .scheduledEventHandler('startHeaterHandler', async (context, event) => {		
 	console.log('startTempHandler - start controlling heater');
 	controlHeater(context);
-});
+})
 
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - turn off heater');
 	stopHeater(context);
 })
-
 
 // Check temperature and turn on/off heater as appropriate
 .scheduledEventHandler('checkTempHandler', async (context, event) => {		
