@@ -12,7 +12,7 @@
 	"pages.mainPage.sections.locationMode.name": "Enter values to control heater based on location",
 	"pages.mainPage.settings.homeName.name": "Name of home to check (optional)",
 	"pages.mainPage.settings.modeType.name": "Mode type to establish occupancy",
-	"pages.mainPage.settings.checkSwitch.name": "Light/switch to check (optional)",
+	"pages.mainPage.settings.checkSwitches.name": "Lights/switch(es) to check (optional)",
 
 	"pages.optionsPage.sections.contactSensors.name": "Door/window contacts to check",
 	"pages.optionsPage.settings.doorContacts.name": "Doors/windows to check (optional)",
