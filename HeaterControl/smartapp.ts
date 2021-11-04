@@ -78,12 +78,19 @@ async function controlHeater( context ) {
 
 async function stopHeater( context ) {
 	// turn off heater
+	console.log('stopHeater - turn off heater switch');
 	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	// cancel any upcoming temperature check calls
-	await context.api.schedules.delete('checkTempHandler');
+	try {
+		await context.api.schedules.unsubscribe('checkTempHandler');
+		console.log('stopHeater - cancelled next temperature handler check');
+	} catch(err) {
+		console.error('stopHeater - np pending temperature handler checks: ', err);
+	}
 	// reschedule heater start at specified time, if specified
 	const startTime = context.configStringValue('startTime');
 	if (startTime) {
+		console.log('stopHeater - reschedule handler to check temperature at next start time');
 		await context.api.schedules.runDaily('checkTempHandler', new Date(startTime));
 	}
 }
