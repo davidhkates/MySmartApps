@@ -85,14 +85,17 @@ async function stopHeater( context ) {
 		await context.api.schedules.unsubscribe('checkTempHandler');
 		console.log('stopHeater - cancelled next temperature handler check');
 	} catch(err) {
-		console.error('stopHeater - np pending temperature handler checks: ', err);
+		console.error('stopHeater - no pending temperature handler checks: ', err);
 	}
+	
+	/*
 	// reschedule heater start at specified time, if specified
 	const startTime = context.configStringValue('startTime');
 	if (startTime) {
 		console.log('stopHeater - reschedule handler to check temperature at next start time');
 		await context.api.schedules.runDaily('checkTempHandler', new Date(startTime));
 	}
+	*/
 }
 
 
@@ -201,7 +204,7 @@ module.exports = new SmartApp()
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
 			console.log('Installed/Updated - set start time for heater: ', new Date(startTime), ', current date/time: ', new Date());
-			await context.api.schedules.runDaily('checkTempHandler', new Date(startTime))
+			await context.api.schedules.runDaily('startHeaterHandler', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
@@ -226,6 +229,7 @@ module.exports = new SmartApp()
 .subscribedEventHandler('heaterSwitchOffHandler', async (context, event) => {
 	console.log('heaterSwitchOffHandler - started, heater switch turned off manually');
 	await context.api.schedules.delete('checkTempHandler');
+	await context.api.schedules.delete('startHeaterHandler');	
 	await context.api.schedules.delete('stopHeaterHandler');	
 	console.log('heaterSwitchOffHandler - finished, subsequent temperate check calls cancelled');
 })
@@ -274,6 +278,11 @@ module.exports = new SmartApp()
 	console.log('contactClosedHandler - finished');
 })
 
+// Check temperature and turn on/off heater as appropriate
+.scheduledEventHandler('startHeaterHandler', async (context, event) => {		
+	console.log('startTempHandler - start controlling heater');
+	controlHeater(context);
+});
 
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
