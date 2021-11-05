@@ -82,7 +82,7 @@ async function stopHeater( context ) {
 	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	// cancel any upcoming temperature check calls
 	try {
-		await context.api.schedules.unsubscribe('checkTempHandler');
+		await context.api.schedules.delete('checkTempHandler');
 		console.log('stopHeater - cancelled next temperature handler check');
 	} catch(err) {
 		console.error('stopHeater - no pending temperature handler checks: ', err);
@@ -148,6 +148,7 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete('checkTempHandler');
+	await context.api.schedules.delete('startHeaterHandler');
 	await context.api.schedules.delete('stopHeaterHandler');
 
 	// test the new isOccupied function
@@ -229,8 +230,6 @@ module.exports = new SmartApp()
 .subscribedEventHandler('heaterSwitchOffHandler', async (context, event) => {
 	console.log('heaterSwitchOffHandler - started, heater switch turned off manually');
 	await context.api.schedules.delete('checkTempHandler');
-	await context.api.schedules.delete('startHeaterHandler');	
-	await context.api.schedules.delete('stopHeaterHandler');	
 	console.log('heaterSwitchOffHandler - finished, subsequent temperate check calls cancelled');
 })
 
