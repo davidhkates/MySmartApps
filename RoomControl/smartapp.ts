@@ -58,6 +58,8 @@ module.exports = new SmartApp()
 	page.section('sensors', section => {
 		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 			.required(false).multiple(true).permissions('r');
+		section.deviceSetting('roomMotionOn').capabilities(['motionSensor'])
+			.required(false).multiple(true).permissions('r');
 		section.numberSetting('motionDelay').required(false).min(0);
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
@@ -145,7 +147,7 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'groupOffHandler');
 
 		// initialize motion behavior
-		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+		await context.api.subscriptions.subscribeToDevices(context.config.roomMotionOn,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');

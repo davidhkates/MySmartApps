@@ -34,7 +34,8 @@
 	"pages.optionsPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
 
 	"pages.optionsPage.sections.sensors.name": "Room sensors",
-	"pages.optionsPage.settings.roomMotion.name": "Room motion sensor",
+	"pages.optionsPage.settings.roomMotionOn.name": "Motion sensor(s) to turn room on",
+	"pages.optionsPage.settings.roomMotion.name": "Motion sensor(s) to monitor room",
 	"pages.optionsPage.settings.motionDelay.name": "Delay after motion stops (seconds)",
 	"pages.optionsPage.settings.roomContacts.name": "Door/window contact sensors",
 	"pages.optionsPage.settings.contactMode.name": "Contact state options",
