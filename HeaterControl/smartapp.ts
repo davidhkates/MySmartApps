@@ -170,6 +170,8 @@ module.exports = new SmartApp()
 	} else {
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
+			'switch', 'switch.on', 'heaterSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
@@ -223,6 +225,14 @@ module.exports = new SmartApp()
 	}
 	
 	console.log('Installed/Updated - end creating subscriptions')
+})
+
+
+// If heater turned ON manually, cancel subsequent check temperature calls to control heater
+.subscribedEventHandler('heaterSwitchOnHandler', async (context, event) => {
+	console.log('heaterSwitchOnHandler - started, heater switch turned on manually');
+	controlHeater(context);
+	console.log('heaterSwitchOnHandler - finished, maintain target temperature until end time');
 })
 
 
