@@ -4,7 +4,7 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.homeName.name": "Name of home to find in DynamoDB settings",
+	"pages.mainPage.settings.homeName.name": "Name of home to check state",
 	"pages.mainPage.settings.delay.name": "Delay after motion stops to turn off light(s)",
 	"pages.mainPage.settings.delay.description": "",
 	"pages.mainPage.sections.controls.name": "Controls for this automation",

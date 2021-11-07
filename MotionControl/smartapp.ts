@@ -32,7 +32,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.deviceSetting('motion').capabilities(['motionSensor'])
 			.required(true).multiple(true).permissions('r');
-		section.deviceSetting('lightSwitch').capabilities(['switch'])
+		section.deviceSetting('controlSwitch').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
 		section.deviceSetting('checkSwitches').capabilities(['switch'])
 			.required(false).multiple(true).permissions('r');
@@ -61,7 +61,7 @@ module.exports = new SmartApp()
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	console.log('motionControl - control enabled value: ', controlEnabled);
 	if (!controlEnabled) {
-		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
 	} else {
 
 		// create subscriptions for relevant devices
@@ -103,13 +103,12 @@ module.exports = new SmartApp()
 
 	// check to see if home is active
 	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
-	console.log('controlHeater - home is active: ', bHomeActive);
-	bCheckSwitch = bCheckSwitch || bHomeActive;
+	console.log('motionStartHandler - home active: ', bHomeActive, ', check switch: ', bCheckSwitch);
 
 	// turn on light if in time window and check switch(es) are on
 	if ( bTimeWindow && bCheckSwitch ) {
-		console.log('motionStartHandler - turning light(s) on');
-		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'on');
+		console.log('motionStartHandler - turning lights/switches on');
+		await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
 	}
 })
 
@@ -135,7 +134,7 @@ module.exports = new SmartApp()
 			return
 		}
 	}
-	console.log("Turn off lights after specified delay");
+	console.log("motionStopHandler - turn off lights/switches after specified delay");
 
 	const delay = context.configNumberValue('delay')
 	if (delay) {
@@ -143,12 +142,12 @@ module.exports = new SmartApp()
 		await context.api.schedules.runIn('motionStopped', delay)
 	} else {
 		// Turn off immediately if no delay
-		await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
 	}
 })
 
 
-// Turns off lights after delay elapses
+// Turns off lights/switches after delay elapses
 .scheduledEventHandler('motionStopped', async (context, event) => {
-	await context.api.devices.sendCommands(context.config.lightSwitch, 'switch', 'off');
+	await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'off');
 });
