@@ -148,7 +148,7 @@ module.exports = new SmartApp()
 
 		// initialize motion behavior
 		// await context.api.subscriptions.subscribeToDevices(context.config.roomMotionOn,
-		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion2,
 		    'motionSensor', 'motion.active', 'motionStartHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 		    'motionSensor', 'motion.inactive', 'motionStopHandler');
