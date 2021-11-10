@@ -154,16 +154,21 @@ module.exports = new SmartApp()
 })
 
 
-// Handle end time if specified
+// Delayed action to set home status to active (formerly awake)
 .scheduledEventHandler('delayedSetMode', async(context, event) => {
 	console.log('delayedSetMode - starting set home status/mode');
-	// check current home status
-	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'awake');
+	// check current home status - TODO: remove
+	const homeMode = SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
+	console.log('delayedSetMode - current home mode: ', homeMode);
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
 })
 
 
-// Check temperature and turn on/off fan as appropriate
+// Reset home status to inactive (formerly asleep)
 .scheduledEventHandler('resetHomeMode', async (context, event) => {		
 	console.log('resetHomeMode - starting reset home status/mode');
-	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'asleep');
+	// check current home status - TODO: remove
+	const homeMode = SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
+	console.log('resetHomeMode - current home mode: ', homeMode);
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'inactive');
 });
