@@ -267,7 +267,7 @@ module.exports = new SmartApp()
 	console.log("Contact closed");
 
 	// See if there are any other contact sensors defined
-	const otherSensors =  context.config.contactSensors
+	const otherSensors =  context.config.doorContacts
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
 	if (otherSensors) {
@@ -303,3 +303,4 @@ module.exports = new SmartApp()
 	console.log("Check temperature");
 	controlFan(context);
 });
+/
