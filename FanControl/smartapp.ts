@@ -251,7 +251,7 @@ module.exports = new SmartApp()
 
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log("Contact open");
+	console.log("contactOpenHandler - contact(s) opened, restart fan control");
 
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
@@ -264,7 +264,7 @@ module.exports = new SmartApp()
 
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log("Contact closed");
+	console.log("contactClosedHandler - if all contacts closes, turn off fan");
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.doorContacts
@@ -303,4 +303,3 @@ module.exports = new SmartApp()
 	console.log("Check temperature");
 	controlFan(context);
 });
-/
