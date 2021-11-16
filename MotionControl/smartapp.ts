@@ -107,8 +107,9 @@ module.exports = new SmartApp()
 
 	// turn on light if in time window and check switch(es) are on
 	if ( ( bTimeWindow && bCheckSwitch ) || bHomeActive) {
-		console.log('motionStartHandler - turning lights/switches on');
+		console.log('motionStartHandler - turning control switched lights/switches on');
 		await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
+		console.log('motionStartHandler - control switch lights/switches turned on');
 	}
 })
 
