@@ -264,12 +264,13 @@ module.exports = new SmartApp()
 
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log("contactClosedHandler - if all contacts closes, turn off fan");
+	console.log('contactClosedHandler - if all contacts closed, turn off fan');
 
 	// See if there are any other contact sensors defined
 	const otherSensors =  context.config.doorContacts
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
+	console.log('contactClosedHandler - other sensors: ', otherSensors);
 	if (otherSensors) {
 		// Get the current states of the other contact sensors
 		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
@@ -278,13 +279,14 @@ module.exports = new SmartApp()
 			'contactSensor'
 		));
 
+		console.log('contactClosedHandler - state requests: ', stateRequests);
 		// Quit if there are other sensors still open
 		const states: device = await Promise.all(stateRequests)
 		if (states.find(it => it.motion.value === 'open')) {
 			return
 		}
 	}
-	console.log("Turn off lights after specified delay");
+	console.log('contactClosedHandler - turn off lights after specified delay');
 
 	// If we got here, no other contact sensors are open so turn off fan 
 	stopFan(context);
