@@ -1,5 +1,4 @@
 service: motion-control
-org: davidhkates
 
 package:
   patterns:
