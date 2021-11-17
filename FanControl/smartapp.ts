@@ -22,7 +22,7 @@ async function controlFan( context ) {
 		const targetTemp = context.configNumberValue('tempTarget');
 		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
 
-		console.log('Indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
+		console.log('controlFan - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 		if (indoorTemp>targetTemp) {
 			console.log('Default fan state to ON');
 			fanState = 'on';
@@ -31,9 +31,9 @@ async function controlFan( context ) {
 			const weatherSensor = context.config.weather;
 			// console.log('Weather sensor: ', weatherSensor);
 			if (weatherSensor) {
-				console.log('Weather sensor specified');
+				console.log('controlFan - weather sensor specified');
 				const outsideTemp = await SmartDevice.getTemperature( context, weatherSensor[0] );
-				console.log('Outside temp: ', outsideTemp);
+				console.log('controlFan - outside temp: ', outsideTemp);
 				
 				// allow for outside temp to be slightly higher than inside by specified offset
 				var tempOffset = context.configNumberValue('tempOffset');
@@ -64,7 +64,7 @@ async function controlFan( context ) {
 		if (targetHumidity) {
 			const indoorHumidity = await SmartDevice.getRelativeHumidity( context, context.config.humiditySensor[0] );
 
-			console.log('Indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
+			console.log('controlFan - indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
 			if (indoorHumidity>targetHumidity) {
 				fanState = 'on';
 				// TODO - think about how to deal with temperature and outside weather conditions
@@ -73,12 +73,12 @@ async function controlFan( context ) {
 	}
 	
 	// Control fan based on determined fan state, set state variable
-	console.log('Turning fan ', fanState);
+	console.log('controlFan - turning fan ', fanState);
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
 	SmartState.putState(context, 'fanState', fanState);
 
 	// call next temperature check after interval (in seconds) until end time (if specified)
-	console.log('Recursive call to check interval again');
+	console.log('controlFan - recursive call to check interval again');
 	const checkInterval = context.configNumberValue('checkInterval');
 	await context.api.schedules.runIn('checkTemperature', checkInterval);	
 
@@ -160,7 +160,7 @@ module.exports = new SmartApp()
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
-	console.log("FanControl: Installed/Updated");
+	console.log("FanControl - installed/updated");
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -169,7 +169,7 @@ module.exports = new SmartApp()
 
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
-	console.log('Fan enabled value: ', fanEnabled);
+	console.log('FanControl - fan enabled value: ', fanEnabled);
 	if (!fanEnabled) {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 	} else {
@@ -226,7 +226,7 @@ module.exports = new SmartApp()
 				}
 			}		
 		} else {
-			console.log('No start time set, start controlling fan based on temperatures');
+			console.log('ControlFan - no start time set, start controlling fan based on temperatures');
 			controlFan(context);
 		}
 	}
@@ -251,7 +251,7 @@ module.exports = new SmartApp()
 
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log("contactOpenHandler - contact(s) opened, restart fan control");
+	console.log('contactOpenHandler - contact(s) opened, restart fan control');
 
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
@@ -295,13 +295,13 @@ module.exports = new SmartApp()
 
 // Handle end time if specified
 .scheduledEventHandler('stopFanHandler', async(context, event) => {
-	console.log("Turn off fan handler");
+	console.log('stopFanHandler - turn off fan handler');
 	stopFan(context);
 })
 
 
 // Check temperature and turn on/off fan as appropriate
 .scheduledEventHandler('checkTemperature', async (context, event) => {		
-	console.log("Check temperature");
+	console.log('checkTemperature - call controlFan');
 	controlFan(context);
 });
