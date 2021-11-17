@@ -282,7 +282,7 @@ module.exports = new SmartApp()
 		// Quit if there are other sensors still open
 		const states: device = await Promise.all(stateRequests)
 		console.log('contactClosedHandler - state requests: ', states);
-		if (states.find(it => it.motion.value === 'open')) {
+		if (states.find(it => it.contact.value === 'open')) {
 			return
 		}
 	}
