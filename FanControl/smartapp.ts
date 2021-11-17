@@ -146,7 +146,7 @@ module.exports = new SmartApp()
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactsOpenClosed').options(['Open','Closed']);
+		section.enumSetting('contactsOpenClosed').options(['anyOpen', 'allOpen','allClosed']);
 	});
 
 	// OPTIONAL: start and end time, outside weather, temp offset
@@ -266,29 +266,34 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - if all contacts closed, turn off fan');
 
-	// See if there are any other contact sensors defined
-	const otherSensors =  context.config.doorContacts
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
+	// TODO: add logic to determine whether ANY or ALL of the contact sensors need to be open
+	const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
+	if (contactsOpenClosed !== 'allOpen') {
 
-	console.log('contactClosedHandler - other sensors: ', otherSensors);
-	if (otherSensors) {
-		// Get the current states of the other contact sensors
-		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'contactSensor'
-		));
+		// See if there are any other contact sensors defined
+		const otherSensors =  context.config.doorContacts
+			.filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
-		// Quit if there are other sensors still open
-		const states: device = await Promise.all(stateRequests)
-		console.log('contactClosedHandler - state requests: ', states);
-		if (states.find(it => it.contact.value === 'open')) {
-			return
+		console.log('contactClosedHandler - other sensors: ', otherSensors);
+		if (otherSensors) {
+			// Get the current states of the other contact sensors
+			const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
+				it.deviceConfig.deviceId,
+				it.deviceConfig.componentId,
+				'contactSensor'
+			));
+
+			// Quit if there are other sensors still open
+			const states: device = await Promise.all(stateRequests)
+			console.log('contactClosedHandler - state requests: ', states);
+			if (states.find(it => it.contact.value === 'open')) {
+				return
+			}
 		}
 	}
-	console.log('contactClosedHandler - turn off lights after specified delay');
 
 	// If we got here, no other contact sensors are open so turn off fan 
+	console.log('contactClosedHandler - if we got here, turn off fan immediately');
 	stopFan(context);
 })
 
