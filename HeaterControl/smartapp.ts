@@ -39,7 +39,7 @@ async function controlHeater( context ) {
 		
 		//set check switch to true if any switch is on
 		const switchStates: any = await Promise.all(stateRequests);
-		bCheckSwitch = ( switchStates.find(it => it.switch.value === 'on') );		
+		bCheckSwitch = !!( switchStates.find(it => it.switch.value === 'on') );		
 		console.log('controlHeater - are any of check switch(es) on?: ', bCheckSwitch);
 	}
 		
