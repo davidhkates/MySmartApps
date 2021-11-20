@@ -209,18 +209,24 @@ module.exports = new SmartApp()
 			console.log('Installed/Updated - set start time for heater: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('startHeaterHandler', new Date(startTime))
 			if (endTime) {
-				await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
+				// await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 					console.log('Installed/Updated - start controlling heater based on temperatures');
 					controlHeater(context);
 				} else {
 					// if outside time window, turn heater off
+					console.log('Installed/Updated - outside time window, turn heater off');
 					await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');		
 				}
 			}		
-		} else {
-			console.log('Installed/Updated - no start time set, start controlling heater immediately');
-			controlHeater(context);
+		// } else {
+		// 	console.log('Installed/Updated - no start time set, start controlling heater immediately');
+		//	controlHeater(context);
+		}
+		
+		// set end time behavior (turn off heater) if specified
+		if (endTime) {
+			await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
 		}
 	}
 	
