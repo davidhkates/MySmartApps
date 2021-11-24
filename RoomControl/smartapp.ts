@@ -20,6 +20,18 @@ interface device {
 // var aws = require('aws-sdk');
 // aws.config.update({region: 'us-west-2'});
 
+
+// Utility functions for this automation
+/*
+async function scheduleEndHandler( context ) {
+	// schedule room end handler at specified time, if specified
+	const endTime = context.configStringValue('endTime');
+	if (endTime) {
+		await context.api.schedules.runDaily('endTimeHandler', new Date(endTime));
+	}
+}
+*/
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
 .enableEventLogging()  // logs requests and responses as pretty-printed JSON
@@ -161,7 +173,10 @@ module.exports = new SmartApp()
 
 		// Schedule endTime activities
 		// await scheduleEndHandler(context);
-		
+		const endTime = context.configStringValue('endTime');
+		if (endTime) {
+			await context.api.schedules.runDaily('endTimeHandler', new Date(endTime));
+		}
 	}	
 	console.log('roomControl - end creating subscriptions');
 })
@@ -172,9 +187,9 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOnHandler - starting');
 	
 	// Get start and end times
-	const startTime = context.configStringValue("startTime");
-	const endTime = context.configStringValue("endTime");
-	const onTimeCheck = context.configStringValue("onTimeCheck");
+	const startTime = context.configStringValue('startTime');
+	const endTime = context.configStringValue('endTime');
+	const onTimeCheck = context.configStringValue('onTimeCheck');
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
@@ -434,40 +449,17 @@ module.exports = new SmartApp()
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
 	console.log('endTimeHandler starting');
 	
-	/*
-	const endBehavior = SmartState.getValue(context, 'endBehavior');
-
-	if ( endBehavior.includes('checkMain') ) {
-		// Turn on room switch(es) if main switch already turned on
-		if ( SmartSensor.getSwitchState( context, context.config.roomSwitch[0] ) ) {
-			console.log('Turning room switch(es) on since main switch already on');
+	// check to see if routine should be run based on specified day of week
+	// TODO: confirm that isDaysOfWeek works if daysOfWeek is NULL
+	const daysOfWeek = context.configStringValue('daysOfWeek');
+	if isDayOfWeek(daysofWeek) {
+		console.log('endTimeHandler - run end time handler today based on daysOfWeek:', daysOfWeek);
+		// Turn off room switch(es) if main switch already turned off
+		if ( !SmartDevice.getSwitchState( context, context.config.roomSwitch[0] ) ) {
+			console.log('endTimeHandler - turning room switch(es) off since main switch already off');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 		}
-	} else if ( endBehavior.includes('offMain') ) {
-
-		// Turn off room switch(es) when end time reached
-		console.log('Turning off main switch at specified end time');
-		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-	} else if ( endBehavior.includes('onMain') ) {
-
-		// Turn on room switch(es) when end time reached
-		console.log('Turning on main switch at specified end time');
-		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-		
 	}
-	*/
-
-	// Turn off room switch(es) if main switch already turned off
-	if ( !SmartDevice.getSwitchState( context, context.config.roomSwitch[0] ) ) {
-		console.log('Turning room switch(es) off since main switch already off');
-		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-	}
-	
-	// Schedule next endTime activities based on endBehavior(s) ('checkMain', 'offMain', 'offGroup', 'onGroup, 'motionOn', 'checkNext')	
-	// appSettings = await getCurrentSettings(context);
-	// await scheduleEndHandler(context);
 })
 
 /*
