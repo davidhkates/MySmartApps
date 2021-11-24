@@ -452,7 +452,7 @@ module.exports = new SmartApp()
 	// check to see if routine should be run based on specified day of week
 	// TODO: confirm that isDaysOfWeek works if daysOfWeek is NULL
 	const daysOfWeek = context.configStringValue('daysOfWeek');
-	if isDayOfWeek(daysofWeek) {
+	if (isDayOfWeek(daysOfWeek)) {
 		console.log('endTimeHandler - run end time handler today based on daysOfWeek:', daysOfWeek);
 		// Turn off room switch(es) if main switch already turned off
 		if ( !SmartDevice.getSwitchState( context, context.config.roomSwitch[0] ) ) {
