@@ -146,7 +146,8 @@ module.exports = new SmartApp()
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactsOpenClosed').options(['anyOpen', 'allOpen','allClosed']);
+		section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
+			.defaultValue('allOpen').required(false);
 	});
 
 	// OPTIONAL: start and end time, outside weather, temp offset
@@ -237,7 +238,7 @@ module.exports = new SmartApp()
 
 // If fan manually turned off, cancel subsequent check temperature calls to control fan
 .subscribedEventHandler('fanSwitchOffHandler', async (context, event) => {
-	console.log('fanSwitchOffHeandler - started, fan switch manually turned off');
+	console.log('fanSwitchOffHandler - started, fan switch manually turned off');
 	
 	// get fan state previously set by SmartApp
 	const fanState = SmartState.getState(context, 'fanState');
@@ -245,7 +246,7 @@ module.exports = new SmartApp()
 		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
 		stopFan(context);
 	}
-	console.log('fanSwitchOffHeandler - finished');
+	console.log('fanSwitchOffHandler - finished');
 })
 
 
