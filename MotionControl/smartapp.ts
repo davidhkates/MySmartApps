@@ -98,12 +98,13 @@ module.exports = new SmartApp()
 		//set check switch to true if any switch is on
 		const switchStates: any = await Promise.all(stateRequests);
 		bCheckSwitch = !!( switchStates.find(it => it.switch.value === 'on') );
-		console.log('motionStartHandler - are any of check switch(es) on?: ', bCheckSwitch);
+		// console.log('motionStartHandler - are any of check switch(es) on?: ', bCheckSwitch);
 	}
 
 	// check to see if home is active
-	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
-	console.log('motionStartHandler - home active: ', bHomeActive, ', check switch: ', bCheckSwitch);
+	const homeName = context.configStringValue('homeName');
+	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive, ', check switch: ', bCheckSwitch);
 
 	// turn on light if in time window and check switch(es) are on
 	if ( ( bTimeWindow && bCheckSwitch ) || bHomeActive) {
