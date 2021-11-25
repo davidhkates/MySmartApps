@@ -455,6 +455,7 @@ module.exports = new SmartApp()
 	if ( SmartUtils.isDayOfWeek(daysOfWeek) ) {
 		console.log('endTimeHandler - run end time handler today based on daysOfWeek:', daysOfWeek);
 		// Turn off room switch(es) if main switch already turned off
+		console.log('endTimeHandler - roomSwitch[0] state: ', SmartDevice.getSwitchState( context, context.config.roomSwitch[0]);
 		if ( SmartDevice.getSwitchState( context, context.config.roomSwitch[0] ) === 'off' ) {
 			console.log('endTimeHandler - turning room switch(es) off since main switch already off');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
