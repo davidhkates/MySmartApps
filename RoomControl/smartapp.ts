@@ -457,7 +457,7 @@ module.exports = new SmartApp()
 		// Turn off room switch(es) if main switch already turned off
 		const isRoomOn = await SmartDevice.getSwitchState( context, context.config.roomSwitch[0]);
 		console.log('endTimeHandler - isRoomOn state: ', isRoomOn );
-		if (!isRoomOn) {
+		if (isRoomOn!=='on') {
 			console.log('endTimeHandler - turning room switch(es) off since main switch already off');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 		}
