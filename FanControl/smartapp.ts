@@ -12,7 +12,7 @@ interface device {
 }
 
 // Utility functions for this automation
-async function controlFan( context ) {
+async function controlFan(context) {
 	// Initialize fan state variable
 	var fanState = 'off';
 
@@ -87,7 +87,7 @@ async function controlFan( context ) {
 }
 
 
-async function stopFan( context ) {
+async function stopFan(context) {
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
 	// set fan state to 'off'
@@ -102,8 +102,9 @@ async function stopFan( context ) {
 }
 
 
-async function getContactStates( contactSensors ) {
+async function getContactStates(context) {
 	console.log('getContactStates - checking status of specified contacts');
+	const contactSensors = context.config.roomContacts;
 	var strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
 	// Get the current state of the specified contact sensors
