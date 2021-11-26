@@ -104,7 +104,7 @@ async function stopFan( context ) {
 
 async function getContactStates( contactSensors ) {
 	console.log('getContactStates - checking status of specified contacts');
-	const strContactStates = 'anyOpen';	// default contact states to anyOpen
+	var strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
 	// Get the current state of the specified contact sensors
 	const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
