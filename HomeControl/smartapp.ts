@@ -79,9 +79,10 @@ module.exports = new SmartApp()
 	
 	// set end time event handler
 	// const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue("endTime");
+	const endTime   = context.configStringValue('endTime');
 	if (endTime) {
-		await context.api.schedules.runDaily('resetHomeMode', new Date(endTime));
+		console.log('homeControl - setting home mode to inactive at endTime: ', endTime);
+		await context.api.schedules.runDaily('endTimeInactivate', new Date(endTime));
 	}		
 	
 	console.log('homeControl - finished creating subscriptions')
@@ -96,32 +97,32 @@ module.exports = new SmartApp()
 	const duration = context.configNumberValue('onDuration');
 	console.log('homeSwitchOnHandler - set home status/mode after specified duration: ' + duration);	
 	if (duration) {
-		await context.api.schedules.runIn('delayedSetMode', duration);
+		await context.api.schedules.runIn('delayedHomeActivate', duration);
 	}
 	
 	console.log('homeSwitchOnHandler - finished');
 })
 
 
-// If home switch turned off, cancel call to delayedSetMode
+// If home switch turned off, cancel call to delayedHomeActivate
 .subscribedEventHandler('homeSwitchOffHandler', async (context, event) => {
 	console.log('homeSwitchOffHandler - starting');
 	
 	try {
-		await context.api.subscriptions.unsubscribe('delayedSetMode');
+		await context.api.subscriptions.unsubscribe('delayedHomeActivate');
 		// await context.api.subscriptions.delete('delayedSetMode');
 	} catch(err) {
-		console.error('Error canceling delayed set mode subscription: ', err);
+		console.error('homeSwitchOffHandler - error canceling delayedHomeActivate subscription: ', err);
 	};
 		
 	console.log('homeSwitchOffHandler - finished');
 })
 
 
-// If one or more contacts open, set home occupancy mode to awake
+// If one or more contacts open, set home occupancy mode to active
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - trigger to change home occupancy mode to AWAY');
-	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'awake');
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
 })
 
 
@@ -154,21 +155,21 @@ module.exports = new SmartApp()
 })
 
 
-// Delayed action to set home status to active (formerly awake)
-.scheduledEventHandler('delayedSetMode', async(context, event) => {
-	console.log('delayedSetMode - starting set home status/mode');
+// Delayed action to set home status to active
+.scheduledEventHandler('delayedHomeActivate', async(context, event) => {
+	console.log('delayedHomeActivate - starting set home status/mode');
 	// check current home status - TODO: remove
 	const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
-	console.log('delayedSetMode - current home mode: ', homeMode);
+	console.log('delayedHomeActivate - current home mode: ', homeMode);
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
 })
 
 
-// Reset home status to inactive (formerly asleep)
-.scheduledEventHandler('resetHomeMode', async (context, event) => {		
-	console.log('resetHomeMode - starting reset home status/mode');
+// Set home mode to inactive at end time
+.scheduledEventHandler('endTimeInactivate', async (context, event) => {		
+	console.log('endTimeInactivate - starting reset home status/mode');
 	// check current home status - TODO: remove
 	const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
-	console.log('resetHomeMode - current home mode: ', homeMode);
+	console.log('endTimeInactivate - current home mode: ', homeMode);
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'inactive');
 });
