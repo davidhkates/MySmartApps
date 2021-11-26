@@ -195,7 +195,7 @@ module.exports = new SmartApp()
 	console.log('FanControl - installed/updated');
 
 	// get state of room contacts
-	const roomContactsState = getRoomContacts( context.config.roomContacts );
+	const roomContactsState = getContactStates(context);
 	console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
