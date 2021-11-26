@@ -94,6 +94,8 @@ module.exports = new SmartApp()
 	console.log('homeSwitchOnHandler - started');
 
 	// Check to see if switch turned on during time window
+	const startTime = context.configStringValue('startTime');
+	const endTime   = context.configStringValue('endTime');
 	if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
 		console.log('homeSwitchOnHandler - in time window');
 		// Schedule turning off room switch if delay specified
@@ -101,6 +103,8 @@ module.exports = new SmartApp()
 		console.log('homeSwitchOnHandler - set home status/mode after specified duration: ' + duration);	
 		if (duration) {
 			await context.api.schedules.runIn('delayedHomeActivate', duration);
+		} else {
+			SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
 		}
 	}
 	
