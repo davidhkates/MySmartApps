@@ -104,8 +104,8 @@ async function stopFan(context) {
 
 async function getContactStates(context) {
 	console.log('getContactStates - checking status of specified contacts');
-	console.log('getContactStatus - roomContacts: ', context.config);
-	let contactSensors = context.config.roomContacts.slice();	
+	// let contactSensors = context.config.roomContacts.slice();	
+	const contactSensors = context.config.roomContacts;	
 	console.log('getContactStates - contactSensors: ', contactSensors);
 	var strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
@@ -115,10 +115,10 @@ async function getContactStates(context) {
 		it.deviceConfig.componentId,
 		'contactSensor'
 	));
+	console.log('getContactStates - stateRequests: ', stateRequests);
 
 	// Quit if there are other sensors still open
 	const states: device = await Promise.all(stateRequests)
-	console.log('contactClosedHandler - state requests: ', states);
 	if (states.find(it => it.contact.value === 'open')) {
 		if (states.find(it => it.contact.value !== 'closed')) {
 			strContactStates = 'allOpen';
@@ -203,6 +203,7 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete('checkTemperature');
+	
 	await context.api.schedules.delete('stopFanHandler');
 
 	// get fan enabled setting and turn off fan if not
