@@ -104,7 +104,7 @@ async function stopFan( context ) {
 
 async function getContactStates( contactSensors ) {
 	console.log('getContactStates - checking status of specified contacts');
-	cont strContactStates = 'anyOpen';	// default contact states to anyOpen
+	const strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
 	// Get the current state of the specified contact sensors
 	const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
@@ -119,6 +119,7 @@ async function getContactStates( contactSensors ) {
 	if (states.find(it => it.contact.value === 'open')) {
 		if (states.find(it => it.contact.value !== 'closed')) {
 			strContactStates = 'allOpen';
+		}
 	} else if (states.find(it => it.contact.value === 'closed')) {
 		strContactStates = 'allClosed';
 	}
@@ -173,7 +174,7 @@ module.exports = new SmartApp()
 	
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
-		section.deviceSetting('doorContacts').capabilities(['contactSensor'])
+		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
 		section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
 			.defaultValue('allOpen').required(false);
@@ -193,7 +194,7 @@ module.exports = new SmartApp()
 	console.log('FanControl - installed/updated');
 
 	// get state of room contacts
-	const roomContactsState = getRoomContacts( context.config.doorContacts );
+	const roomContactsState = getRoomContacts( context.config.roomContacts );
 	console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
@@ -214,10 +215,10 @@ module.exports = new SmartApp()
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.fanSwitch,
 			'switch', 'switch.off', 'fanSwitchOffHandler');
-		if (context.config.doorContacts) {
-			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
+		if (context.config.roomContacts) {
+			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
-			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
+			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
 		}
 
@@ -283,7 +284,7 @@ module.exports = new SmartApp()
 	if (contactsOpenClosed !== 'allOpen') {
 
 		// See if there are any other contact sensors defined
-		const otherSensors =  context.config.doorContacts
+		const otherSensors =  context.config.roomContacts
 			.filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
 		console.log('contactClosedHandler - other sensors: ', otherSensors);
