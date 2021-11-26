@@ -81,7 +81,7 @@ module.exports = new SmartApp()
 	// const startTime = context.configStringValue("startTime");
 	const endTime   = context.configStringValue('endTime');
 	if (endTime) {
-		console.log('homeControl - setting home mode to inactive at endTime: ', endTime);
+		// console.log('homeControl - setting home mode to inactive at endTime: ', endTime);
 		await context.api.schedules.runDaily('endTimeInactivate', new Date(endTime));
 	}		
 	
@@ -89,15 +89,19 @@ module.exports = new SmartApp()
 })
 
 
-// When home control switch turned on, set timer to update home status/mode
+// When home control switch turned on during time window, set timer to update home status/mode
 .subscribedEventHandler('homeSwitchOnHandler', async (context, event) => {
 	console.log('homeSwitchOnHandler - started');
 
-	// Schedule turning off room switch if delay specified
-	const duration = context.configNumberValue('onDuration');
-	console.log('homeSwitchOnHandler - set home status/mode after specified duration: ' + duration);	
-	if (duration) {
-		await context.api.schedules.runIn('delayedHomeActivate', duration);
+	// Check to see if switch turned on during time window
+	if ( SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime)) ) {
+		console.log('homeSwitchOnHandler - in time window');
+		// Schedule turning off room switch if delay specified
+		const duration = context.configNumberValue('onDuration');
+		console.log('homeSwitchOnHandler - set home status/mode after specified duration: ' + duration);	
+		if (duration) {
+			await context.api.schedules.runIn('delayedHomeActivate', duration);
+		}
 	}
 	
 	console.log('homeSwitchOnHandler - finished');
