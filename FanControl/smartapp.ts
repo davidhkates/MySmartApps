@@ -104,6 +104,7 @@ async function stopFan(context) {
 
 async function getContactStates(context) {
 	console.log('getContactStates - checking status of specified contacts');
+	console.log('getContactStatus - roomContacts: ', context.config);
 	let contactSensors = context.config.roomContacts.slice();	
 	console.log('getContactStates - contactSensors: ', contactSensors);
 	var strContactStates = 'anyOpen';	// default contact states to anyOpen
