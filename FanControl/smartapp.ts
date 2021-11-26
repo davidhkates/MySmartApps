@@ -86,6 +86,7 @@ async function controlFan( context ) {
 	return fanState;
 }
 
+
 async function stopFan( context ) {
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
@@ -99,6 +100,34 @@ async function stopFan( context ) {
 		await context.api.schedules.runDaily('checkTemperature', new Date(startTime));
 	}
 }
+
+
+async function getContactStates( contactSensors ) {
+	console.log('getContactStates - checking status of specified contacts');
+	cont strContactStates = 'anyOpen';	// default contact states to anyOpen
+	
+	// Get the current state of the specified contact sensors
+	const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
+		it.deviceConfig.deviceId,
+		it.deviceConfig.componentId,
+		'contactSensor'
+	));
+
+	// Quit if there are other sensors still open
+	const states: device = await Promise.all(stateRequests)
+	console.log('contactClosedHandler - state requests: ', states);
+	if (states.find(it => it.contact.value === 'open')) {
+		if (states.find(it => it.contact.value !== 'closed')) {
+			strContactStates = 'allOpen';
+	} else if (states.find(it => it.contact.value === 'closed')) {
+		strContactStates = 'allClosed';
+	}
+
+	// return contactStates value
+	console.log('getContactStates - current state of room contacts: ', strContactStates);
+	return strContactStates;
+}
+
 
 
 // Define the SmartApp
@@ -161,7 +190,11 @@ module.exports = new SmartApp()
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
 .updated(async (context, updateData) => {
-	console.log("FanControl - installed/updated");
+	console.log('FanControl - installed/updated');
+
+	// get state of room contacts
+	const roomContactsState = getRoomContacts( context.config.doorContacts );
+	console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
@@ -188,28 +221,6 @@ module.exports = new SmartApp()
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
 		}
 
-		// check contact(s) state and turn off if all are closed
-		/*
-		var contactOpen = false;
-		const contactSensors =  context.config.doorContacts;
-		if (contactSensors) {
-			// Get the current states of the contact sensors
-			const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'contactSensor'
-			));
-
-			// Set contactOpen to true if at least one contact is open
-			const states: device = await Promise.all(stateRequests);
-			if (states.find(it => it.motion.value === 'open')) {
-				contactOpen = true;
-			}
-		} else {
-			contactOpen = true;
-		}
-		*/
-		
 		// set start and end time event handlers
 		const startTime = context.configStringValue("startTime");
 		const endTime   = context.configStringValue("endTime");
@@ -219,7 +230,7 @@ module.exports = new SmartApp()
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-					console.log('Start controlling fan based on temperatures');
+					console.log('FanControl - start controlling fan based on temperatures');
 					controlFan(context);
 				} else {
 					// if outside time window, turn fan off
@@ -227,12 +238,12 @@ module.exports = new SmartApp()
 				}
 			}		
 		} else {
-			console.log('ControlFan - no start time set, start controlling fan based on temperatures');
+			console.log('FanControl - no start time set, start controlling fan based on temperatures');
 			controlFan(context);
 		}
 	}
 	
-	console.log('Fan Control: END CREATING SUBSCRIPTIONS')
+	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
 
 
@@ -257,7 +268,7 @@ module.exports = new SmartApp()
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {
-		// await context.api.schedules.runIn('checkTemperature', 0);
+		
 		controlFan(context);
 	}
 })

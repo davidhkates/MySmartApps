@@ -17,7 +17,7 @@
 
 	"pages.optionsPage.name": "Fan Control (Options)",
 	"pages.optionsPage.sections.contactSensors.name": "Door/window contacts to check",
-	"pages.optionsPage.settings.doorContacts.name": "Doors/windows to check (optional)",
+	"pages.optionsPage.settings.roomContacts.name": "Doors/windows to check (optional)",
 	"pages.optionsPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
 	"pages.optionsPage.settings.contactsOpenClosed.options.anyOpen.name": "Any Open",
 	"pages.optionsPage.settings.contactsOpenClosed.options.allOpen.name": "All Open",
