@@ -217,11 +217,12 @@ module.exports = new SmartApp()
 
 	try {
 		const sensorName = 'fanSwitch';
+		console.log('FanControl - context.config: ', context.config);
+		/*
 		const sensorDevice = context.config(sensorName);
 		if (sensorDevice.length == 1) {
 			console.log('FanControl - fanSwitch GUID: ', context.config(sensorName)[0].deviceConfig.deviceId);
 		}
-		/*
 		fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
 		const sensorDevice = sensor.deviceConfig;
 		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
