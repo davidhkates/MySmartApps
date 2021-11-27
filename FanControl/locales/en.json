@@ -13,7 +13,7 @@
 	"pages.mainPage.settings.humiditySensor.name": "Indoor humidity sensor",
 
 	"pages.optionsPage.name": "Fan Control (Options)",
-	"pages.optionsPage.settings.weather.name": "Outdoor weather sensor",
+	"pages.optionsPage.settings.weather.name": "Outdoor weather sensor (optional)",
 	"pages.optionsPage.settings.maxHumidity.name": "Maximum outdoor humidity to turn on fan",
 	"pages.optionsPage.settings.tempOffset.name": "Temperature offset from inside to outside",
 	"pages.optionsPage.sections.contactSensors.name": "Door/window contacts to check",

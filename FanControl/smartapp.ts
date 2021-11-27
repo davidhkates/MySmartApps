@@ -176,7 +176,7 @@ module.exports = new SmartApp()
 	// page.prevPageId('mainPage');
 	page.section('weather', section => {
 		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(true).permissions('r');
+			.required(false).permissions('r');
 		section.numberSetting('maxHumidity').required(false);
 		section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
 	});	
@@ -202,7 +202,6 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
-	/*
 	// get state of room contacts
 	// const roomContactsState = await getContactStates(context);
 	// console.log('FanControl - room contacts state: ', roomContactsState);
@@ -212,6 +211,7 @@ module.exports = new SmartApp()
 	await context.api.schedules.delete('checkTemperature');	
 	await context.api.schedules.delete('stopFanHandler');
 
+	/*
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 	console.log('FanControl - fan enabled value: ', fanEnabled);
