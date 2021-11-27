@@ -1,5 +1,6 @@
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
+const {SmartThingsClient} = require('@smartthings/core-sdk');
 
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
