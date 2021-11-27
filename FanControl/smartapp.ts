@@ -168,19 +168,18 @@ module.exports = new SmartApp()
 		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
 			.required(false).permissions('r');
 		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
-	});
-	
-	page.section('weather', section => {
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		section.numberSetting('maxHumidity').required(false);
-		section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
 	});	
 })
 
 .page('optionsPage', (context, page, configData) => {
 	// separate page for weather information
 	// page.prevPageId('mainPage');
+	page.section('weather', section => {
+		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
+			.required(true).permissions('r');
+		section.numberSetting('maxHumidity').required(false);
+		section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
+	});	
 	
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
