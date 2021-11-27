@@ -86,7 +86,6 @@ async function controlFan(context) {
 	return fanState;
 }
 
-
 async function stopFan(context) {
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
@@ -100,7 +99,6 @@ async function stopFan(context) {
 		await context.api.schedules.runDaily('checkTemperature', new Date(startTime));
 	}
 }
-
 
 async function getContactStates(context) {
 	console.log('getContactStates - checking status of specified contacts');
@@ -207,11 +205,14 @@ module.exports = new SmartApp()
 	// console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
-	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('checkTemperature');	
-	await context.api.schedules.delete('stopFanHandler');
-
-	/*
+	try {
+		await context.api.subscriptions.unsubscribeAll();
+		await context.api.schedules.delete('checkTemperature');	
+		await context.api.schedules.delete('stopFanHandler');
+	} catch(err) {
+		console.error('FanControl - error deleting subscriptions: ', err);
+	}
+	
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
 	console.log('FanControl - fan enabled value: ', fanEnabled);
@@ -253,7 +254,6 @@ module.exports = new SmartApp()
 			controlFan(context);
 		}
 	}
-	*/
 	
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
