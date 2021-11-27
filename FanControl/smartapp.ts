@@ -114,7 +114,6 @@ async function getContactStates(context) {
 	var strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
 	// Get the current state of the specified contact sensors
-	/*
 	try {
 		const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
@@ -135,7 +134,6 @@ async function getContactStates(context) {
 	} catch(err) {
 		console.error('Unable to process state requests Promise: ', err);
 	}
-	*/
 
 	// return contactStates value
 	console.log('getContactStates - current state of room contacts: ', strContactStates);
@@ -206,7 +204,7 @@ module.exports = new SmartApp()
 	console.log('FanControl - installed/updated');
 
 	// get state of room contacts
-	// const roomContactsState = await getContactStates(context);
+	const roomContactsState = await getContactStates(context);
 	// console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
