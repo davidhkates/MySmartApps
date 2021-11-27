@@ -203,7 +203,7 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
-	const currentFanState = await SmartDevice.getSwitchState(context, context.config.fanSwitch[0]);
+	const currentFanState = await SmartApp.getState(context.config.fanSwitch[0]);
 	console.log('FanControl - current fan state: ', currentFanState);
 
 	// get state of room contacts
