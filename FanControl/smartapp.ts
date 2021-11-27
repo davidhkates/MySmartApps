@@ -110,22 +110,25 @@ async function getContactStates(context) {
 	var strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
 	// Get the current state of the specified contact sensors
-	const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
-		it.deviceConfig.deviceId,
-		it.deviceConfig.componentId,
-		'contactSensor'
-	));
-	console.log('getContactStates - stateRequests: ', stateRequests);
+	try {
+		const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
+			it.deviceConfig.deviceId,
+			it.deviceConfig.componentId
+		));
+		console.log('getContactStates - stateRequests: ', stateRequests);
 
-	// Quit if there are other sensors still open
-	const states: device = await Promise.all(stateRequests)
-	if (states.find(it => it.contact.value === 'open')) {
-		if (states.find(it => it.contact.value !== 'closed')) {
-			strContactStates = 'allOpen';
+		const states: device = await Promise.all(stateRequests);
+		if (states.find(it => it.contact.value === 'open')) {
+			if (states.find(it => it.contact.value !== 'closed')) {
+				strContactStates = 'allOpen';
+			}
+		} else if (states.find(it => it.contact.value === 'closed')) {
+			strContactStates = 'allClosed';
 		}
-	} else if (states.find(it => it.contact.value === 'closed')) {
-		strContactStates = 'allClosed';
-	}
+
+	} catch(err) {
+		console.error('Unable to process state requests Promise: ', err);
+	}		
 
 	// return contactStates value
 	console.log('getContactStates - current state of room contacts: ', strContactStates);
