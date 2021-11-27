@@ -217,7 +217,7 @@ module.exports = new SmartApp()
 
 	try {
 		const sensorName = 'fanSwitch';
-		console.log('FanControl - context.config: ', context.config);
+		console.log('FanControl - context.config.fanSwitch: ', context.config[sensorName]);
 		/*
 		const sensorDevice = context.config(sensorName);
 		if (sensorDevice.length == 1) {
