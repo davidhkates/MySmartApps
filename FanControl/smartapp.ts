@@ -107,13 +107,16 @@ async function getContactStates(context) {
 	// let contactSensors = context.config.roomContacts.slice();	
 	const contactSensors = context.config.roomContacts;	
 	console.log('getContactStates - contactSensors: ', contactSensors);
+	console.log('getContactStates - api devices: ', context.api.devices);
 	var strContactStates = 'anyOpen';	// default contact states to anyOpen
 	
 	// Get the current state of the specified contact sensors
+	/*
 	try {
 		const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
 			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId
+			it.deviceConfig.componentId,
+			'contactSensor'			
 		));
 		console.log('getContactStates - stateRequests: ', stateRequests);
 
@@ -128,7 +131,8 @@ async function getContactStates(context) {
 
 	} catch(err) {
 		console.error('Unable to process state requests Promise: ', err);
-	}		
+	}
+	*/
 
 	// return contactStates value
 	console.log('getContactStates - current state of room contacts: ', strContactStates);
