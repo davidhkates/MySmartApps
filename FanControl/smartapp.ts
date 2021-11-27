@@ -202,14 +202,14 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
+	/*
 	// get state of room contacts
 	// const roomContactsState = await getContactStates(context);
 	// console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete('checkTemperature');
-	
+	await context.api.schedules.delete('checkTemperature');	
 	await context.api.schedules.delete('stopFanHandler');
 
 	// get fan enabled setting and turn off fan if not
@@ -253,6 +253,7 @@ module.exports = new SmartApp()
 			controlFan(context);
 		}
 	}
+	*/
 	
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
