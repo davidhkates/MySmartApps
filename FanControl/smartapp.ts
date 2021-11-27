@@ -217,16 +217,20 @@ module.exports = new SmartApp()
 
 	try {
 		const sensorName = 'fanSwitch';
-		console.log('FanControl - context.config.fanSwitch: ', context.config[sensorName], context.config[sensorName].length);
+		console.log('FanControl - context.config.fanSwitch: ', context.config[sensorName], ', length: ', context.config[sensorName].length);
 		
 		// const sensorDevice = sensor.deviceConfig;
 		const sensorDevice = context.config[sensorName];
-		if (sensorDevice.length == 1) {
+		if !(sensorDevice.length) {
 			console.log('FanControl - fanSwitch GUID: ', context.config[sensorName][0].deviceConfig.deviceId);
+			const sensorDevice = context.config[sensorName][0];
+			console.log('FanControl - fanSwitch component: ', 
+			const fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
+			// const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
+			const currentFanState = fanComponent.components.main.switch.switch.value;
+			console.log('FanControl - current fan state: ', currentFanState);
+			// return sensorState.switch.value;
 		}
-		const fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
-		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
-		return sensorState.switch.value;
 	} catch (err) {
 		console.log('Error', err);
 	}
