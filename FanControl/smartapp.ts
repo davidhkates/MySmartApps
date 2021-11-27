@@ -207,8 +207,8 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	try {
 		await context.api.subscriptions.unsubscribeAll();
-		await context.api.schedules.delete('checkTemperature');	
-		await context.api.schedules.delete('stopFanHandler');
+		await context.api.schedules.unsubscribe('checkTemperature');	
+		await context.api.schedules.unsubscribe('stopFanHandler');
 	} catch(err) {
 		console.error('FanControl - error deleting subscriptions: ', err);
 	}
