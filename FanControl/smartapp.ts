@@ -16,8 +16,8 @@ async function controlFan(context) {
 	// Initialize fan state variable
 	var fanState = 'off';
 
-	const currentFanState = await SmartDevice.getSwitchState(context, context.config.fanSwitch[0]);
-	console.log('controlFan - current fan state: ', currentFanState);
+	// const currentFanState = await SmartDevice.getSwitchState(context, context.config.fanSwitch[0]);
+	// console.log('controlFan - current fan state: ', currentFanState);
 
 	// Get temperature(s) and set fan state
 	const tempSensor = context.config.tempSensor;
