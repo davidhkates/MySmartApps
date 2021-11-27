@@ -24,8 +24,7 @@ async function controlFan(context) {
 	const tempSensor = context.config.tempSensor;
 	if (tempSensor) {
 		const targetTemp = context.configNumberValue('tempTarget');
-		// const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
-		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor );
+		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
 
 		console.log('controlFan - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 		if (indoorTemp>targetTemp) {
