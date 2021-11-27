@@ -215,8 +215,8 @@ module.exports = new SmartApp()
 	};
 	*/
 
-	console.log('FanControl - fanSwitch GUID: ', context.config.fanSwitch[0].deviceConfig);
-	const currentFanState = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig);
+	console.log('FanControl - fanSwitch GUID: ', context.config.fanSwitch[0].deviceConfig.deviceId);
+	const currentFanState = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
 	console.log('FanControl - current fan state: ', currentFanState);
 
 	// get state of room contacts
