@@ -16,6 +16,9 @@ async function controlFan(context) {
 	// Initialize fan state variable
 	var fanState = 'off';
 
+	const currentFanState = await SmartDevice.getSwitchState(context, context.config.fanSwitch[0]);
+	console.log('controlFan - current fan state: ', currentFanState);
+
 	// Get temperature(s) and set fan state
 	const tempSensor = context.config.tempSensor;
 	if (tempSensor) {
@@ -205,13 +208,10 @@ module.exports = new SmartApp()
 	// console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
-	try {
-		await context.api.subscriptions.unsubscribeAll();
-		console.log('FanControl - list of current api schedules: ', context.api.schedules.list);
+	await context.api.subscriptions.unsubscribeAll();
+	if (context.api.schedules) {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
-	} catch(err) {
-		console.error('FanControl - error deleting subscriptions: ', err);
 	}
 	
 	// get fan enabled setting and turn off fan if not
@@ -255,7 +255,7 @@ module.exports = new SmartApp()
 			controlFan(context);
 		}
 	}
-	
+	console.log('FanControl - list of current api schedules: ', context.api.schedules.list());
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
 
