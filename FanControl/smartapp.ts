@@ -209,9 +209,11 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	if (context.api.schedules) {
+	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
+	} catch(err) {
+		console.error('FanControl - error deleting schedules: ', err);
 	}
 	
 	// get fan enabled setting and turn off fan if not
