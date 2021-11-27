@@ -102,7 +102,7 @@ async function stopFan(context) {
 }
 
 
-async function getContactStates(context) {
+function getContactStates(context) {
 	console.log('getContactStates - checking status of specified contacts');
 	// let contactSensors = context.config.roomContacts.slice();	
 	const contactSensors = context.config.roomContacts;	
@@ -204,7 +204,8 @@ module.exports = new SmartApp()
 	console.log('FanControl - installed/updated');
 
 	// get state of room contacts
-	const roomContactsState = await getContactStates(context);
+	// const roomContactsState = await getContactStates(context);
+	const roomContactsState = getContactStates(context);
 	console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
