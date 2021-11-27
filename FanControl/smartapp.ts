@@ -14,6 +14,7 @@ interface device {
 // Utility functions for this automation
 async function controlFan(context) {
 	// Initialize fan state variable
+	console.log('controlFan - starting control fan routine, initialize variables');
 	var fanState = 'off';
 
 	// const currentFanState = await SmartDevice.getSwitchState(context, context.config.fanSwitch[0]);
@@ -257,7 +258,7 @@ module.exports = new SmartApp()
 			controlFan(context);
 		}
 	}
-	console.log('FanControl - list of current api schedules: ', context.api.schedules.list());
+	// console.log('FanControl - list of current api schedules: ', context.api.schedules.list());
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
 
