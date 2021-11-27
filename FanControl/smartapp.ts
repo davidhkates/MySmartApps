@@ -231,10 +231,12 @@ module.exports = new SmartApp()
 		console.log('Error', err);
 	}
 	
-	// const fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
+	/*
+	const fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
 	const currentFanState = fanComponent.components.main.switch.switch.value;
 	console.log('FanControl - current fan state: ', currentFanState);
-
+	*/
+	
 	// get state of room contacts
 	const roomContactsState = await getContactStates(context);
 	console.log('FanControl - room contacts state: ', roomContactsState);
