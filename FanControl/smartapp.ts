@@ -168,13 +168,13 @@ module.exports = new SmartApp()
 	console.log('FanControl - installed/updated');
 
 	// unsubscribe all previously established subscriptions
+	await context.api.subscriptions.unsubscribeAll();
+	/*
 	console.log('FanControl - context.api.schedules before adding runDaily: ', context.api.schedules);
 	const tmStart = context.configStringValue("startTime");
 	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart));
 	console.log('FanControl - context.api.schedules after adding runDaily: ', context.api.schedules);
 
-	await context.api.subscriptions.unsubscribeAll();
-	/*
 	await context.api.schedules.delete();
 	try {
 		await context.api.schedules.delete('checkTemperature');	
