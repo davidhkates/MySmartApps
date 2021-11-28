@@ -16,52 +16,38 @@ interface device {
 async function controlFan(context) {
 	// Initialize fan state variable
 	console.log('controlFan - starting control fan routine, initialize variables');
-	let fanState = 'off';
 
-	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
-	console.log('controlFan - current fan state: ', currentFanState);
+	// If outdoor weather sensor specified, see if conditions warrant turning fan on.
+	let enableFan: boolean = true;
+	const weatherSensor = context.config.weather;
+	if (weatherSensor) {
+		// Check outside temperature to see if fan should be turned on/off	
+		const tempSensor = context.config.tempSensor;
+		if (tempSensor) {
+			const outsideTemp = await SmartDevice.getTemperature( context, 'weatherSensor' );
+			const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
+			// allow for outside temp to be slightly higher than inside by specified offset
+			const tempOffset = context.configNumberValue('tempOffset') ?? 0;
+			enableFan &= (outsideTemp<=insideTemp+tempOffset);
+		}
 
-	// Get temperature(s) and set fan state
-	const tempSensor = context.config.tempSensor;
-	if (tempSensor) {
-		const targetTemp = context.configNumberValue('tempTarget');
-		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
-
-		console.log('controlFan - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
-		if (indoorTemp>targetTemp) {
-			console.log('Default fan state to ON');
-			fanState = 'on';
-
-			// If weather sensor defined, make sure it's cooler outside
-			const weatherSensor = context.config.weather;
-			// console.log('Weather sensor: ', weatherSensor);
-			if (weatherSensor) {
-				console.log('controlFan - weather sensor specified');
-				const outsideTemp = await SmartDevice.getTemperature( context, weatherSensor[0] );
-				console.log('controlFan - outside temp: ', outsideTemp);
-				
-				// allow for outside temp to be slightly higher than inside by specified offset
-				var tempOffset = context.configNumberValue('tempOffset');
-				if (!tempOffset) {
-					tempOffset = 0
-				}
-				if (indoorTemp<=outsideTemp-tempOffset) {
-					fanState = 'off';
-				} else {
-
-					// If humidity setting specified, make sure it's below that outside
-					const maxHumidity = context.configNumberValue('maxHumidity');
-					if (maxHumidity) {
-						const outsideHumidity = await SmartDevice.getHumidity( context, context.config.weather[0] );
-						if (maxHumidity<outsideHumidity) { 
-							fanState = 'off'
-						}
-					}
-				}
-			}
+		// Check outside humidity to see if fan should be turned on/off	
+		const maxHumidity = context.configNumberValue('maxHumidity');
+		if (maxHumidity)
+			const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' ) ?? 100;
+			enableFan &= (outsideHumidity<=maxHumidity);
 		}
 	}
-	
+
+	// If designated, check that contacts are open as specified
+	const roomContacts = context.config.roomContacts;
+	if (roomContacts) {
+		const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
+		const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
+		enableFan &= (contactsState=='open' || (contactsState=='mixed' && contactsOpenClosed=='anyOpen');
+	}	
+
+	/*
 	// If room humidity sensor specified
 	const humiditySensor = context.config.humiditySensor;
 	if (humiditySensor) {
@@ -76,10 +62,35 @@ async function controlFan(context) {
 			}
 		}
 	}
+	*/
+
+	// Get current fan state
+	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
+	console.log('controlFan - current fan state: ', currentFanState);
+	const targetTemp = context.configNumberValue('tempTarget');
+	if (targetTemp) {
+		if (indoorTemp>targetTemp && enableFan && currentFanState=='off') {
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+		}
+		
+		if ( (indoorTemp<targetTemp || !enableFan) && currentFanState=='on') {
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
+		}
+	}
+
+	const targetHumidity = context.configNumberValue('humidityTarget');
+	if (targetHumidity) {
+		if (indoorHumidity>targetHumidity && enableFan && currentFanState=='off') {
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
+		}
+		
+		if ( (indoorHumidity<targetHumidity || !enableFan) && currentFanState=='on') {
+			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
+		}
+	}
 	
 	// Control fan based on determined fan state, set state variable
 	console.log('controlFan - turning fan ', fanState);
-	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', fanState);
 	SmartState.putState(context, 'fanState', fanState);
 
 	// call next temperature check after interval (in seconds) until end time (if specified)
@@ -168,13 +179,14 @@ module.exports = new SmartApp()
 	console.log('FanControl - installed/updated');
 
 	// unsubscribe all previously established subscriptions
+	console.log('FanControl - context.api.schedules before adding runDaily: ', context.api.schedules);
 	const tmStart = context.configStringValue("startTime");
 	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart));
-	console.log('FanControl - context.api.schedules: ', context.api.schedules);
+	console.log('FanControl - context.api.schedules after adding runDaily: ', context.api.schedules);
 
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.schedules.delete();
 	/*
+	await context.api.schedules.delete();
 	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');

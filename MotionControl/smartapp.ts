@@ -87,20 +87,9 @@ module.exports = new SmartApp()
 	// Determine if ANY of the switch(es) to check are on
 	var bCheckSwitch = true;
 	const checkSwitches = context.config.checkSwitches;
-	console.log('motionStartHandler - check switches: ', checkSwitches);
 	if (checkSwitches) {
-		console.log('motionStartHandler - checking check switch(es)');
-		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'switch'
-		));
-		
-		//set check switch to true if any switch is on
-		const switchStates: any = await Promise.all(stateRequests);
-		console.log('motionStartHandler - see if any of the check switch(es) are on:', switchStates);
-		bCheckSwitch = !!( switchStates.find(it => it.switch.value === 'on') );
-		console.log('motionStartHandler - are any of check switch(es) on?: ', bCheckSwitch);
+		const switchStates = SmartDevice.getSwitchState(context, 'checkSwitches');
+		bCheckSwitch = (switchStates!=='off');
 	}
 
 	// check to see if home is active
@@ -109,7 +98,7 @@ module.exports = new SmartApp()
 	console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive, ', check switch: ', bCheckSwitch);
 
 	// turn on light if in time window and check switch(es) are on
-	if ( ( bTimeWindow && bCheckSwitch ) || bHomeActive) {
+	if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
 		console.log('motionStartHandler - turning lights/switches on');
 		await context.api.devices.sendCommands(context.config.controlSwitch, 'switch', 'on');
 	}
