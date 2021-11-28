@@ -117,7 +117,7 @@ async function getSwitchState( context, sensorName ) {
 		}
 		*/
 		// Get the current states of all the sensors
-		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId)));
+		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
 
 		// Set return value based on value of motion sensor(s)		
 		const states: any = await Promise.all(stateRequests);
