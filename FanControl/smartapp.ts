@@ -124,6 +124,28 @@ async function getSwitchState( context, sensorName ) {
 	return switchState;
 };
 
+// get the state of specified contact(s)
+async function getContactState( context, sensorName ) {
+	let contactState = 'closed';  // default contact state to closed
+	try {
+		const sensorArray = context.config[sensorName];
+		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
+		// Set return value based on value of contact(s)		
+		const stateValues: any = await Promise.all(stateRequests);
+		console.log('getContactState - stateValues[0].components: ', stateValues[0].components);
+		if (stateValues.find(it => it.components.main.contact.contact.value === 'open')) {
+			contactState = 'open';
+			if (stateValues.find(it => it.components.main.contact.contact.value === 'closed')) {
+				contactState = 'mixed';
+			}
+		}		
+	} catch (err) {
+		console.log('getSwitchState - error retrieving switch state: ', err);
+	}
+	return contactState;
+};
+
+
 // get the temperature value of specified temperature measurement sensor
 async function getTemperature( context, sensorName ) {
 	let tempValue;
@@ -218,6 +240,7 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
+	console.log('FanControl - context.api.schedules: ', context.api.schedules);
 	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
