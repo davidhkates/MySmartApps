@@ -17,6 +17,12 @@ async function controlFan(context) {
 	// Initialize fan state variable
 	console.log('controlFan - starting control fan routine, initialize variables');
 
+	// Get indoor conditions and target values
+	const indoorTemp = await SmartDevice.getTemp(context, 'tempSensor');
+	const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
+	const targetTemp = context.configNumberValue('targetTemp');
+	const targetHumidity = context.configNumberValue('targetHumidity');
+
 	// If outdoor weather sensor specified, see if conditions warrant turning fan on
 	let enableFan: boolean = true;
 	const weatherSensor = context.config.weather;
@@ -25,10 +31,10 @@ async function controlFan(context) {
 		const tempSensor = context.config.tempSensor;
 		if (tempSensor) {
 			const outsideTemp = await SmartDevice.getTemperature( context, 'weatherSensor' );
-			const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
+			// const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
 			// allow for outside temp to be slightly higher than inside by specified offset
 			const tempOffset = context.configNumberValue('tempOffset') ?? 0;
-			enableFan = (outsideTemp<=insideTemp+tempOffset);
+			enableFan = (outsideTemp<=indoorTemp+tempOffset);
 		}
 		
 		if (enableFan) {
@@ -52,16 +58,6 @@ async function controlFan(context) {
 				(contactsState=='closed' && contactsOpenClosed=='allClosed'));
 		}
 	}	
-
-	// Get indoor conditions
-	const targetHumidity = context.configNumberValue('targetHumidity');
-	if (targetHumidity) {
-		const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
-	}	
-	const targetTemp = context.configNumberValue('targetTemp');
-	if (targetTemp) {
-		const indoorTemp = await SmartDevice.getTemp(context, 'tempSensor');
-	}
 
 	// Get current fan state
 	let setFanState;  // variable for defining new fan state
