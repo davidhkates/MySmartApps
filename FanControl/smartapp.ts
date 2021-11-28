@@ -106,7 +106,7 @@ async function stopFan(context) {
 }
 
 async function getSwitchState( context, sensorName ) {
-	let switchState;
+	let switchState = 'off';  // default switch state to off
 	try {
 		const sensorArray = context.config[sensorName];
 		/*
