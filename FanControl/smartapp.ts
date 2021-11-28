@@ -235,7 +235,7 @@ module.exports = new SmartApp()
 	console.log('FanControl - current room temperature: ', indoorTemp);
 	
 	// get state of room contacts
-	const roomContactsState = await getContactStates(context);
+	const roomContactsState = await getContactState(context);
 	console.log('FanControl - room contacts state: ', roomContactsState);
 
 	// unsubscribe all previously established subscriptions
