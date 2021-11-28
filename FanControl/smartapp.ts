@@ -26,12 +26,12 @@ async function controlFan(context) {
 
 	// If outdoor weather sensor specified, see if conditions warrant turning fan on
 	let enableFan: boolean = true;
-	const weatherSensor = context.config.weather;
-	if (weatherSensor) {
+	// const weatherSensor = context.config.weather;
+	if (context.config.weather) {
 		// Check outside temperature to see if fan should be turned on/off	
 		// const tempSensor = context.config.tempSensor;
 		if (context.config.tempSensor) {
-			const outsideTemp = await SmartDevice.getTemperature( context, 'weatherSensor' );
+			const outsideTemp = await SmartDevice.getTemperature( context, 'weather' );
 			// const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
 			// allow for outside temp to be slightly higher than inside by specified offset
 			const tempOffset = context.configNumberValue('tempOffset') ?? 0;
