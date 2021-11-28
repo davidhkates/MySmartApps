@@ -229,7 +229,7 @@ module.exports = new SmartApp()
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 					console.log('FanControl - in time window, check that contacts are in correct state');
-					if (checkContacts(context))
+					if (checkContacts(context)) {
 						controlFan(context);
 					}
 				} else {
@@ -269,7 +269,7 @@ module.exports = new SmartApp()
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {		
 		console.log('contactOpenHandler - in time window, check that contacts comply with setting');
-		if checkControls(context) {
+		if (checkControls(context)) {
 			controlFan(context);
 		}
 	}
@@ -279,7 +279,7 @@ module.exports = new SmartApp()
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - check whether or not contacts comply with setting');
-	if !checkControls(context) {
+	if (!checkControls(context)) {
 		console.log('contactClosedHandler - contacts do NOT comply with settings; stop fan immediately');
 		stopFan(context);
 	}
