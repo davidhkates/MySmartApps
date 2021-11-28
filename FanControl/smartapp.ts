@@ -58,7 +58,8 @@ async function controlFan(context) {
 	if (targetHumidity) {
 		const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
 	}	
-	const targetTemp = context.configNumberValue('targetTemp')
+	const targetTemp = context.configNumberValue('targetTemp');
+	if (targetTemp) {
 		const indoorTemp = await SmartDevice.getTemp(context, 'tempSensor');
 	}
 
@@ -87,6 +88,7 @@ async function controlFan(context) {
 	// return the state of the fan
 	return setFanState;
 }
+
 
 async function stopFan(context) {
 	// turn off fan
