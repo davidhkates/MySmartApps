@@ -34,7 +34,7 @@ async function controlFan(context) {
 		if (enableFan) {
 			// Check outside humidity to see if fan should be turned on/off	
 			const maxHumidity = context.configNumberValue('maxHumidity');
-			if (maxHumidity)
+			if (maxHumidity) {
 				const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' ) ?? 100;
 				enableFan = (outsideHumidity<=maxHumidity);
 			}
