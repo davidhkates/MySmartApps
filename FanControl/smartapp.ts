@@ -109,14 +109,6 @@ async function getSwitchState( context, sensorName ) {
 	let switchState = 'off';  // default switch state to off
 	try {
 		const sensorArray = context.config[sensorName];
-		/*
-		if (sensorArray.length==1) {
-			const sensorDevice = context.config[sensorName][0];
-			const sensorState = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
-			switchState = sensorState.components.main.switch.switch.value;
-		}
-		*/
-		// Get the current states of all the sensors
 		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
 		// Set return value based on value of motion sensor(s)		
 		const stateValues: any = await Promise.all(stateRequests);
@@ -132,40 +124,23 @@ async function getSwitchState( context, sensorName ) {
 	return switchState;
 };
 
-async function getContactStates(context) {
-	console.log('getContactStates - checking status of specified contacts');
-	// let contactSensors = context.config.roomContacts.slice();	
-	const contactSensors = context.config.roomContacts;	
-	console.log('getContactStates - contactSensors: ', contactSensors);
-	console.log('getContactStates - api devices: ', context.api.devices);
-	var strContactStates = 'anyOpen';	// default contact states to anyOpen
-	
-	// Get the current state of the specified contact sensors
+// get the temperature value of specified temperature measurement sensor
+async function getTemperature( context, sensorName ) {
+	let tempValue;
 	try {
-		const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'contactSensor'			
-		));
-		console.log('getContactStates - stateRequests: ', stateRequests);
-
-		const states: device = await Promise.all(stateRequests);
-		if (states.find(it => it.contact.value === 'open')) {
-			if (states.find(it => it.contact.value !== 'closed')) {
-				strContactStates = 'allOpen';
-			}
-		} else if (states.find(it => it.contact.value === 'closed')) {
-			strContactStates = 'allClosed';
+		const sensorArray = context.config[sensorName];
+		if (sensorArray.length==1) {
+			const sensorDevice = context.config[sensorName][0];
+			const sensorState = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
+			console.log('getTemperature - sensorState.components: ', sensorState.components);
+			tempValue = sensorState.components.main.temperature.value;
 		}
-
-	} catch(err) {
-		console.error('Unable to process state requests Promise: ', err);
+	} catch (err) {
+		console.log('getTemperature - error retrieving temperature value: ', err);
 	}
+	return tempValue;
+};	
 
-	// return contactStates value
-	console.log('getContactStates - current state of room contacts: ', strContactStates);
-	return strContactStates;
-}
 
 
 // Define the SmartApp
@@ -229,45 +204,13 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
-	/*
-	async function getSwitchState( context, sensor ) {
-		try {
-			const sensorDevice = sensor.deviceConfig;
-			const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
-			return sensorState.switch.value;
-		} catch (err) {
-			console.log('Error', err);
-		}	
-	};
-
-	try {
-		const sensorName = 'fanSwitch';
-		// console.log('FanControl - context.config.fanSwitch: ', context.config[sensorName], ', length: ', context.config[sensorName].length);
-		// const sensorDevice = sensor.deviceConfig;
-		const sensorArray = context.config[sensorName];
-		if (sensorArray.length==1) {
-			console.log('FanControl - fanSwitch GUID: ', context.config[sensorName][0].deviceConfig.deviceId);
-			const sensorDevice: device = context.config[sensorName][0];
-			console.log('FanControl - fanSwitch component: ', sensorDevice);
-			const fanComponent = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
-			console.log('FanControl - fan component: ', fanComponent);
-			// const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
-			const currentFanState = fanComponent.components.main.switch.switch.value;
-			console.log('FanControl - current fan state: ', currentFanState);
-			// return sensorState.switch.value;
-		}
-	} catch (err) {
-		console.log('Error', err);
-	}
-	
-	const fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
-	const currentFanState = fanComponent.components.main.switch.switch.value;
-	console.log('FanControl - current fan state: ', currentFanState);
-	*/
-
 	// get the current state of the fan switch
 	const fanState = await getSwitchState(context, 'fanSwitch');
 	console.log('FanControl - current fan switch state: ', fanState);
+	
+	// get the current room temperature
+	const indoorTemp = await getTemperature(context, 'tempSensor');
+	console.log('FanControl - current room temperature: ', indoorTemp);
 	
 	// get state of room contacts
 	const roomContactsState = await getContactStates(context);
