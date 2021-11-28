@@ -17,7 +17,7 @@ async function controlFan(context) {
 	// Initialize fan state variable
 	console.log('controlFan - starting control fan routine, initialize variables');
 
-	// If outdoor weather sensor specified, see if conditions warrant turning fan on.
+	// If outdoor weather sensor specified, see if conditions warrant turning fan on
 	let enableFan: boolean = true;
 	const weatherSensor = context.config.weather;
 	if (weatherSensor) {
@@ -28,78 +28,64 @@ async function controlFan(context) {
 			const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
 			// allow for outside temp to be slightly higher than inside by specified offset
 			const tempOffset = context.configNumberValue('tempOffset') ?? 0;
-			enableFan &= (outsideTemp<=insideTemp+tempOffset);
+			enableFan = (outsideTemp<=insideTemp+tempOffset);
 		}
-
-		// Check outside humidity to see if fan should be turned on/off	
-		const maxHumidity = context.configNumberValue('maxHumidity');
-		if (maxHumidity)
-			const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' ) ?? 100;
-			enableFan &= (outsideHumidity<=maxHumidity);
-		}
-	}
-
-	// If designated, check that contacts are open as specified
-	const roomContacts = context.config.roomContacts;
-	if (roomContacts) {
-		const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
-		const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
-		enableFan &= (contactsState=='open' || (contactsState=='mixed' && contactsOpenClosed=='anyOpen');
-	}	
-
-	/*
-	// If room humidity sensor specified
-	const humiditySensor = context.config.humiditySensor;
-	if (humiditySensor) {
-		const targetHumidity = context.configNumberValue('humidityTarget');
-		if (targetHumidity) {
-			const indoorHumidity = await SmartDevice.getRelativeHumidity( context, context.config.humiditySensor[0] );
-
-			console.log('controlFan - indoor humidity: ', indoorHumidity, ', target humidity: ', targetHumidity);
-			if (indoorHumidity>targetHumidity) {
-				fanState = 'on';
-				// TODO - think about how to deal with temperature and outside weather conditions
+		
+		if (enableFan) {
+			// Check outside humidity to see if fan should be turned on/off	
+			const maxHumidity = context.configNumberValue('maxHumidity');
+			if (maxHumidity)
+				const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' ) ?? 100;
+				enableFan = (outsideHumidity<=maxHumidity);
 			}
 		}
 	}
-	*/
+
+	// If designated, check that contacts are open as specified.  TODO: remove this since contactsHandler will take care of it
+	if (enableFan) {
+		const roomContacts = context.config.roomContacts;
+		if (roomContacts) {
+			const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
+			const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
+			enableFan = ((contactsState=='open' && contactsOpenClosed!='allClosed') || 
+				(contactsState=='mixed' && contactsOpenClosed=='anyOpen') ||
+				(contactsState=='closed' && contactsOpenClosed=='allClosed'));
+		}
+	}	
+
+	// Get indoor conditions
+	const targetHumidity = context.configNumberValue('targetHumidity');
+	if (targetHumidity) {
+		const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
+	}	
+	const targetTemp = context.configNumberValue('targetTemp')
+		const indoorTemp = await SmartDevice.getTemp(context, 'tempSensor');
+	}
 
 	// Get current fan state
+	let setFanState;  // variable for defining new fan state
+	// let setFanState = currentFanState;  // default fan state to current state
 	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
-	console.log('controlFan - current fan state: ', currentFanState);
-	const targetTemp = context.configNumberValue('tempTarget');
-	if (targetTemp) {
-		if (indoorTemp>targetTemp && enableFan && currentFanState=='off') {
-			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
-		}
-		
-		if ( (indoorTemp<targetTemp || !enableFan) && currentFanState=='on') {
-			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
-		}
+	if (currentFanState=='on') {
+		setFanState = ( (!enableFan || indoorTemp<targetTemp || indoorHumidity<targetHumidity) ? 'off' : 'on' );
+	} else {
+		setFanState = ( (enableFan || indoorTemp>targetTemp || indoorHumidity>targetHumidity) ? 'on' : 'off' );
 	}
 
-	const targetHumidity = context.configNumberValue('humidityTarget');
-	if (targetHumidity) {
-		if (indoorHumidity>targetHumidity && enableFan && currentFanState=='off') {
-			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
-		}
-		
-		if ( (indoorHumidity<targetHumidity || !enableFan) && currentFanState=='on') {
-			await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');
-		}
+	// Change fan state if different than current fan state
+	if (setFanState!=currentFanState) {
+		console.log('controlFan - turning fan ', setFanState);
+		await context.api.devices.sendCommand(context.config.fanSwitch, 'switch', setFanState);
+		SmartState.putState(context, 'fanState', setFanState);
 	}
 	
-	// Control fan based on determined fan state, set state variable
-	console.log('controlFan - turning fan ', fanState);
-	SmartState.putState(context, 'fanState', fanState);
-
 	// call next temperature check after interval (in seconds) until end time (if specified)
 	console.log('controlFan - recursive call to check interval again');
 	const checkInterval = context.configNumberValue('checkInterval');
 	await context.api.schedules.runIn('checkTemperature', checkInterval);	
 
 	// return the state of the fan
-	return fanState;
+	return setFanState;
 }
 
 async function stopFan(context) {
@@ -130,8 +116,8 @@ module.exports = new SmartApp()
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
 		section.booleanSetting('fanEnabled').defaultValue(true);
-		section.numberSetting('tempTarget').required(false);
-		section.numberSetting('humidityTarget').required(false);
+		section.numberSetting('targetTemp').required(false);
+		section.numberSetting('targetHumidity').required(false);
 	});
 
 	// controls and temperature/humidity sensors
