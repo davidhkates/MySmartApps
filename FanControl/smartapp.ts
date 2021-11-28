@@ -18,7 +18,7 @@ async function controlFan(context) {
 	console.log('controlFan - starting control fan routine, initialize variables');
 
 	// Get indoor conditions and target values
-	const indoorTemp = await SmartDevice.getTemp(context, 'tempSensor');
+	const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
 	const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
 	const targetTemp = context.configNumberValue('targetTemp');
 	const targetHumidity = context.configNumberValue('targetHumidity');
