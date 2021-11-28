@@ -240,6 +240,9 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
+	const tmStart = context.configStringValue("startTime");
+	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart))
+	
 	console.log('FanControl - context.api.schedules: ', context.api.schedules);
 	try {
 		await context.api.schedules.delete('checkTemperature');	
