@@ -169,18 +169,19 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	const tmStart = context.configStringValue("startTime");
-	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart))	
-	console.log('FanControl - context.api: ', context.api);
+	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart));
 	console.log('FanControl - context.api.schedules: ', context.api.schedules);
-	console.log('FanControl - context.api.subscriptions.schedules: ', context.api.subscriptions.schedules);
 
 	await context.api.subscriptions.unsubscribeAll();
+	await context.api.schedules.delete();
+	/*
 	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
 	} catch(err) {
 		console.error('FanControl - error deleting schedules: ', err);
 	}
+	*/
 	
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
