@@ -16,10 +16,10 @@ interface device {
 async function controlFan(context) {
 	// Initialize fan state variable
 	console.log('controlFan - starting control fan routine, initialize variables');
-	var fanState = 'off';
+	// var fanState = 'off';
 
-	// const currentFanState = await SmartDevice.getSwitchState(context, context.config.fanSwitch[0]);
-	// console.log('controlFan - current fan state: ', currentFanState);
+	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
+	console.log('controlFan - current fan state: ', currentFanState);
 
 	// Get temperature(s) and set fan state
 	const tempSensor = context.config.tempSensor;
@@ -105,64 +105,6 @@ async function stopFan(context) {
 	}
 }
 
-/*
-async function getSwitchState( context, sensorName ) {
-	let switchState = 'off';  // default switch state to off
-	try {
-		const sensorArray = context.config[sensorName];
-		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
-		// Set return value based on value of motion sensor(s)		
-		const stateValues: any = await Promise.all(stateRequests);
-		if (stateValues.find(it => it.components.main.switch.switch.value === 'on')) {
-			switchState = 'on';
-			if (stateValues.find(it => it.components.main.switch.switch.value === 'off')) {
-				switchState = 'mixed';
-			}
-		}		
-	} catch (err) {
-		console.log('getSwitchState - error retrieving switch state: ', err);
-	}
-	return switchState;
-};
-
-// get the state of specified contact(s)
-async function getContactState( context, sensorName ) {
-	let contactState = 'closed';  // default contact state to closed
-	try {
-		const sensorArray = context.config[sensorName];
-		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
-		// Set return value based on value of contact(s)		
-		const stateValues: any = await Promise.all(stateRequests);
-		if (stateValues.find(it => it.components.main.contactSensor.contact.value === 'open')) {
-			contactState = 'open';
-			if (stateValues.find(it => it.components.main.contactSensor.contact.value === 'closed')) {
-				contactState = 'mixed';
-			}
-		}		
-	} catch (err) {
-		console.log('getSwitchState - error retrieving switch state: ', err);
-	}
-	return contactState;
-};
-
-
-// get the temperature value of specified temperature measurement sensor
-async function getTemperature( context, sensorName ) {
-	let tempValue;
-	try {
-		const sensorArray = context.config[sensorName];
-		if (sensorArray.length==1) {
-			const sensorDevice = context.config[sensorName][0];
-			const sensorState = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
-			tempValue = sensorState.components.main.temperatureMeasurement.temperature.value;
-		}
-	} catch (err) {
-		console.log('getTemperature - error retrieving temperature value: ', err);
-	}
-	return tempValue;
-};	
-*/
-
 
 // Define the SmartApp
 module.exports = new SmartApp()
@@ -225,24 +167,12 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
-	// get the current state of the fan switch
-	const fanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
-	console.log('FanControl - current fan switch state: ', fanState);
-	
-	// get the current room temperature
-	const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
-	console.log('FanControl - current room temperature: ', indoorTemp);
-	
-	// get state of room contacts
-	const roomContactsState = await SmartDevice.getContactState(context, 'roomContacts');
-	console.log('FanControl - room contacts state: ', roomContactsState);
-	
 	// unsubscribe all previously established subscriptions
-	await context.api.subscriptions.unsubscribeAll();
 	const tmStart = context.configStringValue("startTime");
-	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart))
-	
-	console.log('FanControl - context.api.schedules: ', context.api.schedules.schedules, context.api.schedules.subscriptions, context.api.subscriptions);
+	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart))	
+	console.log('FanControl - context.api.schedules: ', context.api.subscriptions.schedules);
+
+	await context.api.subscriptions.unsubscribeAll();
 	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
