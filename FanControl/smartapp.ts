@@ -105,6 +105,21 @@ async function stopFan(context) {
 	}
 }
 
+async function getSwitchState( context, sensorName ) {
+	const switchState;
+	try {
+		const sensorArray = context.config[sensorName];
+		if (sensorArray.length==1) {
+			const sensorDevice = context.config[sensorName][0];
+			const sensorState = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
+			switchState = sensorState.components.main.switch.switch.value;
+		}
+	} catch (err) {
+		console.log('getSwitchState - error retrieving switch state: ', err);
+	}
+	return switchState;
+};
+
 async function getContactStates(context) {
 	console.log('getContactStates - checking status of specified contacts');
 	// let contactSensors = context.config.roomContacts.slice();	
@@ -139,7 +154,6 @@ async function getContactStates(context) {
 	console.log('getContactStates - current state of room contacts: ', strContactStates);
 	return strContactStates;
 }
-
 
 
 // Define the SmartApp
@@ -213,7 +227,6 @@ module.exports = new SmartApp()
 			console.log('Error', err);
 		}	
 	};
-	*/
 
 	try {
 		const sensorName = 'fanSwitch';
@@ -235,11 +248,14 @@ module.exports = new SmartApp()
 		console.log('Error', err);
 	}
 	
-	/*
 	const fanComponent = await context.api.devices.getState(context.config.fanSwitch[0].deviceConfig.deviceId);
 	const currentFanState = fanComponent.components.main.switch.switch.value;
 	console.log('FanControl - current fan state: ', currentFanState);
 	*/
+
+	// get the current state of the fan switch
+	const fanState = await getSwitchState(context, 'fanControl');
+	console.log('FanControl - current fan switch state: ', fanState);
 	
 	// get state of room contacts
 	const roomContactsState = await getContactStates(context);
