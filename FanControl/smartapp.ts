@@ -133,9 +133,9 @@ async function getContactState( context, sensorName ) {
 		// Set return value based on value of contact(s)		
 		const stateValues: any = await Promise.all(stateRequests);
 		console.log('getContactState - stateValues[0].components: ', stateValues[0].components);
-		if (stateValues.find(it => it.components.main.contact.contact.value === 'open')) {
+		if (stateValues.find(it => it.components.main.contactSensor.contact.value === 'open')) {
 			contactState = 'open';
-			if (stateValues.find(it => it.components.main.contact.contact.value === 'closed')) {
+			if (stateValues.find(it => it.components.main.contactSensor.contact.value === 'closed')) {
 				contactState = 'mixed';
 			}
 		}		
@@ -155,7 +155,7 @@ async function getTemperature( context, sensorName ) {
 			const sensorDevice = context.config[sensorName][0];
 			const sensorState = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
 			console.log('getTemperature - sensorState.components: ', sensorState.components);
-			tempValue = sensorState.components.main.temperature.value;
+			tempValue = sensorState.components.main.temperatureMeasurement.temperature.value;
 		}
 	} catch (err) {
 		console.log('getTemperature - error retrieving temperature value: ', err);
