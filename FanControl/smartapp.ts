@@ -43,7 +43,7 @@ async function controlFan(context) {
 			// Check outside humidity to see if fan should be turned on/off	
 			const maxHumidity = context.configNumberValue('maxHumidity');
 			if (maxHumidity) {
-				const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' ) ?? 100;
+				const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' );
 				console.log('controlFan - outside humidity: ', outsideHumidity, ', max: ', maxHumidity);
 				enableFan = (outsideHumidity<=maxHumidity);
 			}
@@ -51,6 +51,7 @@ async function controlFan(context) {
 	}
 
 	// If designated, check that contacts are open as specified.  TODO: remove this since contactsHandler will take care of it
+	/*
 	if (enableFan) {
 		const roomContacts = context.config.roomContacts;
 		if (roomContacts) {
@@ -62,6 +63,7 @@ async function controlFan(context) {
 				(contactsState=='closed' && contactsOpenClosed=='allClosed'));
 		}
 	}	
+	*/
 
 	// Get current fan state
 	let setFanState;  // variable for defining new fan state
@@ -174,15 +176,15 @@ module.exports = new SmartApp()
 	const tmStart = context.configStringValue("startTime");
 	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart));
 	console.log('FanControl - context.api.schedules after adding runDaily: ', context.api.schedules);
-
-	await context.api.schedules.delete();
+	*/
+	
+	// await context.api.schedules.delete();
 	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
 	} catch(err) {
 		console.error('FanControl - error deleting schedules: ', err);
 	}
-	*/
 	
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
