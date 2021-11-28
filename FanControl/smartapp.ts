@@ -16,7 +16,7 @@ interface device {
 async function controlFan(context) {
 	// Initialize fan state variable
 	console.log('controlFan - starting control fan routine, initialize variables');
-	// var fanState = 'off';
+	let fanState = 'off';
 
 	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
 	console.log('controlFan - current fan state: ', currentFanState);
