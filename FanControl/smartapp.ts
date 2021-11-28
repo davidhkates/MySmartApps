@@ -77,7 +77,7 @@ async function controlFan(context) {
 	// Change fan state if different than current fan state
 	if (setFanState!=currentFanState) {
 		console.log('controlFan - turning fan ', setFanState);
-		await context.api.devices.sendCommand(context.config.fanSwitch, 'switch', setFanState);
+		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', setFanState);
 		SmartState.putState(context, 'fanState', setFanState);
 	}
 	
