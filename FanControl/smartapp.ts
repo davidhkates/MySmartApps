@@ -207,8 +207,8 @@ module.exports = new SmartApp()
 		}
 
 		// set start and end time event handlers
-		const startTime = context.configStringValue("startTime");
-		const endTime   = context.configStringValue("endTime");
+		const startTime = context.configStringValue('startTime');
+		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
 			console.log('Set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
@@ -252,8 +252,7 @@ module.exports = new SmartApp()
 
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
-	if (SmartUtils.inTimeWindow(startTime, endTime)) {
-		
+	if (SmartUtils.inTimeWindow(startTime, endTime)) {		
 		controlFan(context);
 	}
 })
