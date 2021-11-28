@@ -254,7 +254,7 @@ module.exports = new SmartApp()
 	*/
 
 	// get the current state of the fan switch
-	const fanState = await getSwitchState(context, 'fanControl');
+	const fanState = await getSwitchState(context, 'fanSwitch');
 	console.log('FanControl - current fan switch state: ', fanState);
 	
 	// get state of room contacts
