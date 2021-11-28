@@ -22,18 +22,20 @@ async function controlFan(context) {
 	const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
 	const targetTemp = context.configNumberValue('targetTemp');
 	const targetHumidity = context.configNumberValue('targetHumidity');
+	console.log('controlFan - indoor conditions: temp - ', indoorTemp, ', humidity - ', indoorHumidity);
 
 	// If outdoor weather sensor specified, see if conditions warrant turning fan on
 	let enableFan: boolean = true;
 	const weatherSensor = context.config.weather;
 	if (weatherSensor) {
 		// Check outside temperature to see if fan should be turned on/off	
-		const tempSensor = context.config.tempSensor;
-		if (tempSensor) {
+		// const tempSensor = context.config.tempSensor;
+		if (context.config.tempSensor) {
 			const outsideTemp = await SmartDevice.getTemperature( context, 'weatherSensor' );
 			// const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
 			// allow for outside temp to be slightly higher than inside by specified offset
 			const tempOffset = context.configNumberValue('tempOffset') ?? 0;
+			console.log('controlFan - outside temp: ', outsideTemp, ', offset: ', tempOffset);
 			enableFan = (outsideTemp<=indoorTemp+tempOffset);
 		}
 		
@@ -42,6 +44,7 @@ async function controlFan(context) {
 			const maxHumidity = context.configNumberValue('maxHumidity');
 			if (maxHumidity) {
 				const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' ) ?? 100;
+				console.log('controlFan - outside humidity: ', outsideHumidity, ', max: ', maxHumidity);
 				enableFan = (outsideHumidity<=maxHumidity);
 			}
 		}
@@ -53,6 +56,7 @@ async function controlFan(context) {
 		if (roomContacts) {
 			const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
 			const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
+			console.log('controlFan - contacts state: ', contactsState, ', open/closed: ', contactsOpenClosed);
 			enableFan = ((contactsState=='open' && contactsOpenClosed!='allClosed') || 
 				(contactsState=='mixed' && contactsOpenClosed=='anyOpen') ||
 				(contactsState=='closed' && contactsOpenClosed=='allClosed'));
@@ -68,6 +72,7 @@ async function controlFan(context) {
 	} else {
 		setFanState = ( (enableFan || indoorTemp>targetTemp || indoorHumidity>targetHumidity) ? 'on' : 'off' );
 	}
+	console.log('controlFan - current fan state: ', currentFanState, ', set fan state: ', setFanState);
 
 	// Change fan state if different than current fan state
 	if (setFanState!=currentFanState) {
