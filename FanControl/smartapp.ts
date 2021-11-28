@@ -92,7 +92,6 @@ async function controlFan(context) {
 	return setFanState;
 }
 
-
 async function stopFan(context) {
 	// turn off fan
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');
@@ -105,6 +104,20 @@ async function stopFan(context) {
 	if (startTime) {
 		await context.api.schedules.runDaily('checkTemperature', new Date(startTime));
 	}
+}
+
+function checkContacts(context) {
+	let returnValue = true;
+	const roomContacts = context.config.roomContacts;
+	if (roomContacts) {
+		const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
+		const contactsSettings = context.configStringValue('contactsOpenClosed');
+	
+		returnValue = ( (contactsState=='open'&&contactsSetting!='allClosed') ||
+			(contactsState=='mixed'&&contactsSetting=='anyOpen') ||
+			(contactsState=='closed'&&contactsSetting!='allOpen') );
+	}
+	return returnValue;
 }
 
 
@@ -210,13 +223,15 @@ module.exports = new SmartApp()
 		const startTime = context.configStringValue('startTime');
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
-			console.log('Set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
+			console.log('FanControl - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-					console.log('FanControl - start controlling fan based on temperatures');
-					controlFan(context);
+					console.log('FanControl - in time window, check that contacts are in correct state');
+					if (checkContacts(context))
+						controlFan(context);
+					}
 				} else {
 					// if outside time window, turn fan off
 					await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');		
@@ -239,7 +254,7 @@ module.exports = new SmartApp()
 	// get fan state previously set by SmartApp
 	const fanState = SmartState.getState(context, 'fanState');
 	if (fanState === 'on') {
-		console.log('fanSwitchOffHandler - previously set on by SmartApp, stop until next start time');
+		console.log('fanSwitchOffHandler - manually turned off after previously set on by this control; stop until next start time');
 		stopFan(context);
 	}
 	console.log('fanSwitchOffHandler - finished');
@@ -248,20 +263,28 @@ module.exports = new SmartApp()
 
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log('contactOpenHandler - contact(s) opened, restart fan control');
+	console.log('contactOpenHandler - contact(s) opened, check to see if in time window');
 
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {		
-		controlFan(context);
+		console.log('contactOpenHandler - in time window, check that contacts comply with setting');
+		if checkControls(context) {
+			controlFan(context);
+		}
 	}
 })
 
 
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log('contactClosedHandler - if all contacts closed, turn off fan');
+	console.log('contactClosedHandler - check whether or not contacts comply with setting');
+	if !checkControls(context) {
+		console.log('contactClosedHandler - contacts do NOT comply with settings; stop fan immediately');
+		stopFan(context);
+	}
 
+	/*
 	// TODO: add logic to determine whether ANY or ALL of the contact sensors need to be open
 	const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
 	if (contactsOpenClosed !== 'allOpen') {
@@ -291,6 +314,7 @@ module.exports = new SmartApp()
 	// If we got here, no other contact sensors are open so turn off fan 
 	console.log('contactClosedHandler - if we got here, turn off fan immediately');
 	stopFan(context);
+	*/	
 })
 
 
