@@ -88,7 +88,7 @@ module.exports = new SmartApp()
 	var bCheckSwitch = true;
 	const checkSwitches = context.config.checkSwitches;
 	if (checkSwitches) {
-		const switchStates = SmartDevice.getSwitchState(context, 'checkSwitches');
+		const switchStates = await SmartDevice.getSwitchState(context, 'checkSwitches');
 		bCheckSwitch = (switchStates!=='off');
 	}
 
