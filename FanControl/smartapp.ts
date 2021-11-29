@@ -110,7 +110,7 @@ async function checkTimeContacts(context) {
 	// let returnValue = true;
 	let bStartStop = false;
 	const startTime = context.configStringValue('startTime');
-	const endTime = context.configStringValue('endTime);
+	const endTime = context.configStringValue('endTime');
 	
 	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 		console.log('checkTimeContacts - in time window, check that contacts are in correct state');
