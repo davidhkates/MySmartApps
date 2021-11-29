@@ -237,8 +237,6 @@ module.exports = new SmartApp()
 		}
 
 		// set start and end time event handlers
-		checkTimeContacts(context);
-		/*
 		const startTime = context.configStringValue('startTime');
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
@@ -246,7 +244,13 @@ module.exports = new SmartApp()
 			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
-				
+			}
+		}
+		
+		// start controlling fan if in time window and contacts in correct state
+		checkTimeContacts(context);
+		
+		/*
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 					console.log('FanControl - in time window, check that contacts are in correct state');
 					const bContactsOK = await checkContacts(context);
