@@ -203,7 +203,7 @@ module.exports = new SmartApp()
 
 	// see if getCapabilityStatus still works
 	try {
-		const sensorDevice = context.config.fanSwitch.deviceConfig;
+		const sensorDevice = context.config.fanSwitch[0].deviceConfig;
 		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
 		console.log('Fan switch current value: ', sensorState.switch.value);
 	} catch (err) {
