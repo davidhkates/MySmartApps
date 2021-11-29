@@ -305,7 +305,7 @@ module.exports = new SmartApp()
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - check whether or not contacts comply with setting');
-	checktTimeContacts(context);
+	checkTimeContacts(context);
 
 	/*
 	if (!checkControls(context)) {
