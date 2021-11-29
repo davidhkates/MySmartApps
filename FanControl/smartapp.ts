@@ -69,7 +69,7 @@ async function controlFan(context) {
 	let setFanState;  // variable for defining new fan state
 	// let setFanState = currentFanState;  // default fan state to current state
 	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
-	console.log('controlFan - setting setFanState: ', currentFanStatus, enableFan, indoorTemp, targetTemp, indoorHumidity, targetHumidity);
+	console.log('controlFan - setting setFanState: ', currentFanState, enableFan, indoorTemp, targetTemp, indoorHumidity, targetHumidity);
 	if (currentFanState=='on') {
 		setFanState = ( (!enableFan || indoorTemp<targetTemp || indoorHumidity<targetHumidity) ? 'off' : 'on' );
 	} else {
