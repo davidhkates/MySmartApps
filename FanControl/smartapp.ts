@@ -43,7 +43,7 @@ async function controlFan(context) {
 			// Check outside humidity to see if fan should be turned on/off	
 			const maxHumidity = context.configNumberValue('maxHumidity');
 			if (maxHumidity) {
-				const outsideHumidity = await SmartDevice.getHumidity( context, 'weatherSensor' );
+				const outsideHumidity = await SmartDevice.getHumidity( context, 'weather' );
 				console.log('controlFan - outside humidity: ', outsideHumidity, ', max: ', maxHumidity);
 				enableFan = (outsideHumidity<=maxHumidity);
 			}
@@ -69,6 +69,7 @@ async function controlFan(context) {
 	let setFanState;  // variable for defining new fan state
 	// let setFanState = currentFanState;  // default fan state to current state
 	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
+	console.log('controlFan - setting setFanState: ', currentFanStatus, enableFan, indoorTemp, targetTemp, indoorHumidity, targetHumidity);
 	if (currentFanState=='on') {
 		setFanState = ( (!enableFan || indoorTemp<targetTemp || indoorHumidity<targetHumidity) ? 'off' : 'on' );
 	} else {
