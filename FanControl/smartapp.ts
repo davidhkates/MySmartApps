@@ -106,18 +106,34 @@ async function stopFan(context) {
 	}
 }
 
-function checkContacts(context) {
-	let returnValue = true;
-	const roomContacts = context.config.roomContacts;
-	if (roomContacts) {
-		const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
-		const contactsSettings = context.configStringValue('contactsOpenClosed');
+async function checkTimeContacts(context) {
+	// let returnValue = true;
+	let bStartStop = false;
+	const startTime = context.configStringValue('startTime');
+	const endTime = context.configStringValue('endTime);
 	
-		returnValue = ( (contactsState=='open'&&contactsSetting!='allClosed') ||
-			(contactsState=='mixed'&&contactsSetting=='anyOpen') ||
-			(contactsState=='closed'&&contactsSetting!='allOpen') );
+	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+		console.log('checkTimeContacts - in time window, check that contacts are in correct state');
+		bStartStop = true;
+		const roomContacts = context.config.roomContacts;
+		if (roomContacts) {
+			const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
+			const contactsSettings = context.configStringValue('contactsOpenClosed');
+		
+			bStartStop = ( (contactsState=='open'&&contactsSetting!='allClosed') ||
+				(contactsState=='mixed'&&contactsSetting=='anyOpen') ||
+				(contactsState=='closed'&&contactsSetting!='allOpen') );
+		}
 	}
-	return returnValue;
+	
+	// restart or stop controlling fan based on time and contacts state
+	if (bStartStop) {
+		controlFan(context);
+	} else {
+		stopFan(context);
+	]
+	// return returnValue;
+	return bStartStop;
 }
 
 
@@ -220,6 +236,8 @@ module.exports = new SmartApp()
 		}
 
 		// set start and end time event handlers
+		checkTimeContacts(context);
+		/*
 		const startTime = context.configStringValue('startTime');
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
@@ -227,9 +245,11 @@ module.exports = new SmartApp()
 			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
+				
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 					console.log('FanControl - in time window, check that contacts are in correct state');
-					if (checkContacts(context)) {
+					const bContactsOK = await checkContacts(context);
+					if (bContactsOK) {
 						controlFan(context);
 					}
 				} else {
@@ -241,6 +261,7 @@ module.exports = new SmartApp()
 			console.log('FanControl - no start time set, start controlling fan based on temperatures');
 			controlFan(context);
 		}
+		*/
 	}
 	// console.log('FanControl - list of current api schedules: ', context.api.schedules.list());
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
@@ -264,25 +285,33 @@ module.exports = new SmartApp()
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - contact(s) opened, check to see if in time window');
-
+	checkTimeContacts(context);
+	
+	/*
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {		
-		console.log('contactOpenHandler - in time window, check that contacts comply with setting');
-		if (checkControls(context)) {
+		console.log('contactOpenHandler - in time window, check that contacts comply with setting');		
+		const bContactsOK = await checkContacts(context);
+		if (bContactsOK) {
 			controlFan(context);
 		}
 	}
+	*/
 })
 
 
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - check whether or not contacts comply with setting');
+	checktTimeContacts(context);
+
+	/*
 	if (!checkControls(context)) {
 		console.log('contactClosedHandler - contacts do NOT comply with settings; stop fan immediately');
 		stopFan(context);
 	}
+	*/
 
 	/*
 	// TODO: add logic to determine whether ANY or ALL of the contact sensors need to be open
