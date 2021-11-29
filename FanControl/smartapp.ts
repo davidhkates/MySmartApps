@@ -203,7 +203,7 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await.context.api.schedules.delete();
+	await context.api.schedules.delete();
 	/*
 	console.log('FanControl - context.api.schedules before adding runDaily: ', context.api.schedules);
 	const tmStart = context.configStringValue("startTime");
