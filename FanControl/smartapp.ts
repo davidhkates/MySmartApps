@@ -131,7 +131,8 @@ async function checkTimeContacts(context) {
 		controlFan(context);
 	} else {
 		stopFan(context);
-	]
+	}
+	
 	// return returnValue;
 	return bStartStop;
 }
