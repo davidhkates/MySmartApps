@@ -118,7 +118,7 @@ async function checkTimeContacts(context) {
 		bStartStop = true;
 		const roomContacts = context.config.roomContacts;
 		if (roomContacts) {
-			const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
+			const contactsState = await SmartDevice.getContactState( context, 'roomContacts' );
 			const contactsSetting = context.configStringValue('contactsOpenClosed');
 		
 			bStartStop = ( (contactsState=='open'&&contactsSetting!='allClosed') ||
