@@ -17,7 +17,7 @@ async function controlFan(context) {
 	// Initialize fan state variable
 	console.log('controlFan - starting control fan routine, initialize variables');
 
-	// Get indoor conditions and target values.  TODO: logic for undefined with ??
+	// Get indoor conditions and target values
 	const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
 	const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
 	const targetTemp = context.configNumberValue('targetTemp');
@@ -70,10 +70,11 @@ async function controlFan(context) {
 	// let setFanState = currentFanState;  // default fan state to current state
 	const currentFanState = await SmartDevice.getSwitchState(context, 'fanSwitch');
 	console.log('controlFan - setting setFanState: ', currentFanState, enableFan, indoorTemp, targetTemp, indoorHumidity, targetHumidity);
+	// compare temperature with 0.5 degrees of hysterisis
 	if (currentFanState=='on') {
-		setFanState = ( (!enableFan || indoorTemp<targetTemp || indoorHumidity<targetHumidity) ? 'off' : 'on' );
+		setFanState = ( (!enableFan || (indoorTemp+0.5)<targetTemp || indoorHumidity<targetHumidity) ? 'off' : 'on' );
 	} else {
-		setFanState = ( (enableFan && (indoorTemp>targetTemp || indoorHumidity>targetHumidity)) ? 'on' : 'off' );
+		setFanState = ( (enableFan && ((indoorTemp-0.5)>targetTemp || indoorHumidity>targetHumidity)) ? 'on' : 'off' );
 	}
 	console.log('controlFan - current fan state: ', currentFanState, ', set fan state: ', setFanState);
 
