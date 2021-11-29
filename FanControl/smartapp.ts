@@ -201,23 +201,27 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
-	// unsubscribe all previously established subscriptions
+	// see if getCapabilityStatus still works
+	try {
+		const sensorDevice = context.config.fanSwitch.deviceConfig;
+		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
+		console.log('Fan switch current value: ', sensorState.switch.value);
+	} catch (err) {
+		console.log('Error', err);
+	}	
+
+	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
-	// await context.api.schedules.delete();
+	await context.api.schedules.delete();	
+
 	/*
-	console.log('FanControl - context.api.schedules before adding runDaily: ', context.api.schedules);
-	const tmStart = context.configStringValue("startTime");
-	await context.api.schedules.runDaily('checkTemperature', new Date(tmStart));
-	console.log('FanControl - context.api.schedules after adding runDaily: ', context.api.schedules);
-	*/
-	
-	// await context.api.schedules.delete();
 	try {
 		await context.api.schedules.delete('checkTemperature');	
 		await context.api.schedules.delete('stopFanHandler');
 	} catch(err) {
 		console.error('FanControl - error deleting schedules: ', err);
 	}
+	*/
 	
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
