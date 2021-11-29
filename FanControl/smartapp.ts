@@ -73,7 +73,7 @@ async function controlFan(context) {
 	if (currentFanState=='on') {
 		setFanState = ( (!enableFan || indoorTemp<targetTemp || indoorHumidity<targetHumidity) ? 'off' : 'on' );
 	} else {
-		setFanState = ( (enableFan || indoorTemp>targetTemp || indoorHumidity>targetHumidity) ? 'on' : 'off' );
+		setFanState = ( (enableFan && (indoorTemp>targetTemp || indoorHumidity>targetHumidity)) ? 'on' : 'off' );
 	}
 	console.log('controlFan - current fan state: ', currentFanState, ', set fan state: ', setFanState);
 
