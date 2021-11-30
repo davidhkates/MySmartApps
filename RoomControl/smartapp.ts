@@ -43,10 +43,11 @@ async function getSwitchState( context, sensorName ) {
 	let switchState = 'off';  // default switch state to off
 	try {
 		const sensorArray = context.config[sensorName];
-		console.log('getSwitchState - sensorArray: ', sensorArray);
+		console.log('getSwitchState (local) - sensorArray: ', sensorArray);
 		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
 		// Set return value based on value of switch(es)		
 		const stateValues: any = await Promise.all(stateRequests);
+		console.log('getSwitchState (local) - stateValues: ', stateValues);
 		if (stateValues.find(it => it.components.main.switch.switch.value === 'on')) {
 			switchState = 'on';
 			if (stateValues.find(it => it.components.main.switch.switch.value === 'off')) {
@@ -54,7 +55,7 @@ async function getSwitchState( context, sensorName ) {
 			}
 		}		
 	} catch (err) {
-		console.log('getSwitchState - error retrieving switch state: ', err);
+		console.log('getSwitchState (local) - error retrieving switch state: ', err);
 	}
 	return switchState;
 };
@@ -234,7 +235,7 @@ module.exports = new SmartApp()
 			const stateOnGroup = await getSwitchState(context, 'onGroup');
 			// const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
 			console.log('roomSwitchOnHandler - group switches state: ', stateOnGroup);
-			if (stateOnGroup!=='off') {
+			if (stateOnGroup==='off') {
 				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
 			}
