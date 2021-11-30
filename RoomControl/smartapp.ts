@@ -354,7 +354,7 @@ module.exports = new SmartApp()
 	// check to see if home is active
 	const homeName = context.configStringValue('homeName');
 	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
-	console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive, ', check switch: ', bCheckSwitch);
+	console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
 
 	// turn on light if in time window and check switch(es) are on
 	// if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
