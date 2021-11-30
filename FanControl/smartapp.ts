@@ -201,15 +201,6 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('FanControl - installed/updated');
 
-	// see if getCapabilityStatus still works
-	try {
-		const sensorDevice = context.config.fanSwitch[0].deviceConfig;
-		const sensorState = await context.api.devices.getCapabilityStatus( sensorDevice.deviceId, sensorDevice.componentId, 'switch');
-		console.log('Fan switch current value: ', sensorState.switch.value);
-	} catch (err) {
-		console.log('Error', err);
-	}	
-
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete();	
