@@ -232,8 +232,8 @@ module.exports = new SmartApp()
 		// if (onGroupSwitches) {
 		if (context.config.onGroup) {
 			console.log('roomSwitchOnHandler - calling local getSwitchState for onGroup');
-			const stateOnGroup = await getSwitchState(context, 'onGroup');
-			// const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
+			// const stateOnGroup = await getSwitchState(context, 'onGroup');
+			const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
 			console.log('roomSwitchOnHandler - group switches state: ', stateOnGroup);
 			if (stateOnGroup==='off') {
 				console.log('roomSwitchOnHandler - turn on switches in on group');
