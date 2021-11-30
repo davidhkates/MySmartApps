@@ -13,7 +13,7 @@ interface device {
 }
 
 // Remove console log and console error outputs when not debugging
-console.log = function () {};
+// console.log = function () {};
 // console.error = function () {};
 
 // Utility functions for this automation

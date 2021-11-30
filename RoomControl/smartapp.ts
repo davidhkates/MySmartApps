@@ -20,6 +20,11 @@ interface device {
 // var aws = require('aws-sdk');
 // aws.config.update({region: 'us-west-2'});
 
+// Remove console log and console error outputs when not debugging
+// console.log = function () {};
+// console.error = function () {};
+
+console.log = function () {};
 
 // Utility functions for this automation
 /*
