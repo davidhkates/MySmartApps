@@ -230,6 +230,7 @@ module.exports = new SmartApp()
 		// const onGroupSwitches = context.config.onGroup;
 		// if (onGroupSwitches) {
 		if (context.config.onGroup) {
+			console.log('roomSwitchOnHandler - calling local getSwitchState for onGroup');
 			const stateOnGroup = await getSwitchState(context, 'onGroup');
 			// const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
 			console.log('roomSwitchOnHandler - group switches state: ', stateOnGroup);
