@@ -46,6 +46,7 @@ module.exports = new SmartApp()
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
+		section.textSetting('homeName').required(false);
 	});
 
 	// room switches
@@ -345,11 +346,23 @@ module.exports = new SmartApp()
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - start');
 
+	// check to see if home is active
+	const homeName = context.configStringValue('homeName');
+	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive, ', check switch: ', bCheckSwitch);
+
+	// turn on light if in time window and check switch(es) are on
+	// if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
+	if (bHomeActive) {
+		console.log('motionStartHandler - turning lights/switches on');
+		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
+	}
+
+	/*
 	// turn on room switch
 	console.log('motionStartHandler - turning room light(s) on');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 	
-	/*
 	// Get motion behavior setting
 	// appSettings = await getCurrentSettings(context);
 	// const motionBehavior = getSettingValue(context, 'motionBehavior');
