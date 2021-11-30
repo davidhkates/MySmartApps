@@ -134,13 +134,9 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 	// console.log('Context, room speakers: ', context.config.roomSpeakers);
-	// console.log('Context, on group: ', context.config.onGroup);
-	console.log('NODEJS environment variable(s): ', process.env);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
-	// await context.api.schedules.delete('roomOnHandler');
-	// await context.api.schedules.delete('roomOffHandler');
 	await context.api.schedules.delete();
 
 	// if control is not enabled, turn off switch
@@ -210,10 +206,11 @@ module.exports = new SmartApp()
 		await context.api.schedules.delete('delayedOffSwitch');
 		
 		// Only turn on switches in the on group if none have already been turned on
-		const onGroupSwitches = context.config.onGroup;
-		if (onGroupSwitches) {
-			const stateGroupSwitches = await SmartDevice.getSwitchState(context, 'onGroupSwitches');
-			console.log('roomSwitchOnHandler - group switches state: ', stateGroupSwitches);
+		// const onGroupSwitches = context.config.onGroup;
+		// if (onGroupSwitches) {
+		if (context.config.onGroup) {
+			const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
+			console.log('roomSwitchOnHandler - group switches state: ', stateOnGroup);
 			if (stateGroupSwitches!=='off') {
 				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
