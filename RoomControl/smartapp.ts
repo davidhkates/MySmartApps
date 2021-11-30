@@ -21,8 +21,11 @@ interface device {
 // aws.config.update({region: 'us-west-2'});
 
 // Remove console log and console error outputs when not debugging
-// console.log = function () {};
-// console.error = function () {};
+console.log('NODEJS environment variable(s): ', process.env);
+if (process.env.NODE_ENV == "production") {
+    console.log = function(){}; 
+    // console.error = function(){}; 
+}
 
 
 // Utility functions for this automation
