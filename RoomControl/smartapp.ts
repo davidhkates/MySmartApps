@@ -24,7 +24,6 @@ interface device {
 // console.log = function () {};
 // console.error = function () {};
 
-console.log = function () {};
 
 // Utility functions for this automation
 /*
@@ -209,6 +208,13 @@ module.exports = new SmartApp()
 		// Only turn on switches in the on group if none have already been turned on
 		const onGroupSwitches = context.config.onGroup;
 		if (onGroupSwitches) {
+			const stateGroupSwitches = await SmartDevice.getSwitchState(context, 'onGroupSwitches');
+			console.log('roomSwitchOnHandler - group switches state: ', stateGroupSwitches);
+			if (stateGroupSwitches!=='off') {
+				console.log('roomSwitchOnHandler - turn on switches in on group');
+				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+			}
+			/*
 			// Get the current states of the switches in the on group
 			const onGroupStates = await onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
 				it.deviceConfig.deviceId,
@@ -224,6 +230,7 @@ module.exports = new SmartApp()
 				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			}
+			*/
 		}
 	}
 	
@@ -235,8 +242,8 @@ module.exports = new SmartApp()
 	}
 	
 	// save state variable to indicate room should be turned off immediately
-	SmartState.putState(context, 'roomOff', 'immediate');		
-	
+	SmartState.putState(context, 'roomOff', 'immediate');			
+	console.log('roomSwitchOnHandler - finished');	
 })
 
 
@@ -402,7 +409,7 @@ module.exports = new SmartApp()
 	
 	// Cancel delayed off switch handler
 	await context.api.schedules.delete('delayedSwitchOff');
-	console.log('motionStartHandler - end');
+	console.log('motionStartHandler - finished');
 })
 
 
@@ -465,7 +472,7 @@ module.exports = new SmartApp()
 
 // Schedule activity(ies) to be performed at end time
 .scheduledEventHandler('endTimeHandler', async (context, event) => {
-	console.log('endTimeHandler starting');
+	console.log('endTimeHandler - starting');
 	
 	// check to see if routine should be run based on specified day of week
 	// TODO: confirm that isDaysOfWeek works if daysOfWeek is NULL
@@ -480,6 +487,7 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
 		}
 	}
+	console.log('endTimeHandler - finished');
 })
 
 /*
