@@ -23,7 +23,7 @@ interface device {
 // Remove console log and console error outputs when not debugging
 console.log('NODEJS environment variable(s): ', process.env);
 if (process.env.NODE_ENV == "production") {
-    console.log = function(){}; 
+    // console.log = function(){}; 
     // console.error = function(){}; 
 }
 
@@ -135,6 +135,7 @@ module.exports = new SmartApp()
 	console.log('roomControl - start install/update');
 	// console.log('Context, room speakers: ', context.config.roomSpeakers);
 	// console.log('Context, on group: ', context.config.onGroup);
+	console.log('NODEJS environment variable(s): ', process.env);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
