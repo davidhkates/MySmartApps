@@ -22,8 +22,9 @@ var mqfunc1 = function(callback) {
         };
 };
 
-function authCallback(callback) {
-	console.log('Auth made it', callback);
+function authCallback(event, context, callback) {
+	console.log('Auth made it: Event: ', event, '\nContext: ', context, '\nCallback: ', callback);
+	callback('Code=');
 	return "Auth made it";
 };
 
