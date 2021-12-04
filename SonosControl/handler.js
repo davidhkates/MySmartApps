@@ -1,5 +1,12 @@
 'use strict'
 
+exports.authCallback = function(event, context, callback) => {
+	console.log('Code: ', event.queryStringParameters.code);
+	callback(null, "Auth Callback");
+	// return context.logStreamName;
+};
+
+/*
 exports.authCallback = async function(event, context) {
 	console.log('Code: ', event.queryStringParameters.code);
 	return context.logStreamName;
