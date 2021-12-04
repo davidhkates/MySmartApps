@@ -15,9 +15,9 @@ provider:
   region: us-west-2
 
 functions:
-  smartapp:
-    handler: index.handle
-    timeout: 20
+#  smartapp:
+#    handler: index.handle
+#    timeout: 20
   auth-callback:
     handler: handler.authCallback
     events:

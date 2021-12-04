@@ -2,23 +2,14 @@
 
 exports.authCallback = (event, context, callback) => {
 	console.log('Code: ', event.queryStringParameters.code);
-	
+
 	const message = {'message': 'Execution started successfully!'};
-	const response = {
-		'statusCode': 200,
-		'headers': {'Content-Type': 'application/json'},
-		'body': json.dumps(message)
-	};
-	
-	callback(null, response);
-	return {
-		'statusCode': 200,
-		'headers': {'Content-Type': 'application/json'},
-		'body': json.dumps(message)
-	}
 
-
-	// return context.logStreamName;
+	callback(null, {
+		statusCode: 200,
+		body: JSON.stringify(message),
+		headers: {'Content-Type': 'application/json'}
+	});	
 };
 
 /*
