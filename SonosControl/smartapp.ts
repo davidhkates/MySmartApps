@@ -15,51 +15,6 @@ const uriRandom = 'http://www.random.org/integers/?num=1&min=1&max=10&col=1&base
 const uriWeather = 'http://api.openweathermap.org/data/2.5/weather?q=Denver&appid=178796e24e49d001f0999f866eb7eb52';
 
 
-/*
-  Get the value for a given key from a given table
-  */
-async function getValue( table, key ) {
-	// Set the parameters
-	const params = {
-  		TableName: table,
-  		Key: {
-    			key: { S: key }
-  		},
-  		ProjectionExpression: 'keyValue'
-	};
-  	
-	// Return the requested state variable
-	try {
-		const data = await dbclient.send(new GetItemCommand(params));
-		console.log("Get value: ", data);
-		return data.Item.keyValue.S;
-	} catch (err) {
-		console.log("Error", err);
-	}	
-};
-
-
-async function putValue( table, key, value ) {
-	// Set the parameters
-	const params = {
-  		TableName: table,
-  		Item: {
-    			key: { S: key },
-			keyValue: { S: value },
-  		},
-	};
-	
-	try {
-		console.log('Put value: ', params);
-    		const data = await dbclient.send(new PutItemCommand(params));
-    		console.log(data);
-  	} catch (err) {
-    		console.error(err);
-  	}
-};
-
-
-
 // const sonosClientID = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 // const sonosClientID = await SmartState.getValue( 'smartapp-sonos-speakers', 'clientID' );
 // console.log('Client ID: ', sonosClientID);
@@ -68,7 +23,7 @@ const sonosToken = '';
 // const sonosRedirect = 'https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
 const sonosCallbackID = 'r5twrfl7nd';
 const sonosRedirect = encodeURI('https://' + sonosCallbackID + '.execute-api.us-west-2.amazonaws.com/dev/callback');
-const sonosRedirect = encodeURI('https://r5twrfl7nd.execute-api.us-west-2.amazonaws.com/dev/callback');
+// const sonosRedirect = encodeURI('https://r5twrfl7nd.execute-api.us-west-2.amazonaws.com/dev/callback');
 console.log('Redirect URI: ', sonosRedirect);
 const authRedirect = '&redirect_uri=https%3A%2F%2Fm4bm3s9kj5.execute-api.us-west-2.amazonaws.com%2Fdev%2Fcallback';
 const uriSonosCreateToken = 'https:///login/v3/oauth/access?grant_type=authorization_code&code=' + sonosToken + '&redirect_uri=' + sonosRedirect;
