@@ -2,7 +2,7 @@
 
 // Install relevant node packages
 const axios = require("axios");
-const oauth2 = require("simple-oauth2");
+const simpleOauth2 = require("simple-oauth2");
 // const SmartState = require('@katesthings/smartstate');
 
 // Sonos Oauth2 parameters
