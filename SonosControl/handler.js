@@ -2,7 +2,7 @@
 
 // Install relevant node packages
 const axios = require("axios");
-const simpleOauth2 = require("simple-oauth2");
+// const oauth2 = require("simple-oauth2");
 // const SmartState = require('@katesthings/smartstate');
 
 // Sonos Oauth2 parameters
@@ -52,11 +52,13 @@ getToken();
 
 // Initial page redirecting to Sonos
 app.get('/auth', async (req, res) => {
+	console.log('Request: ', req, ', Response: ', res);
 	res.redirect(authorizationUri);
 });
 
 // redirect service parsing the authorization token and asking for the access token
 app.get('/redirect', async (req, res) => {
+	console.log('Request: ', req, ', Response: ', res);
 	const code = req.query.code;
 	const redirect_uri = 'http://localhost:3001/redirect';
 
