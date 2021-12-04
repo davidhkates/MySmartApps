@@ -24,7 +24,7 @@ var mqfunc1 = function(callback) {
 
 function authCallback(event, context, callback) {
 	console.log('Auth made it: Event: ', event, '\nContext: ', context, '\nCallback: ', callback);
-	callback('Code=');
+    callback({'result': 'success'});
 	// return "Auth made it";
 };
 
@@ -32,6 +32,16 @@ function tokenCallback(callback) {
 	console.log('Token made it', callback);
 	return "Token made it";
 };
+
+/*
+exports.handler = (event, context, callback) => {
+      mqfunc1(callback);
+};
+
+var mqfunc1 = function(callback) {
+    callback({'result': 'success'});
+};
+*/
 
 // export external modules
 module.exports.authCallback  = authCallback
