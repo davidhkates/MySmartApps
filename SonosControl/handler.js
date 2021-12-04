@@ -1,8 +1,15 @@
 'use strict'
 
-exports.authCallback = function(event, context, callback) => {
+exports.authCallback = (event, context, callback) => {
 	console.log('Code: ', event.queryStringParameters.code);
 	callback(null, "Auth Callback");
+	
+	const message = {'message': 'Execution started successfully!'};
+	return {
+		'statusCode': 200,
+		'headers': {'Content-Type': 'application/json'},
+		'body': json.dumps(message)
+	}
 	// return context.logStreamName;
 };
 
