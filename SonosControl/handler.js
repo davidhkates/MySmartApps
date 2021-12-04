@@ -2,9 +2,10 @@
 
 // Install relevant node packages
 const axios = require("axios");
-const simple-oauth2 = require("simple-oauth2");
+// const simple-oauth2 = require("simple-oauth2");
 // const SmartState = require('@katesthings/smartstate');
 
+/*
 // Sonos Oauth2 parameters
 const oauth2 = simpleOauthModule.create({
 	client: {
@@ -49,6 +50,7 @@ async function getToken() {
 	}
 }
 getToken();
+*/
 
 // Initial page redirecting to Sonos
 app.get('/auth', async (req, res) => {
@@ -66,6 +68,7 @@ app.get('/redirect', async (req, res) => {
 		code,redirect_uri,
 	};
 
+	/*
 	try {
 		const result = await oauth2.authorizationCode.getToken(options);
 		console.log('The resulting token: ', result);
@@ -78,6 +81,7 @@ app.get('/redirect', async (req, res) => {
 		console.error('Access Token Error', error.message);
 		return res.status(500).json('Authentication failed');
 	}
+	*/
 });
 
 
