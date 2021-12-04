@@ -1,32 +1,24 @@
 'use strict'
 
-exports.handler = (event, context, callback) => {
-            // TODO implement
+exports.handler =  async function(event, context) {
+  console.log("EVENT: \n" + JSON.stringify(event, null, 2))
+  return context.logStreamName
+}
 
-          mqfunc1(func2);
-
-};
-
-var func2 = function(data) {
-            console.log('got data: '+data);
-
-};
-
-var mqfunc1 = function(callback) {
-        var myCallback = function(data) {
-        console.log('got data: '+data);
-        };
-
-        var usingItNow = function(callback) {
-        callback('get it?');
-        };
-};
-
+/*
 function authCallback(event, context, callback) {
 	// console.log('Auth made it: Event: ', event, '\nContext: ', context, '\nCallback: ', callback);
 	console.log('Code: ', event.queryStringParameters.code);
     callback('success', 'error');
 	// return "Auth made it";
+};
+*/
+
+function authCallback(event, context) {
+	// console.log('Auth made it: Event: ', event, '\nContext: ', context, '\nCallback: ', callback);
+	console.log('Code: ', event.queryStringParameters.code);
+    // callback('success', 'error');
+	return context.logStreamName;
 };
 
 function tokenCallback(callback) {
