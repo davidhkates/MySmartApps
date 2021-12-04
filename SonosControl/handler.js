@@ -23,7 +23,11 @@ var mqfunc1 = function(callback) {
 };
 
 function authCallback(callback) {
-	return "Made it";
+	return "Auth made it";
+};
+
+function tokenCallback(callback) {
+	return "Token made it";
 };
 
 // export external modules
