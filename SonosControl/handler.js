@@ -2,7 +2,7 @@
 
 // Install relevant node packages
 const axios = require("axios");
-// const simple-oauth2 = require("simple-oauth2");
+const simple-oauth2 = require("simple-oauth2");
 // const SmartState = require('@katesthings/smartstate');
 
 /*
