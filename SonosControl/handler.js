@@ -5,7 +5,7 @@ const axios = require("axios");
 const simple-oauth2 = require("simple-oauth2");
 // const SmartState = require('@katesthings/smartstate');
 
-/*
+
 // Sonos Oauth2 parameters
 const oauth2 = simpleOauthModule.create({
 	client: {
@@ -50,7 +50,7 @@ async function getToken() {
 	}
 }
 getToken();
-*/
+
 
 // Initial page redirecting to Sonos
 app.get('/auth', async (req, res) => {
