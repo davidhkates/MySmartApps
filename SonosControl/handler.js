@@ -1,18 +1,22 @@
 'use strict'
 
+exports.authCallback = async function(event, context) {
+	console.log('Code: ', event.queryStringParameters.code);
+	return context.logStreamName;
+};
+	
+/*
 exports.handler =  async function(event, context) {
   console.log("EVENT: \n" + JSON.stringify(event, null, 2))
   return context.logStreamName
 }
 
-/*
 function authCallback(event, context, callback) {
 	// console.log('Auth made it: Event: ', event, '\nContext: ', context, '\nCallback: ', callback);
 	console.log('Code: ', event.queryStringParameters.code);
     callback('success', 'error');
 	// return "Auth made it";
 };
-*/
 
 function authCallback(event, context) {
 	// console.log('Auth made it: Event: ', event, '\nContext: ', context, '\nCallback: ', callback);
@@ -20,6 +24,7 @@ function authCallback(event, context) {
     // callback('success', 'error');
 	return context.logStreamName;
 };
+*/
 
 function tokenCallback(callback) {
 	console.log('Token made it', callback);
@@ -37,5 +42,5 @@ var mqfunc1 = function(callback) {
 */
 
 // export external modules
-module.exports.authCallback  = authCallback
+// module.exports.authCallback  = authCallback
 module.exports.tokenCallback = tokenCallback
