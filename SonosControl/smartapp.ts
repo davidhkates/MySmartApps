@@ -107,12 +107,10 @@ function postURI( uri, token ) {
     		headers: { Authorization: 'Bearer ' + token }
 	};
 	
-	axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
-	/*
+	// axios.post(uri, bodyParameters, config).then(console.log).catch(console.log);
 	axios.post(uri, bodyParameters, config).then(resp => {
 		console.log('Axios response: ', resp.data);
 	}.catch(console.log);
-	*/
 };
 */	
 
