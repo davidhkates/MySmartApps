@@ -23,10 +23,12 @@ var mqfunc1 = function(callback) {
 };
 
 function authCallback(callback) {
+	console.log('Auth made it', callback);
 	return "Auth made it";
 };
 
 function tokenCallback(callback) {
+	console.log('Token made it', callback);
 	return "Token made it";
 };
 
