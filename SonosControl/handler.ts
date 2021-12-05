@@ -50,9 +50,9 @@ exports.authCallback = (event, context, callback) => {
 	*/
 	
 	const postData = {
-		grant_type: 'authorization_code',
-		code: authCode,
-		redirect_uri: 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback'
+		'grant_type': 'authorization_code',
+		'code': authCode,
+		'redirect_uri': 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback'
 	};
 
 	const axiosConfig = {
