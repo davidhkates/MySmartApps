@@ -15,6 +15,7 @@ exports.authCallback = (event, context, callback) => {
 	const message = {'message': 'Auth Code: ' + authCode};
 	const clientId = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 	const bearerToken = clientId + ':' + requestId;
+	const bearerToken64 = base64.fromByteArray( bearerToken );
 
 	/*
 	callback(null, {
@@ -29,7 +30,7 @@ exports.authCallback = (event, context, callback) => {
 	console.log('Request: ', request);
 	// const request = 'grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode';
 	const headers = { 
-		'Authorization': 'Basic ' + bearerToken.fromByteArray(),
+		'Authorization': 'Basic ' + bearerToken64,
 //		'Authorization': 'Basic token:secret',
 		'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 	};
