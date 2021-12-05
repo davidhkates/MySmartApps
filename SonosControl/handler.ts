@@ -34,9 +34,9 @@ exports.authCallback = (event, context, callback) => {
 		'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
 	};
 	
-	console.log('Making call to get token');
-	axios.post(uriAuth, article, { headers })
-		.then(response => element.innerHTML = response.data.id);	
+	console.log('Making call to get token, headers:', headers);
+	axios.post(uriAuth, request, { headers })
+		.then(response => Element.innerHTML = response.data.id);	
 	// const response = axios.post(uriAuth, request, headers);
 	console.log('Response data: ', response.data);
 };
