@@ -26,7 +26,7 @@ exports.authCallback = (event, context, callback) => {
 	console.log('Request: ', request);
 	// const request = 'grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode';
 	const headers = { 
-		'Authorization': 'Basic my-token',
+		'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1Ojk5NzdiNjVmLTMwM2QtNDQ4Ny1hOGY0LWRmNWE2ZDU1NTEzYQ==',
 		'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 	};
 	
