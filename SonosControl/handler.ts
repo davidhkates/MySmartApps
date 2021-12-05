@@ -6,6 +6,7 @@ const axios = require("axios");
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
+	console.log('Event: ', event);
 	console.log('Code: ', authCode);
 
 	const message = {'message': 'Auth Code: ' + authCode};
@@ -20,6 +21,7 @@ exports.authCallback = (event, context, callback) => {
 	
 	const uriAuth = 'https://api.sonos.com/login/v3/oauth/access';
 	const request = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
+	console.log('Request: ', request);
 	// const request = 'grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode';
 	const headers = { 
 		'Authorization': 'Basic my-token',
@@ -31,7 +33,7 @@ exports.authCallback = (event, context, callback) => {
 		.then(response => element.innerHTML = response.data.id);	
 	*/
 	console.log('Making call to get token');
-	const response = axios.post(uriAuth, request, headers);
+	const response = axios.post(uriAuth, request, {headers});
 	console.log('Response data: ', response.data);
 };
 
