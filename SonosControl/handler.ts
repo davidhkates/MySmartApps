@@ -5,9 +5,11 @@ const axios = require("axios");
 
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
-	const authCode = event.queryStringParameters.code;
+	// const authCode = event.queryStringParameters.code;
+	const authCode = event.requestContext.requestId;
 	console.log('Event: ', event);
 	console.log('Code: ', authCode);
+	console.log('Context: ', context);
 
 	const message = {'message': 'Auth Code: ' + authCode};
 
