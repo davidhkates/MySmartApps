@@ -35,9 +35,9 @@ exports.authCallback = (event, context, callback) => {
 	};
 	
 	console.log('Making call to get token, headers:', headers);
-	axios.post(uriAuth, request, { headers })
-		.then(response => Element.innerHTML = response.data.id);	
-	// const response = axios.post(uriAuth, request, headers);
+	// axios.post(uriAuth, request, { headers })
+	//	.then(response => element.innerHTML = response.data.id);	
+	const response = axios.post(uriAuth, request, headers);
 	console.log('Response data: ', response.data);
 };
 
