@@ -35,10 +35,41 @@ exports.authCallback = (event, context, callback) => {
 	};
 	
 	console.log('Making call to get token, headers:', headers);
-	// axios.post(uriAuth, request, { headers })
-	//	.then(response => element.innerHTML = response.data.id);	
-	const response = await axios.post(uriAuth, request, headers);
-	console.log('Response data: ', response.data);
+	/*
+	axios.post(uriAuth, request, { headers })
+		.then(response => element.innerHTML = response.data.id);	
+    try {
+        const resp = await axios.post(uriAuth, request);
+        console.log(resp.data);
+    } catch (err) {
+        // Handle Error Here
+        console.error(err);
+    }
+	// const response = await axios.post(uriAuth, request, headers);
+	// console.log('Response data: ', response.data);
+	*/
+	
+	const postData = {
+		grant_type: 'authorization_code',
+		code: authCode,
+		redirect_uri: 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback'
+	};
+
+	const axiosConfig = {
+		headers: {
+			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+			'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
+		}
+	};
+
+	axios.post(uriAuth, postData, axiosConfig)
+		.then((res) => {
+			console.log("RESPONSE RECEIVED: ", res);
+	})
+	.catch((err) => {
+		console.log("AXIOS ERROR: ", err);
+	})
+	
 };
 
 /*
