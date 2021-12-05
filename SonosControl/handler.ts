@@ -2,16 +2,19 @@
 
 // Install relevant node packages
 const axios = require("axios");
+const base64 = require("base64-js");
 
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
-	// const authCode = event.requestContext.requestId;
+	const requestId = event.requestContext.requestId;
 	console.log('Event: ', event);
 	console.log('Code: ', authCode);
 	console.log('Context: ', context);
 
 	const message = {'message': 'Auth Code: ' + authCode};
+	const clientId = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
+	const bearerToken = clientId + ':' + requestId;
 
 	/*
 	callback(null, {
@@ -26,7 +29,7 @@ exports.authCallback = (event, context, callback) => {
 	console.log('Request: ', request);
 	// const request = 'grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode';
 	const headers = { 
-		'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1Ojk5NzdiNjVmLTMwM2QtNDQ4Ny1hOGY0LWRmNWE2ZDU1NTEzYQ==',
+		'Authorization': 'Basic ' + bearerToken.fromByteArray(),
 //		'Authorization': 'Basic token:secret',
 		'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8'
 	};
