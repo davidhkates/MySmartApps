@@ -19,7 +19,7 @@ exports.authCallback = (event, context, callback) => {
 	*/
 	
 	const uriAuth = 'https://api.sonos.com/login/v3/oauth/access';
-    const request = 'client_id=d313a2a0-960e-481f-9fc7-3c02e4366955&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
+	const request = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
 	// const request = 'grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode';
 	const headers = { 
 		'Authorization': 'Basic my-token',
