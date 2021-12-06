@@ -58,6 +58,7 @@ exports.authCallback = (event, context, callback) => {
 		.catch((err) => {
 			console.log("Error: ", err);
 		})
+		*/
 	}
 };
 
