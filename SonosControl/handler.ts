@@ -7,47 +7,22 @@ const axios = require("axios");
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
-	const requestId = event.requestContext.requestId;
 	console.log('Event: ', event);
 	console.log('Code: ', authCode);
-	console.log('Request ID: ', requestId);
 
 	const message = {'message': 'Auth Code: ' + authCode};
-	const keyName = 'd313a2a0-960e-481f-9fc7-3c02e4366955';
 
-	/*
 	callback(null, {
 		statusCode: 200,
 		body: JSON.stringify(message),
 		headers: {'Content-Type': 'application/json'}
 	});
-	*/
+
 	
 	const uriAuth = 'https://api.sonos.com/login/v3/oauth/access';
-	const request = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
-	// const request = 'grant_type=authorization_code&code=' + requestId + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
-	// const request = 'grant_type=authorization_code&code=' + keyName + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
-	console.log('Request: ', request);
+	// const request = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
+	// console.log('Request: ', request);
 	// const request = 'grant_type=authorization_code&code=d37cca67-d509-4c04-9df4-49f8c6f0004b&redirect_uri=https%3A%2F%2FACME.example.com%3A7443%2Foauth%2Fv2%2Fclient%2Fauthcode';
-	const headers = { 
-		'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
-		'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
-	};
-	
-	/*
-	console.log('Making call to get token, headers:', headers);
-	axios.post(uriAuth, request, { headers })
-		.then(response => element.innerHTML = response.data.id);	
-    try {
-        const resp = await axios.post(uriAuth, request);
-        console.log(resp.data);
-    } catch (err) {
-        // Handle Error Here
-        console.error(err);
-    }
-	// const response = await axios.post(uriAuth, request, headers);
-	// console.log('Response data: ', response.data);
-	*/
 	
 	const postData = {
 		'grant_type': 'authorization_code',
@@ -55,20 +30,20 @@ exports.authCallback = (event, context, callback) => {
 		'redirect_uri': 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback'
 	};
 
-	const axiosConfig = {
+	const postHeaders = {
 		headers: {
 			'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
 			'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
 		}
 	};
 
-	console.log('Making call to get token, headers:', headers, ', data: ', postData);
-	axios.post(uriAuth, postData, axiosConfig)
+	console.log('Making call to get token, headers:', postHeaders, ', data: ', postData);
+	axios.post(uriAuth, postData, postHeaders)
 		.then((res) => {
-			console.log("RESPONSE RECEIVED: ", res);
+			console.log("Response received: ", res);
 	})
 	.catch((err) => {
-		console.log("AXIOS ERROR: ", err);
+		console.log("Error: ", err);
 	})
 	
 };
