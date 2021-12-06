@@ -2,7 +2,7 @@
 
 // Install relevant node packages
 const axios = require("axios");
-const FormData = require('form-data');
+const formData = require("form-data");
 // const base64 = require("base64-js");
 
 // Sonos authorization callback
@@ -43,7 +43,7 @@ exports.authCallback = (event, context, callback) => {
 		});
 		*/
 		
-		const form = new FormData();
+		const form = new formData();
 		form.append('grant_type', 'authorization_code');
 		form.append('code', authCode);
 		form.append('redirect_uri', 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback');
