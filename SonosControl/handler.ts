@@ -22,18 +22,24 @@ exports.authCallback = (event, context, callback) => {
 		const formBody = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
 
 		console.log('Sending POST request to retrieve token, body: ', formBody);
-		fetch('https://api.sonos.com/login/v3/oauth/access', {
+		const response = await fetch('https://api.sonos.com/login/v3/oauth/access', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
 				'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
 			}, 
 			body: formBody
-		}).then((response) => {
-			console.log('Success!  Results: ', response);
-		// }).catch(err=>{console.error('Error: ', err)
 		});
-
+		
+		console.log('Success!  Results: ', response);
+		
+		/*
+		.then((response) => {
+			console.log('Success!  Results: ', response);
+		}).catch(err=>{console.error('Error: ', err)
+		});
+		*/
+		
 		/*
 		axios.post('https://api.sonos.com/login/v3/oauth/access',
 			{grant_type: 'authorization_code',
