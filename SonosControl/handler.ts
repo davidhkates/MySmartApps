@@ -19,6 +19,19 @@ exports.authCallback = (event, context, callback) => {
 	});
 	
 	if (authCode) {
+		axios.post('https://api.sonos.com/login/v3/oauth/access',
+			{grant_type: 'authorization_code',
+			 code: authCode,
+			 redirect_uri': 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback'
+			}, {
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+					'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
+				}
+			}
+		);
+	
+		/*
 		const uriAuth = 'https://api.sonos.com/login/v3/oauth/access';
 		// const request = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
 		// console.log('Request: ', request);
