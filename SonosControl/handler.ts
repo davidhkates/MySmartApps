@@ -12,12 +12,13 @@ exports.authCallback = (event, context, callback) => {
 
 	const message = {'message': 'Auth Code: ' + authCode};
 
+	/*
 	callback(null, {
 		statusCode: 200,
 		body: JSON.stringify(message),
 		headers: {'Content-Type': 'application/json'}
 	});
-
+	*/
 	
 	const uriAuth = 'https://api.sonos.com/login/v3/oauth/access';
 	// const request = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
@@ -38,7 +39,6 @@ exports.authCallback = (event, context, callback) => {
 	};
 
 	console.log('Making call to get token, headers:', postHeaders, ', data: ', postData);
-	/*
 	axios.post(uriAuth, postData, postHeaders)
 		.then((res) => {
 			console.log("Response received: ", res);
@@ -46,8 +46,6 @@ exports.authCallback = (event, context, callback) => {
 	.catch((err) => {
 		console.log("Error: ", err);
 	})
-	*/
-	
 };
 
 /*
