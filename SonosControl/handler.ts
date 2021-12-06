@@ -38,6 +38,7 @@ exports.authCallback = (event, context, callback) => {
 	};
 
 	console.log('Making call to get token, headers:', postHeaders, ', data: ', postData);
+	/*
 	axios.post(uriAuth, postData, postHeaders)
 		.then((res) => {
 			console.log("Response received: ", res);
@@ -45,6 +46,7 @@ exports.authCallback = (event, context, callback) => {
 	.catch((err) => {
 		console.log("Error: ", err);
 	})
+	*/
 	
 };
 
