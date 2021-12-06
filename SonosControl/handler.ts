@@ -20,8 +20,8 @@ exports.authCallback = (event, context, callback) => {
 	
 	if (authCode) {
 		const formBody = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Ftoken-callback';
-		
-		fetch('https://example.com/login', {
+
+		fetch('https://api.sonos.com/login/v3/oauth/access', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
