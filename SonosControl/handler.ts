@@ -28,9 +28,9 @@ exports.authCallback = (event, context, callback) => {
 				'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
 			},
 			body: formBody
-		}).then(function(res) {
+		}).then(res) {
 			console.log('Success!  Results: ', res);
-		}).else(function(err) {
+		}).catch(err) {
 			error.log('Error: ', err);
 		})
 		
