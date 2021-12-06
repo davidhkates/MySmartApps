@@ -21,6 +21,7 @@ exports.authCallback = (event, context, callback) => {
 	if (authCode) {
 		const formBody = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
 
+		console.log('Sending POST request to retrieve token, body: ', formBody);
 		fetch('https://api.sonos.com/login/v3/oauth/access', {
 			method: 'POST',
 			headers: {
@@ -33,12 +34,6 @@ exports.authCallback = (event, context, callback) => {
 		// }).catch(err=>{console.error('Error: ', err)
 		});
 
-fetch("https://jsonplaceholder.typicode.com/users/1")
-  .then((response) => response.json()) //2
-  .then((user) => {
-    console.log(user.address); //3
-  });
-		
 		/*
 		axios.post('https://api.sonos.com/login/v3/oauth/access',
 			{grant_type: 'authorization_code',
