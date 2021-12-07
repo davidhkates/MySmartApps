@@ -38,15 +38,6 @@ exports.authCallback = (event, context, callback) => {
 		axios.post(urlToken, params, config).then((result) => {
 			console.log('Success!  Data: ', result.data);
 			
-			/*
-			const headers = {
-				headers: {
-					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + result.data.access_token
-				}
-			}
-			*/
-			
 			const sonosControl = axios.create({
 				baseURL: 'https://api.ws.sonos.com/control/api/v1',
 				timeout: 1000,
@@ -55,13 +46,15 @@ exports.authCallback = (event, context, callback) => {
 					'Authorization': 'Bearer ' + result.data.access_token
 				}
 			});
-				
-				
-			// axios.get('https://api.ws.sonos.com/control/api/v1/households', headers).then((result) => {
+								
 			sonosControl.get('households').then((result) => {
+				const idHousehold = result.data.households[0].id;
 				console.log('Households: ', result.data);
 				
-				const message = {'Households': result.data};
+				const message = {'Households': idHousehold};
+				
+				const devices = await sonosControl.get('households/' + idHousehold + '/groups');
+				console.log('Devices: ', result.data);
 				
 				callback(null, {
 					statusCode: 200,
