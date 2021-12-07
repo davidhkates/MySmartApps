@@ -69,9 +69,12 @@ exports.authCallback = (event, context, callback) => {
 				timeout: 1000,
 				headers: {
 					'Content-Type': 'application/json',
-					'Authorization': 'Bearer ' + result.data.access_token
+					'Authorization': result.data.token_type + ' ' + result.data.access_token
 				}
 			});
+			
+			SmartState.putValue( 'smartapp-home-settings', 'sonos-access-token', result.data.access_token );
+			SmartState.putValue( 'smartapp-home-settings', 'sonos-refresh-token', result.data.refresh_token );
 
 			/*
 			const households: any = getSonosData( sonosControl, 'households' );
@@ -85,28 +88,32 @@ exports.authCallback = (event, context, callback) => {
 			});
 			*/
 			
+			/*
 			const householdPromise = callSonosAPI( sonosControl, 'households' );
 			console.log('Households: ', householdPromise);
 			const householdList = async () => {
 				const listValue = await householdPromise;
 				console.log('Households: ', listValue);
 			};
+			*/
 			
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
 				console.log('Households: ', result.data);
 				
-				const message = {'Households': idHousehold};
 				
 				sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 					console.log('Devices: ', result.data);
 				});
-				
+
+				callback(null, {body: JSON.stringify({'Households': idHousehold})});
+				/*
 				callback(null, {
 					statusCode: 200,
-					body: JSON.stringify(message),
+					body: JSON.stringify({'Households': idHousehold}),
 					headers: {'Content-Type': 'application/json'}
 				});
+				*/
 			})
 			
 		}).catch((err) => {
