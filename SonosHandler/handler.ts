@@ -16,7 +16,17 @@ const axios = require("axios");
 const qs = require("qs");
 
 // Local functions
-async function callSonosAPI( sonosControl, endpoint ) {
+async function callSonosAPI( token_data, endpoint ) {
+	
+	const sonosControl = axios.create({
+		baseURL: 'https://api.ws.sonos.com/control/api/v1',
+		timeout: 1000,
+		headers: {
+			'Content-Type': 'application/json',
+			'Authorization': token_data.token_type + ' ' + token_data.access_token
+		}
+	});
+			
 	sonosControl.get(endpoint).then((result) => {
 		console.log('callSonosAPI: ', result);
 		return result;
@@ -26,7 +36,7 @@ async function callSonosAPI( sonosControl, endpoint ) {
 }
 
 async function putSonosData( key, value ) {
-	SmartState.putValue( 'smartapp-home-settings', key, value );
+	SmartState.putHomeMode('niwot', 'sonos-' + key, value);
 }
 
 
@@ -74,8 +84,10 @@ exports.authCallback = (event, context, callback) => {
 				}
 			});
 			
-			SmartState.putValue( 'smartapp-home-settings', 'sonos-access-token', result.data.access_token );
-			SmartState.putValue( 'smartapp-home-settings', 'sonos-refresh-token', result.data.refresh_token );
+			// store tokens in DynamoDB home settings file
+			const token_data = result.data;
+			putSonosData( 'access-token', token_data.access_token );
+			putSonosData( 'refresh-token', token_data.refresh_token );
 
 			/*
 			const households: any = getSonosData( sonosControl, 'households' );
@@ -89,14 +101,12 @@ exports.authCallback = (event, context, callback) => {
 			});
 			*/
 			
-			/*
-			const householdPromise = callSonosAPI( sonosControl, 'households' );
+			const householdPromise = callSonosAPI( token_data, 'households' );
 			console.log('Households: ', householdPromise);
 			const householdList = async () => {
 				const listValue = await householdPromise;
 				console.log('Households: ', listValue);
 			};
-			*/
 			
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
