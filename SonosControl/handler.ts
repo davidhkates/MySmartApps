@@ -2,7 +2,8 @@
 
 // Install relevant node packages
 const axios = require("axios");
-const formData = require("form-data");
+const qs = require("qs");
+// const formData = require("form-data");
 // const base64 = require("base64-js");
 
 // Sonos authorization callback
@@ -13,17 +14,39 @@ exports.authCallback = (event, context, callback) => {
 
 	const message = {'message': 'Auth Code: ' + authCode};
 
+	/*
 	callback(null, {
 		statusCode: 200,
 		body: JSON.stringify(message),
 		headers: {'Content-Type': 'application/json'}
 	});
+	*/
 	
 	if (authCode) {
-		const formBody = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
+		// const formBody = 'grant_type=authorization_code&code=' + authCode + '&redirect_uri=https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback';
+		const url = 'https://api.sonos.com/login/v3/oauth/access';
 
-		console.log('Sending POST request to retrieve token, body: ', formBody);
+		const params = new URLSearchParams();
+		params.append('grant_type', 'authorization_code');
+		params.append('code', authCode);
+		params.append('redirect_uri', 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback');
+	
+		const config = {
+			headers: {
+				'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
+				'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
+			}
+		}
 		
+		console.log('Sending POST request to retrieve token, parameters: ', params);
+		axios.post(url, params, config)
+			.then((result) => {
+				console.log('Success: ', result);
+			})
+			.catch((err) => {
+				console.log('Error: ', err);
+			})		
+			
 		/*
 		const response = fetch('https://api.sonos.com/login/v3/oauth/access', {
 			method: 'POST',
@@ -43,20 +66,24 @@ exports.authCallback = (event, context, callback) => {
 		});
 		*/
 		
+		/*
 		const form = new formData();
 		form.append('grant_type', 'authorization_code');
 		form.append('code', authCode);
 		form.append('redirect_uri', 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback');
-
+		*/
+		
 		// axios.post('https://example.com', form, { headers: form.getHeaders() })
 		
-		axios.post('https://api.sonos.com/login/v3/oauth/access', form, {
+		/*
+		axios.post('https://api.sonos.com/login/v3/oauth/access', formBody, {
 				headers: {
 					'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8',
 					'Authorization': 'Basic ZDMxM2EyYTAtOTYwZS00ODFmLTlmYzctM2MwMmU0MzY2OTU1OjNhY2ZkZmQ5LTI3YzQtNGE3NC05NzhkLWUyN2ZlZmE0NWJkMg=='
 				}
 			}
 		);
+		*/
 	
 		/*
 		const uriAuth = 'https://api.sonos.com/login/v3/oauth/access';
