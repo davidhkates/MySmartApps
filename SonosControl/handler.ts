@@ -4,11 +4,6 @@
 const axios = require("axios");
 const qs = require("qs");
 
-// SmartApp type definitions
-interface device {
-	[value: string]: any
-}
-
 // Local functions
 function getSonosData( sonosControl, verb ) {
 	sonosControl.get(verb).then((result) => {
@@ -63,9 +58,9 @@ exports.authCallback = (event, context, callback) => {
 				}
 			});
 
-			const households: device = getSonosData( sonosControl, 'households' );
+			const households: any = getSonosData( sonosControl, 'households' );
 			const idHousehold = households.data.households[0].id;
-			const devices: device = getSonosData( sonosControl, 'households/' + idHousehold + '/groups');
+			const devices: any = getSonosData( sonosControl, 'households/' + idHousehold + '/groups');
 
 			callback(null, {
 				statusCode: 200,
