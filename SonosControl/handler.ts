@@ -53,8 +53,9 @@ exports.authCallback = (event, context, callback) => {
 				
 				const message = {'Households': idHousehold};
 				
-				const devices = await sonosControl.get('households/' + idHousehold + '/groups');
-				console.log('Devices: ', result.data);
+				sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
+					console.log('Devices: ', result.data);
+				});
 				
 				callback(null, {
 					statusCode: 200,
