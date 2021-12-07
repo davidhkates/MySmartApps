@@ -7,12 +7,12 @@ const qs = require("qs");
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
-	console.log('Event: ', event);
-	console.log('Code: ', authCode);
-
-	const message = {'message': 'Auth Code: ' + authCode};
+	// console.log('Event: ', event);
+	// console.log('Code: ', authCode);
 
 	/*
+	const message = {'message': 'Auth Code: ' + authCode};
+
 	callback(null, {
 		statusCode: 200,
 		body: JSON.stringify(message),
@@ -37,15 +37,38 @@ exports.authCallback = (event, context, callback) => {
 		
 		axios.post(urlToken, params, config).then((result) => {
 			console.log('Success!  Data: ', result.data);
+			
+			/*
 			const headers = {
 				headers: {
 					'Content-Type': 'application/json',
 					'Authorization': 'Bearer ' + result.data.access_token
 				}
 			}
+			*/
+			
+			const sonosControl = axios.create({
+				baseURL: 'https://api.ws.sonos.com/control/api/v1',
+				timeout: 1000,
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + result.data.access_token
+				}
+			});
 				
-			axios.get('api.ws.sonos.com/control/api/v1/households', headers).then((result) => {
+				
+			// axios.get('https://api.ws.sonos.com/control/api/v1/households', headers).then((result) => {
+			sonosControl.get('households').then((result) => {
 				console.log('Households: ', result.data);
+				
+				const message = {'Households': result.data};
+				
+				callback(null, {
+					statusCode: 200,
+					body: JSON.stringify(message),
+					headers: {'Content-Type': 'application/json'}
+				});
+				
 			})
 			
 		}).catch((err) => {
