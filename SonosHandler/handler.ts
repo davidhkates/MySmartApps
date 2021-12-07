@@ -16,7 +16,7 @@ const axios = require("axios");
 const qs = require("qs");
 
 // Local functions
-function callSonosAPI( sonosControl, endpoint ) {
+async function callSonosAPI( sonosControl, endpoint ) {
 	sonosControl.get(endpoint).then((result) => {
 		return result;
 	}).catch((err) => {
@@ -85,14 +85,12 @@ exports.authCallback = (event, context, callback) => {
 			});
 			*/
 			
-			const householdPromise = callSonosAPI( sonosControl, 'households' );
+			const householdPromise = await callSonosAPI( sonosControl, 'households' );
 			console.log('Households: ', householdPromise);
-			/*
 			const householdList = async () => {
 				const listValue = await householdPromise;
 				console.log('Households: ', listValue);
 			};
-			*/
 			
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
