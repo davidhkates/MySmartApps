@@ -4,9 +4,20 @@
 const axios = require("axios");
 const qs = require("qs");
 
-function getSonosData( sonosControl, verb ) {
-	
+// SmartApp type definitions
+interface device {
+	[value: string]: any
 }
+
+// Local functions
+function getSonosData( sonosControl, verb ) {
+	sonosControl.get(verb).then((result) => {
+		return result;
+	}).catch((err) => {
+		console.log('Error: ', err);
+	})		
+}
+
 
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
@@ -52,9 +63,9 @@ exports.authCallback = (event, context, callback) => {
 				}
 			});
 
-			const households = getSonosData( sonosControl, 'households' );
+			const households: device = getSonosData( sonosControl, 'households' );
 			const idHousehold = households.data.households[0].id;
-			const devices = getSonosData( sonosControl, 'households/' + idHousehold + '/groups');
+			const devices: device = getSonosData( sonosControl, 'households/' + idHousehold + '/groups');
 
 			callback(null, {
 				statusCode: 200,
