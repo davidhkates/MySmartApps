@@ -18,6 +18,7 @@ const qs = require("qs");
 // Local functions
 async function callSonosAPI( sonosControl, endpoint ) {
 	sonosControl.get(endpoint).then((result) => {
+		console.log('callSonosAPI: ', result);
 		return result;
 	}).catch((err) => {
 		console.log('Error: ', err);
