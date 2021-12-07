@@ -4,6 +4,10 @@
 const axios = require("axios");
 const qs = require("qs");
 
+function getSonosData( sonosControl, verb ) {
+	
+}
+
 // Sonos authorization callback
 exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
@@ -20,7 +24,8 @@ exports.authCallback = (event, context, callback) => {
 	});
 	*/
 	
-	if (authCode) {
+	// if (authCode) {
+	
 		const urlToken = 'https://api.sonos.com/login/v3/oauth/access';
 
 		const params = new URLSearchParams();
@@ -46,7 +51,18 @@ exports.authCallback = (event, context, callback) => {
 					'Authorization': 'Bearer ' + result.data.access_token
 				}
 			});
-								
+
+			const households = getSonosData( sonosControl, 'households' );
+			const idHousehold = households.data.households[0].id;
+			const devices = getSonosData( sonosControl, 'households/' + idHousehold + '/groups');
+
+			callback(null, {
+				statusCode: 200,
+				body: JSON.stringify({'Households': idHousehold}),
+				headers: {'Content-Type': 'application/json'}
+			});
+			
+			/*
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
 				console.log('Households: ', result.data);
@@ -64,11 +80,12 @@ exports.authCallback = (event, context, callback) => {
 				});
 				
 			})
+			*/
 			
 		}).catch((err) => {
 			console.log('Error: ', err);
 		})		
-	}
+	// }
 };
 
 
