@@ -21,7 +21,7 @@ exports.authCallback = (event, context, callback) => {
 	*/
 	
 	if (authCode) {
-		const url = 'https://api.sonos.com/login/v3/oauth/access';
+		const urlToken = 'https://api.sonos.com/login/v3/oauth/access';
 
 		const params = new URLSearchParams();
 		params.append('grant_type', 'authorization_code');
@@ -35,8 +35,19 @@ exports.authCallback = (event, context, callback) => {
 			}
 		}
 		
-		axios.post(url, params, config).then((result) => {
+		axios.post(urlToken, params, config).then((result) => {
 			console.log('Success!  Data: ', result.data);
+			const headers = {
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + result.data.access_token
+				}
+			}
+				
+			axios.get('api.ws.sonos.com/control/api/v1/households', headers).then((result) => {
+				console.log('Households: ', result.data);
+			})
+			
 		}).catch((err) => {
 			console.log('Error: ', err);
 		})		
