@@ -58,6 +58,7 @@ exports.authCallback = (event, context, callback) => {
 				}
 			});
 
+			/*
 			const households: any = getSonosData( sonosControl, 'households' );
 			const idHousehold = households.data.households[0].id;
 			const devices: any = getSonosData( sonosControl, 'households/' + idHousehold + '/groups');
@@ -67,8 +68,8 @@ exports.authCallback = (event, context, callback) => {
 				body: JSON.stringify({'Households': idHousehold}),
 				headers: {'Content-Type': 'application/json'}
 			});
+			*/
 			
-			/*
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
 				console.log('Households: ', result.data);
@@ -84,9 +85,7 @@ exports.authCallback = (event, context, callback) => {
 					body: JSON.stringify(message),
 					headers: {'Content-Type': 'application/json'}
 				});
-				
 			})
-			*/
 			
 		}).catch((err) => {
 			console.log('Error: ', err);
