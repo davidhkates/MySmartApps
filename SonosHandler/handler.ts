@@ -85,7 +85,7 @@ exports.authCallback = (event, context, callback) => {
 			});
 			*/
 			
-			const householdList = callSonosAPI( sonosControl, 'households' );
+			const householdList = await callSonosAPI( sonosControl, 'households' );
 			console.log('Households: ', householdList);
 			
 			sonosControl.get('households').then((result) => {
