@@ -1,16 +1,31 @@
+//---------------------------------------------------------------------------------------
+// Sonos Handler - get sonos household device information and keep token refreshed
+//---------------------------------------------------------------------------------------
 'use strict'
+
+// Load SmartApp SDK APIs
+// const SmartApp = require('@smartthings/smartapp');
+
+// Install relevant SmartApp utilities
+// const SmartDevice = require('@katesthings/smartdevice');
+// const SmartUtils  = require('@katesthings/smartutils');
+const SmartState  = require('@katesthings/smartstate');
 
 // Install relevant node packages
 const axios = require("axios");
 const qs = require("qs");
 
 // Local functions
-function getSonosData( sonosControl, verb ) {
-	sonosControl.get(verb).then((result) => {
+async function callSonosAPI( sonosControl, endpoint ) {
+	sonosControl.get(endpoint).then((result) => {
 		return result;
 	}).catch((err) => {
 		console.log('Error: ', err);
 	})		
+}
+
+async function putSonosData( key, value ) {
+	SmartState.putValue( 'smartapp-home-settings', key, value );
 }
 
 
@@ -69,6 +84,9 @@ exports.authCallback = (event, context, callback) => {
 				headers: {'Content-Type': 'application/json'}
 			});
 			*/
+			
+			const householdList = callSonosAPI( sonosControl, 'households' );
+			console.log('Households: ', householdList);
 			
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
