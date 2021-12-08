@@ -33,6 +33,7 @@ async function callSonosAPI( token_data, endpoint ) {
 */
 
 async function putSonosData( key, value ) {
+	console.log('putSonosData - key: ', key, ', value: ', value);
 	SmartState.putHomeMode('niwot', 'sonos-' + key, value);
 }
 
