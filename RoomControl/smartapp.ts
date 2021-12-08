@@ -156,7 +156,7 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 	console.log('Context, room speakers: ', context.config.roomSpeakers);
-	console.log('roomControl - room speakers: ', context.configStringValue('roomSpeakers');
+	console.log('roomControl - room speakers: ', context.configStringValue('roomSpeakers'));
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
