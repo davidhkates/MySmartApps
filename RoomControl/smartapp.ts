@@ -109,6 +109,7 @@ module.exports = new SmartApp()
 	});
 
 	page.section('speakers', section => {
+		// section.textSetting('roomSpeakers').required(false);
 		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 		// section.deviceSetting('roomSpeakers').capabilities(['audioMute'])
 			.required(false).multiple(true).permissions('rx');
@@ -155,8 +156,12 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
-	console.log('Context, room speakers: ', context.config.roomSpeakers);
-	console.log('roomControl - room speakers: ', context.configStringValue('roomSpeakers'));
+	console.log('roomControl - room speakers context: ', context.config.roomSpeakers);
+	try {
+		const speakerProfile = await context.api.DeviceProfile.get(context.config.roomSpeakers.id);
+	} catch(err) {
+		console.log('roomControl - error getting speaker device profile: ', err);
+	}
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
