@@ -119,7 +119,7 @@ exports.authCallback = (event, context, callback) => {
 				});
 
 				// callback(null, {body: JSON.stringify({'Households': idHousehold})});
-				callback(null, {body: 'Success!  Tokens and groups stored in DynamoDB'});
+				callback(null, {body: 'Success!  Tokens and groups stored in DynamoDB smartapp-home-settings'});
 				/*
 				callback(null, {
 					statusCode: 200,
