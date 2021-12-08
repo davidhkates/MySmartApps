@@ -34,12 +34,12 @@ async function callSonosAPI( token_data, endpoint ) {
 
 async function putSonosData( key, value ) {
 	console.log('putSonosData - key: ', key, ', value: ', value);
-	await SmartState.putHomeMode('niwot', 'sonos-' + key, value);
+	SmartState.putHomeMode('niwot', 'sonos-' + key, value);
 }
 
 
 // Sonos authorization callback
-async exports.authCallback = (event, context, callback) => {
+exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
 	// console.log('Event: ', event);
 	// console.log('Code: ', authCode);
@@ -111,12 +111,13 @@ async exports.authCallback = (event, context, callback) => {
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
 				console.log('Households: ', result.data);
+				putSonosData( 'household-id', idHousehold );
 				
 				
 				sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 					console.log('Groups: ', result.data.groups);
 					console.log('Stringified: ', JSON.stringify(result.data.groups));
-					await putSonosData( 'groups-json', 'test' );
+					putSonosData( 'groups-json', 'test' );
 				});
 
 				// callback(null, {body: JSON.stringify({'Households': idHousehold})});
