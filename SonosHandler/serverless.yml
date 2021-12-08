@@ -2,10 +2,7 @@ service: sonos-oauth
 
 package:
   patterns:
-    - index.js
-    - smartapp.js
-    - locales/**
-    - api/handler.js
+    - handler.js
     
 provider:
   name: aws
@@ -24,9 +21,9 @@ functions:
       - http:
           path: auth-callback
           method: get
-  token-callback:
-    handler: handler.tokenCallback
-    events:
-      - http:
-          path: token-callback
-          method: any
+#  token-callback:
+#    handler: handler.tokenCallback
+#    events:
+#      - http:
+#          path: token-callback
+#          method: get
