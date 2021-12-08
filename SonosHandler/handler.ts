@@ -115,9 +115,11 @@ exports.authCallback = (event, context, callback) => {
 				
 				sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 					console.log('Devices: ', result.data);
+					putSonosData( 'groups', result.data.groups );
 				});
 
-				callback(null, {body: JSON.stringify({'Households': idHousehold})});
+				// callback(null, {body: JSON.stringify({'Households': idHousehold})});
+				callback(null, {body: 'Success!  Tokens and groups stored in DynamoDB'});
 				/*
 				callback(null, {
 					statusCode: 200,
