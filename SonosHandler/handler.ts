@@ -3,12 +3,7 @@
 //---------------------------------------------------------------------------------------
 'use strict'
 
-// Load SmartApp SDK APIs
-// const SmartApp = require('@smartthings/smartapp');
-
-// Install relevant SmartApp utilities
-// const SmartDevice = require('@katesthings/smartdevice');
-// const SmartUtils  = require('@katesthings/smartutils');
+// Install relevant utilities
 const SmartState  = require('@katesthings/smartstate');
 
 // Install relevant node packages
@@ -16,6 +11,7 @@ const axios = require("axios");
 const qs = require("qs");
 
 // Local functions
+/*
 async function callSonosAPI( token_data, endpoint ) {
 	
 	const sonosControl = axios.create({
@@ -34,6 +30,7 @@ async function callSonosAPI( token_data, endpoint ) {
 		console.log('Error: ', err);
 	})		
 }
+*/
 
 async function putSonosData( key, value ) {
 	SmartState.putHomeMode('niwot', 'sonos-' + key, value);
@@ -101,12 +98,14 @@ exports.authCallback = (event, context, callback) => {
 			});
 			*/
 			
+			/*
 			const householdPromise = callSonosAPI( token_data, 'households' );
 			console.log('Households: ', householdPromise);
 			const householdList = async () => {
 				const listValue = await householdPromise;
 				console.log('Households: ', listValue);
 			};
+			*/
 			
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;

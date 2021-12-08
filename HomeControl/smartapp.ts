@@ -1,3 +1,7 @@
+//---------------------------------------------------------------------------------------
+// Home Control - set home state and settings based on time of day and events
+//---------------------------------------------------------------------------------------
+
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
 
