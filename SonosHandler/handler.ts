@@ -116,7 +116,7 @@ exports.authCallback = (event, context, callback) => {
 				sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 					console.log('Groups: ', result.data.groups);
 					console.log('Stringified: ', JSON.stringify(result.data.groups));
-					putSonosData( 'groups-json', 'test' );
+					await putSonosData( 'groups-json', 'test' );
 				});
 
 				// callback(null, {body: JSON.stringify({'Households': idHousehold})});
