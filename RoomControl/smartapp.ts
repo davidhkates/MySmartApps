@@ -158,7 +158,7 @@ module.exports = new SmartApp()
 	console.log('roomControl - start install/update');
 	console.log('roomControl - room speakers context: ', context.config.roomSpeakers);
 	try {
-		const speakerId = context.config.roomSpeakers[0].deviceConfig.deviceId;
+		const speakerId = context.config.roomContacts[0].deviceConfig.deviceId;
 		console.log('roomControl - speaker device ID: ', speakerId);
 		const speakerProfile = await context.api.deviceProfiles.get(speakerId);
 	} catch(err) {
