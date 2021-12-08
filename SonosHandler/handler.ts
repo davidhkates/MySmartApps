@@ -39,7 +39,7 @@ async function putSonosData( key, value ) {
 
 
 // Sonos authorization callback
-exports.authCallback = (event, context, callback) => {
+async exports.authCallback = (event, context, callback) => {
 	const authCode = event.queryStringParameters.code;
 	// console.log('Event: ', event);
 	// console.log('Code: ', authCode);
