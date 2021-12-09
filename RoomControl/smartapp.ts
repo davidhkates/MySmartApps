@@ -183,7 +183,7 @@ module.exports = new SmartApp()
 
 			const sonosControl = axios.create({
 				baseURL: 'https://api.ws.sonos.com/control/api/v1',
-				timeout: 1000,
+				timeout: 5000,
 				headers: {
 					'Content-Type': 'application/json',
 					'Authorization': 'Bearer ' + access_token
