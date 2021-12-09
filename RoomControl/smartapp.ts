@@ -160,6 +160,7 @@ module.exports = new SmartApp()
 	try {
 		var speaker: any;
 		for (speaker in context.config.roomSpeakers) {
+			console.log('roomControl - speaker: ', speaker);
 			const speakerId = speaker.deviceConfig.deviceId;
 			console.log('roomControl - speaker device ID: ', speakerId);
 			const speakerInfo = await context.api.devices.get(speakerId);
