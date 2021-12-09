@@ -161,8 +161,8 @@ module.exports = new SmartApp()
 	try {
 		const speakerId = context.config.roomMotion[0].deviceConfig.deviceId;
 		console.log('roomControl - speaker device ID: ', speakerId);
-		const speakerProfile = await context.api.deviceProfiles.get(speakerId);
-		console.log('roomControl - speaker profile: ', speakerProfile);
+		const speakerInfo = await context.api.devices.get(speakerId);
+		console.log('roomControl - speaker info: ', speakerInfo);
 	} catch(err) {
 		console.log('roomControl - error getting speaker device profile: ', err);
 	}
