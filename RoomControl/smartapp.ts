@@ -168,7 +168,31 @@ module.exports = new SmartApp()
 			console.log('roomControl - speaker info: ', speakerInfo);
 			const speakerName = speakerInfo.name;
 			console.log('roomControl = speaker name: ', speakerName);			
-			SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+			// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+			
+			const groups_json = JSON.parse( await SmartState.getHomeMode('niwot', 'sonos-groups-json') );
+			console.log('getGroupId - groups: ', groups_json);
+			const result = groups_json.find(speaker => speaker.name === speakerName);
+			console.log('getGroupId - speaker: ', result);
+			const groupId = result.id;
+			console.log('getGroupId - speaker: ', groupId);
+
+			const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
+			console.log('getGroupId - access token: ', access_token);
+
+			const sonosControl = axios.create({
+				baseURL: 'https://api.ws.sonos.com/control/api/v1',
+				timeout: 1000,
+				headers: {
+					'Content-Type': 'application/json',
+					'Authorization': 'Bearer ' + access_token
+				}
+			});
+
+			// console.log('controlSpeakers - speaker: ', speaker);
+			const urlControl = '/groups/' + groupId + '/playback/' + command;
+			sonosControl.post(urlControl);
+			
 		}
 	} catch(err) {
 		console.log('roomControl - error getting speaker device profile: ', err);
