@@ -167,6 +167,12 @@ module.exports = new SmartApp()
 			const speakerInfo = await context.api.devices.get(speakerId);
 			console.log('roomControl - speaker info: ', speakerInfo);
 			SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+			
+			const groups_json = JSON.parse( await SmartState.getHomeMode('niwot', 'sonos-groups-json') );
+			console.log('getGroupId - groups: ', groups_json);
+			const result = groups_json.find(speaker => speaker.name === speakerName);
+			console.log('getGroupId - speaker: ', result);
+
 		}
 	} catch(err) {
 		console.log('roomControl - error getting speaker device profile: ', err);
