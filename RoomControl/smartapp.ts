@@ -11,6 +11,7 @@ const SmartApp = require('@smartthings/smartapp');
 const SmartDevice = require('@katesthings/smartdevice');
 const SmartUtils  = require('@katesthings/smartutils');
 const SmartState  = require('@katesthings/smartstate');
+const SmartSonos  = require('@katesthings/smartsonos');
 
 // SmartApp type definitions
 interface device {
@@ -157,10 +158,13 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 	try {
-		const speakerId = context.config.roomSpeakers[0].deviceConfig.deviceId;
-		console.log('roomControl - speaker device ID: ', speakerId);
-		const speakerInfo = await context.api.devices.get(speakerId);
-		console.log('roomControl - speaker info: ', speakerInfo);
+		for (var speaker in context.config.roomSpeakers) {
+			const speakerId = speaker.deviceConfig.deviceId;
+			console.log('roomControl - speaker device ID: ', speakerId);
+			const speakerInfo = await context.api.devices.get(speakerId);
+			console.log('roomControl - speaker info: ', speakerInfo);
+			SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+		}
 	} catch(err) {
 		console.log('roomControl - error getting speaker device profile: ', err);
 	}
