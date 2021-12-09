@@ -175,7 +175,8 @@ module.exports = new SmartApp()
 			console.log('getGroupId - groups: ', groups_json);
 			const result = groups_json.find(speaker => speaker.name === speakerName);
 			console.log('getGroupId - speaker: ', result);
-			const groupId = result.id;
+			// const groupId = result.id;
+			const groupId = result.coordinatorId;
 			console.log('getGroupId - speaker: ', groupId);
 
 			const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
@@ -193,7 +194,7 @@ module.exports = new SmartApp()
 			// console.log('controlSpeakers - speaker: ', speaker);
 			const command = 'pause';
 			const urlControl = '/groups/' + groupId + '/playback/' + command;
-			// sonosControl.post(urlControl);
+			sonosControl.post(urlControl);
 			
 		}
 	} catch(err) {
