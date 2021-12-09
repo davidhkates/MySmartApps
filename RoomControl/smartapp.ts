@@ -156,10 +156,8 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
-	console.log('roomControl - room speakers context: ', context.config.roomSpeakers);
-	console.log('roomControl - room motion detectors context: ', context.config.roomMotion);
 	try {
-		const speakerId = context.config.roomMotion[0].deviceConfig.deviceId;
+		const speakerId = context.config.roomSpeakers[0].deviceConfig.deviceId;
 		console.log('roomControl - speaker device ID: ', speakerId);
 		const speakerInfo = await context.api.devices.get(speakerId);
 		console.log('roomControl - speaker info: ', speakerInfo);
