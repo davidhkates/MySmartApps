@@ -158,7 +158,8 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 	try {
-		for (var speaker: any in context.config.roomSpeakers) {
+		var speaker: any;
+		for (speaker in context.config.roomSpeakers) {
 			const speakerId = speaker.deviceConfig.deviceId;
 			console.log('roomControl - speaker device ID: ', speakerId);
 			const speakerInfo = await context.api.devices.get(speakerId);
