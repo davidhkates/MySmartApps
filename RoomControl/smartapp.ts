@@ -166,9 +166,9 @@ module.exports = new SmartApp()
 			console.log('roomControl - speaker device ID: ', speakerId);
 			const speakerInfo = await context.api.devices.get(speakerId);
 			console.log('roomControl - speaker info: ', speakerInfo);
-			// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
 			const speakerName = speakerInfo.name;
 			console.log('roomControl = speaker name: ', speakerName);			
+			SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
 		}
 	} catch(err) {
 		console.log('roomControl - error getting speaker device profile: ', err);
