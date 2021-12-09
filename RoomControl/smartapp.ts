@@ -193,7 +193,7 @@ module.exports = new SmartApp()
 			// console.log('controlSpeakers - speaker: ', speaker);
 			const command = 'pause';
 			const urlControl = '/groups/' + groupId + '/playback/' + command;
-			sonosControl.post(urlControl);
+			// sonosControl.post(urlControl);
 			
 		}
 	} catch(err) {
