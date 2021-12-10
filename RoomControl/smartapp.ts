@@ -175,14 +175,15 @@ module.exports = new SmartApp()
 		sonosControl.get('households').then((result) => {
 			const idHousehold = result.data.households[0].id;
 			console.log('Households: ', result.data);
-			putSonosData( 'household-id', idHousehold );
-					
-			/*
+			// putSonosData( 'household-id', idHousehold );
+
+			// get sonos groups and devices
 			sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 				const sonosGroups = result.data.groups;
 				console.log('Groups: ', result.data.groups);
 				// console.log('Stringified: ', JSON.stringify(result.data.groups));
 			
+				// pause all specified speakers
 				console.log('roomControl - room speakers: ', context.config.roomSpeakers);
 				for (const speaker of context.config.roomSpeakers) {
 					console.log('roomControl - speaker: ', speaker);
@@ -211,8 +212,7 @@ module.exports = new SmartApp()
 					const urlControl = '/groups/' + groupId + '/playback/' + command;
 					sonosControl.post(urlControl);
 				}
-			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
-			*/
+			})
 		})
 	} catch(err) { console.log('roomControl - error controlling Sonos: ', err); }
 	
