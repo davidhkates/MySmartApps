@@ -158,11 +158,11 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
+	/*
 	try {
 		// var speaker: any;
 		console.log('roomControl - room speakers: ', context.config.roomSpeakers);
 		
-		/*
 		// get household id
 		const sonosControl = axios.create({
 			baseURL: 'https://api.ws.sonos.com/control/api/v1',
