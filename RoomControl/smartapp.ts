@@ -182,6 +182,7 @@ module.exports = new SmartApp()
 				console.log('Groups: ', result.data.groups);
 				// console.log('Stringified: ', JSON.stringify(result.data.groups));
 			
+				/*
 				for (const speaker of context.config.roomSpeakers) {
 					console.log('roomControl - speaker: ', speaker);
 					const speakerId = speaker.deviceConfig.deviceId;
@@ -209,6 +210,7 @@ module.exports = new SmartApp()
 					const urlControl = '/groups/' + groupId + '/playback/' + command;
 					sonosControl.post(urlControl);
 				}
+				*/
 			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
 		} catch(err) { console.log('roomControl - error getting Sonos household id: ', err); }
 	} catch(err) { console.log('roomControl - error getting speaker device profile: ', err); }
