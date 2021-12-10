@@ -158,7 +158,7 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
-	/*
+
 	try {
 		// var speaker: any;
 		console.log('roomControl - room speakers: ', context.config.roomSpeakers);
@@ -173,6 +173,7 @@ module.exports = new SmartApp()
 			}
 		});
 
+		/*
 		sonosControl.get('households').then((result) => {
 			const idHousehold = result.data.households[0].id;
 			console.log('Households: ', result.data);
@@ -212,8 +213,8 @@ module.exports = new SmartApp()
 				}
 			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
 		} catch(err) { console.log('roomControl - error getting Sonos household id: ', err); }
+		*/
 	} catch(err) { console.log('roomControl - error getting speaker device profile: ', err); }
-	*/
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
