@@ -87,6 +87,16 @@ exports.authCallback = (event, context, callback) => {
 			putSonosData( 'access-token', token_data.access_token );
 			putSonosData( 'refresh-token', token_data.refresh_token );
 
+			// callback(null, {body: JSON.stringify({'Households': idHousehold})});
+			callback(null, {
+				statusCode: 200,
+				body: JSON.stringify({
+					'access-token': token_data.access_token,
+					'refresh-token': token_data.refresh_token
+				}),
+				headers: {'Content-Type': 'application/json'}
+			});
+
 			/*
 			const households: any = getSonosData( sonosControl, 'households' );
 			const idHousehold = households.data.households[0].id;
@@ -106,7 +116,6 @@ exports.authCallback = (event, context, callback) => {
 				const listValue = await householdPromise;
 				console.log('Households: ', listValue);
 			};
-			*/
 			
 			sonosControl.get('households').then((result) => {
 				const idHousehold = result.data.households[0].id;
@@ -129,8 +138,8 @@ exports.authCallback = (event, context, callback) => {
 					body: JSON.stringify({'Households': idHousehold}),
 					headers: {'Content-Type': 'application/json'}
 				});
-				*/
 			})
+			*/
 			
 		}).catch((err) => {
 			console.log('Error: ', err);
