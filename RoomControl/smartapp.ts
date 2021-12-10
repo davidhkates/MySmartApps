@@ -159,7 +159,7 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 
-	SmartSonos.controlSpeakers(context.config.roomSpeakers, 'pause');
+	SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 	/*
 	try {
 		// create axios sonos control object
