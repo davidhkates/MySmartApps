@@ -282,6 +282,7 @@ module.exports = new SmartApp()
 			if (stateOnGroup==='off') {
 				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+				console.log('roomSwitchOnHandler - turning speakers on', context.config['roomSpeakers']);
 				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 			}
 			/*
