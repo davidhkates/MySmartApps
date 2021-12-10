@@ -162,6 +162,7 @@ module.exports = new SmartApp()
 		// var speaker: any;
 		console.log('roomControl - room speakers: ', context.config.roomSpeakers);
 		
+		/*
 		// get household id
 		const sonosControl = axios.create({
 			baseURL: 'https://api.ws.sonos.com/control/api/v1',
@@ -182,7 +183,6 @@ module.exports = new SmartApp()
 				console.log('Groups: ', result.data.groups);
 				// console.log('Stringified: ', JSON.stringify(result.data.groups));
 			
-				/*
 				for (const speaker of context.config.roomSpeakers) {
 					console.log('roomControl - speaker: ', speaker);
 					const speakerId = speaker.deviceConfig.deviceId;
@@ -210,10 +210,10 @@ module.exports = new SmartApp()
 					const urlControl = '/groups/' + groupId + '/playback/' + command;
 					sonosControl.post(urlControl);
 				}
-				*/
 			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
 		} catch(err) { console.log('roomControl - error getting Sonos household id: ', err); }
 	} catch(err) { console.log('roomControl - error getting speaker device profile: ', err); }
+	*/
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
