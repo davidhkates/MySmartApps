@@ -171,13 +171,13 @@ module.exports = new SmartApp()
 			}
 		});
 
-		/*
 		// get household id
 		sonosControl.get('households').then((result) => {
 			const idHousehold = result.data.households[0].id;
 			console.log('Households: ', result.data);
 			putSonosData( 'household-id', idHousehold );
 					
+			/*
 			sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 				const sonosGroups = result.data.groups;
 				console.log('Groups: ', result.data.groups);
@@ -212,8 +212,8 @@ module.exports = new SmartApp()
 					sonosControl.post(urlControl);
 				}
 			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
+			*/
 		} catch(err) { console.log('roomControl - error getting Sonos household id: ', err); }
-		*/
 	} catch(err) { console.log('roomControl - error getting speaker device profile: ', err); }
 	
 	// unsubscribe all previously established subscriptions and scheduled events
