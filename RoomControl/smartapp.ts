@@ -160,10 +160,8 @@ module.exports = new SmartApp()
 	console.log('roomControl - start install/update');
 
 	try {
-		// var speaker: any;
-		console.log('roomControl - room speakers: ', context.config.roomSpeakers);
-		
-		// get household id
+		// create axios sonos control object
+		const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
 		const sonosControl = axios.create({
 			baseURL: 'https://api.ws.sonos.com/control/api/v1',
 			timeout: 5000,
@@ -174,6 +172,7 @@ module.exports = new SmartApp()
 		});
 
 		/*
+		// get household id
 		sonosControl.get('households').then((result) => {
 			const idHousehold = result.data.households[0].id;
 			console.log('Households: ', result.data);
@@ -184,6 +183,7 @@ module.exports = new SmartApp()
 				console.log('Groups: ', result.data.groups);
 				// console.log('Stringified: ', JSON.stringify(result.data.groups));
 			
+				console.log('roomControl - room speakers: ', context.config.roomSpeakers);
 				for (const speaker of context.config.roomSpeakers) {
 					console.log('roomControl - speaker: ', speaker);
 					const speakerId = speaker.deviceConfig.deviceId;
