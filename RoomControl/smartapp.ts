@@ -345,6 +345,7 @@ module.exports = new SmartApp()
 		} else {
 			console.log('roomSwitchOffHandler - turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+			console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
 			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'mute', 'setMute');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
