@@ -209,7 +209,7 @@ module.exports = new SmartApp()
 				const urlControl = '/groups/' + groupId + '/playback/' + command;
 				sonosControl.post(urlControl);
 			}
-		}
+		})
 	} catch(err) {
 		console.log('roomControl - error getting speaker device profile: ', err);
 	}
