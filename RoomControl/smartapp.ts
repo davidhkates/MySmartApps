@@ -159,6 +159,8 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 
+	SmartSonos.controlSpeakers(context.config.roomSpeakers, 'pause');
+	/*
 	try {
 		// create axios sonos control object
 		const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
@@ -174,41 +176,22 @@ module.exports = new SmartApp()
 		// get household id
 		sonosControl.get('households').then((result) => {
 			const idHousehold = result.data.households[0].id;
-			console.log('Households: ', result.data);
 			// putSonosData( 'household-id', idHousehold );
 
 			// get sonos groups and devices
 			sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
 				const sonosGroups = result.data.groups;
-				console.log('Groups: ', result.data.groups);
-				// console.log('Stringified: ', JSON.stringify(result.data.groups));
 			
 				// pause all specified speakers
-				console.log('roomControl - room speakers: ', context.config.roomSpeakers);
 				for (const speaker of context.config.roomSpeakers) {
-					console.log('roomControl - speaker: ', speaker);
 					const speakerId = speaker.deviceConfig.deviceId;
-					console.log('roomControl - speaker device ID: ', speakerId);
-					// const speakerInfo = await context.api.devices.get(speakerId);
 					context.api.devices.get(speakerId).then((speakerInfo) => {
-						console.log('roomControl - speaker info: ', speakerInfo);
 						const speakerName = speakerInfo.name;
-						console.log('roomControl = speaker name: ', speakerName);			
 						// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
 						
-						// const groups_json = JSON.parse( await SmartState.getHomeMode('niwot', 'sonos-groups-json') );
-						// console.log('getGroupId - groups: ', groups_json);
-						// const result = groups_json.find(speaker => speaker.name === speakerName);
 						const result = sonosGroups.find(speaker => speaker.name === speakerName);
-						console.log('getGroupId - speaker: ', result);
-						// const groupId = result.id;
 						const groupId = result.id;
-						console.log('getGroupId - speaker: ', groupId);
 
-						// const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
-						// console.log('getGroupId - access token: ', access_token);
-
-						// console.log('controlSpeakers - speaker: ', speaker);
 						const command = 'pause';
 						const urlControl = '/groups/' + groupId + '/playback/' + command;
 						sonosControl.post(urlControl);
@@ -217,6 +200,7 @@ module.exports = new SmartApp()
 			})
 		})
 	} catch(err) { console.log('roomControl - error controlling Sonos: ', err); }
+	*/
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
