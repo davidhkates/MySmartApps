@@ -189,7 +189,7 @@ module.exports = new SmartApp()
 					console.log('roomControl - speaker: ', speaker);
 					const speakerId = speaker.deviceConfig.deviceId;
 					console.log('roomControl - speaker device ID: ', speakerId);
-					const speakerInfo = await context.api.devices.get(speakerId);
+					const speakerInfo = context.api.devices.get(speakerId);
 					console.log('roomControl - speaker info: ', speakerInfo);
 					const speakerName = speakerInfo.name;
 					console.log('roomControl = speaker name: ', speakerName);			
