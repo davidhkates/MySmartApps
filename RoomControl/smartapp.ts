@@ -159,7 +159,6 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 
-	SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 	/*
 	try {
 		// create axios sonos control object
@@ -283,6 +282,7 @@ module.exports = new SmartApp()
 			if (stateOnGroup==='off') {
 				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 			}
 			/*
 			// Get the current states of the switches in the on group
@@ -345,6 +345,7 @@ module.exports = new SmartApp()
 		} else {
 			console.log('roomSwitchOffHandler - turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'mute', 'setMute');
 			// await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
 			console.log('roomSwitchOffHandler - turning off group complete');
