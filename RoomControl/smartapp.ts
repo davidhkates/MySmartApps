@@ -213,8 +213,8 @@ module.exports = new SmartApp()
 				}
 			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
 			*/
-		} catch(err) { console.log('roomControl - error getting Sonos household id: ', err) }
-	} catch(err) { console.log('roomControl - error getting speaker device profile: ', err) }
+		} catch(errHousehold) { console.log('roomControl - error getting Sonos household id: ', errHousehold); }
+	} catch(errToken) { console.log('roomControl - error retrieving Sonos tokens from home settings: ', errToken); }
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
