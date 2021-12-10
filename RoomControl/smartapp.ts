@@ -436,7 +436,7 @@ module.exports = new SmartApp()
 	// if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
 	if (bHomeActive) {
 		console.log('motionStartHandler - turning lights/switches on');
-		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
+		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
 	}
 
 	/*
@@ -478,6 +478,7 @@ module.exports = new SmartApp()
 	
 	// Cancel delayed off switch handler
 	await context.api.schedules.delete('delayedSwitchOff');
+	await context.api.schedules.delete('delayedGroupOff');
 	console.log('motionStartHandler - finished');
 })
 
