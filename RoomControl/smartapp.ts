@@ -173,46 +173,45 @@ module.exports = new SmartApp()
 		});
 
 		sonosControl.get('households').then((result) => {
-		const idHousehold = result.data.households[0].id;
-		console.log('Households: ', result.data);
-		putSonosData( 'household-id', idHousehold );
+			const idHousehold = result.data.households[0].id;
+			console.log('Households: ', result.data);
+			putSonosData( 'household-id', idHousehold );
+					
+			sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
+				const sonosGroups = result.data.groups;
+				console.log('Groups: ', result.data.groups);
+				// console.log('Stringified: ', JSON.stringify(result.data.groups));
 			
-		sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
-			const sonosGroups = result.data.groups;
-			console.log('Groups: ', result.data.groups);
-			// console.log('Stringified: ', JSON.stringify(result.data.groups));
-		
-			for (const speaker of context.config.roomSpeakers) {
-				console.log('roomControl - speaker: ', speaker);
-				const speakerId = speaker.deviceConfig.deviceId;
-				console.log('roomControl - speaker device ID: ', speakerId);
-				const speakerInfo = await context.api.devices.get(speakerId);
-				console.log('roomControl - speaker info: ', speakerInfo);
-				const speakerName = speakerInfo.name;
-				console.log('roomControl = speaker name: ', speakerName);			
-				// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
-				
-				// const groups_json = JSON.parse( await SmartState.getHomeMode('niwot', 'sonos-groups-json') );
-				// console.log('getGroupId - groups: ', groups_json);
-				// const result = groups_json.find(speaker => speaker.name === speakerName);
-				const result = sonosGroups.find(speaker => speaker.name === speakerName);
-				console.log('getGroupId - speaker: ', result);
-				// const groupId = result.id;
-				const groupId = result.id;
-				console.log('getGroupId - speaker: ', groupId);
+				for (const speaker of context.config.roomSpeakers) {
+					console.log('roomControl - speaker: ', speaker);
+					const speakerId = speaker.deviceConfig.deviceId;
+					console.log('roomControl - speaker device ID: ', speakerId);
+					const speakerInfo = await context.api.devices.get(speakerId);
+					console.log('roomControl - speaker info: ', speakerInfo);
+					const speakerName = speakerInfo.name;
+					console.log('roomControl = speaker name: ', speakerName);			
+					// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+					
+					// const groups_json = JSON.parse( await SmartState.getHomeMode('niwot', 'sonos-groups-json') );
+					// console.log('getGroupId - groups: ', groups_json);
+					// const result = groups_json.find(speaker => speaker.name === speakerName);
+					const result = sonosGroups.find(speaker => speaker.name === speakerName);
+					console.log('getGroupId - speaker: ', result);
+					// const groupId = result.id;
+					const groupId = result.id;
+					console.log('getGroupId - speaker: ', groupId);
 
-				// const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
-				// console.log('getGroupId - access token: ', access_token);
+					// const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
+					// console.log('getGroupId - access token: ', access_token);
 
-				// console.log('controlSpeakers - speaker: ', speaker);
-				const command = 'pause';
-				const urlControl = '/groups/' + groupId + '/playback/' + command;
-				sonosControl.post(urlControl);
-			}
-		})
-	} catch(err) {
-		console.log('roomControl - error getting speaker device profile: ', err);
-	}
+					// console.log('controlSpeakers - speaker: ', speaker);
+					const command = 'pause';
+					const urlControl = '/groups/' + groupId + '/playback/' + command;
+					sonosControl.post(urlControl);
+				}
+			} catch(err) { console.log('roomControl - error getting groups and devices: ', err); }
+		} catch(err) { console.log('roomControl - error getting Sonos household id: ', err); }
+	} catch(err) { console.log('roomControl - error getting speaker device profile: ', err); }
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
