@@ -53,7 +53,8 @@ async function controlHeater( context ) {
 	console.log('controlHeater - target temperature: ', targetTemp, ' isHomeActive: ', bHomeActive, ' bCheckSwitch: ', bCheckSwitch);
 	// if (targetTemp && (homeMode==='awake')) 
 	if (targetTemp && bHomeActive && bCheckSwitch) {
-		const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
+		// const indoorTemp = await SmartDevice.getTemperature( context, context.config.tempSensor[0] );
+		const indoorTemp = await SmartDevice.getTemperature( context, 'tempSensor' );
 		if (indoorTemp) {
 			console.log('controlHeater - indoor temperature: ', indoorTemp, ', target temperature: ', targetTemp);
 			if ( indoorTemp<targetTemp ) {
