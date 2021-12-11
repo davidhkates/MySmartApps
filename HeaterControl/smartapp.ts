@@ -27,7 +27,7 @@ async function controlHeater( context ) {
 	console.log('controlHeater - home is active: ', bHomeActive);
 
 	// Determine if ANY of the switch(es) to check are on
-	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, checkSwitches) != 'off');
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
 
 	/*
 	var bCheckSwitch = true;
@@ -82,15 +82,26 @@ async function controlHeater( context ) {
 
 async function stopHeater( context ) {
 	// turn off heater
-	console.log('stopHeater - turn off heater switch');
-	await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
-	// cancel any upcoming temperature check calls
+	console.log('stopHeater - turn off heater switch begin');
+
+	const endBehavior = context.configStringValue('endBehavior');
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+	
+	if (endBehavior==='always' || (endBehavior==='check' && !bCheckSwitch)) {
+		console.log('stopHeater - turn off heater switch, endBehavior: ', endBehavior, ', bCheckSwitch: ', bCheckSwitch);
+		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
+		// cancel any upcoming temperature check calls
+		await context.api.schedules.delete('checkTempHandler');
+	}
+	
+	/*
 	try {
 		await context.api.schedules.delete('checkTempHandler');
 		console.log('stopHeater - cancelled next temperature handler check');
 	} catch(err) {
 		console.error('stopHeater - no pending temperature handler checks: ', err);
 	}
+	*/
 	
 	/*
 	// reschedule heater start at specified time, if specified
@@ -100,6 +111,7 @@ async function stopHeater( context ) {
 		await context.api.schedules.runDaily('checkTempHandler', new Date(startTime));
 	}
 	*/
+	console.log('stopHeater - turn off heater switch complete');
 }
 
 
@@ -179,6 +191,8 @@ module.exports = new SmartApp()
 			'switch', 'switch.on', 'heaterSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
+			'switch', 'switch.off', 'checkSwitchOffHandler');
 		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
@@ -256,6 +270,16 @@ module.exports = new SmartApp()
 })
 
 
+// Turn off heater if all check switches are turned off outside of time window
+.subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
+	console.log('checkSwitchOffHandler - started, check to see whether to turn off heater');
+	// call stopHeater to check if heater should be turned off
+	stopHeater(context);
+	console.log('checkSwitchOffHandler - finished, check to see whether to turn off heater');
+})
+
+
+
 // If one or more contacts open, resuming checking temperature to control heater
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - started');
@@ -299,6 +323,7 @@ module.exports = new SmartApp()
 	console.log('contactClosedHandler - finished');
 })
 
+
 // Check temperature and turn on/off heater as appropriate
 .scheduledEventHandler('startHeaterHandler', async (context, event) => {		
 	console.log('startTempHandler - start controlling heater');
@@ -308,13 +333,16 @@ module.exports = new SmartApp()
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - turn off heater');
-	
+
+	/*
 	const endBehavior = context.configStringValue('endBehavior');
-	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, checkSwitches) != 'off');
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
 	
 	if (endBehavior==='always' || (endBehavior==='check' && !bCheckSwitch)) {
 		stopHeater(context);
 	}
+	*/
+	stopHeater(context);
 })
 
 // Check temperature and turn on/off heater as appropriate
