@@ -170,7 +170,7 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	console.log('roomSwitchOnHandler - starting, context: ' context, ', event: ', event);
+	console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
 	
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of mainSwitchPressed");
