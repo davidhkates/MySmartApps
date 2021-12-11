@@ -5,6 +5,7 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
+	"pages.mainPage.settings.motionEnabled.name": "Turn on room automatically with motion",
 	"pages.mainPage.settings.homeName.name": "Name of home to check state",
 	
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
