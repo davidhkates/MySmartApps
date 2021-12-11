@@ -138,6 +138,8 @@ module.exports = new SmartApp()
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
+		section.enumSetting('endBehavior').options(['off','check'])
+			.required(false).defaultValue('off');
 	});
 })
 
@@ -302,6 +304,10 @@ module.exports = new SmartApp()
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - turn off heater');
+	const endBehavior = context.configStringValue('endBehavior');
+	
+	if (endBehavior==='always' || (endBehavior==='check' && 
+	
 	stopHeater(context);
 })
 
