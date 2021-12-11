@@ -44,6 +44,7 @@ module.exports = new SmartApp()
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
+		section.booleanSetting('motionEnabled').defaultValue(true);
 		section.textSetting('homeName').required(false);
 	});
 
@@ -53,8 +54,7 @@ module.exports = new SmartApp()
 			.required(true).permissions('rx');
 		section.deviceSetting('onGroup').capabilities(['switch'])
 			.required(true).multiple(true).permissions('rx');
-		section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
-		// section.enumSetting('onBehavior').options(['onBefore', 'onAfter', 'onAlways']);
+		// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
 		section.deviceSetting('offGroup').capabilities(['switch'])
 			.required(false).multiple(true).permissions('rx');
 		section.numberSetting('offDelay').required(false).min(0);
@@ -69,8 +69,6 @@ module.exports = new SmartApp()
 	page.section('sensors', section => {
 		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 			.required(false).multiple(true).permissions('r');
-		// section.deviceSetting('roomMotionOn').capabilities(['motionSensor'])
-		//	.required(false).multiple(true).permissions('r');
 		section.numberSetting('motionDelay').required(false).min(0);
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
@@ -78,20 +76,9 @@ module.exports = new SmartApp()
 	});
 
 	page.section('speakers', section => {
-		// section.textSetting('roomSpeakers').required(false);
 		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-		// section.deviceSetting('roomSpeakers').capabilities(['audioMute'])
 			.required(false).multiple(true).permissions('rx');
 	});
-
-	// behavior at turn switch off and delay, if applicable
-	/*
-	page.section('behavior', section => {
-		section.enumSetting('offBehavior').options(['group','speakers', 'all','none'])
-			.defaultValue('both').required('true');
-		section.numberSetting('offDelay').required(false).min(0).defaultValue(0);
-	});
-	*/
 
 	// time window and days of week
 	page.section('time', section => {
@@ -126,48 +113,6 @@ module.exports = new SmartApp()
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
 
-	/*
-	try {
-		// create axios sonos control object
-		const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
-		const sonosControl = axios.create({
-			baseURL: 'https://api.ws.sonos.com/control/api/v1',
-			timeout: 5000,
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': 'Bearer ' + access_token
-			}
-		});
-
-		// get household id
-		sonosControl.get('households').then((result) => {
-			const idHousehold = result.data.households[0].id;
-			// putSonosData( 'household-id', idHousehold );
-
-			// get sonos groups and devices
-			sonosControl.get('households/' + idHousehold + '/groups').then((result) => {
-				const sonosGroups = result.data.groups;
-			
-				// pause all specified speakers
-				for (const speaker of context.config.roomSpeakers) {
-					const speakerId = speaker.deviceConfig.deviceId;
-					context.api.devices.get(speakerId).then((speakerInfo) => {
-						const speakerName = speakerInfo.name;
-						// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
-						
-						const result = sonosGroups.find(speaker => speaker.name === speakerName);
-						const groupId = result.id;
-
-						const command = 'pause';
-						const urlControl = '/groups/' + groupId + '/playback/' + command;
-						sonosControl.post(urlControl);
-					})
-				}
-			})
-		})
-	} catch(err) { console.log('roomControl - error controlling Sonos: ', err); }
-	*/
-	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete();
@@ -227,7 +172,8 @@ module.exports = new SmartApp()
 	// Get start and end times
 	const startTime = context.configStringValue('startTime');
 	const endTime = context.configStringValue('endTime');
-	const onTimeCheck = context.configStringValue('onTimeCheck');
+	// const onTimeCheck = context.configStringValue('onTimeCheck');
+	const onTimeCheck = true;
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
@@ -397,18 +343,22 @@ module.exports = new SmartApp()
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - start');
 
-	// check to see if home is active
-	const homeName = context.configStringValue('homeName');
-	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
-	console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
+	const motionEnabled = context.configStringValue('motionEnabled');
+	if (motionEnabled) {
 
-	// turn on light if in time window and check switch(es) are on
-	// if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
-	if (bHomeActive) {
-		console.log('motionStartHandler - turning lights/switches on');
-		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
+		// check to see if home is active
+		const homeName = context.configStringValue('homeName');
+		const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+		console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
+
+		// turn on light if in time window and check switch(es) are on
+		// if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
+		if (bHomeActive) {
+			console.log('motionStartHandler - turning lights/switches on');
+			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
+		}
 	}
-
+	
 	/*
 	// turn on room switch
 	console.log('motionStartHandler - turning room light(s) on');
