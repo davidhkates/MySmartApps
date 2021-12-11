@@ -187,7 +187,7 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 	*/
-	cont bTimeWindow = SmartUtils.inTimeContext(context, 'startTime', 'endTime');
+	const bTimeWindow = SmartUtils.inTimeContext(context, 'startTime', 'endTime');
 	// const onTimeCheck = context.configStringValue('onTimeCheck');
 	const onTimeCheck = 'onAlways';
 	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
