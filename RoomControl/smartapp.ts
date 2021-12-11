@@ -42,7 +42,7 @@ module.exports = new SmartApp()
 	// page.nextPageId('optionsPage');
 
 	// initialize state variable(s)
-	SmartState.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+	SmartState.putState( context, 'mainSwitchPressed', 'true' );
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
@@ -170,11 +170,11 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	console.log('roomSwitchOnHandler - starting, appId: ', context.event.appId;
+	console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
 	
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of mainSwitchPressed");
-	const switchPressed = await SmartState.getState( context.event.appId, 'mainSwitchPressed' );
+	const switchPressed = await SmartState.getState( context, 'mainSwitchPressed' );
 	console.log("Main Switch Pressed: ", switchPressed);
 	
 	// Get start and end times
@@ -204,7 +204,7 @@ module.exports = new SmartApp()
 			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 		} else {
 			console.log("Main switch NOT pressed, don't turn on other lights");
-			SmartState.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+			SmartState.putState( context, 'mainSwitchPressed', 'true' );
 		}
 		
 		/*
@@ -325,7 +325,7 @@ module.exports = new SmartApp()
 	console.log('groupOnHandler - starting, context: ', context, ' event: ', event);
 
 	// indicate main switch was NOT manually pressed
-	SmartState.putState( context.event.appId, 'mainSwitchPressed', 'false' );
+	SmartState.putState( context, 'mainSwitchPressed', 'false' );
 
 	// Turn on the main switch when a light in the on group is turned on
 	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
@@ -358,7 +358,7 @@ module.exports = new SmartApp()
 	// If we get here, turn off the main switch and reset roomSwitchPressed state variable
 	console.log('groupOffHandler - turning off lights/switches');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	SmartState.putState( context.event.appId, 'roomSwitchPressed', 'true' );
+	SmartState.putState( context, 'roomSwitchPressed', 'true' );
 	console.log('groupOffHandler - done');
 })
 
