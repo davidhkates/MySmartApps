@@ -264,9 +264,12 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - started');
 
+	/*
 	const startTime = new Date(context.configStringValue('startTime'));
 	const endTime   = new Date(context.configStringValue('endTime'));
 	if (SmartUtils.inTimeWindow(startTime, endTime)) {
+	*/
+	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime')) {
 		// await context.api.schedules.runIn('checkTempHandler', 0);
 		controlHeater(context);
 	}
