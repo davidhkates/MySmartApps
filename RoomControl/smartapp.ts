@@ -173,7 +173,7 @@ module.exports = new SmartApp()
 	const startTime = context.configStringValue('startTime');
 	const endTime = context.configStringValue('endTime');
 	// const onTimeCheck = context.configStringValue('onTimeCheck');
-	const onTimeCheck = true;
+	const onTimeCheck = 'onAlways';
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
