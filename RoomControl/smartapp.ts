@@ -322,7 +322,7 @@ module.exports = new SmartApp()
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
-	console.log('groupOnHandler - starting');
+	console.log('groupOnHandler - starting, context: ', context, ' event: ', event);
 
 	// indicate main switch was NOT manually pressed
 	SmartState.putState( context.event.appId, 'mainSwitchPressed', 'false' );
