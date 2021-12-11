@@ -166,19 +166,11 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
+	await context.api.subscriptions.delete();
+	/*
 	await context.api.schedules.delete('checkTempHandler');
 	await context.api.schedules.delete('startHeaterHandler');
 	await context.api.schedules.delete('stopHeaterHandler');
-
-	// test the new isOccupied function
-	/*
-	const homeName = context.configStringValue('homeName');
-	const bOccupied: boolean = await SmartState.isHomeActive(homeName);
-	console.log('Test isOccupied: ', bOccupied);	
-	
-	// debug statements
-	const homeMode = context.configStringValue('homeMode');
-	console.log('Current home mode: ', homeMode);	
 	*/
 	
 	// get heater enabled setting and turn off heater if not
@@ -201,28 +193,6 @@ module.exports = new SmartApp()
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
 		}
 
-		// check contact(s) state and turn off if all are closed
-		/*
-		var contactOpen = false;
-		const contactSensors =  context.config.doorContacts;
-		if (contactSensors) {
-			// Get the current states of the contact sensors
-			const stateRequests = contactSensors.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'contactSensor'
-			));
-
-			// Set contactOpen to true if at least one contact is open
-			const states = await Promise.all(stateRequests);
-			if (states.find(it => it.motion.value === 'open')) {
-				contactOpen = true;
-			}
-		} else {
-			contactOpen = true;
-		}
-		*/
-		
 		// set start and end time event handlers
 		const startTime = context.configStringValue('startTime');
 		const endTime   = context.configStringValue('endTime');
