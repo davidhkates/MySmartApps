@@ -259,7 +259,7 @@ module.exports = new SmartApp()
 .subscribedEventHandler('heaterSwitchOnHandler', async (context, event) => {
 	console.log('heaterSwitchOnHandler - started, heater switch turned on manually');
 
-	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime') {
+	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime')) {
 	/*
 	const startTime = context.configStringValue('startTime');	
 	const endTime   = context.configStringValue('endTime');
