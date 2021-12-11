@@ -27,6 +27,9 @@ async function controlHeater( context ) {
 	console.log('controlHeater - home is active: ', bHomeActive);
 
 	// Determine if ANY of the switch(es) to check are on
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, checkSwitches) != 'off');
+
+	/*
 	var bCheckSwitch = true;
 	const checkSwitches = context.config.checkSwitches;
 	console.log('controlHeater - check switches: ', checkSwitches);
@@ -42,6 +45,7 @@ async function controlHeater( context ) {
 		bCheckSwitch = !!( switchStates.find(it => it.switch.value === 'on') );		
 		console.log('controlHeater - are any of check switch(es) on?: ', bCheckSwitch);
 	}
+	*/
 		
 	// Get temperature(s) and set heater state, default heater state to off
 	var heaterState = 'off';
@@ -304,11 +308,13 @@ module.exports = new SmartApp()
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - turn off heater');
+	
 	const endBehavior = context.configStringValue('endBehavior');
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, checkSwitches) != 'off');
 	
-	if (endBehavior==='always' || (endBehavior==='check' && 
-	
-	stopHeater(context);
+	if (endBehavior==='always' || (endBehavior==='check' && !bCheckSwitch)) {
+		stopHeater(context);
+	}
 })
 
 // Check temperature and turn on/off heater as appropriate
