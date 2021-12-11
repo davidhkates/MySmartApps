@@ -30,39 +30,6 @@ if (process.env.NODE_ENV == "production") {
 }
 
 
-// Utility functions for this automation
-/*
-async function scheduleEndHandler( context ) {
-	// schedule room end handler at specified time, if specified
-	const endTime = context.configStringValue('endTime');
-	if (endTime) {
-		await context.api.schedules.runDaily('endTimeHandler', new Date(endTime));
-	}
-}
-*/
-
-async function getSwitchState( context, sensorName ) {
-	let switchState = 'off';  // default switch state to off
-	try {
-		const sensorArray = context.config[sensorName];
-		console.log('getSwitchState (local) - sensorArray: ', sensorArray);
-		const stateRequests = sensorArray.map(it => context.api.devices.getState(it.deviceConfig.deviceId));
-		// Set return value based on value of switch(es)		
-		const stateValues: any = await Promise.all(stateRequests);
-		console.log('getSwitchState (local) - stateValues: ', stateValues);
-		if (stateValues.find(it => it.components.main.switch.switch.value === 'on')) {
-			switchState = 'on';
-			if (stateValues.find(it => it.components.main.switch.switch.value === 'off')) {
-				switchState = 'mixed';
-			}
-		}		
-	} catch (err) {
-		console.log('getSwitchState (local) - error retrieving switch state: ', err);
-	}
-	return switchState;
-};
-
-
 /* Define the SmartApp */
 module.exports = new SmartApp()
 .enableEventLogging()  // logs requests and responses as pretty-printed JSON
@@ -276,7 +243,6 @@ module.exports = new SmartApp()
 		// if (onGroupSwitches) {
 		if (context.config.onGroup) {
 			console.log('roomSwitchOnHandler - calling local getSwitchState for onGroup');
-			// const stateOnGroup = await getSwitchState(context, 'onGroup');
 			const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
 			console.log('roomSwitchOnHandler - group switches state: ', stateOnGroup);
 			if (stateOnGroup==='off') {
@@ -554,7 +520,6 @@ module.exports = new SmartApp()
 	if ( SmartUtils.isDayOfWeek(daysOfWeek) ) {
 		console.log('endTimeHandler - run end time handler today based on daysOfWeek:', daysOfWeek);
 		// Turn off room switch(es) if main switch already turned off
-		// const isRoomOn = await SmartDevice.getSwitchState( context, context.config.roomSwitch[0]);
 		const isRoomOn = await SmartDevice.getSwitchState( context, 'roomSwitch');
 		console.log('endTimeHandler - isRoomOn state: ', isRoomOn );
 		if (isRoomOn!=='on') {
