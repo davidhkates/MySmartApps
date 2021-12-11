@@ -204,7 +204,7 @@ module.exports = new SmartApp()
 			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 		} else {
 			console.log("Main switch NOT pressed, don't turn on other lights");
-			stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+			SmartState.putState( context.event.appId, 'mainSwitchPressed', 'true' );
 		}
 		
 		/*
