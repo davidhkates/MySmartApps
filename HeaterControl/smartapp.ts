@@ -254,10 +254,17 @@ module.exports = new SmartApp()
 })
 
 
-// If heater turned ON manually, cancel subsequent check temperature calls to control heater
+// If heater turned ON manually, begin controlling heater in time window; else leave on
 .subscribedEventHandler('heaterSwitchOnHandler', async (context, event) => {
 	console.log('heaterSwitchOnHandler - started, heater switch turned on manually');
-	controlHeater(context);
+
+	// if (SmartUtils.inTimeWindow(context, 'startTime', 'endTime') {
+	const startTime = context.configStringValue('startTime');	
+	const endTime   = context.configStringValue('endTime');
+	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
+		controlHeater(context);
+	}
+		
 	console.log('heaterSwitchOnHandler - finished, maintain target temperature until end time');
 })
 
