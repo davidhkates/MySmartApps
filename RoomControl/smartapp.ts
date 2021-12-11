@@ -41,6 +41,9 @@ module.exports = new SmartApp()
 	// main options page with room controls and behaviors
 	// page.nextPageId('optionsPage');
 
+	// initialize state variable(s)
+	SmartState.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
@@ -169,7 +172,13 @@ module.exports = new SmartApp()
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
 	console.log('roomSwitchOnHandler - starting');
 	
+	// Get session state variable to see if button was manually pressed
+	console.log("Checking value of mainSwitchPressed");
+	const switchPressed = await SmartState.getState( context.event.appId, 'mainSwitchPressed' );
+	console.log("Main Switch Pressed: ", switchPressed);
+	
 	// Get start and end times
+	/*
 	const startTime = context.configStringValue('startTime');
 	const endTime = context.configStringValue('endTime');
 	// const onTimeCheck = context.configStringValue('onTimeCheck');
@@ -177,6 +186,10 @@ module.exports = new SmartApp()
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
+	*/
+	cont bTimeWindow = SmartUtils.inTimeContext(context, 'startTime', 'endTime');
+	// const onTimeCheck = context.configStringValue('onTimeCheck');
+	const onTimeCheck = 'onAlways';
 	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
 		
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
@@ -184,6 +197,17 @@ module.exports = new SmartApp()
 		// Cancel scheduled event to turn off main switch after delay
 		await context.api.schedules.delete('delayedOffSwitch');
 		
+		// check value of mainSwitchPressed state variable
+		if ( switchPressed == 'true' ) {
+			console.log("Main switch pressed, turning on all lights in OnGroup");
+			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
+			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+		} else {
+			console.log("Main switch NOT pressed, don't turn on other lights");
+			stateVariable.putState( context.event.appId, 'mainSwitchPressed', 'true' );
+		}
+		
+		/*
 		// Only turn on switches in the on group if none have already been turned on
 		// const onGroupSwitches = context.config.onGroup;
 		// if (onGroupSwitches) {
@@ -197,7 +221,7 @@ module.exports = new SmartApp()
 				console.log('roomSwitchOnHandler - turning speakers on', context.config['roomSpeakers']);
 				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 			}
-			/*
+
 			// Get the current states of the switches in the on group
 			const onGroupStates = await onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
 				it.deviceConfig.deviceId,
@@ -213,8 +237,8 @@ module.exports = new SmartApp()
 				console.log('roomSwitchOnHandler - turn on switches in on group');
 				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			}
-			*/
 		}
+		*/
 	}
 	
 	// Schedule turning off room switch if delay specified
@@ -301,10 +325,10 @@ module.exports = new SmartApp()
 	console.log('groupOnHandler - starting');
 
 	// indicate main switch was NOT manually pressed
-	// stateVariable.putState( context.event.appId, 'roomSwitchPressed', 'false' );
+	SmartState.putState( context.event.appId, 'mainSwitchPressed', 'false' );
 
 	// Turn on the main switch when a light in the on group is turned on
-	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
+	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
 })
 
 
@@ -334,7 +358,8 @@ module.exports = new SmartApp()
 	// If we get here, turn off the main switch and reset roomSwitchPressed state variable
 	console.log('groupOffHandler - turning off lights/switches');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	// stateVariable.putState( context.event.appId, 'roomSwitchPressed', 'true' );
+	SmartState.putState( context.event.appId, 'roomSwitchPressed', 'true' );
+	console.log('groupOffHandler - done');
 })
 
 
