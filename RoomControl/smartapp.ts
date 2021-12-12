@@ -371,7 +371,8 @@ module.exports = new SmartApp()
 	console.log('motionStartHandler - start');
 
 	const motionEnabled = context.configStringValue('motionEnabled');
-	if (motionEnabled) {
+	console.log('motionStartHandler - motionEnabled (truthy): ', motionEnabled, ', (boolean): ', !!motionEnabled);
+	if (!!motionEnabled) {
 
 		// check to see if home is active
 		const homeName = context.configStringValue('homeName');
