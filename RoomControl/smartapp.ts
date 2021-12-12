@@ -41,7 +41,7 @@ module.exports = new SmartApp()
 	// main options page with room controls and behaviors
 	// page.nextPageId('optionsPage');
 
-	// initialize control enabled flag to control other settings prompts
+	// set control enabled flag to control other settings prompts
 	const bControlEnabled = context.configBooleanValue('controlEnabled');
 
 	// initialize state variable(s)
@@ -75,33 +75,39 @@ module.exports = new SmartApp()
 })
 
 .page('optionsPage', (context, page, configData) => {
+
+	// set control enabled flag to control other settings prompts
+	const bControlEnabled = context.configBooleanValue('controlEnabled');
+
 	// room motion sensor(s) and door/window contact(s)
-	page.section('sensors', section => {
-		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.numberSetting('motionDelay').required(false).min(0);
-		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
-	});
+	if (bControlEnabled) {
+		page.section('sensors', section => {
+			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
+				.required(false).multiple(true).permissions('r');
+			section.numberSetting('motionDelay').required(false).min(0);
+			section.deviceSetting('roomContacts').capabilities(['contactSensor'])
+				.required(false).multiple(true).permissions('r');
+			section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
+		});
 
-	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-			.required(false).multiple(true).permissions('rx');
-	});
+		page.section('speakers', section => {
+			section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+				.required(false).multiple(true).permissions('rx');
+		});
 
-	// time window and days of week
-	page.section('time', section => {
-		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
-			defaultValue('everyday').required(true);
-		section.timeSetting('startTime').required(false).submitOnChange(true);
-		if (context.configStringValue('startTime')) {
-			section.timeSetting('endTime').required(false);
-		}
-	});
+		// time window and days of week
+		page.section('time', section => {
+			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
+				defaultValue('everyday').required(true);
+			section.timeSetting('startTime').required(false).submitOnChange(true);
+			if (context.configStringValue('startTime')) {
+				section.timeSetting('endTime').required(false);
+			}
+		});
 
-	// specify next (third) options page
-	// page.nextPageId('timePage');
+		// specify next (third) options page
+		// page.nextPageId('timePage');
+	}
 })
 
 /*
