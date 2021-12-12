@@ -210,7 +210,7 @@ module.exports = new SmartApp()
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');
-			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 			console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
 		} else {
 			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
