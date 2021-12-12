@@ -84,7 +84,7 @@ exports.authCallback = (event, context, callback) => {
 			
 			// store tokens in DynamoDB home settings file
 			const token_data = result.data;
-			putSonosData( 'token-date', new Date() );
+			putSonosData( 'token-time', new Date() );
 			putSonosData( 'access-token', token_data.access_token );
 			putSonosData( 'refresh-token', token_data.refresh_token );
 			putSonosData( 'expires-in', token_data.expires_in );
