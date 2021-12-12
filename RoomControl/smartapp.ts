@@ -41,30 +41,37 @@ module.exports = new SmartApp()
 	// main options page with room controls and behaviors
 	// page.nextPageId('optionsPage');
 
+	// initialize control enabled flag to control other settings prompts
+	const bControlEnabled = context.configBooleanValue('controlEnabled');
+
 	// initialize state variable(s)
 	SmartState.putState( context, 'roomSwitchPressed', 'true' );
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true);
-		section.booleanSetting('motionEnabled').defaultValue(true);
-		section.textSetting('homeName').required(false);
+		if (bControlEnabled) {
+			section.booleanSetting('motionEnabled').defaultValue(true);
+			section.textSetting('homeName').required(false);
+		}
 	});
 
-	// room switches
-	page.section('controls', section => {
-		section.deviceSetting('roomSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
-		section.deviceSetting('onGroup').capabilities(['switch'])
-			.required(true).multiple(true).permissions('rx');
-		// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
-		section.deviceSetting('offGroup').capabilities(['switch'])
-			.required(false).multiple(true).permissions('rx');
-		section.numberSetting('offDelay').required(false).min(0);
-	});
+	if (bControlEnabled) {
+		// room switches
+		page.section('controls', section => {
+			section.deviceSetting('roomSwitch').capabilities(['switch'])
+				.required(true).permissions('rx');
+			section.deviceSetting('onGroup').capabilities(['switch'])
+				.required(true).multiple(true).permissions('rx');
+			// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
+			section.deviceSetting('offGroup').capabilities(['switch'])
+				.required(false).multiple(true).permissions('rx');
+			section.numberSetting('offDelay').required(false).min(0);
+		});
 
-	// specify next (second) options page
-	page.nextPageId('optionsPage');
+		// specify next (second) options page
+		page.nextPageId('optionsPage');
+	}
 })
 
 .page('optionsPage', (context, page, configData) => {
