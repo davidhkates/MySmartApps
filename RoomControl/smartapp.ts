@@ -370,9 +370,9 @@ module.exports = new SmartApp()
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - start');
 
-	const motionEnabled = context.configStringValue('motionEnabled');
+	const motionEnabled = context.configBooleanValue('motionEnabled');
 	console.log('motionStartHandler - motionEnabled (truthy): ', motionEnabled, ', (boolean): ', !!motionEnabled);
-	if (!!motionEnabled) {
+	if (motionEnabled) {
 
 		// check to see if home is active
 		const homeName = context.configStringValue('homeName');
