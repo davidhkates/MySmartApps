@@ -175,7 +175,7 @@ module.exports = new SmartApp()
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of mainSwitchPressed");
 	const switchPressed = await SmartState.getState( context, 'mainSwitchPressed' );
-	console.log('roomSwitchOnHandler - main switch pressed: ", switchPressed);
+	console.log('roomSwitchOnHandler - main switch pressed: ', switchPressed);
 	
 	// Get start and end times
 	/*
