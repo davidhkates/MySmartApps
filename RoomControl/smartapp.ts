@@ -42,7 +42,7 @@ module.exports = new SmartApp()
 	// page.nextPageId('optionsPage');
 
 	// initialize state variable(s)
-	SmartState.putState( context, 'mainSwitchPressed', 'true' );
+	SmartState.putState( context, 'roomSwitchPressed', 'true' );
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
@@ -173,8 +173,8 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
 	
 	// Get session state variable to see if button was manually pressed
-	console.log("Checking value of mainSwitchPressed");
-	const switchPressed = await SmartState.getState( context, 'mainSwitchPressed' );
+	console.log("Checking value of roomSwitchPressed");
+	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
 	console.log('roomSwitchOnHandler - main switch pressed: ', switchPressed);
 	
 	// Get start and end times
@@ -197,16 +197,16 @@ module.exports = new SmartApp()
 		// Cancel scheduled event to turn off main switch after delay
 		await context.api.schedules.delete('delayedOffSwitch');
 		
-		// check value of mainSwitchPressed state variable
+		// check value of roomSwitchPressed state variable
 		if ( switchPressed == 'true' ) {
-			console.log("roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup");
+			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
-			console.log("roomSwitchOnHandler - turning speakers on if part of onGroup");
+			console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');
 			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
-			console.log("roomSwitchOnHandler - speakers turned on as part of onGroup");
+			console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
 		} else {
-			console.log("roomSwitchHandler - main switch NOT pressed, don't turn on other lights");
-			SmartState.putState( context, 'mainSwitchPressed', 'true' );
+			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
+			SmartState.putState( context, 'roomSwitchPressed', 'true' );
 		}
 		
 		/*
@@ -327,10 +327,10 @@ module.exports = new SmartApp()
 	console.log('groupOnHandler - starting, context: ', context, ' event: ', event);
 
 	// indicate main switch was NOT manually pressed
-	SmartState.putState( context, 'mainSwitchPressed', 'false' );
+	SmartState.putState( context, 'roomSwitchPressed', 'false' );
 
 	// Turn on the main switch when a light in the on group is turned on
-	await context.api.devices.sendCommands(context.config.mainSwitch, 'switch', 'on');
+	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 })
 
 
