@@ -30,6 +30,60 @@ if (process.env.NODE_ENV == "production") {
 }
 
 
+// Control playback on Sonos speakers
+async function controlSpeakers(context, speakers, command) {
+	  	
+	try {
+		// create axios sonos control object
+		const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
+		const sonosControl = axios.create({
+			baseURL: 'https://api.ws.sonos.com/control/api/v1',
+			timeout: 5000,
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + access_token
+			}
+		});
+
+		// get household id
+		console.log('controlSpeakers - getting households');
+		sonosControl.get('households').then((result) => {
+			const householdId = result.data.households[0].id;			
+			console.log('controlSpeakers - household ID: ', householdId);
+			// putSonosData( 'household-id', idHousehold );
+
+			// get sonos groups and devices
+			sonosControl.get('households/' + householdId + '/groups').then((result) => {
+				const sonosGroups = result.data.groups;
+				console.log('controlSpeakers - Sonos groups: ', sonosGroups);
+			
+				// pause all specified speakers
+				// for (const speaker of context.config.roomSpeakers) {
+				const speakerDevices = context.config[speakers];
+				for (const speaker of speakerDevices) {
+					const speakerId = speaker.deviceConfig.deviceId;
+					// const speakerInfo = await context.api.devices.get(speakerId);
+					context.api.devices.get(speakerId).then((speakerInfo) => {
+						const speakerName = speakerInfo.name;
+						// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+						
+						const result = sonosGroups.find(speaker => speaker.name === speakerName);
+						const groupId = result.id;
+
+						const command = 'pause';
+						const urlControl = '/groups/' + groupId + '/playback/' + command;
+						// sonosControl.post(urlControl);
+						sonosControl.post(urlControl).then((result) => {
+							console.log('controlSpeakers - Success!  Data: ', result.data);;
+						}).catch((err) => { console.log('controlSpeakers - error controlling speaker: ', err, ', command: ', command); })
+					})
+				}
+			}).catch((err) => { console.log('controlSpeakers - error getting groups/speakers: ', err); })
+		}).catch((err) => { console.log('controlSpeakers - error getting household(s): ', err); })
+	} catch(err) { console.log('controlSpeakers - error controlling Sonos: ', err); }
+};
+
+
 /* Define the SmartApp */
 module.exports = new SmartApp()
 .enableEventLogging()  // logs requests and responses as pretty-printed JSON
@@ -210,7 +264,8 @@ module.exports = new SmartApp()
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');
-			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+			await controlSpeakers(context, 'roomSpeakers', 'play');
 			console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
 		} else {
 			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
@@ -293,9 +348,8 @@ module.exports = new SmartApp()
 			console.log('roomSwitchOffHandler - turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
-			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-			// await context.api.devices.sendComments(context.config.roomSpeakers, 'mute', 'setMute');
-			// await context.api.devices.sendComments(context.config.roomSpeakers, 'supportedPlaybackCommand', 'stop');
+			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
+			await controlSpeakers(context, 'roomSpeakers', 'pause');
 			console.log('roomSwitchOffHandler - turning off group complete');
 		}
 	}
