@@ -88,7 +88,7 @@ module.exports = new SmartApp()
 		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
 			defaultValue('everyday').required(true);
 		section.timeSetting('startTime').required(false).submitOnChange(true);
-		if (config.configStringValue('startTime')) {
+		if (context.configStringValue('startTime')) {
 			section.timeSetting('endTime').required(false);
 		}
 	});
