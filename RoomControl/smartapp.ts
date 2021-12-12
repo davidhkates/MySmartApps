@@ -49,7 +49,7 @@ module.exports = new SmartApp()
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
-		section.booleanSetting('controlEnabled').defaultValue(true);
+		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
 			section.booleanSetting('motionEnabled').defaultValue(true);
 			section.textSetting('homeName').required(false);
