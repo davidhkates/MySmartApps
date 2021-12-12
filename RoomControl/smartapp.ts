@@ -199,11 +199,13 @@ module.exports = new SmartApp()
 		
 		// check value of mainSwitchPressed state variable
 		if ( switchPressed == 'true' ) {
-			console.log("Main switch pressed, turning on all lights in OnGroup");
+			console.log("roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup");
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
-			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+			console.log("roomSwitchOnHandler - turning speakers on if part of onGroup");
+			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+			console.log("roomSwitchOnHandler - speakers turned on as part of onGroup");
 		} else {
-			console.log("Main switch NOT pressed, don't turn on other lights");
+			console.log("roomSwitchHandler - main switch NOT pressed, don't turn on other lights");
 			SmartState.putState( context, 'mainSwitchPressed', 'true' );
 		}
 		
