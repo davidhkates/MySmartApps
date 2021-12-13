@@ -30,6 +30,7 @@ if (process.env.NODE_ENV == "production") {
 }
 
 
+/*
 // Control playback on Sonos speakers
 async function controlSpeakers(context, speakers, command) {
 	  	
@@ -82,6 +83,7 @@ async function controlSpeakers(context, speakers, command) {
 		}).catch((err) => { console.log('controlSpeakers - error getting household(s): ', err); })
 	} catch(err) { console.log('controlSpeakers - error controlling Sonos: ', err); }
 };
+*/
 
 
 /* Define the SmartApp */
@@ -264,8 +266,8 @@ module.exports = new SmartApp()
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 			console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');
-			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'togglePlayPause');
-			await controlSpeakers(context, 'roomSpeakers', 'play');
+			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+			await controlSpeakers(context, 'roomSpeakers', 'togglePlayPause');
 			console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
 		} else {
 			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
