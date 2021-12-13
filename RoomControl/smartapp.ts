@@ -257,7 +257,7 @@ module.exports = new SmartApp()
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
 	// const onTimeCheck = context.configStringValue('onTimeCheck');
 	const onTimeCheck = 'onAlways';
-	console.log('roomSwitchOnHandler - day of week: ', bDayOfWeek, ', time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
+	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
 		
 	// if ( (bDayOfWeek && bTimeWindow) || onTimeCheck==='onAlways') {		
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
