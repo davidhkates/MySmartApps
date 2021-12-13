@@ -30,7 +30,6 @@ if (process.env.NODE_ENV == "production") {
 }
 
 
-/*
 // Control playback on Sonos speakers
 async function controlSpeakers(context, speakers, command) {
 	  	
@@ -83,7 +82,6 @@ async function controlSpeakers(context, speakers, command) {
 		}).catch((err) => { console.log('controlSpeakers - error getting household(s): ', err); })
 	} catch(err) { console.log('controlSpeakers - error controlling Sonos: ', err); }
 };
-*/
 
 
 /* Define the SmartApp */
@@ -251,11 +249,17 @@ module.exports = new SmartApp()
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
 	*/
-	const bTimeWindow = SmartUtils.inTimeContext(context, 'startTime', 'endTime');
+
+	// Determine if Now() is in time window
+	// const bDayOfWeek = SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') );
+	// const bTimeWindow = SmartUtils.inTimeContext(context, 'startTime', 'endTime');
+	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
+		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
 	// const onTimeCheck = context.configStringValue('onTimeCheck');
 	const onTimeCheck = 'onAlways';
-	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
+	console.log('roomSwitchOnHandler - day of week: ', bDayOfWeek, ', time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
 		
+	// if ( (bDayOfWeek && bTimeWindow) || onTimeCheck==='onAlways') {		
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
 		// Cancel scheduled event to turn off main switch after delay
@@ -327,12 +331,18 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOffHandler - starting');
 	
 	// Get start and end times
+	/*
 	const startTime = context.configStringValue("startTime");
 	const endTime   = context.configStringValue("endTime");
 
 	// Determine whether current time is within start and end time window
 	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
+	*/
 	
+	// Determine if Now() is in time window
+	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
+		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
+		
 	console.log('roomSwitchOffHandler - in time window: ', bTimeWindow);
 	if (!bTimeWindow) {	
 		console.log('roomSwitchOffHandler - outside time window');
