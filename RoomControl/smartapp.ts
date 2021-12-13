@@ -342,7 +342,7 @@ module.exports = new SmartApp()
 	// Determine if Now() is in time window
 	console.log('roomSwitchOffHandler - time window: ', SmartUtils.inTimeContext( context, 'startTime', 'endTime') );
 	const dayOfWeek = context.configStringValue('daysOfWeek');
-	console.log('roomSwitchOffHandler - daysOfWeek: ', daysOfWeek, ', isDayOfWeek: ', SmartUtils.isDayOfWeek( daysOfWeek ) }
+	console.log('roomSwitchOffHandler - daysOfWeek: ', daysOfWeek, ', isDayOfWeek: ', SmartUtils.isDayOfWeek( daysOfWeek ) );
 	
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
