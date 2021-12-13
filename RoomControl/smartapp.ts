@@ -350,7 +350,7 @@ module.exports = new SmartApp()
 	
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ||
-		!!(context.configStringValue('startTime') ); 		
+		!!(context.configStringValue('startTime')) ); 		
 		
 	console.log('roomSwitchOffHandler - in time window: ', bTimeWindow);
 	if (!bTimeWindow) {	
