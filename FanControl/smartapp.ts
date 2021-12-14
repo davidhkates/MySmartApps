@@ -1,6 +1,5 @@
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
-// const {SmartThingsClient} = require('@smartthings/core-sdk');
 
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
@@ -53,6 +52,10 @@ async function controlFan(context) {
 			}
 		}
 	}
+
+	// Determine if ANY of the switch(es) to check are on
+	// const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+	enableFan &= ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
 
 	// If designated, check that contacts are open as specified.  TODO: remove this since contactsHandler will take care of it
 	/*
@@ -171,6 +174,8 @@ module.exports = new SmartApp()
 		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
 			.required(false).permissions('r');
 		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
+		section.deviceSetting('checkSwitches').capabilities(['switch'])
+			.required(false).multiple(true).permissions('r');
 	});	
 })
 
