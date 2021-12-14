@@ -54,8 +54,10 @@ async function controlFan(context) {
 	}
 
 	// Determine if ANY of the switch(es) to check are on
-	// const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
-	enableFan &&= ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+	if (enableFan) {
+		const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+		enableFan = bCheckSwitch;
+	}
 
 	// If designated, check that contacts are open as specified.  TODO: remove this since contactsHandler will take care of it
 	/*
