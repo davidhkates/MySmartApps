@@ -76,9 +76,9 @@ exports.authCallback = (event, context, callback) => {
 		const token_data = result.data;
 		console.log('authCallback - tokenData: ', token_data);
 		putSonosData( 'token-time', new Date() );
-		putSonosData( 'expires-in', token_data.expires_in );
 		putSonosData( 'access-token', token_data.access_token );
 		putSonosData( 'refresh-token', token_data.refresh_token );
+		putSonosData( 'expires-in', token_data.expires_in.toString() );
 
 		// callback(null, {body: JSON.stringify({'Households': idHousehold})});
 		callback(null, {
