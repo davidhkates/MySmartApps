@@ -35,7 +35,7 @@ async function callSonosAPI( token_data, endpoint ) {
 
 async function putSonosData( key, value ) {
 	console.log('putSonosData - key: ', key, ', value: ', value);
-	SmartState.putHomeMode('niwot', 'sonos-' + key, value);
+	await SmartState.putHomeMode('niwot', 'sonos-' + key, value);
 }
 
 
@@ -75,10 +75,10 @@ exports.authCallback = (event, context, callback) => {
 		// store tokens in DynamoDB home settings file
 		const token_data = result.data;
 		console.log('authCallback - tokenData: ', token_data);
-		await putSonosData( 'token-time', new Date() );
-		await putSonosData( 'access-token', token_data.access_token );
-		await putSonosData( 'refresh-token', token_data.refresh_token );
-		await putSonosData( 'expires-in', token_data.expires_in );
+		putSonosData( 'token-time', new Date() );
+		putSonosData( 'access-token', token_data.access_token );
+		putSonosData( 'refresh-token', token_data.refresh_token );
+		putSonosData( 'expires-in', token_data.expires_in );
 
 		// callback(null, {body: JSON.stringify({'Households': idHousehold})});
 		callback(null, {
