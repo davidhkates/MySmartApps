@@ -109,9 +109,8 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
-			section.enumSetting('roomType').options(['lights/speakers', 'motion/contacts']).
+			section.enumSetting('roomType').options(['simple', 'complex']).
 				required(true).defaultValue('lights/speakers').submitOnChange(true);
-			section.booleanSetting('motionEnabled').defaultValue(true);
 			section.textSetting('homeName').required(false);
 		}
 	});
@@ -121,16 +120,25 @@ module.exports = new SmartApp()
 		page.section('controls', section => {
 			section.deviceSetting('roomSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
-			section.deviceSetting('onGroup').capabilities(['switch'])
-				.required(true).multiple(true).permissions('rx');
-			// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
-			section.deviceSetting('offGroup').capabilities(['switch'])
+			if (roomType==='complex') {
+				section.deviceSetting('onGroup').capabilities(['switch'])
+					.required(true).multiple(true).permissions('rx');
+				// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
+				section.deviceSetting('offGroup').capabilities(['switch'])
+					.required(false).multiple(true).permissions('rx');
+				section.numberSetting('offDelay').required(false).min(0);
+			}
+		});
+		
+		page.section('speakers', section => {
+			section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 				.required(false).multiple(true).permissions('rx');
-			section.numberSetting('offDelay').required(false).min(0);
 		});
 
 		// specify next (second) options page
-		page.nextPageId('optionsPage');
+		if (roomType==='complex') {
+			page.nextPageId('optionsPage');
+		}
 	}
 })
 
@@ -142,6 +150,7 @@ module.exports = new SmartApp()
 	// get settings 
 	if (roomType==='motion/contacts') {
 		page.section('sensors', section => {
+			section.booleanSetting('motionEnabled').defaultValue(true);
 			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 				.required(false).multiple(true).permissions('r');
 			section.numberSetting('motionDelay').required(false).min(0);
@@ -150,11 +159,6 @@ module.exports = new SmartApp()
 			section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
 		});
 	}
-
-	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-			.required(false).multiple(true).permissions('rx');
-	});
 
 	// time window and days of week
 	page.section('time', section => {
