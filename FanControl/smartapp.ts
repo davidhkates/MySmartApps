@@ -54,7 +54,7 @@ async function controlFan(context) {
 	}
 
 	// Determine if ANY of the switch(es) to check are on
-	if (enableFan && checkSwitches) {
+	if (enableFan && context.config.checkSwitches) {
 		const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
 		enableFan = bCheckSwitch;
 	}
