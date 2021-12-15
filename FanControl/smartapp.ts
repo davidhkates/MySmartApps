@@ -156,29 +156,33 @@ module.exports = new SmartApp()
 
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
-	// separate page for weather information
-	page.nextPageId('optionsPage');
-	
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
 		section.booleanSetting('fanEnabled').defaultValue(true);
-		section.numberSetting('targetTemp').required(false);
-		section.numberSetting('targetHumidity').required(false);
+		if (context.configBooleanValue('fanEnabled')) {
+			section.numberSetting('targetTemp').required(false);
+			section.numberSetting('targetHumidity').required(false);
+		}
 	});
 
 	// controls and temperature/humidity sensors
-	page.section('controls', section => {
-		section.deviceSetting('fanSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
-		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-			.required(false).permissions('r');
-		// section.enumSetting('tempAboveBelow').options(['Above','Below']);
-		section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
-		section.deviceSetting('checkSwitches').capabilities(['switch'])
-			.required(false).multiple(true).permissions('r');
-	});	
+	if (context.configBooleanValue('fanEnabled')) {
+		page.section('controls', section => {
+			section.deviceSetting('fanSwitch').capabilities(['switch'])
+				.required(true).permissions('rx');
+			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
+				.required(false).permissions('r');
+			// section.enumSetting('tempAboveBelow').options(['Above','Below']);
+			section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
+				.required(false).permissions('r');
+			// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
+			section.deviceSetting('checkSwitches').capabilities(['switch'])
+				.required(false).multiple(true).permissions('r');
+		});
+
+		// separate page for weather information
+		page.nextPageId('optionsPage');
+	}
 })
 
 .page('optionsPage', (context, page, configData) => {
@@ -205,7 +209,6 @@ module.exports = new SmartApp()
 		section.timeSetting('endTime').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
-
 })
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
