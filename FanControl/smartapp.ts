@@ -173,15 +173,14 @@ module.exports = new SmartApp()
 	if (bFanEnabled) {
 		// controls and temperature/humidity sensors
 		page.section('targets', section => {		
-				section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-					.required(false).permissions('r');
-				section.numberSetting('targetTemp').required(false);
-				// section.enumSetting('tempAboveBelow').options(['Above','Below']);
-				section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
-					.required(false).permissions('r');
-				section.numberSetting('targetHumidity').required(false);
-				// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
-			}
+			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
+				.required(false).permissions('r');
+			section.numberSetting('targetTemp').required(false);
+			// section.enumSetting('tempAboveBelow').options(['Above','Below']);
+			section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
+				.required(false).permissions('r');
+			section.numberSetting('targetHumidity').required(false);
+			// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
 		});
 
 		// separate page for weather information
