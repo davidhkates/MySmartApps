@@ -214,7 +214,7 @@ module.exports = new SmartApp()
 
 	// OPTIONAL: start and end time
 	const strHomeName = context.configStringValue('homeName');
-	console.log('optionsPage - home name: ', strHomeName, ', length: ', strHomeName.length;
+	console.log('optionsPage - home name: ', strHomeName, ', length: ', strHomeName.length);
 	if (context.configStringValue('homeName')==="") {
 		page.section('time', section => {
 			section.timeSetting('startTime').required(false);
