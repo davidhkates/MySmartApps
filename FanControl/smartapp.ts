@@ -209,7 +209,7 @@ module.exports = new SmartApp()
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r').submitOnChange(true);
-		if (context.config.contactSensors) {
+		if (context.config.roomContacs) {
 			section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
 				.defaultValue('allOpen').required(false);
 		}
