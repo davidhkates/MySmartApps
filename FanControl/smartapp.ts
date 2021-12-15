@@ -161,11 +161,15 @@ module.exports = new SmartApp()
 	const bFanEnabled = context.configBooleanValue('fanEnabled');
 
 	// operating switch and interval for checking temperature
-	page.section('targets', section => {
+	page.section('general', section => {
 		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
 		if (bFanEnabled) {
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
+			section.textSetting('homeName').required(false);
+		}
+
+	page.section('targets', section => {		
 			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 				.required(false).permissions('r');
 			section.numberSetting('targetTemp').required(false);

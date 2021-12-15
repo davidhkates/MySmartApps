@@ -1,11 +1,12 @@
 {
 	"pages.mainPage.name": "Fan Control (Main)",
 	"Tap to set": "Tap to set",
-	"pages.mainPage.sections.targets.name": "Target settings",
+	"pages.mainPage.sections.general.name": "General control settings",
 	"pages.mainPage.settings.fanEnabled.name": "Fan enabled?",
 	"pages.mainPage.settings.fanEnabled.description": "Turn on/off to operate fan",
 	"pages.mainPage.settings.homeName.name": "Home name",
 	"pages.mainPage.settings.fanSwitch.name": "Fan switch",
+	"pages.mainPage.sections.targets.name": "Target settings",
 	"pages.mainPage.settings.tempSensor.name": "Indoor temperature sensor",
 	"pages.mainPage.settings.humiditySensor.name": "Indoor humidity sensor",
 	"pages.mainPage.settings.targetTemp.name": "Target temperature (optional)",
