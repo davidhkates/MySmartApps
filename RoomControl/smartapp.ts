@@ -109,6 +109,8 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
+			section.enumSetting('roomType').options(['lights/speakers', 'motion/contacts']).
+				required(true).defaultValue('lights/speakers').submitOnChange(true);
 			section.booleanSetting('motionEnabled').defaultValue(true);
 			section.textSetting('homeName').required(false);
 		}
@@ -133,14 +135,21 @@ module.exports = new SmartApp()
 })
 
 .page('optionsPage', (context, page, configData) => {
-	page.section('sensors', section => {
-		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.numberSetting('motionDelay').required(false).min(0);
-		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
-	});
+
+	// initialize room type settings
+	const roomType = context.configStringValue('roomType');
+
+	// get settings 
+	if (roomType==='motion/contacts') {
+		page.section('sensors', section => {
+			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
+				.required(false).multiple(true).permissions('r');
+			section.numberSetting('motionDelay').required(false).min(0);
+			section.deviceSetting('roomContacts').capabilities(['contactSensor'])
+				.required(false).multiple(true).permissions('r');
+			section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
+		});
+	}
 
 	page.section('speakers', section => {
 		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
