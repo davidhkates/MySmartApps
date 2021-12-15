@@ -213,7 +213,7 @@ module.exports = new SmartApp()
 	});
 
 	// OPTIONAL: start and end time
-	if (context.configStringValue('homeName')==="") {
+	if (context.configStringValue('homeName').trim()==="") {
 		page.section('time', section => {
 			section.timeSetting('startTime').required(false);
 			section.timeSetting('endTime').required(false);
