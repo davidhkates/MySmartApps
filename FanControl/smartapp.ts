@@ -184,6 +184,10 @@ module.exports = new SmartApp()
 .page('optionsPage', (context, page, configData) => {
 	// separate page for weather information
 	// page.prevPageId('mainPage');
+	
+	// get fan type to control which parameters to display
+	const strFanType = context.configStringValue('fanType');	
+
 	if (strFanType==='attic') {
 		page.section('weather', section => {
 			section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
