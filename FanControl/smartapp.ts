@@ -208,9 +208,11 @@ module.exports = new SmartApp()
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
-			.defaultValue('allOpen').required(false);
+			.required(false).multiple(true).permissions('r').submitOnChange(true);
+		if (context.config.contactSensors) {
+			section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
+				.defaultValue('allOpen').required(false);
+		}
 	});
 
 	// OPTIONAL: start and end time
