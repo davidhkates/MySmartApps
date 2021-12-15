@@ -59,21 +59,6 @@ async function controlFan(context) {
 		enableFan = bCheckSwitch;
 	}
 
-	// If designated, check that contacts are open as specified.  TODO: remove this since contactsHandler will take care of it
-	/*
-	if (enableFan) {
-		const roomContacts = context.config.roomContacts;
-		if (roomContacts) {
-			const contactsState = await SmartDevice.getContact( context, 'roomContacts' );
-			const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
-			console.log('controlFan - contacts state: ', contactsState, ', open/closed: ', contactsOpenClosed);
-			enableFan = ((contactsState=='open' && contactsOpenClosed!='allClosed') || 
-				(contactsState=='mixed' && contactsOpenClosed=='anyOpen') ||
-				(contactsState=='closed' && contactsOpenClosed=='allClosed'));
-		}
-	}	
-	*/
-
 	// Get current fan state
 	let setFanState;  // variable for defining new fan state
 	// let setFanState = currentFanState;  // default fan state to current state
@@ -162,11 +147,14 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	const bFanEnabled = context.configBooleanValue('fanEnabled');
+	const strFanType = context.configStringValue('fanType');
 
 	// operating switch and interval for checking temperature
 	page.section('general', section => {
 		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
 		if (bFanEnabled) {
+			section.enumSetting('fanType').options(['attic','bathroom','exhaust','room'])
+				.required(true).defaultValue('room');
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
 			section.textSetting('homeName').required(false);
@@ -179,11 +167,13 @@ module.exports = new SmartApp()
 			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 				.required(false).permissions('r');
 			section.numberSetting('targetTemp').required(false);
-			// section.enumSetting('tempAboveBelow').options(['Above','Below']);
-			section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
-				.required(false).permissions('r');
-			section.numberSetting('targetHumidity').required(false);
-			// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
+			// section.enumSetting('tempAboveBelow').options(['above','below']);
+			if (strFanType==='bathroom') {
+				section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
+					.required(false).permissions('r');
+				section.numberSetting('targetHumidity').required(false);
+				// section.enumSetting('humidityAboveBelow').options(['above','below']);
+			}
 		});
 
 		// separate page for weather information
@@ -194,17 +184,20 @@ module.exports = new SmartApp()
 .page('optionsPage', (context, page, configData) => {
 	// separate page for weather information
 	// page.prevPageId('mainPage');
-	page.section('weather', section => {
-		section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
-			.required(false).permissions('r');
-		section.numberSetting('maxHumidity').required(false);
-		section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
-	});	
+	if (strFanType==='attic') {
+		page.section('weather', section => {
+			section.deviceSetting('weather').capabilities(['temperatureMeasurement', 'relativeHumidityMeasurement'])
+				.required(false).permissions('r');
+			section.numberSetting('maxHumidity').required(false);
+			section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
+		});	
+	}
 	
 	// OPTIONAL: check switch(es)
 	page.section('controls', section => {
 		section.deviceSetting('checkSwitches').capabilities(['switch'])
 			.required(false).multiple(true).permissions('r');
+		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	});
 
 	// OPTIONAL: contact sensors
@@ -215,12 +208,13 @@ module.exports = new SmartApp()
 			.defaultValue('allOpen').required(false);
 	});
 
-	// OPTIONAL: start and end time, outside weather, temp offset
-	page.section('time', section => {
-		section.timeSetting('startTime').required(false);
-		section.timeSetting('endTime').required(false);
-		section.numberSetting('checkInterval').defaultValue(300).required(false);
-	});
+	// OPTIONAL: start and end time
+	if (context.configStringValue('homeName')==="") {
+		page.section('time', section => {
+			section.timeSetting('startTime').required(false);
+			section.timeSetting('endTime').required(false);
+		});
+	}
 })
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
@@ -230,15 +224,6 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete();	
-
-	/*
-	try {
-		await context.api.schedules.delete('checkTemperature');	
-		await context.api.schedules.delete('stopFanHandler');
-	} catch(err) {
-		console.error('FanControl - error deleting schedules: ', err);
-	}
-	*/
 	
 	// get fan enabled setting and turn off fan if not
 	const fanEnabled = context.configBooleanValue('fanEnabled');
@@ -273,26 +258,7 @@ module.exports = new SmartApp()
 		
 		// start controlling fan if in time window and contacts in correct state
 		checkReadiness(context);
-		
-		/*
-				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-					console.log('FanControl - in time window, check that contacts are in correct state');
-					const bContactsOK = await checkContacts(context);
-					if (bContactsOK) {
-						controlFan(context);
-					}
-				} else {
-					// if outside time window, turn fan off
-					await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'off');		
-				}
-			}		
-		} else {
-			console.log('FanControl - no start time set, start controlling fan based on temperatures');
-			controlFan(context);
-		}
-		*/
 	}
-	// console.log('FanControl - list of current api schedules: ', context.api.schedules.list());
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
 
@@ -315,18 +281,6 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - contact(s) opened, check to see if in time window');
 	checkReadiness(context);
-	
-	/*
-	const startTime = new Date(context.configStringValue('startTime'));
-	const endTime   = new Date(context.configStringValue('endTime'));
-	if (SmartUtils.inTimeWindow(startTime, endTime)) {		
-		console.log('contactOpenHandler - in time window, check that contacts comply with setting');		
-		const bContactsOK = await checkContacts(context);
-		if (bContactsOK) {
-			controlFan(context);
-		}
-	}
-	*/
 })
 
 
@@ -334,45 +288,6 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - check whether or not contacts comply with setting');
 	checkReadiness(context);
-
-	/*
-	if (!checkControls(context)) {
-		console.log('contactClosedHandler - contacts do NOT comply with settings; stop fan immediately');
-		stopFan(context);
-	}
-	*/
-
-	/*
-	// TODO: add logic to determine whether ANY or ALL of the contact sensors need to be open
-	const contactsOpenClosed = context.configStringValue('contactsOpenClosed');
-	if (contactsOpenClosed !== 'allOpen') {
-
-		// See if there are any other contact sensors defined
-		const otherSensors =  context.config.roomContacts
-			.filter(it => it.deviceConfig.deviceId !== event.deviceId);
-
-		console.log('contactClosedHandler - other sensors: ', otherSensors);
-		if (otherSensors) {
-			// Get the current states of the other contact sensors
-			const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'contactSensor'
-			));
-
-			// Quit if there are other sensors still open
-			const states: device = await Promise.all(stateRequests)
-			console.log('contactClosedHandler - state requests: ', states);
-			if (states.find(it => it.contact.value === 'open')) {
-				return
-			}
-		}
-	}
-
-	// If we got here, no other contact sensors are open so turn off fan 
-	console.log('contactClosedHandler - if we got here, turn off fan immediately');
-	stopFan(context);
-	*/	
 })
 
 
