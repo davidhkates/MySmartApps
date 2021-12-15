@@ -117,14 +117,17 @@ async function stopFan(context) {
 	}
 }
 
-async function checkTimeContacts(context) {
+// check readiness to operate fan based on home being active, time window and contacts
+async function checkReadiness(context) {
 	// let returnValue = true;
 	let bStartStop = false;
-	const startTime = context.configStringValue('startTime');
-	const endTime = context.configStringValue('endTime');
-	
-	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-		console.log('checkTimeContacts - in time window, check that contacts are in correct state');
+
+	// check to see if home is active or in time window
+	const homeName = context.configStringValue('homeName');
+	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+
+	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || bHomeActive) {
+		console.log('checkReadiness - in time window, check that contacts are in correct state');
 		bStartStop = true;
 		const roomContacts = context.config.roomContacts;
 		if (roomContacts) {
@@ -269,7 +272,7 @@ module.exports = new SmartApp()
 		}
 		
 		// start controlling fan if in time window and contacts in correct state
-		checkTimeContacts(context);
+		checkReadiness(context);
 		
 		/*
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
@@ -311,7 +314,7 @@ module.exports = new SmartApp()
 // If one or more contacts open, resuming checking temperature to control fan
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - contact(s) opened, check to see if in time window');
-	checkTimeContacts(context);
+	checkReadiness(context);
 	
 	/*
 	const startTime = new Date(context.configStringValue('startTime'));
@@ -330,7 +333,7 @@ module.exports = new SmartApp()
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - check whether or not contacts comply with setting');
-	checkTimeContacts(context);
+	checkReadiness(context);
 
 	/*
 	if (!checkControls(context)) {
