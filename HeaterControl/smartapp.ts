@@ -202,7 +202,6 @@ module.exports = new SmartApp()
 			console.log('Installed/Updated - set start time for heater: ', new Date(startTime), ', current date/time: ', new Date());
 			await context.api.schedules.runDaily('startHeaterHandler', new Date(startTime))
 			if (endTime) {
-				// await context.api.schedules.runDaily('stopHeaterHandler', new Date(endTime));
 				if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
 					console.log('Installed/Updated - start controlling heater based on temperatures');
 					controlHeater(context);
@@ -321,7 +320,12 @@ module.exports = new SmartApp()
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - turn off heater');
-	stopHeater(context);
+
+	// Determine if ANY of the switch(es) to check are on
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+	if (!bCheckSwitch) {
+		stopHeater(context);
+	}
 })
 
 // Check temperature and turn on/off heater as appropriate
