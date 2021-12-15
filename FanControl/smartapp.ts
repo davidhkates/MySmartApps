@@ -164,26 +164,21 @@ module.exports = new SmartApp()
 	page.section('targets', section => {
 		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
 		if (bFanEnabled) {
+			section.deviceSetting('fanSwitch').capabilities(['switch'])
+				.required(true).permissions('rx');
+			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
+				.required(false).permissions('r');
 			section.numberSetting('targetTemp').required(false);
+			// section.enumSetting('tempAboveBelow').options(['Above','Below']);
+			section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
+				.required(false).permissions('r');
 			section.numberSetting('targetHumidity').required(false);
+			// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
 		}
 	});
 
 	// controls and temperature/humidity sensors
 	if (bFanEnabled) {
-		page.section('controls', section => {
-			section.deviceSetting('fanSwitch').capabilities(['switch'])
-				.required(true).permissions('rx');
-			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-				.required(false).permissions('r');
-			// section.enumSetting('tempAboveBelow').options(['Above','Below']);
-			section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
-				.required(false).permissions('r');
-			// section.enumSetting('humidityAboveBelow').options(['Above','Below']);
-			section.deviceSetting('checkSwitches').capabilities(['switch'])
-				.required(false).multiple(true).permissions('r');
-		});
-
 		// separate page for weather information
 		page.nextPageId('optionsPage');
 	}
@@ -199,6 +194,12 @@ module.exports = new SmartApp()
 		section.numberSetting('tempOffset').defaultValue(0).min(-5).max(5);
 	});	
 	
+	// OPTIONAL: check switch(es)
+	page.section('controls', section => {
+		section.deviceSetting('checkSwitches').capabilities(['switch'])
+			.required(false).multiple(true).permissions('r');
+	});
+
 	// OPTIONAL: contact sensors
 	page.section('contactSensors', section => {		     
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
