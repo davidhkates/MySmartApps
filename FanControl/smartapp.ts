@@ -154,7 +154,7 @@ module.exports = new SmartApp()
 		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
 		if (bFanEnabled) {
 			section.enumSetting('fanType').options(['attic','bathroom','exhaust','room'])
-				.required(true).defaultValue('room');
+				.required(true).defaultValue('room').submitOnChange(true);
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
 			section.textSetting('homeName').required(false);
@@ -163,7 +163,8 @@ module.exports = new SmartApp()
 
 	if (bFanEnabled) {
 		// controls and temperature/humidity sensors
-		page.section('targets', section => {		
+		page.section('targets', section => {
+			if (strFanType==='attic' || strFanType==='exhaust' || strFanType==='room') {
 			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
 				.required(false).permissions('r');
 			section.numberSetting('targetTemp').required(false);
