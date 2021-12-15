@@ -158,19 +158,19 @@ module.exports = new SmartApp()
 .page('mainPage', (context, page, configData) => {
 
 	// set control enabled flag to control other settings prompts
-	const bControlEnabled = context.configBooleanValue('controlEnabled');
+	const bFanEnabled = context.configBooleanValue('fanEnabled');
 
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
-		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
-		if (bControlEnabled) {
+		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
+		if (bFanEnabled) {
 			section.numberSetting('targetTemp').required(false);
 			section.numberSetting('targetHumidity').required(false);
 		}
 	});
 
 	// controls and temperature/humidity sensors
-	if (bControlEnabled) {
+	if (bFanEnabled) {
 		page.section('controls', section => {
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
