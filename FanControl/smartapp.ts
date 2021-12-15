@@ -157,24 +157,23 @@ module.exports = new SmartApp()
 				.required(true).defaultValue('room').submitOnChange(true);
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
-			section.textSetting('homeName').required(false);
+			section.textSetting('homeName').required(false).submitOnChange(true);
 		}
 	});
 
 	if (bFanEnabled) {
 		// controls and temperature/humidity sensors
 		page.section('targets', section => {
-			if (strFanType==='attic' || strFanType==='exhaust' || strFanType==='room') {
-				section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-					.required(false).permissions('r');
-				section.numberSetting('targetTemp').required(false);
-				// section.enumSetting('tempAboveBelow').options(['above','below']);
-			}
 			if (strFanType==='bathroom') {
 				section.deviceSetting('humiditySensor').capabilities(['relativeHumidityMeasurement'])
 					.required(false).permissions('r');
 				section.numberSetting('targetHumidity').required(false);
 				// section.enumSetting('humidityAboveBelow').options(['above','below']);
+			} else {
+				section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
+					.required(false).permissions('r');
+				section.numberSetting('targetTemp').required(false);
+				// section.enumSetting('tempAboveBelow').options(['above','below']);
 			}
 		});
 
