@@ -162,7 +162,7 @@ module.exports = new SmartApp()
 
 	// operating switch and interval for checking temperature
 	page.section('targets', section => {
-		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
+		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
 			section.numberSetting('targetTemp').required(false);
 			section.numberSetting('targetHumidity').required(false);
