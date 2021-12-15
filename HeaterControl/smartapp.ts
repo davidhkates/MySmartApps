@@ -185,6 +185,8 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
+			'switch', 'switch.on', 'checkSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
 			'switch', 'switch.off', 'checkSwitchOffHandler');
 		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
@@ -250,6 +252,14 @@ module.exports = new SmartApp()
 })
 
 
+// Turn on heater if any check switches are on within time window
+.subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
+	console.log('checkSwitchOnHandler - started, check to see whether to turn on heater');
+	controlHeater(context);
+	console.log('checkSwitchOnHandler - finished checking whether to turn on heater');
+})
+
+
 // Turn off heater if all check switches are turned off outside of time window
 .subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
 	console.log('checkSwitchOffHandler - started, check to see whether to turn off heater');
@@ -264,11 +274,6 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - started');
 
-	/*
-	const startTime = new Date(context.configStringValue('startTime'));
-	const endTime   = new Date(context.configStringValue('endTime'));
-	if (SmartUtils.inTimeWindow(startTime, endTime)) {
-	*/
 	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime')) {
 		// await context.api.schedules.runIn('checkTempHandler', 0);
 		controlHeater(context);
@@ -316,15 +321,6 @@ module.exports = new SmartApp()
 // Handle end time if specified
 .scheduledEventHandler('stopHeaterHandler', async(context, event) => {
 	console.log('stopHeaterHandler - turn off heater');
-
-	/*
-	const endBehavior = context.configStringValue('endBehavior');
-	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
-	
-	if (endBehavior==='always' || (endBehavior==='check' && !bCheckSwitch)) {
-		stopHeater(context);
-	}
-	*/
 	stopHeater(context);
 })
 
