@@ -82,7 +82,7 @@ async function controlFan(context) {
 	// call next temperature check after interval (in seconds) until end time (if specified)
 	console.log('controlFan - recursive call to check interval again');
 	const checkInterval = context.configNumberValue('checkInterval');
-	await context.api.schedules.runIn('checkTemperature', checkInterval);	
+	await context.api.schedules.runIn('checkFanHandler', checkInterval);	
 
 	// return the state of the fan
 	return setFanState;
@@ -94,18 +94,18 @@ async function stopFan(context) {
 	// set fan state to 'off'
 	SmartState.putState(context, 'fanState', 'off');
 	// cancel any upcoming temperature check calls
-	await context.api.schedules.delete('checkTemperature');
+	await context.api.schedules.delete('checkFanHandler');
 	// reschedule fan start at specified time, if specified
 	const startTime = context.configStringValue('startTime');
 	if (startTime) {
-		await context.api.schedules.runDaily('checkTemperature', new Date(startTime));
+		await context.api.schedules.runDaily('checkFanHandler', new Date(startTime));
 	}
 }
 
 // check readiness to operate fan based on home being active, time window and contacts
 async function checkReadiness(context) {
 	// let returnValue = true;
-	let bStartStop = false;
+	let bReady = false;
 
 	// check to see if home is active or in time window
 	const homeName = context.configStringValue('homeName');
@@ -113,27 +113,27 @@ async function checkReadiness(context) {
 
 	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || bHomeActive) {
 		console.log('checkReadiness - in time window, check that contacts are in correct state');
-		bStartStop = true;
+		bReady = true;
 		const roomContacts = context.config.roomContacts;
 		if (roomContacts) {
 			const contactsState = await SmartDevice.getContactState( context, 'roomContacts' );
 			const contactsSetting = context.configStringValue('contactsOpenClosed');
 		
-			bStartStop = ( (contactsState=='open'&&contactsSetting!='allClosed') ||
+			bReady = ( (contactsState=='open'&&contactsSetting!='allClosed') ||
 				(contactsState=='mixed'&&contactsSetting=='anyOpen') ||
 				(contactsState=='closed'&&contactsSetting!='allOpen') );
 		}
 	}
 	
 	// restart or stop controlling fan based on time and contacts state
-	if (bStartStop) {
+	if (bReady) {
 		controlFan(context);
 	} else {
 		stopFan(context);
 	}
 	
 	// return returnValue;
-	return bStartStop;
+	return bReady;
 }
 
 
@@ -258,7 +258,7 @@ module.exports = new SmartApp()
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
 			console.log('FanControl - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
-			await context.api.schedules.runDaily('checkTemperature', new Date(startTime))
+			await context.api.schedules.runDaily('checkFanHandler', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 			}
@@ -299,15 +299,21 @@ module.exports = new SmartApp()
 })
 
 
+// Handle start time if specified
+.scheduledEventHandler('startFanHandler', async(context, event) => {
+	console.log('startFanHandler - call checkReadiness to control fan');
+	checkReadiness(context);
+})
+
+
 // Handle end time if specified
 .scheduledEventHandler('stopFanHandler', async(context, event) => {
 	console.log('stopFanHandler - turn off fan handler');
 	stopFan(context);
 })
 
-
 // Check temperature and turn on/off fan as appropriate
-.scheduledEventHandler('checkTemperature', async (context, event) => {		
-	console.log('checkTemperature - call controlFan');
+.scheduledEventHandler('checkFanHandler', async (context, event) => {		
+	console.log('checkFanHandler - call controlFan to turn on/off fan based on settings');
 	controlFan(context);
 });
