@@ -101,6 +101,9 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	const bControlEnabled = context.configBooleanValue('controlEnabled');
+	if (!bControlEnabled) {
+		bControlEnabled = true;
+	}
 	const roomType = context.configStringValue('roomType');
 
 	// initialize state variable(s)
