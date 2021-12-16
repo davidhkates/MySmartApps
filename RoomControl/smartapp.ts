@@ -100,7 +100,7 @@ module.exports = new SmartApp()
 	// page.nextPageId('optionsPage');
 
 	// set control enabled flag to control other settings prompts
-	const bControlEnabled = context.configBooleanValue('controlEnabled');
+	let bControlEnabled = context.configBooleanValue('controlEnabled');
 	if (!bControlEnabled) {
 		bControlEnabled = true;
 	}
