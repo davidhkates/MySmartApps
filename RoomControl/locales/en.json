@@ -5,7 +5,10 @@
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.roomType.name": "Type of room controls",	
+	"pages.mainPage.settings.roomType.name": "Type of room controls",
+	"pages.mainPage.settings.roomType.description": "Indicate whether to set up simple or complex controls",
+	"pages.mainPage.settings.roomType.options.simple.name": "Simple (turn lights, outlets, and speakers on/off)",
+	"pages.mainPage.settings.roomType.options.complex.name": "Complex (motion/contact detectors, time window)",	
 	"pages.mainPage.settings.homeName.name": "Name of home to check state",
 	
 	"pages.mainPage.sections.speakers.name": "Speakers in room to control",

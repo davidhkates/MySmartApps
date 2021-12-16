@@ -145,21 +145,16 @@ module.exports = new SmartApp()
 
 .page('optionsPage', (context, page, configData) => {
 
-	// initialize room type settings
-	const roomType = context.configStringValue('roomType');
-
 	// get settings 
-	if (roomType==='motion/contacts') {
-		page.section('sensors', section => {
-			section.booleanSetting('motionEnabled').defaultValue(true);
-			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
-				.required(false).multiple(true).permissions('r');
-			section.numberSetting('motionDelay').required(false).min(0);
-			section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-				.required(false).multiple(true).permissions('r');
-			section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
-		});
-	}
+	page.section('sensors', section => {
+		section.booleanSetting('motionEnabled').defaultValue(true);
+		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
+			.required(false).multiple(true).permissions('r');
+		section.numberSetting('motionDelay').required(false).min(0);
+		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
+			.required(false).multiple(true).permissions('r');
+		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
+	});
 
 	// time window and days of week
 	page.section('time', section => {
