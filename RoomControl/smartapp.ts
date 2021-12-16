@@ -112,7 +112,9 @@ module.exports = new SmartApp()
 		if (bControlEnabled) {
 			section.enumSetting('roomType').options(['simple', 'complex']).
 				required(true).defaultValue('lights/speakers').submitOnChange(true);
-			section.textSetting('homeName').required(false);
+			if (roomType==='complex') {
+				section.textSetting('homeName').required(false);
+			}
 		}
 	});
 
@@ -121,14 +123,14 @@ module.exports = new SmartApp()
 		page.section('controls', section => {
 			section.deviceSetting('roomSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
-			if (roomType==='complex') {
+			// if (roomType==='complex') {
 				section.deviceSetting('onGroup').capabilities(['switch'])
 					.required(true).multiple(true).permissions('rx');
 				// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
 				section.deviceSetting('offGroup').capabilities(['switch'])
 					.required(false).multiple(true).permissions('rx');
 				section.numberSetting('offDelay').required(false).min(0);
-			}
+			// }
 		});
 		
 		page.section('speakers', section => {
