@@ -29,24 +29,6 @@ async function controlHeater( context ) {
 	// Determine if ANY of the switch(es) to check are on
 	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
 
-	/*
-	var bCheckSwitch = true;
-	const checkSwitches = context.config.checkSwitches;
-	console.log('controlHeater - check switches: ', checkSwitches);
-	if (checkSwitches) {
-		const stateRequests = checkSwitches.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'switch'
-		));
-		
-		//set check switch to true if any switch is on
-		const switchStates: any = await Promise.all(stateRequests);
-		bCheckSwitch = !!( switchStates.find(it => it.switch.value === 'on') );		
-		console.log('controlHeater - are any of check switch(es) on?: ', bCheckSwitch);
-	}
-	*/
-		
 	// Get temperature(s) and set heater state, default heater state to off
 	var heaterState = 'off';
 	const targetTemp = context.configNumberValue('tempTarget');
@@ -74,7 +56,7 @@ async function controlHeater( context ) {
 	if (targetTemp) {
 		console.log('controlHeater - recursive call to check temperature');
 		const checkInterval = context.configNumberValue('checkInterval');
-		await context.api.schedules.runIn('checkTempHandler', checkInterval);	
+		await context.api.schedules.runIn('checkHeaterHandler', checkInterval);	
 	}
 
 	// return the state of the heater
@@ -92,26 +74,9 @@ async function stopHeater( context ) {
 		console.log('stopHeater - turn off heater switch, endBehavior: ', endBehavior, ', bCheckSwitch: ', bCheckSwitch);
 		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 		// cancel any upcoming temperature check calls
-		await context.api.schedules.delete('checkTempHandler');
+		await context.api.schedules.delete('checkHeaterHandler');
 	}
 	
-	/*
-	try {
-		await context.api.schedules.delete('checkTempHandler');
-		console.log('stopHeater - cancelled next temperature handler check');
-	} catch(err) {
-		console.error('stopHeater - no pending temperature handler checks: ', err);
-	}
-	*/
-	
-	/*
-	// reschedule heater start at specified time, if specified
-	const startTime = context.configStringValue('startTime');
-	if (startTime) {
-		console.log('stopHeater - reschedule handler to check temperature at next start time');
-		await context.api.schedules.runDaily('checkTempHandler', new Date(startTime));
-	}
-	*/
 	console.log('stopHeater - turn off heater switch complete');
 }
 
@@ -123,23 +88,32 @@ module.exports = new SmartApp()
 
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
-	// separate page for weather information
-	page.nextPageId('optionsPage');
+
+	// initialize variables to select settings
+	const bHeaterEnabled = config.configBooleanValue('heaterEnabled');
 	
-	// 
+	
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {
-		section.booleanSetting('heaterEnabled').defaultValue(true);
-		section.numberSetting('tempTarget').required(false);
-		section.deviceSetting('heaterSwitch').capabilities(['switch'])
-			.required(true).permissions('rx');
-		section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
-			.required(false).permissions('r');
-		section.textSetting('homeName').required(false);
-		// section.modeSetting('homeMode').multiple(true).style('COMPLETE');
-		section.deviceSetting('checkSwitches').capabilities(['switch'])
-			.required(false).multiple(true).permissions('r');
+		section.booleanSetting('heaterEnabled').defaultValue(true).submitOnChange(true);
+		if (bHeaterEnabled) {
+			section.textSetting('homeName').required(false);
+			// section.modeSetting('homeMode').multiple(true).style('COMPLETE');
+			section.numberSetting('tempTarget').required(false);
+			section.deviceSetting('heaterSwitch').capabilities(['switch'])
+				.required(true).permissions('rx');
+			section.deviceSetting('tempSensor').capabilities(['temperatureMeasurement'])
+				.required(false).permissions('r');
+			section.deviceSetting('checkSwitches').capabilities(['switch'])
+				.required(false).multiple(true).permissions('r');
+		}
 	});
+
+	if (bHeaterEnabled) {
+		// separate page for weather information
+		page.nextPageId('optionsPage');
+	}
+	
 })
 
 .page('optionsPage', (context, page, configData) => {
@@ -167,11 +141,6 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.subscriptions.delete();
-	/*
-	await context.api.schedules.delete('checkTempHandler');
-	await context.api.schedules.delete('startHeaterHandler');
-	await context.api.schedules.delete('stopHeaterHandler');
-	*/
 	
 	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
@@ -185,9 +154,7 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
-			'switch', 'switch.on', 'checkSwitchOnHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
-			'switch', 'switch.off', 'checkSwitchOffHandler');
+			'switch', '', 'checkSwitchHandler');
 		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
@@ -231,11 +198,6 @@ module.exports = new SmartApp()
 	console.log('heaterSwitchOnHandler - started, heater switch turned on manually');
 
 	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime')) {
-	/*
-	const startTime = context.configStringValue('startTime');	
-	const endTime   = context.configStringValue('endTime');
-	if (SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime))) {
-	*/
 		controlHeater(context);
 	}
 		
@@ -246,16 +208,16 @@ module.exports = new SmartApp()
 // If heater manually turned off, cancel subsequent check temperature calls to control heater
 .subscribedEventHandler('heaterSwitchOffHandler', async (context, event) => {
 	console.log('heaterSwitchOffHandler - started, heater switch turned off manually');
-	await context.api.schedules.delete('checkTempHandler');
+	await context.api.schedules.delete('checkHeaterHandler');
 	console.log('heaterSwitchOffHandler - finished, subsequent temperate check calls cancelled');
 })
 
 
-// Turn on heater if any check switches are on within time window
-.subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
-	console.log('checkSwitchOnHandler - started, check to see whether to turn on heater');
+// Check whether to turn on or off heater if check switch changes state
+.subscribedEventHandler('checkSwitchHandler', async (context, event) => {
+	console.log('checkSwitchHandler - started, check to see whether to turn on or off heater');
 	controlHeater(context);
-	console.log('checkSwitchOnHandler - finished checking whether to turn on heater');
+	console.log('checkSwitchHandler - finished checking whether to turn on or off heater');
 })
 
 
@@ -274,7 +236,6 @@ module.exports = new SmartApp()
 	console.log('contactOpenHandler - started');
 
 	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime')) {
-		// await context.api.schedules.runIn('checkTempHandler', 0);
 		controlHeater(context);
 	}
 	console.log('contactOpenHandler - finished');
@@ -329,7 +290,7 @@ module.exports = new SmartApp()
 })
 
 // Check temperature and turn on/off heater as appropriate
-.scheduledEventHandler('checkTempHandler', async (context, event) => {		
-	console.log('checkTempHandler - start controlling heater');
+.scheduledEventHandler('checkHeaterHandler', async (context, event) => {		
+	console.log('checkHeaterHandler - start controlling heater');
 	controlHeater(context);
 });
