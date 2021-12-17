@@ -90,8 +90,7 @@ module.exports = new SmartApp()
 .page('mainPage', (context, page, configData) => {
 
 	// initialize variables to select settings
-	const bHeaterEnabled = config.configBooleanValue('heaterEnabled');
-	
+	const bHeaterEnabled = context.configBooleanValue('heaterEnabled');
 	
 	// operating switch and interval for checking temperature
 	page.section('controls', section => {
