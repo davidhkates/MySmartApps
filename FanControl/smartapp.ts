@@ -95,11 +95,14 @@ async function stopFan(context) {
 	SmartState.putState(context, 'fanState', 'off');
 	// cancel any upcoming temperature check calls
 	await context.api.schedules.delete('checkFanHandler');
+	
+	/*
 	// reschedule fan start at specified time, if specified
 	const startTime = context.configStringValue('startTime');
 	if (startTime) {
 		await context.api.schedules.runDaily('checkFanHandler', new Date(startTime));
 	}
+	*/
 }
 
 // check readiness to operate fan based on home being active, time window and contacts
@@ -153,7 +156,7 @@ module.exports = new SmartApp()
 	page.section('general', section => {
 		section.booleanSetting('fanEnabled').defaultValue(true).submitOnChange(true);
 		if (bFanEnabled) {
-			section.enumSetting('fanType').options(['attic','bathroom','exhaust','room'])
+			section.enumSetting('fanType').options(['attic','bathroom','exhaust','heater','room'])
 				.required(true).defaultValue('room').submitOnChange(true);
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
@@ -258,7 +261,7 @@ module.exports = new SmartApp()
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
 			console.log('FanControl - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
-			await context.api.schedules.runDaily('checkFanHandler', new Date(startTime))
+			await context.api.schedules.runDaily('startFanHandler', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 			}
