@@ -154,12 +154,13 @@ module.exports = new SmartApp()
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
 			'switch', '', 'checkSwitchHandler');
-		if (context.config.doorContacts) {
+		console.log('Installed/Updated - value of door contacts: ', context.config.doorContacts);
+		// if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
-		}
+		// }
 
 		// set start and end time event handlers
 		const startTime = context.configStringValue('startTime');
