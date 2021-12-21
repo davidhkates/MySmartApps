@@ -148,25 +148,20 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	} else {
 		// create subscriptions for relevant devices
-		console.log('Installed/Updated - starting to set up subscriptions');
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.on', 'heaterSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
 			'switch', 'switch', 'checkSwitchHandler');
-//		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
-//			'switch', 'switch.off', 'checkSwitchHandler');
-		// console.log('Installed/Updated - value of door contacts: ', context.config.doorContacts);
-		// if (context.config.doorContacts) {
+		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
-		// }
+		}
 
 		// set start and end time event handlers
-		console.log('Installed/Updated - setting up times');
 		const startTime = context.configStringValue('startTime');
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
