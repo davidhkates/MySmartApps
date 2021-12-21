@@ -27,4 +27,8 @@
 	"pages.optionsPage.settings.endTime.name": "End time (optional)",
 	"pages.optionsPage.settings.endTime.description": "Time when heater should stop operating",
 	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
+	"pages.optionsPage.settings.endBehavior.name": "What to do at end time"
+	"pages.optionsPage.settings.endBehavior.options.off.name": "Turn off",
+	"pages.optionsPage.settings.endBehavior.options.check.name": "Check control switch",
+	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"	
 }
