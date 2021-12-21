@@ -154,7 +154,9 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
-			'switch', '', 'checkSwitchHandler');
+			'switch', 'switch', 'checkSwitchHandler');
+//		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
+//			'switch', 'switch.off', 'checkSwitchHandler');
 		// console.log('Installed/Updated - value of door contacts: ', context.config.doorContacts);
 		// if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
