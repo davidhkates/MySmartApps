@@ -148,6 +148,7 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
 	} else {
 		// create subscriptions for relevant devices
+		console.log('Installed/Updated - starting to set up subscriptions');
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.on', 'heaterSwitchOnHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
