@@ -1,6 +1,5 @@
 //---------------------------------------------------------------------------------------
-// Room Control - control lights/switches in room based on sensors, time of day, 
-//     and day of week
+// Sonos Control - control sonos speaker(s) from light switch
 //---------------------------------------------------------------------------------------
 
 
@@ -19,6 +18,8 @@ interface device {
 	[value: string]: any
 }
 
+// var aws = require('aws-sdk');
+// aws.config.update({region: 'us-west-2'});
 
 // Remove console log and console error outputs when not debugging
 /*
@@ -29,6 +30,61 @@ interface device {
 // }
 */
 
+
+/*
+// Control playback on Sonos speakers
+async function controlSpeakers(context, speakers, command) {
+	  	
+	try {
+		// create axios sonos control object
+		const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
+		const sonosControl = axios.create({
+			baseURL: 'https://api.ws.sonos.com/control/api/v1',
+			timeout: 5000,
+			headers: {
+				'Content-Type': 'application/json',
+				'Authorization': 'Bearer ' + access_token
+			}
+		});
+
+		// get household id
+		console.log('controlSpeakers - getting households');
+		sonosControl.get('households').then((result) => {
+			const householdId = result.data.households[0].id;			
+			console.log('controlSpeakers - household ID: ', householdId);
+			// putSonosData( 'household-id', idHousehold );
+
+			// get sonos groups and devices
+			sonosControl.get('households/' + householdId + '/groups').then((result) => {
+				const sonosGroups = result.data.groups;
+				console.log('controlSpeakers - Sonos groups: ', sonosGroups);
+			
+				// pause all specified speakers
+				// for (const speaker of context.config.roomSpeakers) {
+				const speakerDevices = context.config[speakers];
+				for (const speaker of speakerDevices) {
+					const speakerId = speaker.deviceConfig.deviceId;
+					// const speakerInfo = await context.api.devices.get(speakerId);
+					context.api.devices.get(speakerId).then((speakerInfo) => {
+						const speakerName = speakerInfo.name;
+						// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
+						
+						const result = sonosGroups.find(speaker => speaker.name === speakerName);
+						const groupId = result.id;
+
+						const command = 'pause';
+						const urlControl = '/groups/' + groupId + '/playback/' + command;
+						// sonosControl.post(urlControl);
+						sonosControl.post(urlControl).then((result) => {
+							console.log('controlSpeakers - Success!  Data: ', result.data);;
+						}).catch((err) => { console.log('controlSpeakers - error controlling speaker: ', err, ', command: ', command); })
+					})
+				}
+			}).catch((err) => { console.log('controlSpeakers - error getting groups/speakers: ', err); })
+		}).catch((err) => { console.log('controlSpeakers - error getting household(s): ', err); })
+	} catch(err) { console.log('controlSpeakers - error controlling Sonos: ', err); }
+};
+*/
 
 
 /* Define the SmartApp */
@@ -47,7 +103,6 @@ module.exports = new SmartApp()
 	if (!bControlEnabled) {
 		bControlEnabled = true;
 	}
-	const roomType = context.configStringValue('roomType');
 
 	// initialize state variable(s)
 	SmartState.putState( context, 'roomSwitchPressed', 'true' );
@@ -56,14 +111,9 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
-			section.textSetting('homeName').required(false);
-			/*
-			section.enumSetting('roomType').options(['simple', 'complex']).
-				required(true).defaultValue('lights/speakers').submitOnChange(true);
 			if (roomType==='complex') {
 				section.textSetting('homeName').required(false);
 			}
-			*/
 		}
 	});
 
@@ -72,80 +122,17 @@ module.exports = new SmartApp()
 		page.section('controls', section => {
 			section.deviceSetting('roomSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
-			// if (roomType==='complex') {
-				section.deviceSetting('onGroup').capabilities(['switch'])
-					.required(true).multiple(true).permissions('rx');
-				// section.enumSetting('onTimeCheck').options(['onWindow', 'onAlways']);
-				section.deviceSetting('offGroup').capabilities(['switch'])
-					.required(false).multiple(true).permissions('rx');
-				section.numberSetting('offDelay').required(false).min(0);
-			// }
-		});
-		
-		/*
-		page.section('speakers', section => {
 			section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 				.required(false).multiple(true).permissions('rx');
+			section.enumSetting('speakerBehavior').options(['onAlways','onActive']).required(false);
 		});
-		*/
-		
-		// specify next (second) options page
-		page.nextPageId('optionsPage');
-		/*
-		if (roomType==='complex') {
-			page.nextPageId('optionsPage');
-		}
-		*/
 	}
 })
-
-.page('optionsPage', (context, page, configData) => {
-
-	// get settings 
-	page.section('sensors', section => {
-		section.booleanSetting('motionEnabled').defaultValue(true);
-		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.numberSetting('motionDelay').required(false).min(0);
-		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
-	});
-
-	// time window and days of week
-	page.section('time', section => {
-		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
-			defaultValue('everyday').required(true);
-		section.timeSetting('startTime').required(false).submitOnChange(true);
-		if (context.configStringValue('startTime')) {
-			section.timeSetting('endTime').required(false);
-		}
-	});
-
-	// specify next (third) options page
-	// page.nextPageId('timePage');
-})
-
-/*
-.page('timePage', (context, page, configData) => {
-	
-	// pointer to previous (second) configuration page
-	// page.prevPageId('optionsPage');
-	
-	// time window and days of week
-	page.section('time', section => {
-		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
-			defaultValue('everyday').required(true);
-		section.timeSetting('startTime').required(false);
-		section.timeSetting('endTime').required(false);
-	});
-})
-*/
 
 
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
-	console.log('roomControl - start install/update');
+	console.log('sonosControl - start install/update');
 
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
@@ -208,27 +195,6 @@ module.exports = new SmartApp()
 	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
 	console.log('roomSwitchOnHandler - main switch pressed: ', switchPressed);
 	
-	// Get start and end times
-	/*
-	const startTime = context.configStringValue('startTime');
-	const endTime = context.configStringValue('endTime');
-	// const onTimeCheck = context.configStringValue('onTimeCheck');
-	const onTimeCheck = 'onAlways';
-
-	// Determine whether current time is within start and end time window
-	var bTimeWindow = SmartUtils.inTimeWindow(new Date(startTime), new Date(endTime));
-	*/
-
-	// Determine if Now() is in time window
-	// const bDayOfWeek = SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') );
-	// const bTimeWindow = SmartUtils.inTimeContext(context, 'startTime', 'endTime');
-	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
-		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
-	// const onTimeCheck = context.configStringValue('onTimeCheck');
-	const onTimeCheck = 'onAlways';
-	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
-		
-	// if ( (bDayOfWeek && bTimeWindow) || onTimeCheck==='onAlways') {		
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
 		// Cancel scheduled event to turn off main switch after delay
@@ -246,39 +212,6 @@ module.exports = new SmartApp()
 			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
 			SmartState.putState( context, 'roomSwitchPressed', 'true' );
 		}
-		
-		/*
-		// Only turn on switches in the on group if none have already been turned on
-		// const onGroupSwitches = context.config.onGroup;
-		// if (onGroupSwitches) {
-		if (context.config.onGroup) {
-			console.log('roomSwitchOnHandler - calling local getSwitchState for onGroup');
-			const stateOnGroup = await SmartDevice.getSwitchState(context, 'onGroup');
-			console.log('roomSwitchOnHandler - group switches state: ', stateOnGroup);
-			if (stateOnGroup==='off') {
-				console.log('roomSwitchOnHandler - turn on switches in on group');
-				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-				console.log('roomSwitchOnHandler - turning speakers on', context.config['roomSpeakers']);
-				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
-			}
-
-			// Get the current states of the switches in the on group
-			const onGroupStates = await onGroupSwitches.map(it => context.api.devices.getCapabilityStatus(
-				it.deviceConfig.deviceId,
-				it.deviceConfig.componentId,
-				'switch'
-			));	
-			
-			const states: device = await Promise.all(onGroupStates);
-			// If any switches in the on group are already on, don't turn on others
-			if (states.find(it => it.switch.value === 'on')) {
-				console.log('roomSwitchOnHandler - switch(es) in on group already on, do not turn on group')
-			} else {
-				console.log('roomSwitchOnHandler - turn on switches in on group');
-				await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
-			}
-		}
-		*/
 	}
 	
 	// Schedule turning off room switch if delay specified
