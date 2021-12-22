@@ -9,7 +9,7 @@ const axios = require('axios');
 
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
-const SmartUtils  = require('@katesthings/smartutils');
+// const SmartUtils  = require('@katesthings/smartutils');
 const SmartState  = require('@katesthings/smartstate');
 const SmartSonos  = require('@katesthings/smartsonos');
 
@@ -31,7 +31,6 @@ interface device {
 */
 
 
-/*
 // Control playback on Sonos speakers
 async function controlSpeakers(context, speakers, command) {
 	  	
@@ -84,7 +83,6 @@ async function controlSpeakers(context, speakers, command) {
 		}).catch((err) => { console.log('controlSpeakers - error getting household(s): ', err); })
 	} catch(err) { console.log('controlSpeakers - error controlling Sonos: ', err); }
 };
-*/
 
 
 /* Define the SmartApp */
@@ -94,9 +92,6 @@ module.exports = new SmartApp()
 
 // Configuration page definition
 .page('mainPage', (context, page, configData) => {
-
-	// main options page with room controls and behaviors
-	// page.nextPageId('optionsPage');
 
 	// set control enabled flag to control other settings prompts
 	let bControlEnabled = context.configBooleanValue('controlEnabled');
@@ -162,19 +157,16 @@ module.exports = new SmartApp()
 	
 	// Get session state variable to see if button was manually pressed
 	console.log("Checking value of roomSwitchPressed");
-	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
-	console.log('switchOnHandler - main switch pressed: ', switchPressed);
+	const speakerBehavior = context.configStringValue('speakerBehavior');
+	console.log('switchOnHandler - speaker behavior: ', speakerBehavior);
 	
-	if (bTimeWindow || onTimeCheck==='onAlways') {		
+	if (speakerBehavior==='onAlways' || 
+	   (speakerBehavior==='onActive' && smartSonos.isHomeActive(context.stringValue('homeName')))) {		
 	
-		// check value of roomSwitchPressed state variable
-		if ( switchPressed == 'true' ) {
-			console.log('switchOnHandler - main switch pressed, turning on all lights in OnGroup');
-			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-			console.log('switchOnHandler - speakers turned on as part of onGroup');
-		} else {
-			console.log('switchHandler - main switch NOT pressed, don\'t turn on other lights');
-			SmartState.putState( context, 'roomSwitchPressed', 'true' );
+		// turn on speaker(s)
+			console.log('switchOnHandler - switch pressed, turning on speakers');
+			await controlSpeakers( context, 'roomSpeakers', 'play');
+			console.log('switchOnHandler - speakers turned on');
 		}
 	}
 	
@@ -182,40 +174,13 @@ module.exports = new SmartApp()
 })
 
 
-// Turn off the lights in the offGroup when room switch is turned off
+// Turn off speakers when room switch is turned off
 .subscribedEventHandler('switchOffHandler', async (context, event) => {
 	// Turn on the lights in off group based on behavior setting
 	console.log('switchOffHandler - starting');
 		
-	// Determine if Now() is in time window
-	console.log('switchOffHandler - time window: ', SmartUtils.inTimeContext( context, 'startTime', 'endTime') );
-	const daysOfWeek = context.configStringValue('daysOfWeek');
-	console.log('switchOffHandler - daysOfWeek: ', daysOfWeek, ', isDayOfWeek: ', SmartUtils.isDayOfWeek( daysOfWeek ) );
-	
-	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
-		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
-		!!(context.configStringValue('startTime')) ); 		
-		
-	console.log('switchOffHandler - in time window: ', bTimeWindow);
-	if (!bTimeWindow) {	
-		console.log('roomSwitchOffHandler - outside time window');
-		const offDelay = context.configNumberValue('offDelay')
-		console.log('roomSwitchOffHandler - off delay: ', offDelay);
-		
-		// get state variable to see if room switch was turned off by delay
-		const roomState = await SmartState.getState(context, 'roomOff');
-		console.log('roomSwitchOffHandler - room off context value: ', roomState);
-
-		if (offDelay>0 && roomState==='delay') {
-			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
-			await context.api.schedules.runIn('delayedGroupOff', offDelay);
-		} else {
-			console.log('roomSwitchOffHandler - turning off group immediately');
-			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-			console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
-			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-			// await controlSpeakers(context, 'roomSpeakers', 'pause');
-			console.log('roomSwitchOffHandler - turning off group complete');
-		}
+	// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
+	await controlSpeakers(context, 'roomSpeakers', 'pause');
+	console.log('roomSwitchOffHandler - turning off speakers complete');
 	}
 });
