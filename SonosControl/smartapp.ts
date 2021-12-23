@@ -242,7 +242,7 @@ module.exports = new SmartApp()
 	console.log('switchOnHandler - speaker behavior: ', speakerBehavior);
 	
 	if (speakerBehavior==='onAlways' || 
-	   (speakerBehavior==='onActive' && smartState.isHomeActive(context.stringValue('homeName')))) {		
+	   (speakerBehavior==='onActive' && SmartState.isHomeActive(context.stringValue('homeName')))) {		
 	
 		// turn on speaker(s)
 			console.log('switchOnHandler - switch pressed, turning on speakers');
