@@ -105,7 +105,7 @@ async function accessToken() {
 
 	try {
 		// create axios sonos control object
-		console.log('accessToken - getting Sonos data from DyanmoDB') }	
+		console.log('accessToken - getting Sonos data from DyanmoDB');
 		accessToken = await getSonosData('access-token');
 		const tokenTime = await getSonosData( 'token-time' );
 		const expiresIn = await getSonosData( 'expires-in' );
