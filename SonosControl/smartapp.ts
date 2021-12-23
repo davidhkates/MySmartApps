@@ -34,14 +34,6 @@ interface device {
 //---------------------------------------------------------------------------------------
 // Sonos Utility Functions - use control API to stop/start speakers
 //---------------------------------------------------------------------------------------
-'use strict'
-
-// Install relevant utilities
-const SmartState  = require('@katesthings/smartstate');
-
-// Install relevant node packages
-const axios = require("axios");
-
 
 // Store stateful Sonos data in DynamoDB home setting table
 async function getSonosData( key ) {
