@@ -189,9 +189,7 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
-			if (roomType==='complex') {
-				section.textSetting('homeName').required(false);
-			}
+			section.textSetting('homeName').required(false);
 		}
 	});
 
