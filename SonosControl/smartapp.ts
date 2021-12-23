@@ -258,7 +258,6 @@ module.exports = new SmartApp()
 			console.log('switchOnHandler - switch pressed, turning on speakers');
 			await controlSpeakers( context, 'roomSpeakers', 'play');
 			console.log('switchOnHandler - speakers turned on');
-		}
 	}
 	
 	console.log('switchOnHandler - finished');	
