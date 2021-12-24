@@ -82,7 +82,7 @@ async function refreshToken() {
 			putSonosData( 'token-time', new Date() );
 			putSonosData( 'access-token', token_data.access_token );
 			putSonosData( 'refresh-token', token_data.refresh_token );
-			putSonosData( 'expires-in', token_data.expires_in );
+			putSonosData( 'expires-in', token_data.expires_in.toString() );
 			
 			// putSonosToken( tokenData );
 		}).catch((err) => { console.log('refreshToken - error refreshing token: ', err); })
