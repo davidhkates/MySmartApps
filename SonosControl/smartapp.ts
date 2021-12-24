@@ -52,7 +52,8 @@ async function refreshToken() {
 	
 	try {
 		// create axios sonos control object
-		const refreshToken = await SmartSonos.getSonosData('refresh-token');
+		// const refreshToken = await SmartSonos.getSonosData('refresh-token');
+		const refreshToken = await getSonosData('refresh-token');
 		console.log('refreshToken - retrieved refresh token: ', refreshToken);
 			
 		const urlToken = 'https://api.sonos.com/login/v3/oauth/access';
