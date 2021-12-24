@@ -52,14 +52,16 @@ async function refreshToken() {
 	
 	try {
 		// create axios sonos control object
-		const refresh_token = await SmartState.getSonosData('refresh-token');
+		const refreshToken = await SmartState.getSonosData('refresh-token');
+		console.log('refreshToken - retrieved refresh token: ', refreshToken);
 			
 		const urlToken = 'https://api.sonos.com/login/v3/oauth/access';
 
 		const params = new URLSearchParams();
 		params.append('grant_type', 'refresh_token');
-		params.append('refresh_token', refresh_token);
+		params.append('refresh_token', refreshToken);
 		// params.append('redirect_uri', 'https%3A%2F%2F00t156cqe1.execute-api.us-west-2.amazonaws.com%2Fdev%2Fauth-callback');
+		console.log('refreshToken - initialized parameters: ', params);
 	
 		const config = {
 			headers: {
