@@ -120,7 +120,7 @@ async function controlSpeakers(context, speakers, command) {
 	try {
 		// create axios sonos control object
 		// const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
-		const access_token = getAccessToken();
+		const access_token = await getAccessToken();
 		const sonosControl = axios.create({
 			baseURL: 'https://api.ws.sonos.com/control/api/v1',
 			timeout: 5000,
