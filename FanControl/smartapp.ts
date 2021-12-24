@@ -235,9 +235,9 @@ module.exports = new SmartApp()
 
 	// OPTIONAL: room (contact, motion) sensors
 	// page.section('roomSensors', section => {		     
-		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r').submitOnChange(true);
-		if (context.config.roomContacts) {
+		if (strFanType==='attic') {
+			section.deviceSetting('roomContacts').capabilities(['contactSensor'])
+				.required(false).multiple(true).permissions('r');
 			section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
 				.defaultValue('allOpen').required(false);
 		}
@@ -245,9 +245,9 @@ module.exports = new SmartApp()
 
 	// OPTIONAL: motion sensors
 	// page.section('motionSensors', section => {		     
-		section.deviceSetting('motionSensors').capabilities(['motionSensor'])
-			.required(false).multiple(true).permissions('r').submitOnChange(true);
-		if (context.config.motionSensors) {
+		if (strFanType==='bathroom') {
+			section.deviceSetting('motionSensors').capabilities(['motionSensor'])
+				.required(false).multiple(true).permissions('r').submitOnChange(true);
 			section.numberSetting('motionDelay').defaultValue(300).required(false);
 		}
 	});

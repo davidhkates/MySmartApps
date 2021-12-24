@@ -19,6 +19,7 @@
 	"pages.mainPage.settings.targetTemp.description": "Turn on fan if indoor temperature is above this value",
 	"pages.mainPage.settings.targetHumidity.name": "Target humidity (optional)",
 	"pages.mainPage.settings.targetHumidity.description": "Turn on fan if indoor humidity is above this value",
+	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
 
 	"pages.optionsPage.name": "Fan Control (Options)",
 	"pages.optionsPage.settings.weather.name": "Outdoor weather sensor (optional)",
@@ -33,10 +34,13 @@
 	"pages.optionsPage.settings.contactsOpenClosed.options.allClosed.name": "All Closed",
 	"pages.optionsPage.settings.motionSensors.name": "Motion sensor to start fan",
 	"pages.optionsPage.settings.motionDelay.name": "Delay after motion ends to stop fan",
-	"pages.optionsPage.sections.time.name": "Time of day to operate",
-	"pages.optionsPage.settings.startTime.name": "Start time (optional)",
-	"pages.optionsPage.settings.startTime.description": "Time when fan should start operating",
-	"pages.optionsPage.settings.endTime.name": "End time (optional)",
-	"pages.optionsPage.settings.endTime.description": "Time when fan should stop operating",
-	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
+	
+	"pages.timePage.name": "Fan Control (Time Settings)",
+	"pages.timePage.sections.time.name": "Time of day to operate",
+	"pages.timePage.settings.startTime.name": "Start time (optional)",
+	"pages.timePage.settings.startTime.description": "Time when fan should start operating",
+	"pages.timePage.settings.endTime.name": "End time (optional)",
+	"pages.timePage.settings.endTime.description": "Time when fan should stop operating",
+	
+	
 }
