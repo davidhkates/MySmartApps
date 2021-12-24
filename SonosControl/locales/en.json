@@ -17,6 +17,6 @@
 	"pages.mainPage.settings.onGroup.name": "Lights to turn on from main switch",
 
 	"pages.mainPage.settings.speakerBehavior.name": "When should speakers be turned on",
-	"pages.mainPage.settings.speakerBehavior.options.onAlways.name": "Always, with switch",
-	"pages.mainPage.settings.speakerBehavior.options.onActive.name": "When home is active"
+	"pages.mainPage.settings.speakerBehavior.options.onAlways.name": "Always with room switch",
+	"pages.mainPage.settings.speakerBehavior.options.onActive.name": "Only when home is active"
 }
