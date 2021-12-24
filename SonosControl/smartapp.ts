@@ -157,7 +157,9 @@ async function controlSpeakers(context, speakers, command) {
 						const speakerName = speakerInfo.name;
 						// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
 						
+						console.log('controlSpeakers - find speaker: ', speakerName, ', speakerId: ', speakerId);
 						const result = sonosGroups.find(speaker => speaker.name === speakerName);
+						console.log('controlSpeakers - result of find: ', result);
 						const groupId = result.id;
 
 						const command = 'pause';
