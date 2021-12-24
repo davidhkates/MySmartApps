@@ -90,25 +90,25 @@ async function refreshToken() {
 };
 
 // Get access token
-async function accessToken() {
+async function getAccessToken() {
 	
 	// declare access token variable to be returned
 	let accessToken;
 
 	try {
 		// create axios sonos control object
-		console.log('accessToken - getting Sonos data from DyanmoDB');
+		console.log('getAccessToken - getting Sonos data from DyanmoDB');
 		accessToken = await getSonosData('access-token');
 		const tokenTime = await getSonosData( 'token-time' );
 		const expiresIn = await getSonosData( 'expires-in' );
 
 		// check to see if token has expired
 		const currentTime: any = new Date();
-		console.log('accessToken - token-time: ', tokenTime, ', expires-in: ', expiresIn, ', time gap: ', (currentTime - tokenTime) / 1000 );
+		console.log('getAccessToken - token-time: ', tokenTime, ', expires-in: ', expiresIn, ', time gap: ', (currentTime - tokenTime) / 1000 );
 		if ( ( ( currentTime - tokenTime ) / 1000 ) > expiresIn ) {
 			accessToken = await refreshToken();
 		}
-	} catch(err) { console.log('accessToken - error getting refresh token from DynamoDB: ', err) }	
+	} catch(err) { console.log('getAccessToken - error getting refresh token from DynamoDB: ', err) }	
 	
 	return accessToken;
 };
@@ -119,7 +119,8 @@ async function controlSpeakers(context, speakers, command) {
 	  	
 	try {
 		// create axios sonos control object
-		const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
+		// const access_token = await SmartState.getHomeMode('niwot', 'sonos-access-token');
+		const access_token = getAccessToken();
 		const sonosControl = axios.create({
 			baseURL: 'https://api.ws.sonos.com/control/api/v1',
 			timeout: 5000,
