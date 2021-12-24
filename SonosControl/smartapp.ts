@@ -41,7 +41,7 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	let bControlEnabled = context.configBooleanValue('controlEnabled');
-	if (!bControlEnabled) {
+	if (bControlEnabled === undefined) {
 		bControlEnabled = true;
 	}
 
