@@ -1,3 +1,8 @@
+//---------------------------------------------------------------------------------------
+// Fan Control - turn on/off fan based on temp, humidity, check switch, sensors, time
+//---------------------------------------------------------------------------------------
+'use strict'
+
 // Load SmartApp SDK APIs
 const SmartApp = require('@smartthings/smartapp');
 
@@ -15,6 +20,28 @@ interface device {
 // console.log = function () {};
 // console.error = function () {};
 
+
+
+async function getHumidity( context, sensorName ) {
+	let humidityValue;
+	try {
+		const sensorArray = context.config[sensorName];
+		if (sensorArray) {
+			if (sensorArray.length==1) {
+				const sensorDevice = context.config[sensorName][0];
+				const sensorState = await context.api.devices.getState(sensorDevice.deviceConfig.deviceId);
+				humidityValue = sensorState.components.main.relativeHumidityMeasurement.humidity.value;
+			}
+		}
+	} catch (err) {
+		console.log('getHumidity - error retrieving humidity value: ', err);
+	}
+	return humidityValue;
+};	
+
+
+
+
 // Utility functions for this automation
 async function controlFan(context) {
 	// Initialize fan state variable
@@ -22,6 +49,7 @@ async function controlFan(context) {
 
 	// Get indoor conditions and target values
 	const indoorTemp = await SmartDevice.getTemperature(context, 'tempSensor');
+	// const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
 	const indoorHumidity = await SmartDevice.getHumidity(context, 'humiditySensor');
 	const targetTemp = context.configNumberValue('targetTemp');
 	const targetHumidity = context.configNumberValue('targetHumidity');
@@ -206,15 +234,24 @@ module.exports = new SmartApp()
 		section.deviceSetting('checkSwitches').capabilities(['switch'])
 			.required(false).multiple(true).permissions('r');
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
-	});
+	// });
 
-	// OPTIONAL: contact sensors
-	page.section('contactSensors', section => {		     
+	// OPTIONAL: room (contact, motion) sensors
+	// page.section('roomSensors', section => {		     
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r').submitOnChange(true);
 		if (context.config.roomContacs) {
 			section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
 				.defaultValue('allOpen').required(false);
+		}
+	// });
+
+	// OPTIONAL: motion sensors
+	// page.section('motionSensors', section => {		     
+		section.deviceSetting('motionSensors').capabilities(['motionSensor'])
+			.required(false).multiple(true).permissions('r').submitOnChange(true);
+		if (context.config.motionSensors) {
+			section.numberSetting('motionDelay').defaultValue(300).required(false);
 		}
 	});
 
@@ -254,6 +291,12 @@ module.exports = new SmartApp()
 				'contactSensor', 'contact.open', 'contactOpenHandler');
 			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
+		}
+		if (context.config.motionSensors) {
+			await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
+				'motionSensor', 'contact.open', 'motionStartHandler');
+			await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
+				'motionSensor', 'contact.stopped', 'motionStopHandler');
 		}
 
 		// set start and end time event handlers
@@ -298,6 +341,20 @@ module.exports = new SmartApp()
 // If contact is closed, see if they're all closed in which case stop fan
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - check whether or not contacts comply with setting');
+	checkReadiness(context);
+})
+
+
+// If one or more motion sensors starts, start controlling fan
+.subscribedEventHandler('motionStartHandler', async (context, event) => {
+	console.log('motionStartHandler - motion started, start controlling fan');
+	checkReadiness(context);
+})
+
+
+// If all motion has stopped, set timer to stop fan
+.subscribedEventHandler('motionStopHandler', async (context, event) => {
+	console.log('motionStopHandler - stop fan if all motion stopped after delay');
 	checkReadiness(context);
 })
 
