@@ -300,11 +300,13 @@ module.exports = new SmartApp()
 			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
 				'contactSensor', 'contact.closed', 'contactClosedHandler');
 		}
+
+		// initialize motion behavior		// await context.api.subscriptions.subscribeToDevices(context.config.roomMotionOn,
 		if (context.config.motionSensors) {
-			await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-				'motionSensor', 'contact.open', 'motionStartHandler');
-			await context.api.subscriptions.subscribeToDevices(context.config.motionSensors,
-				'motionSensor', 'contact.stopped', 'motionStopHandler');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+				'motionSensor', 'motion.active', 'motionStartHandler');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+				'motionSensor', 'motion.inactive', 'motionStopHandler');
 		}
 
 		// set start and end time event handlers
