@@ -105,8 +105,9 @@ async function getAccessToken() {
 		// check to see if token has expired
 		const currentTime: any = new Date();
 		const elapsedTime = (currentTime.getTime() - tokenTime.getTime()) / 1000;
-		console.log('getAccessToken - token-time: ', tokenTime, ', expires-in: ', expiresIn, ', time gap: ', elapsedTime / 1000 );
+		console.log('getAccessToken - token-time: ', tokenTime, ', expires-in: ', expiresIn, ', time gap: ', elapsedTime );
 		if ( elapsedTime > expiresIn ) {
+			console.log('getAccessToken - token expired, need to refresh: ', elapsedTime);
 			accessToken = await refreshToken();
 		}
 	} catch(err) { console.log('getAccessToken - error getting refresh token from DynamoDB: ', err) }	
