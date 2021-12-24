@@ -206,17 +206,15 @@ module.exports = new SmartApp()
 				section.numberSetting('targetTemp').required(false);
 				// section.enumSetting('tempAboveBelow').options(['above','below']);
 			}
+			section.numberSetting('checkInterval').defaultValue(300).required(false);
 		});
 
-		// separate page for weather information
+		// separate page for weather information and sensors
 		page.nextPageId('optionsPage');
 	}
 })
 
 .page('optionsPage', (context, page, configData) => {
-	// separate page for weather information
-	// page.prevPageId('mainPage');
-	
 	// get fan type to control which parameters to display
 	const strFanType = context.configStringValue('fanType');	
 
@@ -233,14 +231,13 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.deviceSetting('checkSwitches').capabilities(['switch'])
 			.required(false).multiple(true).permissions('r');
-		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	// });
 
 	// OPTIONAL: room (contact, motion) sensors
 	// page.section('roomSensors', section => {		     
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r').submitOnChange(true);
-		if (context.config.roomContacs) {
+		if (context.config.roomContacts) {
 			section.enumSetting('contactsOpenClosed').options(['allOpen','allClosed','anyOpen'])
 				.defaultValue('allOpen').required(false);
 		}
@@ -255,14 +252,25 @@ module.exports = new SmartApp()
 		}
 	});
 
+	// separate page for time information if fan NOT controlled by home active status
+	if (!(context.configStringValue('homeName'))) {
+		page.nextPageId('timePage');
+	}
+})
+
+.page('timePage', (context, page, configData) => {
+	// get fan type to control which parameters to display
+	// const strFanType = context.configStringValue('fanType');	
+
 	// OPTIONAL: start and end time
 	// const strHomeName = context.configStringValue('homeName');
-	if (!(context.configStringValue('homeName'))) {
+	
+	// if (strFanType==='attic') {
 		page.section('time', section => {
 			section.timeSetting('startTime').required(false);
 			section.timeSetting('endTime').required(false);
 		});
-	}
+	// }
 })
 
 // Handler called whenever app is installed or updated (unless separate .installed handler)
