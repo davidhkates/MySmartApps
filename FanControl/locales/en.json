@@ -19,7 +19,7 @@
 	"pages.mainPage.settings.targetTemp.description": "Turn on fan if indoor temperature is above this value",
 	"pages.mainPage.settings.targetHumidity.name": "Target humidity (optional)",
 	"pages.mainPage.settings.targetHumidity.description": "Turn on fan if indoor humidity is above this value",
-	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)"
+	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)",
 
 	"pages.optionsPage.name": "Fan Control (Options)",
 	"pages.optionsPage.settings.weather.name": "Outdoor weather sensor (optional)",
@@ -40,7 +40,5 @@
 	"pages.timePage.settings.startTime.name": "Start time (optional)",
 	"pages.timePage.settings.startTime.description": "Time when fan should start operating",
 	"pages.timePage.settings.endTime.name": "End time (optional)",
-	"pages.timePage.settings.endTime.description": "Time when fan should stop operating",
-	
-	
+	"pages.timePage.settings.endTime.description": "Time when fan should stop operating"	
 }
