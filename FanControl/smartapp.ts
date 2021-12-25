@@ -241,7 +241,7 @@ module.exports = new SmartApp()
 	// });
 
 	// OPTIONAL: motion sensors
-	// page.section('motionSensors', section => {		     
+	// page.section('motionSensors', section => {
 		if (strFanType==='bathroom') {
 			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 				.required(false).multiple(true).permissions('r').submitOnChange(true);
@@ -311,11 +311,7 @@ module.exports = new SmartApp()
 		const startTime = context.configStringValue('startTime');
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
-			console.log('FanControl - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
-			
-			// start controlling fan if in time window and contacts in correct state		
-			checkReadiness(context);
-			
+			console.log('FanControl - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());			
 			// set start and end time event handlers
 			await context.api.schedules.runDaily('startFanHandler', new Date(startTime))
 			if (endTime) {
@@ -324,6 +320,15 @@ module.exports = new SmartApp()
 		}
 		
 	}
+	
+	// check readiness of sensors, time and home status to start controlling
+	// UNLESS it's a bathroom fan which is triggered by motion sensor
+	const strFanType = context.configStringValue('fanType');		
+	if (strFanType!=='bathroom') {
+		console.log('FanControl - check readiness of controlling fan based on type: ', strFanType);
+		checkReadiness(context);	
+	}
+	
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
 
