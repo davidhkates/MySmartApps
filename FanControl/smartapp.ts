@@ -243,7 +243,7 @@ module.exports = new SmartApp()
 	// OPTIONAL: motion sensors
 	// page.section('motionSensors', section => {		     
 		if (strFanType==='bathroom') {
-			section.deviceSetting('motionSensors').capabilities(['motionSensor'])
+			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 				.required(false).multiple(true).permissions('r').submitOnChange(true);
 			section.numberSetting('motionDelay').defaultValue(300).required(false);
 		}
