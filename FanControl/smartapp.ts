@@ -300,6 +300,7 @@ module.exports = new SmartApp()
 
 		// initialize motion behavior		// await context.api.subscriptions.subscribeToDevices(context.config.roomMotionOn,
 		if (context.config.motionSensors) {
+			console.log('FanControl - subscribe to motion sensor device handlers');
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 				'motionSensor', 'motion.active', 'motionStartHandler');
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
@@ -360,6 +361,7 @@ module.exports = new SmartApp()
 	console.log('motionStartHandler - motion started, start controlling fan');
 
 	// start fan if in time window and check switch is on
+	
 	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
 	// controlFan(context);
 })
