@@ -365,7 +365,12 @@ module.exports = new SmartApp()
 // If all motion has stopped, set timer to stop fan
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
 	console.log('motionStopHandler - stop fan if all motion stopped after delay');
-	checkReadiness(context);
+	const motionDelay = context.configStringValue('motionDelay');
+	if (motionDelay) {
+		await context.api.schedules.runIn('stopFanHandler', motionDelay);	
+	} else {
+		stopFan(context);
+	}
 })
 
 
