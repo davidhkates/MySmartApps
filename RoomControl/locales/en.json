@@ -51,6 +51,7 @@
 	"pages.optionsPage.settings.contactMode.options.AnyOpen.name": "Any Open",	
 	"pages.optionsPage.settings.contactMode.options.AnyClosed.name": "Any Closed",	
 	
+	"pages.optionsPage.sections.time.name": "Days/times for this automation",
 	"pages.optionsPage.settings.daysOfWeek.name": "Days of week",
 	"pages.optionsPage.settings.daysOfWeek.options.everyday.name": "Every Day",
 	"pages.optionsPage.settings.daysOfWeek.options.weekdays.name": "Weekdays",

@@ -44,7 +44,7 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	let bControlEnabled = context.configBooleanValue('controlEnabled');
-	if (!bControlEnabled) {
+	if (bControlEnabled === undefined) {
 		bControlEnabled = true;
 	}
 	const roomType = context.configStringValue('roomType');
@@ -113,14 +113,17 @@ module.exports = new SmartApp()
 	});
 
 	// time window and days of week
-	page.section('time', section => {
-		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
-			defaultValue('everyday').required(true);
-		section.timeSetting('startTime').required(false).submitOnChange(true);
-		if (context.configStringValue('startTime')) {
-			section.timeSetting('endTime').required(false);
-		}
-	});
+	
+	if (context.configStringValue('homeName')) {
+		page.section('time', section => {
+			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
+				defaultValue('everyday').required(true);
+			section.timeSetting('startTime').required(false).submitOnChange(true);
+			if (context.configStringValue('startTime')) {
+				section.timeSetting('endTime').required(false);
+			}
+		});
+	}
 
 	// specify next (third) options page
 	// page.nextPageId('timePage');
