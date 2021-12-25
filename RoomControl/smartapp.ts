@@ -59,7 +59,7 @@ module.exports = new SmartApp()
 			section.textSetting('homeName').required(false);
 			/*
 			section.enumSetting('roomType').options(['simple', 'complex']).
-				required(true).defaultValue('lights/speakers').submitOnChange(true);
+				required(true).defaultValue('complex').submitOnChange(true);
 			if (roomType==='complex') {
 				section.textSetting('homeName').required(false);
 			}
