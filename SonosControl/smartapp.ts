@@ -154,6 +154,7 @@ async function controlSpeakers(context, speakers, command) {
 
 			// get sonos groups and devices
 			sonosControl.get('households/' + householdId + '/groups').then((result) => {
+				console.log('controlSpeakers - Sonos household data: ', result.data);
 				const sonosGroups = result.data.groups;
 				console.log('controlSpeakers - Sonos groups: ', sonosGroups);
 			
