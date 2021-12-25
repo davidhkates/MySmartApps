@@ -32,7 +32,7 @@
 	"pages.optionsPage.settings.contactsOpenClosed.options.anyOpen.name": "Any Open",
 	"pages.optionsPage.settings.contactsOpenClosed.options.allOpen.name": "All Open",
 	"pages.optionsPage.settings.contactsOpenClosed.options.allClosed.name": "All Closed",
-	"pages.optionsPage.settings.motionSensors.name": "Motion sensor to start fan",
+	"pages.optionsPage.settings.roomMotion.name": "Motion sensor to start fan",
 	"pages.optionsPage.settings.motionDelay.name": "Delay after motion ends to stop fan",
 	
 	"pages.timePage.name": "Fan Control (Time Settings)",
