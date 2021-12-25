@@ -114,7 +114,7 @@ module.exports = new SmartApp()
 
 	// time window and days of week
 	
-	if (context.configStringValue('homeName')) {
+	if (context.configStringValue('homeName')===undefined) {
 		page.section('time', section => {
 			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
 				defaultValue('everyday').required(true);
