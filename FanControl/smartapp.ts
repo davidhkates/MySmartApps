@@ -21,7 +21,6 @@ interface device {
 // console.error = function () {};
 
 
-
 async function getHumidity( context, sensorName ) {
 	let humidityValue;
 	try {
@@ -38,8 +37,6 @@ async function getHumidity( context, sensorName ) {
 	}
 	return humidityValue;
 };	
-
-
 
 
 // Utility functions for this automation
@@ -358,7 +355,7 @@ module.exports = new SmartApp()
 // If one or more motion sensors starts, start controlling fan
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - motion started, start controlling fan');
-	checkReadiness(context);
+	controlFan(context);
 })
 
 
