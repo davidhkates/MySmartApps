@@ -14,20 +14,14 @@ interface device {
 
 // Utility functions for this automation
 async function controlHeater( context ) {
+	console.log('controlHeater - begin checking whether to turn heater on/off');
+
 	// Check home status if specified
-	/*
-	var homeMode = 'awake';
-	const homeName = context.configStringValue('homeName');
-	if (homeName) {
-		homeMode = await SmartState.getHomeMode(homeName, 'occupancy');
-		console.log('controlHeater - current mode for home occupancy: ', homeName, ' = ', homeMode);
-	}
-	*/
 	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
 	console.log('controlHeater - home is active: ', bHomeActive);
 
 	// Determine if ANY of the switch(es) to check are on
-	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') !== 'off');
 
 	// Get temperature(s) and set heater state, default heater state to off
 	var heaterState = 'off';
