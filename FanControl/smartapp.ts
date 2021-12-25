@@ -311,14 +311,17 @@ module.exports = new SmartApp()
 		const endTime   = context.configStringValue('endTime');
 		if (startTime) {
 			console.log('FanControl - set start time for fan: ', new Date(startTime), ', current date/time: ', new Date());
+			
+			// start controlling fan if in time window and contacts in correct state		
+			checkReadiness(context);
+			
+			// set start and end time event handlers
 			await context.api.schedules.runDaily('startFanHandler', new Date(startTime))
 			if (endTime) {
 				await context.api.schedules.runDaily('stopFanHandler', new Date(endTime));
 			}
 		}
 		
-		// start controlling fan if in time window and contacts in correct state
-		checkReadiness(context);
 	}
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
@@ -355,7 +358,10 @@ module.exports = new SmartApp()
 // If one or more motion sensors starts, start controlling fan
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - motion started, start controlling fan');
-	controlFan(context);
+
+	// start fan if in time window and check switch is on
+	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
+	// controlFan(context);
 })
 
 
