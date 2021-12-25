@@ -136,10 +136,13 @@ async function checkReadiness(context) {
 	let bReady = false;
 
 	// check to see if home is active or in time window
+	/*
 	const homeName = context.configStringValue('homeName');
 	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
 
 	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || bHomeActive) {
+	*/
+	if (isHomeReady(context)) {
 		console.log('checkReadiness - in time window, check that contacts are in correct state');
 		bReady = true;
 		const roomContacts = context.config.roomContacts;
@@ -162,6 +165,13 @@ async function checkReadiness(context) {
 	
 	// return returnValue;
 	return bReady;
+}
+
+// check whether in time window or if home is active
+async function isHomeReady(context) {
+	const homeName = context.configStringValue('homeName');
+	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	return (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || bHomeActive);
 }
 
 
@@ -299,7 +309,7 @@ module.exports = new SmartApp()
 		}
 
 		// initialize motion behavior		// await context.api.subscriptions.subscribeToDevices(context.config.roomMotionOn,
-		if (context.config.motionSensors) {
+		if (context.config.roomMotion) {
 			console.log('FanControl - subscribe to motion sensor device handlers');
 			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
 				'motionSensor', 'motion.active', 'motionStartHandler');
@@ -366,9 +376,10 @@ module.exports = new SmartApp()
 	console.log('motionStartHandler - motion started, start controlling fan');
 
 	// start fan if in time window and check switch is on
-	
-	await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
+	if (isHomeReady(context) && SmartDevice.getSwitchState(context, 'checkSwitches')!=='off') {
+		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
 	// controlFan(context);
+	}
 })
 
 
