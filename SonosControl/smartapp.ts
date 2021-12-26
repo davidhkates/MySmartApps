@@ -179,6 +179,7 @@ async function controlSpeakers(context, speakers, command) {
 							// if player included in group
 							if (groupPlayers.indexOf(player.id) > -1) {
 								const urlControl = '/groups/' + group.id + '/playback/' + command;
+								console.log('controlSpeakers - command: ', command, ', urlControl: ', urlControl);
 								// sonosControl.post(urlControl);
 								sonosControl.post(urlControl).then((result) => {
 									console.log('controlSpeakers - Success!  Data: ', result.data);;
