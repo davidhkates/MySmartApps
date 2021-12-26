@@ -176,7 +176,7 @@ async function controlSpeakers(context, speakers, command) {
 						console.log('controlSpeakers - players found: ', players, ', id: ', players.id);
 
 						// find groups that include that player
-						const groups = sonosGoups.find(speaker => speaker.playerIds === players.id);
+						const groups = sonosGroups.find(speaker => speaker.playerIds === players.id);
 						console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
 						const groupId = groups.id
 
