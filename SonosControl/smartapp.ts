@@ -40,10 +40,7 @@ module.exports = new SmartApp()
 .page('mainPage', (context, page, configData) => {
 
 	// set control enabled flag to control other settings prompts
-	let bControlEnabled = context.configBooleanValue('controlEnabled');
-	if (bControlEnabled === undefined) {
-		bControlEnabled = true;
-	}
+	let bControlEnabled;
 
 	// initialize state variable(s)
 	SmartState.putState( context, 'roomSwitchPressed', 'true' );
@@ -51,6 +48,7 @@ module.exports = new SmartApp()
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
+		bControlEnabled = context.configBooleanValue('controlEnabled');
 		if (bControlEnabled) {
 			section.textSetting('homeName').required(false);
 		}
@@ -63,7 +61,8 @@ module.exports = new SmartApp()
 				.required(true).permissions('rx');
 			section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 				.required(false).multiple(true).permissions('rx');
-			section.enumSetting('speakerBehavior').options(['onAlways','onActive']).required(false);
+			section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
+				.required(true).defaultValue('doNothing');
 		});
 	}
 })
@@ -79,12 +78,7 @@ module.exports = new SmartApp()
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
-	// console.log('Control enabled value: ', controlEnabled);
-	if (!controlEnabled) {
-		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-		// await context.api.devices.sendCommands(context.config.delayGroup, 'switch', 'off');
-	} else {
+	if (controlEnabled) {
 		// create subscriptions for relevant devices
 		await context.api.subscriptions.subscribeToDevices(context.config.roomSwitch,
 		    'switch', 'switch.on', 'switchOnHandler');
@@ -104,26 +98,23 @@ module.exports = new SmartApp()
 	const speakerBehavior = context.configStringValue('speakerBehavior');
 	console.log('switchOnHandler - speaker behavior: ', speakerBehavior);
 	
-	if (speakerBehavior==='onAlways' || 
-	   (speakerBehavior==='onActive' && SmartState.isHomeActive(context.stringValue('homeName')))) {		
+	if (speakerBehavior!=='doNothing') {
+		if (SmartState.isHomeActive(context.stringValue('homeName'))) {		
 	
 		// turn on speaker(s)
 			console.log('switchOnHandler - switch pressed, turning on speakers');
-			// await SmartSonos.controlSpeakers( context, 'roomSpeakers', 'play');
-			await controlSpeakers( context, 'roomSpeakers', 'play');
+			await SmartSonos.controlSpeakers( context, 'roomSpeakers', 'play');
 			console.log('switchOnHandler - speakers turned on');
-	}
-	
+		}
+	}	
 	console.log('switchOnHandler - finished');	
 })
 
 
 // Turn off speakers when room switch is turned off
 .subscribedEventHandler('switchOffHandler', async (context, event) => {
-	// Turn on the lights in off group based on behavior setting
+	// Turn off speakers when room switch turned off
 	console.log('switchOffHandler - starting');
-		
-	// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-	await controlSpeakers(context, 'roomSpeakers', 'pause');
+	await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 	console.log('roomSwitchOffHandler - turning off speakers complete');
 });
