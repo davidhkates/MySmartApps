@@ -154,23 +154,36 @@ async function controlSpeakers(context, speakers, command) {
 
 			// get sonos groups and devices
 			sonosControl.get('households/' + householdId + '/groups').then((result) => {
-				console.log('controlSpeakers - Sonos players: ', result.data.players);
-				const sonosGroups = result.data.groups;
-				console.log('controlSpeakers - Sonos groups: ', sonosGroups);
-			
+				// console.log('controlSpeakers - Sonos players: ', result.data.players);
+				const sonosPlayers = result.data.players;
+				const sonosGroups  = result.data.groups;
+				// console.log('controlSpeakers - Sonos groups: ', sonosGroups);
+
 				// pause all specified speakers
 				// for (const speaker of context.config.roomSpeakers) {
 				const speakerDevices = context.config[speakers];
 				for (const speaker of speakerDevices) {
 					const speakerId = speaker.deviceConfig.deviceId;
-					// const speakerInfo = await context.api.devices.get(speakerId);
 					context.api.devices.get(speakerId).then((speakerInfo) => {
-						const speakerName = speakerInfo.name;						// SmartSonos.controlSpeaker(speakerInfo.name, 'pause');
-						
+						const speakerName = speakerInfo.name;												
 						console.log('controlSpeakers - find speaker: ', speakerName, ', speakerId: ', speakerId);
-						const result = sonosGroups.find(speaker => speaker.name === speakerName);
-						console.log('controlSpeakers - result of find: ', result);
-						const groupId = result.id;
+						// const result = sonosGroups.find(speaker => speaker.name === speakerName);
+						// const groupId = result.id;
+
+
+						// find players that include selected speaker
+						const players = sonosPlayers.find(speaker => speaker.name === speakerName);
+						console.log('controlSpeakers - players found: ', players, ', id: ', players.id);
+
+						// find groups that include that player
+						const groups = sonosDevices.find(speaker => speaker.playerIds === players.id);
+						console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
+						const groupId = groups.id
+
+
+
+
+
 
 						const command = 'pause';
 						const urlControl = '/groups/' + groupId + '/playback/' + command;
