@@ -163,36 +163,27 @@ async function controlSpeakers(context, speakers, command) {
 				for (const speaker of speakerDevices) {
 					const speakerId = speaker.deviceConfig.deviceId;
 					context.api.devices.get(speakerId).then((speakerInfo) => {
-						const speakerName = speakerInfo.name;												
+						const speakerName = speakerInfo.name;
 						console.log('controlSpeakers - find speaker: ', speakerName, ', speakerId: ', speakerId);
-						// const result = sonosGroups.find(speaker => speaker.name === speakerName);
-						// const groupId = result.id;
-
 
 						// find player that include selected speaker
-						// console.log('controlSpeakers - Sonos players: ', sonosPlayers);
 						const player = sonosPlayers.find(speaker => speaker.name === speakerName);
 						console.log('controlSpeakers - player found: ', player, ', id: ', player.id);
-						// const playerId = player.id;
 
 						// find groups that include that player
-						console.log('controlSpeakers - Sonos groups: ', sonosGroups);
+						// console.log('controlSpeakers - Sonos groups: ', sonosGroups);
 						for (const group of sonosGroups) {
 							const groupPlayers = group.playerIds;
-							console.log('controlSpeakers - playerIds: ', groupPlayers);
-							console.log('controlSpeakers - groupId: ', group.id, ', found: ', (groupPlayers.indexOf(player.id) > -1));
-							console.log('controlSpeakers - groupId: ', group.id, ', found: ', groupPlayers.indexOf(player.id));
-
-							// const groups = sonosGroups.find(group => group.playerIds === players.id);
-							// console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
-							// const groupId = group.id;
-
-							// const command = 'pause';
-							const urlControl = '/groups/' + group.id + '/playback/' + command;
-							// sonosControl.post(urlControl);
-							sonosControl.post(urlControl).then((result) => {
-								console.log('controlSpeakers - Success!  Data: ', result.data);;
-							}).catch((err) => { console.log('controlSpeakers - error controlling speaker: ', err, ', command: ', command); })
+							// console.log('controlSpeakers - playerIds: ', groupPlayers);
+							
+							// if player included in group
+							if (groupPlayers.indexOf(player.id) > -1) {
+								const urlControl = '/groups/' + group.id + '/playback/' + command;
+								// sonosControl.post(urlControl);
+								sonosControl.post(urlControl).then((result) => {
+									console.log('controlSpeakers - Success!  Data: ', result.data);;
+								}).catch((err) => { console.log('controlSpeakers - error controlling speaker: ', err, ', command: ', command); })
+							}
 						}
 					})
 				}
