@@ -169,26 +169,30 @@ async function controlSpeakers(context, speakers, command) {
 						// const groupId = result.id;
 
 
-						// find players that include selected speaker
+						// find player that include selected speaker
 						// console.log('controlSpeakers - Sonos players: ', sonosPlayers);
-						const players = sonosPlayers.find(speaker => speaker.name === speakerName);
-						console.log('controlSpeakers - players found: ', players, ', id: ', players.id);
+						const player = sonosPlayers.find(speaker => speaker.name === speakerName);
+						console.log('controlSpeakers - player found: ', player, ', id: ', player.id);
+						const playerId = player.id;
 
 						// find groups that include that player
 						console.log('controlSpeakers - Sonos groups: ', sonosGroups);
-						const groups = sonosGroups.find(group => group.playerIds === players.id);
-						console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
-						const groupId = groups.id;
+						for (const group of sonosGroups) {
+							const groupPlayers = group.playerIds;
+							console.log('controlSpeakers - playerIds: ', groupPlayers);
+							console.log('controlSpeakers - groupId: ', group.id, ', found: ', (groupPlayers.indexOf(player.id) > -1)
 
+							// const groups = sonosGroups.find(group => group.playerIds === players.id);
+							// console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
+							const groupId = groups.id;
 
-
-
-						const command = 'pause';
-						const urlControl = '/groups/' + groupId + '/playback/' + command;
-						// sonosControl.post(urlControl);
-						sonosControl.post(urlControl).then((result) => {
-							console.log('controlSpeakers - Success!  Data: ', result.data);;
-						}).catch((err) => { console.log('controlSpeakers - error controlling speaker: ', err, ', command: ', command); })
+							const command = 'pause';
+							const urlControl = '/groups/' + groupId + '/playback/' + command;
+							// sonosControl.post(urlControl);
+							sonosControl.post(urlControl).then((result) => {
+								console.log('controlSpeakers - Success!  Data: ', result.data);;
+							}).catch((err) => { console.log('controlSpeakers - error controlling speaker: ', err, ', command: ', command); })
+						}
 					})
 				}
 			}).catch((err) => { console.log('controlSpeakers - error getting groups/speakers: ', err); })
