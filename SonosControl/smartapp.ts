@@ -173,7 +173,7 @@ async function controlSpeakers(context, speakers, command) {
 						// console.log('controlSpeakers - Sonos players: ', sonosPlayers);
 						const player = sonosPlayers.find(speaker => speaker.name === speakerName);
 						console.log('controlSpeakers - player found: ', player, ', id: ', player.id);
-						const playerId = player.id;
+						// const playerId = player.id;
 
 						// find groups that include that player
 						console.log('controlSpeakers - Sonos groups: ', sonosGroups);
@@ -185,10 +185,10 @@ async function controlSpeakers(context, speakers, command) {
 
 							// const groups = sonosGroups.find(group => group.playerIds === players.id);
 							// console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
-							const groupId = groups.id;
+							// const groupId = group.id;
 
-							const command = 'pause';
-							const urlControl = '/groups/' + groupId + '/playback/' + command;
+							// const command = 'pause';
+							const urlControl = '/groups/' + group.id + '/playback/' + command;
 							// sonosControl.post(urlControl);
 							sonosControl.post(urlControl).then((result) => {
 								console.log('controlSpeakers - Success!  Data: ', result.data);;
