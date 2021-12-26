@@ -154,10 +154,8 @@ async function controlSpeakers(context, speakers, command) {
 
 			// get sonos groups and devices
 			sonosControl.get('households/' + householdId + '/groups').then((result) => {
-				// console.log('controlSpeakers - Sonos players: ', result.data.players);
 				const sonosPlayers = result.data.players;
 				const sonosGroups  = result.data.groups;
-				// console.log('controlSpeakers - Sonos groups: ', sonosGroups);
 
 				// pause all specified speakers
 				// for (const speaker of context.config.roomSpeakers) {
@@ -172,10 +170,12 @@ async function controlSpeakers(context, speakers, command) {
 
 
 						// find players that include selected speaker
+						// console.log('controlSpeakers - Sonos players: ', sonosPlayers);
 						const players = sonosPlayers.find(speaker => speaker.name === speakerName);
 						console.log('controlSpeakers - players found: ', players, ', id: ', players.id);
 
 						// find groups that include that player
+						console.log('controlSpeakers - Sonos groups: ', sonosGroups);
 						const groups = sonosGroups.find(group => group.playerIds === players.id);
 						console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
 						const groupId = groups.id;
