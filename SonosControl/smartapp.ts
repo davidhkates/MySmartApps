@@ -10,7 +10,7 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 // const SmartDevice = require('@katesthings/smartdevice');
 // const SmartUtils  = require('@katesthings/smartutils');
-// const SmartState  = require('@katesthings/smartstate');
+const SmartState  = require('@katesthings/smartstate');
 const SmartSonos  = require('@katesthings/smartsonos');
 
 // SmartApp type definitions
