@@ -180,7 +180,8 @@ async function controlSpeakers(context, speakers, command) {
 						for (const group of sonosGroups) {
 							const groupPlayers = group.playerIds;
 							console.log('controlSpeakers - playerIds: ', groupPlayers);
-							console.log('controlSpeakers - groupId: ', group.id, ', found: ', (groupPlayers.indexOf(player.id) > -1)
+							console.log('controlSpeakers - groupId: ', group.id, ', found: ', (groupPlayers.indexOf(player.id) > -1));
+							console.log('controlSpeakers - groupId: ', group.id, ', found: ', groupPlayers.indexOf(player.id));
 
 							// const groups = sonosGroups.find(group => group.playerIds === players.id);
 							// console.log('controlSpeakers - groups found: ', groups, ', id: ', groups.id);
