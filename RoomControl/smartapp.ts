@@ -82,13 +82,6 @@ module.exports = new SmartApp()
 			// }
 		});
 		
-		page.section('speakers', section => {
-			section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-				.required(false).multiple(true).permissions('rx');
-			section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
-				.required(true).defaultValue('doNothing');				
-		});
-		
 		// specify next (second) options page
 		page.nextPageId('optionsPage');
 		/*
@@ -112,8 +105,14 @@ module.exports = new SmartApp()
 		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
 	});
 
-	// time window and days of week
-	
+	page.section('speakers', section => {
+		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+			.required(false).multiple(true).permissions('rx');
+		section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
+			.required(true).defaultValue('doNothing');				
+	});
+		
+	// time window and days of week	
 	if (context.configStringValue('homeName')===undefined) {
 		page.section('time', section => {
 			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
