@@ -11,13 +11,6 @@
 	"pages.mainPage.settings.roomType.options.complex.name": "Complex (motion/contact detectors, time window)",	
 	"pages.mainPage.settings.homeName.name": "Name of home to check state",
 	
-	"pages.mainPage.sections.speakers.name": "Speakers in room to control",
-	"pages.mainPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
-	"pages.mainPage.settings.speakerBehavior.name": "When should speakers be turned on",
-	"pages.mainPage.settings.speakerBehavior.options.onAlways.name": "Do not turn on",
-	"pages.mainPage.settings.speakerBehavior.options.onAlways.name": "Always with room switch",
-	"pages.mainPage.settings.speakerBehavior.options.onActive.name": "Only when home is active",
-
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.sections.switches.name": "Switches to control room",
 	"pages.mainPage.settings.roomSwitch.name": "Main switch to control room",
@@ -55,6 +48,13 @@
 	"pages.optionsPage.settings.contactMode.options.AnyOpen.name": "Any Open",	
 	"pages.optionsPage.settings.contactMode.options.AnyClosed.name": "Any Closed",	
 	
+	"pages.optionsPage.sections.speakers.name": "Speakers in room to control",
+	"pages.optionsPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
+	"pages.optionsPage.settings.speakerBehavior.name": "When should speakers be turned on",
+	"pages.optionsPage.settings.speakerBehavior.options.doNothing.name": "Do not turn on",
+	"pages.optionsPage.settings.speakerBehavior.options.onAlways.name": "Always with room switch",
+	"pages.optionsPage.settings.speakerBehavior.options.onActive.name": "Only when home is active",
+
 	"pages.optionsPage.sections.time.name": "Days/times for this automation",
 	"pages.optionsPage.settings.daysOfWeek.name": "Days of week",
 	"pages.optionsPage.settings.daysOfWeek.options.everyday.name": "Every Day",
