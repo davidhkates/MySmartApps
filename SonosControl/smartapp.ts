@@ -282,6 +282,6 @@ module.exports = new SmartApp()
 	console.log('switchOffHandler - starting');
 		
 	// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-	await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
+	await controlSpeakers(context, 'roomSpeakers', 'pause');
 	console.log('roomSwitchOffHandler - turning off speakers complete');
 });
