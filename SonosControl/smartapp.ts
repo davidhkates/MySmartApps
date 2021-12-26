@@ -104,7 +104,7 @@ module.exports = new SmartApp()
 		// turn on speaker(s)
 			console.log('switchOnHandler - switch pressed, turning on speakers');
 			await SmartSonos.controlSpeakers( context, 'roomSpeakers', 'play');
-			console.log('switchOnHandler - speakers turned on');		}
+			console.log('switchOnHandler - speakers turned on');
 	}	
 	console.log('switchOnHandler - finished');	
 })
