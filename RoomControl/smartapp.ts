@@ -82,12 +82,12 @@ module.exports = new SmartApp()
 			// }
 		});
 		
-		/*
 		page.section('speakers', section => {
 			section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
 				.required(false).multiple(true).permissions('rx');
+			section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
+				.required(true).defaultValue('doNothing');				
 		});
-		*/
 		
 		// specify next (second) options page
 		page.nextPageId('optionsPage');
@@ -241,10 +241,16 @@ module.exports = new SmartApp()
 		if ( switchPressed == 'true' ) {
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
-			// console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');
-			// await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
-			// await controlSpeakers(context, 'roomSpeakers', 'togglePlayPause');
-			console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
+
+			// turn on speakers based on setting of speakerBehavior
+			const speakerBehavior = context.configStringValue('speakerBehavior');
+			if (speakerBehavior==='onAlways' || speakerBehavior==='onActive' &&
+				SmartState.isHomeActive(context.stringValue('homeName'))) {		
+
+					console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');			
+					await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+					console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
+			}
 		} else {
 			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
 			SmartState.putState( context, 'roomSwitchPressed', 'true' );
