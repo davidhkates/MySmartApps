@@ -329,16 +329,14 @@ module.exports = new SmartApp()
 			}
 		}
 		
-	}
-	
-	// check readiness of sensors, time and home status to start controlling
-	// UNLESS it's a bathroom fan which is triggered by motion sensor
-	const strFanType = context.configStringValue('fanType');		
-	if (strFanType!=='bathroom') {
-		console.log('FanControl - check readiness of controlling fan based on type: ', strFanType);
-		checkReadiness(context);	
-	}
-	
+		// check readiness of sensors, time and home status to start controlling
+		// UNLESS it's a bathroom fan which is triggered by motion sensor
+		const strFanType = context.configStringValue('fanType');		
+		if (strFanType!=='bathroom') {
+			console.log('FanControl - check readiness of controlling fan based on type: ', strFanType);
+			checkReadiness(context);	
+		}
+	}	
 	console.log('FanControl - END CREATING SUBSCRIPTIONS')
 })
 
