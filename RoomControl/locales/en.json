@@ -16,7 +16,7 @@
 	"pages.mainPage.settings.speakerBehavior.name": "When should speakers be turned on",
 	"pages.mainPage.settings.speakerBehavior.options.onAlways.name": "Do not turn on",
 	"pages.mainPage.settings.speakerBehavior.options.onAlways.name": "Always with room switch",
-	"pages.mainPage.settings.speakerBehavior.options.onActive.name": "Only when home is active"
+	"pages.mainPage.settings.speakerBehavior.options.onActive.name": "Only when home is active",
 
 	"pages.mainPage.sections.controls.name": "Controls for this automation",
 	"pages.mainPage.sections.switches.name": "Switches to control room",
