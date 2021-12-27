@@ -197,7 +197,7 @@ module.exports = new SmartApp()
 				.required(true).defaultValue('room').submitOnChange(true);
 			section.deviceSetting('fanSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');
-			section.textSetting('homeName').required(false).submitOnChange(true);
+			section.textSetting('homeName').required(false);
 		}
 	});
 
@@ -215,7 +215,6 @@ module.exports = new SmartApp()
 				section.numberSetting('targetTemp').required(false);
 				// section.enumSetting('tempAboveBelow').options(['above','below']);
 			}
-			section.numberSetting('checkInterval').defaultValue(300).required(false);
 		});
 
 		// separate page for weather information and sensors
@@ -240,6 +239,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		section.deviceSetting('checkSwitches').capabilities(['switch'])
 			.required(false).multiple(true).permissions('r');
+		section.numberSetting('checkInterval').defaultValue(300).required(false);
 	// });
 
 	// OPTIONAL: room (contact, motion) sensors

@@ -19,7 +19,6 @@
 	"pages.mainPage.settings.targetTemp.description": "Turn on fan if indoor temperature is above this value",
 	"pages.mainPage.settings.targetHumidity.name": "Target humidity (optional)",
 	"pages.mainPage.settings.targetHumidity.description": "Turn on fan if indoor humidity is above this value",
-	"pages.mainPage.settings.checkInterval.name": "Check temperature interval (in seconds)",
 
 	"pages.optionsPage.name": "Fan Control (Options)",
 	"pages.optionsPage.settings.weather.name": "Outdoor weather sensor (optional)",
@@ -27,6 +26,7 @@
 	"pages.optionsPage.settings.tempOffset.name": "Temperature offset from inside to outside",
 	"pages.optionsPage.sections.controls.name": "Room controls/sensors",
 	"pages.optionsPage.settings.checkSwitches.name": "Switches to check to control fan",
+	"pages.optionsPage.settings.checkInterval.name": "Check temperature interval (in seconds)",
 	"pages.optionsPage.settings.roomContacts.name": "Doors/windows to check (optional)",
 	"pages.optionsPage.settings.contactsOpenClosed.name": "Should contacts be open or closed?",
 	"pages.optionsPage.settings.contactsOpenClosed.options.anyOpen.name": "Any Open",
