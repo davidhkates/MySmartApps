@@ -380,10 +380,14 @@ module.exports = new SmartApp()
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - motion started, start controlling fan');
 
+	// cancel any pending stop fan handler calls
+	await context.api.schedules.delete('stopFanHandler');
+	
 	// start fan if in time window and check switch is on
 	console.log('motionStartHandler - check switches: ', SmartDevice.getSwitchState(context, 'checkSwitches'));
 	if (isHomeReady(context) && SmartDevice.getSwitchState(context, 'checkSwitches')!=='off') {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
+		
 	// controlFan(context);
 	}
 })
