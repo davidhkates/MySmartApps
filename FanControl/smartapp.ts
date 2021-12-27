@@ -172,6 +172,7 @@ async function checkReadiness(context) {
 async function isHomeReady(context) {
 	const homeName = context.configStringValue('homeName');
 	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	console.log('isHomeReady - homeName: ', homeName, 'bHomeActive', isHomeActive);
 	return (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || 
 		((homeName!==undefined) && bHomeActive) );
 }
