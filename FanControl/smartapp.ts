@@ -381,6 +381,7 @@ module.exports = new SmartApp()
 	console.log('motionStartHandler - motion started, start controlling fan');
 
 	// start fan if in time window and check switch is on
+	console.log('motionStartHandler - check switches: ', SmartDevice.getSwitchState(context, 'checkSwitches'));
 	if (isHomeReady(context) && SmartDevice.getSwitchState(context, 'checkSwitches')!=='off') {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
 	// controlFan(context);
