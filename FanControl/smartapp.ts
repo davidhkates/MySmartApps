@@ -81,6 +81,7 @@ async function controlFan(context) {
 	// Determine if ANY of the switch(es) to check are on
 	if (enableFan && context.config.checkSwitches) {
 		const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
+		console.log('controlFan - checking that at least one of the check switch(es) are on: ', bCheckSwitch);
 		enableFan = bCheckSwitch;
 	}
 
@@ -171,7 +172,8 @@ async function checkReadiness(context) {
 async function isHomeReady(context) {
 	const homeName = context.configStringValue('homeName');
 	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
-	return (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || bHomeActive);
+	return (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || 
+		((homeName!==undefined) && bHomeActive) );
 }
 
 
