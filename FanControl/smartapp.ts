@@ -382,10 +382,11 @@ module.exports = new SmartApp()
 
 	// cancel any pending stop fan handler calls
 	await context.api.schedules.delete('stopFanHandler');
+	const bCheckSwitch = await SmartDevice.getSwitchState(context, 'checkSwitches');
 	
 	// start fan if in time window and check switch is on
-	console.log('motionStartHandler - check switches: ', SmartDevice.getSwitchState(context, 'checkSwitches'));
-	if (isHomeReady(context) && SmartDevice.getSwitchState(context, 'checkSwitches')!=='off') {
+	console.log('motionStartHandler - check switches: ', bCheckSwitch);
+	if (isHomeReady(context) && bCheckSwitch!=='off') {
 		await context.api.devices.sendCommands(context.config.fanSwitch, 'switch', 'on');	
 		
 	// controlFan(context);
