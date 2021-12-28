@@ -133,19 +133,12 @@ async function stopFan(context) {
 
 // check readiness to operate fan based on home being active, time window and contacts
 async function checkReadiness(context) {
-	// let returnValue = true;
-	let bReady = false;
 
 	// check to see if home is active or in time window
-	/*
-	const homeName = context.configStringValue('homeName');
-	const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+	let bReady = await isHomeReady(context);
 
-	if (SmartUtils.inTimeContext(context, 'startTime', 'endTime') || bHomeActive) {
-	*/
-	if (isHomeReady(context)) {
+	if (bReady) {
 		console.log('checkReadiness - in time window, check that contacts are in correct state');
-		bReady = true;
 		const roomContacts = context.config.roomContacts;
 		if (roomContacts) {
 			const contactsState = await SmartDevice.getContactState( context, 'roomContacts' );
