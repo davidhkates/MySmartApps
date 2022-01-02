@@ -18,11 +18,12 @@ async function controlHeater( context ) {
 
 	// Check home status if specified
 	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
-	console.log('controlHeater - home is active: ', bHomeActive);
+	// console.log('controlHeater - home is active: ', bHomeActive);
 
 	// Determine if ANY of the switch(es) to check are on
 	const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') !== 'off');
-
+	// console.log('controlHeater - check switch(es): ', bCheckSwitch);
+	
 	// Get temperature(s) and set heater state, default heater state to off
 	var heaterState = 'off';
 	const targetTemp = context.configNumberValue('tempTarget');
@@ -37,6 +38,8 @@ async function controlHeater( context ) {
 				heaterState = 'on';
 				// heaterState = ( indoorTemp>targetTemp ? 'off' : 'on' );
 			}
+		} else {
+			heaterState = 'on';
 		}
 	}
 	
