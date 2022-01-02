@@ -17,7 +17,7 @@ async function controlHeater( context ) {
 	console.log('controlHeater - begin checking whether to turn heater on/off');
 
 	// Check home status if specified
-	const bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
+	let bHomeActive: boolean = await SmartState.isHomeActive(context.configStringValue('homeName'));
 	bHomeActive = ( (bHomeActive==undefined) ? true : bHomeActive );
 	// console.log('controlHeater - home is active: ', bHomeActive);
 
