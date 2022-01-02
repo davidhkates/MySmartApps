@@ -24,6 +24,7 @@ async function controlHeater( context ) {
 	// Determine if ANY of the switch(es) to check are on
 	// const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') !== 'off');
 	let bCheckSwitch = true;
+	const checkSwitches = context.deviceConfig('checkSwitches');
 	if (checkSwitches) {
 		bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') !== 'off');
 	}
@@ -72,6 +73,7 @@ async function stopHeater( context ) {
 	const endBehavior = context.configStringValue('endBehavior');
 	// const bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') != 'off');
 	let bCheckSwitch = true;
+	const checkSwitches = context.deviceConfig('checkSwitches');
 	if (checkSwitches) {
 		bCheckSwitch = ( await SmartDevice.getSwitchState(context, 'checkSwitches') !== 'off');
 	}
