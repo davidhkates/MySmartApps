@@ -237,7 +237,10 @@ module.exports = new SmartApp()
 .subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
 	console.log('checkSwitchOffHandler - started, check to see whether to turn off heater');
 	// call stopHeater to check if heater should be turned off
-	stopHeater(context);
+	// stopHeater(context);
+
+	// await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');
+	SmartDevice.setSwitchState(context, 'heaterSwitch', 'off');	
 	console.log('checkSwitchOffHandler - finished, check to see whether to turn off heater');
 })
 
