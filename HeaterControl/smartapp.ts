@@ -190,9 +190,9 @@ module.exports = new SmartApp()
 					await context.api.devices.sendCommands(context.config.heaterSwitch, 'switch', 'off');		
 				}
 			}		
-		// } else {
-		// 	console.log('Installed/Updated - no start time set, start controlling heater immediately');
-		//	controlHeater(context);
+		} else {
+		 	console.log('Installed/Updated - no start time set, start controlling heater immediately');
+			controlHeater(context);
 		}
 		
 		// set end time behavior (turn off heater) if specified
