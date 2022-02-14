@@ -239,9 +239,12 @@ module.exports = new SmartApp()
 .subscribedEventHandler('checkSwitchOnHandler', async (context, event) => {
 	console.log('checkSwitchOnHandler - started, check to see whether to turn on or off heater');
 	const checkLag = Number(context.configNumberValue('checkLag'));
+	console.log('checkSwitchOnHandler - check lag: ', checkLag);
 	if (checkLag>0) {
+		console.log('checkSwitchOnHandler - control heater after lag');
 		await context.api.schedules.runIn('checkHeaterHandler', checkLag);	
 	} else {
+		console.log('checkSwitchOnHandler - control heater immediately');
 		controlHeater(context);
 	}
 	console.log('checkSwitchOnHandler - finished checking whether to turn on or off heater');
