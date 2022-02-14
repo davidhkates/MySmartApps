@@ -192,7 +192,7 @@ module.exports = new SmartApp()
 	// const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
 	// console.log('endTimeInactivate - current home mode: ', homeMode);
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'inactive');
-});
+})
 
 
 // Set home mode to active at on time
