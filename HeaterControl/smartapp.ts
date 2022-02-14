@@ -141,6 +141,7 @@ module.exports = new SmartApp()
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
+		section.numberSetting('checkLag').defaultValue(60).required(false);
 		section.enumSetting('endBehavior').options(['off','check'])
 			.required(false).defaultValue('off');
 	});
@@ -166,7 +167,9 @@ module.exports = new SmartApp()
 		await context.api.subscriptions.subscribeToDevices(context.config.heaterSwitch,
 			'switch', 'switch.off', 'heaterSwitchOffHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
-			'switch', 'switch', 'checkSwitchHandler');
+			'switch', 'switch.on', 'checkSwitchOnHandler');
+		await context.api.subscriptions.subscribeToDevices(context.config.checkSwitches,
+			'switch', 'switch.off', 'checkSwitchOffHandler');
 		if (context.config.doorContacts) {
 			await context.api.subscriptions.subscribeToDevices(context.config.doorContacts,
 				'contactSensor', 'contact.open', 'contactOpenHandler');
@@ -232,7 +235,26 @@ module.exports = new SmartApp()
 	console.log('checkSwitchHandler - finished checking whether to turn on or off heater');
 })
 
+// Check whether to turn on or off heater if check switch changes state
+.subscribedEventHandler('checkSwitchOnHandler', async (context, event) => {
+	console.log('checkSwitchOnHandler - started, check to see whether to turn on or off heater');
+	const checkLag = Number(context.configNumberValue('checkLag'));
+	if (checkLag>0) {
+		await context.api.schedules.runIn('checkHeaterHandler', checkLag);	
+	} else {
+		controlHeater(context);
+	}
+	console.log('checkSwitchOnHandler - finished checking whether to turn on or off heater');
+})
 
+// Check whether to turn on or off heater if check switch changes state
+.subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
+	console.log('checkSwitchOffHandler - started, check to see whether to turn on or off heater');
+	controlHeater(context);
+	console.log('checkSwitchOffHandler - finished checking whether to turn on or off heater');
+})
+
+/*
 // Turn off heater if all check switches are turned off outside of time window
 .subscribedEventHandler('checkSwitchOffHandler', async (context, event) => {
 	console.log('checkSwitchOffHandler - started, check to see whether to turn off heater');
@@ -243,7 +265,7 @@ module.exports = new SmartApp()
 	SmartDevice.setSwitchState(context, 'heaterSwitch', 'off');	
 	console.log('checkSwitchOffHandler - finished, check to see whether to turn off heater');
 })
-
+*/
 
 
 // If one or more contacts open, resuming checking temperature to control heater
