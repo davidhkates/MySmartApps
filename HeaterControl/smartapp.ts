@@ -141,7 +141,7 @@ module.exports = new SmartApp()
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
 		section.numberSetting('checkInterval').defaultValue(300).required(false);
-		section.numberSetting('checkLag').defaultValue(60).required(false);
+		section.numberSetting('checkLag').required(false);
 		section.enumSetting('endBehavior').options(['off','check'])
 			.required(false).defaultValue('off');
 	});
