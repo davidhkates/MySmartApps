@@ -45,6 +45,7 @@ module.exports = new SmartApp()
 	page.section('time', section => {
 		section.timeSetting('startTime').required(false);
 		section.timeSetting('endTime').required(false);
+		section.timeSetting('onTime').required(false);
 		section.numberSetting('onDuration').defaultValue(60).required(false);
 	});
 
@@ -82,12 +83,19 @@ module.exports = new SmartApp()
 		'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
 	
 	// set end time event handler
-	// const startTime = context.configStringValue("startTime");
-	const endTime   = context.configStringValue('endTime');
+	const endTime = context.configStringValue('endTime');
 	if (endTime) {
 		// console.log('homeControl - setting home mode to inactive at endTime: ', endTime);
 		await context.api.schedules.runDaily('endTimeInactivate', new Date(endTime));
-	}		
+	}
+
+	// set activate time event handler
+	const onTime = context.configStringValue('onTime');
+	if (onTime) {
+		// console.log('homeControl - setting home mode to active at onTime: ', onTime);
+		await context.api.schedules.runDaily('onTimeActivate', new Date(onTime));
+	}
+	
 	
 	console.log('homeControl - finished creating subscriptions')
 })
@@ -181,7 +189,14 @@ module.exports = new SmartApp()
 .scheduledEventHandler('endTimeInactivate', async (context, event) => {		
 	console.log('endTimeInactivate - starting reset home status/mode');
 	// check current home status - TODO: remove
-	const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
-	console.log('endTimeInactivate - current home mode: ', homeMode);
+	// const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
+	// console.log('endTimeInactivate - current home mode: ', homeMode);
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'inactive');
+});
+
+
+// Set home mode to active at on time
+.scheduledEventHandler('onTimeActivate', async (context, event) => {		
+	console.log('onTimeActivate - starting set home status/mode');
+	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
 });
