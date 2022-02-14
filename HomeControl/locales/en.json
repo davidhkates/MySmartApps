@@ -15,5 +15,7 @@
 	"pages.mainPage.settings.startTime.description": "Time to start monitoring home status",
 	"pages.mainPage.settings.endTime.name": "End time (optional)",
 	"pages.mainPage.settings.endTime.description": "Time to stop monitoring home status",
+	"pages.mainPage.settings.onTime.name": "Activate time (optional)",
+	"pages.mainPage.settings.onTime.description": "Time to active home without control switch",
 	"pages.mainPage.settings.onDuration.name": "Duration for switch to be on to set awake"
 }
