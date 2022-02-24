@@ -515,11 +515,16 @@ module.exports = new SmartApp()
 	console.log('motionStopHandler - all other motion sensors inactive');
 	
 	// See if all door(s) are closed during applicable window
-	if (context.configStringValue('contactMode')=='stayOnAlways' ||	
-		context.configStringValue('contactMode')=='stayOnWindow' &&
+	const roomContacts = await SmartDevice.getContactState( context, 'roomContacts');
+
+	if ( (roomContacts === 'allClosed') && 		// all doors are closed
+
+		(context.configStringValue('contactMode')=='stayOnAlways' ||	// always stay on when closed OR
+
+		context.configStringValue('contactMode')=='stayOnWindow' &&		// stay on during time window and in that window
 		SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
-		!!(context.configStringValue('startTime')) ) return;
+		!!(context.configStringValue('startTime')) )) return;
 
 	// const delay = context.configNumberValue('motionDelay')
 	// appSettings = await getCurrentSettings(context);

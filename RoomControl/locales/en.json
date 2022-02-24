@@ -43,7 +43,7 @@
 	"pages.optionsPage.settings.motionDelay.name": "Delay after motion stops (seconds)",
 	"pages.optionsPage.settings.roomContacts.name": "Door/window contact sensors",
 	"pages.optionsPage.settings.contactMode.name": "Contact state options",
-	"pages.optionsPage.settings.contactMode.options.stayOnClosed.name": "Stay on when closed",
+	"pages.optionsPage.settings.contactMode.options.stayOnAlways.name": "Stay on when closed",
 	"pages.optionsPage.settings.contactMode.options.stayOnWindow.name": "Stay on in time window",
 	"pages.optionsPage.settings.contactMode.options.turnOffClose.name": "Turn off when closed",
 	
