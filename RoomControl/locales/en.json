@@ -43,10 +43,9 @@
 	"pages.optionsPage.settings.motionDelay.name": "Delay after motion stops (seconds)",
 	"pages.optionsPage.settings.roomContacts.name": "Door/window contact sensors",
 	"pages.optionsPage.settings.contactMode.name": "Contact state options",
-	"pages.optionsPage.settings.contactMode.options.AllOpen.name": "All Open",
-	"pages.optionsPage.settings.contactMode.options.AllClosed.name": "All Closed",
-	"pages.optionsPage.settings.contactMode.options.AnyOpen.name": "Any Open",	
-	"pages.optionsPage.settings.contactMode.options.AnyClosed.name": "Any Closed",	
+	"pages.optionsPage.settings.contactMode.options.stayOnClosed.name": "Stay on when closed",
+	"pages.optionsPage.settings.contactMode.options.stayOnWindow.name": "Stay on in time window",
+	"pages.optionsPage.settings.contactMode.options.turnOffClose.name": "Turn off when closed",
 	
 	"pages.optionsPage.sections.speakers.name": "Speakers in room to control",
 	"pages.optionsPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
