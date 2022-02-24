@@ -102,7 +102,7 @@ module.exports = new SmartApp()
 		section.numberSetting('motionDelay').required(false).min(0);
 		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed']);
+		section.enumSetting('contactMode').options(['stayOnAlways', 'stayOnWindow', 'turnOffClose']);
 	});
 
 	page.section('speakers', section => {
@@ -513,6 +513,13 @@ module.exports = new SmartApp()
 		}
 	}
 	console.log('motionStopHandler - all other motion sensors inactive');
+	
+	// See if all door(s) are closed during applicable window
+	if (context.configStringValue('contactMode')=='stayOnAlways') ||	
+		context.configStringValue('contactMode')=='stayOnWindow' &&
+		SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
+		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
+		!!(context.configStringValue('startTime')) ) return;
 
 	// const delay = context.configNumberValue('motionDelay')
 	// appSettings = await getCurrentSettings(context);
