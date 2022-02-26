@@ -51,7 +51,7 @@ module.exports = new SmartApp()
 
 	// initialize state variable(s)
 	SmartState.putState( context, 'roomSwitchPressed', 'true' );
-	SmartState.putState( context, 'roomOccupied', 'false' );
+	SmartState.putState( context, 'roomOccupied', false );
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
@@ -313,10 +313,12 @@ module.exports = new SmartApp()
 		console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
 
 		// turn on light if in time window and check switch(es) are on
-		// if ( ( bTimeWindow && bHomeActive ) || bCheckSwitch) {
 		if (bHomeActive) {
 			console.log('motionStartHandler - turning lights/switches on');
 			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
+			
+			// set room occupied state to TRUE
+			await SmartState.putState(context, 'roomOccupied', true);	
 		}
 	}
 	
@@ -331,11 +333,15 @@ module.exports = new SmartApp()
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
 	console.log('motionStopHandler - starting');
 
-	// Set room occupied based on state of contact sensors
-	const roomContacts = await SmartDevice.getContactState( context, 'roomContacts');	
-	SmartState.putState(context, 'roomOccupied', roomContacts);	
+	// ignore motion stop if room is occupied
+	const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
+	console.log('motionStopHandler - room occupied state: ', roomOccupied);
+	if ( roomOccupied ) return;
 
 	/*
+	// Set room occupied based on state of contact sensors
+	const roomContacts = await SmartDevice.getContactState( context, 'roomContacts');	
+
 	// See if all door(s) are closed during applicable window
 	if (context.config.roomContacts) {	// if room contacts specified
 		if ( (roomContacts === 'closed') && 		// all doors are closed
@@ -382,6 +388,14 @@ module.exports = new SmartApp()
 		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	}
 })
+
+
+.subscribedEventHandler('contactOpenHandler', async (context, event) => {
+	console.log('contactOpenHandler - start, set room to vacant');
+	
+	// set room occupied state to FALSE
+	await SmartState.putState(context, 'roomOccupied', false);
+})	
 
 
 // Schedule activity(ies) to be performed at end time
