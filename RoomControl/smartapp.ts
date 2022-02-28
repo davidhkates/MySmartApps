@@ -49,10 +49,6 @@ module.exports = new SmartApp()
 	}
 	const roomType = context.configStringValue('roomType');
 
-	// initialize state variable(s)
-	SmartState.putState(context, 'roomSwitchPressed', 'true');
-	SmartState.putState(context, 'roomOccupied', 'vacant');
-
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
@@ -122,6 +118,11 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete();
+
+	// initialize state variable(s)
+	SmartState.putState(context, 'roomSwitchPressed', 'true');
+	SmartState.putState(context, 'roomOccupied', 'vacant');
+	SmartState.putState(context, 'roomOff', 'immediate');
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
