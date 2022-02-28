@@ -30,6 +30,30 @@ interface device {
 */
 
 
+const { DynamoDBClient, GetItemCommand, PutItemCommand } = require("@aws-sdk/client-dynamodb");
+const dbclient = new DynamoDBClient({ region: 'us-west-2' });
+async function putState( context, name, value ) {
+	// use appId as unique key combined with name for state variable 
+	const appId = context.event.appId;
+
+	// Set the parameters
+	const params = {
+  		TableName: 'smartapp-context-store',
+  		Item: {
+    		appId: { S: appId },
+			name: { S: name },
+			stateValue: { S: value },
+  		},
+	};
+	
+	try {
+    		const data = await dbclient.send(new PutItemCommand(params));
+    		console.log('Data stored in DynamoDB: ',data);
+  	} catch (err) {
+    		console.error(err);
+  	}
+};
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -50,8 +74,12 @@ module.exports = new SmartApp()
 	const roomType = context.configStringValue('roomType');
 
 	// initialize state variable(s)
+	/*
 	SmartState.putState(context, 'roomSwitchPressed', 'true');
 	SmartState.putState(context, 'roomOccupied', 'vacant');
+	*/
+	await putState(context, 'roomSwitchPressed', 'true');
+	await putState(context, 'roomOccupied', 'vacant');
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
