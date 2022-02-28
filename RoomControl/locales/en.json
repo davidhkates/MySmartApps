@@ -21,8 +21,8 @@
 	"pages.mainPage.settings.onTimeCheck.options.onWindow.name": "Time Window Only",
 	"pages.mainPage.settings.onTimeCheck.options.onAlways.name": "Always",
 	
-	"pages.mainPage.settings.offGroup.name": "Lights to turn off from main switch",
-	"pages.mainPage.settings.offDelay.name": "Delay to turn off lights (seconds)",
+	"pages.mainPage.settings.offGroup.name": "Lights/outlets to turn off from main switch",
+	"pages.mainPage.settings.offDelay.name": "Delay after main switch turned off for rest of group (seconds)",
 	
 
 	"pages.optionsPage.name": "Room Control (2 of 2)",
