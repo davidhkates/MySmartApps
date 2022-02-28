@@ -50,8 +50,8 @@ module.exports = new SmartApp()
 	const roomType = context.configStringValue('roomType');
 
 	// initialize state variable(s)
-	SmartState.putState( context, 'roomSwitchPressed', 'true' );
-	SmartState.putState( context, 'roomOccupied', false );
+	SmartState.putState(context, 'roomSwitchPressed', 'true');
+	SmartState.putState(context, 'roomOccupied', 'vacant');
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
@@ -199,7 +199,7 @@ module.exports = new SmartApp()
 			}
 		} else {
 			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
-			SmartState.putState( context, 'roomSwitchPressed', 'true' );
+			SmartState.putState(context, 'roomSwitchPressed', 'true');
 		}		
 	}
 	
@@ -260,7 +260,7 @@ module.exports = new SmartApp()
 	console.log('groupOnHandler - starting, context: ', context, ' event: ', event);
 
 	// indicate main switch was NOT manually pressed
-	SmartState.putState( context, 'roomSwitchPressed', 'false' );
+	SmartState.putState(context, 'roomSwitchPressed', 'false');
 
 	// Turn on the main switch when a light in the on group is turned on
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
@@ -293,7 +293,7 @@ module.exports = new SmartApp()
 	// If we get here, turn off the main switch and reset roomSwitchPressed state variable
 	console.log('groupOffHandler - turning off lights/switches');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	SmartState.putState( context, 'roomSwitchPressed', 'true' );
+	SmartState.putState(context, 'roomSwitchPressed', 'true');
 	console.log('groupOffHandler - done');
 })
 
@@ -317,8 +317,11 @@ module.exports = new SmartApp()
 			console.log('motionStartHandler - turning lights/switches on');
 			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
 			
-			// set room occupied state to TRUE
-			await SmartState.putState(context, 'roomOccupied', true);	
+			// set room occupied state to occupied if previously armed
+			const roomOccupied = await SmartState.getState(context, 'roomOccupied');
+			if (roomOccupied=='armed') {
+				await SmartState.putState(context, 'roomOccupied', 'occupied');	
+			}
 		}
 	}
 	
@@ -336,7 +339,7 @@ module.exports = new SmartApp()
 	// ignore motion stop if room is occupied
 	const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
 	console.log('motionStopHandler - room occupied state: ', roomOccupied);
-	if ( roomOccupied ) return;
+	if ( roomOccupied=='occupied' ) return;
 
 	/*
 	// Set room occupied based on state of contact sensors
@@ -391,10 +394,14 @@ module.exports = new SmartApp()
 
 
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
-	console.log('contactOpenHandler - start, set room to vacant');
-	
-	// set room occupied state to FALSE
-	await SmartState.putState(context, 'roomOccupied', false);
+	console.log('contactOpenHandler - set room to vacant');	
+	await SmartState.putState(context, 'roomOccupied', 'vacant');
+})	
+
+
+.subscribedEventHandler('contactClosedHandler', async (context, event) => {
+	console.log('contactOpenHandler - set room to armed');
+	await SmartState.putState(context, 'roomOccupied', 'armed');
 })	
 
 
