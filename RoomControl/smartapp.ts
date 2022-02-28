@@ -78,8 +78,8 @@ module.exports = new SmartApp()
 	SmartState.putState(context, 'roomSwitchPressed', 'true');
 	SmartState.putState(context, 'roomOccupied', 'vacant');
 	*/
-	await putState(context, 'roomSwitchPressed', 'true');
-	await putState(context, 'roomOccupied', 'vacant');
+	putState(context, 'roomSwitchPressed', 'true');
+	putState(context, 'roomOccupied', 'vacant');
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
