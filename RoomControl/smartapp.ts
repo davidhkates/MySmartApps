@@ -402,7 +402,7 @@ module.exports = new SmartApp()
 
 
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log('contactOpenHandler - set room to armed');
+	console.log('contactClosedHandler - set room to armed');
 	await SmartState.putState(context, 'roomOccupied', 'armed');
 })	
 
