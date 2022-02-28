@@ -320,6 +320,7 @@ module.exports = new SmartApp()
 			
 			// set room occupied state to occupied if previously armed
 			const roomOccupied = await SmartState.getState(context, 'roomOccupied');
+			console.log('motionStartHandler - room occupied state: ', roomOccupied);
 			if (roomOccupied=='armed') {
 				await SmartState.putState(context, 'roomOccupied', 'occupied');	
 			}
