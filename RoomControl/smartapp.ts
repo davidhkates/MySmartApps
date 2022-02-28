@@ -150,9 +150,9 @@ module.exports = new SmartApp()
 
 		// initialize contact behaviors
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-		    'contactSensor', 'contactSensor.open', 'contactOpenHandler');
+		    'contactSensor', 'contact.open', 'contactOpenHandler');
 		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-		    'contactSensor', 'contactSensor.closed', 'contactClosedHandler');
+		    'contactSensor', 'contact.closed', 'contactClosedHandler');
 
 		// Schedule endTime activities
 		const endTime = context.configStringValue('endTime');
