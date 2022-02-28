@@ -22,7 +22,7 @@
 	"pages.mainPage.settings.onTimeCheck.options.onAlways.name": "Always",
 	
 	"pages.mainPage.settings.offGroup.name": "Lights/outlets to turn off from main switch",
-	"pages.mainPage.settings.offDelay.name": "Delay after main switch turned off for rest of group (seconds)",
+	"pages.mainPage.settings.offDelay.name": "Delay turning off group after main switch (seconds)",
 	
 
 	"pages.optionsPage.name": "Room Control (2 of 2)",
@@ -38,7 +38,7 @@
 	"pages.optionsPage.settings.motionEnabled.description": "Automatically turn on room based on other settings",
 	"pages.optionsPage.settings.roomMotionOn.name": "Motion sensor(s) to turn room on",
 	"pages.optionsPage.settings.roomMotion.name": "Motion sensor(s) to monitor room",
-	"pages.optionsPage.settings.motionDelay.name": "Delay after motion stops (seconds)",
+	"pages.optionsPage.settings.motionDelay.name": "Delay turning off lights after motion stops (seconds)",
 	"pages.optionsPage.settings.roomContacts.name": "Door/window contact sensors",
 	"pages.optionsPage.settings.contactMode.name": "Contact state options",
 	"pages.optionsPage.settings.contactMode.options.stayOnAlways.name": "Stay on when closed",
