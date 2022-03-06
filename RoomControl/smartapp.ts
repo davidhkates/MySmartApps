@@ -143,16 +143,22 @@ module.exports = new SmartApp()
 		    'switch', 'switch.off', 'groupOffHandler');
 
 		// initialize motion behavior
-		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motion.active', 'motionStartHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
-		    'motionSensor', 'motion.inactive', 'motionStopHandler');
+		if (context.config.roomMotion) {
+			console.log('roomControl - setting up handlers for room motion sensor(s)');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+				'motionSensor', 'motion.active', 'motionStartHandler');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomMotion,
+				'motionSensor', 'motion.inactive', 'motionStopHandler');
+		}
 
 		// initialize contact behaviors
-		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-		    'contactSensor', 'contact.open', 'contactOpenHandler');
-		await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
-		    'contactSensor', 'contact.closed', 'contactClosedHandler');
+		if (context.config.roomContacts) {
+			console.log('roomControl - setting up handlers for room contact(s)');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+				'contactSensor', 'contact.open', 'contactOpenHandler');
+			await context.api.subscriptions.subscribeToDevices(context.config.roomContacts,
+				'contactSensor', 'contact.closed', 'contactClosedHandler');
+		}
 
 		// Schedule endTime activities
 		const endTime = context.configStringValue('endTime');
