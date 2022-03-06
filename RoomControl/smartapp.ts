@@ -404,6 +404,17 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - set room to armed');
 	await SmartState.putState(context, 'roomOccupied', 'armed');
+	
+	// Get room door states and motion delay
+	const roomContacts = await SmartDevice.getContactState( context, 'roomContacts');	
+	const offDelay = context.configNumberValue('offDelay')
+	console.log('contactClosedHandler - contact(s) state: ', roomContacts, ', off delay: ', offDelay);	
+
+	// Turn off lights when all doors closed after off delay
+	if (roomContacts==='closed' && offDelay) {
+		await context.api.schedules.runIn('delayedSwitchOff', offDelay);
+	}
+	
 })	
 
 
