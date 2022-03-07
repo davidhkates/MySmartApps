@@ -403,7 +403,17 @@ module.exports = new SmartApp()
 
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - set room to vacant');	
-	await SmartState.putState(context, 'roomOccupied', 'vacant');
+
+	// Check to see if lights are already on and room is currently occupied
+	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch'); 
+	console.log('contactOpenHandler - room switch state: ', roomSwitch);
+
+	// Set room occupied state to vacant if lights are on, else turn on
+	if (roomSwitch==='on') {
+		SmartState.putState(context, 'roomOccupied', 'vacant');
+	} else {
+		SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
+	}
 })	
 
 
@@ -412,7 +422,7 @@ module.exports = new SmartApp()
 	await SmartState.putState(context, 'roomOccupied', 'armed');
 	
 	// Get room door states and motion delay
-	const roomContacts = await SmartDevice.getContactState( context, 'roomContacts');	
+	const roomContacts = await SmartDevice.getContactState(context, 'roomContacts');	
 	const offDelay = context.configNumberValue('offDelay')
 	console.log('contactClosedHandler - contact(s) state: ', roomContacts, ', off delay: ', offDelay);	
 
@@ -420,7 +430,6 @@ module.exports = new SmartApp()
 	if (roomContacts==='closed' && offDelay) {
 		await context.api.schedules.runIn('delayedSwitchOff', offDelay);
 	}
-	
 })	
 
 
@@ -433,7 +442,7 @@ module.exports = new SmartApp()
 	if ( SmartUtils.isDayOfWeek(daysOfWeek) ) {
 		console.log('endTimeHandler - run end time handler today based on daysOfWeek:', daysOfWeek);
 		// Turn off room switch(es) if main switch already turned off
-		const isRoomOn = await SmartDevice.getSwitchState( context, 'roomSwitch');
+		const isRoomOn = await SmartDevice.getSwitchState(context, 'roomSwitch');
 		console.log('endTimeHandler - isRoomOn state: ', isRoomOn );
 		if (isRoomOn!=='on') {
 			console.log('endTimeHandler - turning room switch(es) off since main switch already off');
@@ -447,7 +456,8 @@ module.exports = new SmartApp()
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedGroupOff', async (context, event) => {
 	console.log('delayedGroupOff - starting');
-	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	SmartDevice.setSwitchState(context, 'offGroup', 'off');
 })
 
 
@@ -460,5 +470,6 @@ module.exports = new SmartApp()
 	SmartState.putState(context, 'roomOff', 'delay');	
 	
 	console.log('delayedSwitchOff - turning off room switch');
-	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 });
