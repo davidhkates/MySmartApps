@@ -334,6 +334,7 @@ module.exports = new SmartApp()
 	}
 	
 	// Cancel delayed off switch handler
+	console.log('motionStartHandler - deleting scheduled activities');
 	await context.api.schedules.delete('delayedSwitchOff');
 	await context.api.schedules.delete('delayedGroupOff');
 	console.log('motionStartHandler - finished');
