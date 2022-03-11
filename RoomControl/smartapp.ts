@@ -29,7 +29,25 @@ interface device {
 // }
 */
 
+// Define JSON state machine object to manage room state
+const doorOpenJSON = 
+	'{
+	  "Comment": "A Hello World example of the Amazon States Language using a Pass state",
+	  "StartAt": "vacant",
+	  "States": {
+		"vacant": {
+		  "Type": "Pass",
+		  "Result": "Hello World!",
+		  "End": true
+		}
+	  }
+	}';
 
+
+'{"vacant":{"room":"off", "next":"entering"},
+					   "entering"
+const roomJSON = '{"vacant":{"room":"off", "doors":"open", "next":"name":"John", "age":30, "car":null}';
+const roomState = JSON.parse(roomJSON);
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
