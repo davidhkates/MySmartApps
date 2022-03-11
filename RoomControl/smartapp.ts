@@ -195,7 +195,6 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
 	
 	// Get session state variable to see if button was manually pressed
-	console.log("Checking value of roomSwitchPressed");
 	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
 	console.log('roomSwitchOnHandler - main switch pressed: ', switchPressed);
 	
