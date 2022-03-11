@@ -29,6 +29,7 @@ interface device {
 // }
 */
 
+/*
 // Define JSON state machine object to manage room state
 const doorOpenJSON = 
 	'{
@@ -48,6 +49,7 @@ const doorOpenJSON =
 					   "entering"
 const roomJSON = '{"vacant":{"room":"off", "doors":"open", "next":"name":"John", "age":30, "car":null}';
 const roomState = JSON.parse(roomJSON);
+*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -427,10 +429,12 @@ module.exports = new SmartApp()
 	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch'); 
 	console.log('contactOpenHandler - room switch state: ', roomSwitch);
 
-	// Set room occupied state to vacant if lights are on, else turn on
+	// Set room occupied state to leaving (or vacant?) if lights are on, else turn on
 	if (roomSwitch==='on') {
-		SmartState.putState(context, 'roomOccupied', 'vacant');
+		console.log('contactOpenHandler - setting room state to leaving');
+		SmartState.putState(context, 'roomOccupied', 'leaving');
 	} else {
+		console.log('contactOpenHandler - turning on room switch');
 		SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 	}
 })	
