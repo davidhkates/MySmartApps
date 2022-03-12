@@ -436,7 +436,6 @@ module.exports = new SmartApp()
 		console.log('contactOpenHandler - turning on room switch');
 		// SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
-		
 	}
 })	
 
