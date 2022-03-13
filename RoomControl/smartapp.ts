@@ -369,21 +369,6 @@ module.exports = new SmartApp()
 	console.log('motionStopHandler - room occupied state: ', roomOccupied);
 	if ( roomOccupied=='occupied' ) return;
 
-	/*
-	// Set room occupied based on state of contact sensors
-	const roomContacts = await SmartDevice.getContactState( context, 'roomContacts');	
-
-	// See if all door(s) are closed during applicable window
-	if (context.config.roomContacts) {	// if room contacts specified
-		if ( (roomContacts === 'closed') && 		// all doors are closed
-			(context.configStringValue('contactMode')=='stayOnAlways' ||	// always stay on when closed OR
-			context.configStringValue('contactMode')=='stayOnWindow' &&		// stay on during time window and in that window
-			SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
-			SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
-			!!(context.configStringValue('startTime')) )) return;
-	}
-	*/
-
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
@@ -433,9 +418,18 @@ module.exports = new SmartApp()
 		console.log('contactOpenHandler - setting room state to leaving');
 		SmartState.putState(context, 'roomOccupied', 'leaving');
 	} else {
-		console.log('contactOpenHandler - turning on room switch');
-		SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-		// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
+		const homeName = context.configStringValue('homeName');
+		const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
+		console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
+
+		// turn on room switch/light(s) if home active
+		if (bHomeActive) {
+			console.log('contactOpenHandler - turning on room switch');
+			SmartState.putState(context, 'roomOccupied', 'entering');
+			// TODO: Define timers for checking for activity in room
+			await context.api.schedules.runIn('delayedSwitchOff', 15);		
+			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
+		}
 	}
 })	
 
@@ -495,4 +489,5 @@ module.exports = new SmartApp()
 	console.log('delayedSwitchOff - turning off room switch');
 	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
+	SmartState.putState(context, 'roomOccupied', 'vacant');
 });
