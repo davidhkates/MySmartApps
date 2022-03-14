@@ -427,8 +427,8 @@ module.exports = new SmartApp()
 			console.log('contactOpenHandler - turning on room switch');
 			SmartState.putState(context, 'roomOccupied', 'entering');
 			// TODO: Define timers for checking for activity in room
+			await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 			await context.api.schedules.runIn('delayedSwitchOff', 15);		
-			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 		}
 	}
 })	
