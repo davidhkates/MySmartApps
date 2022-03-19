@@ -207,7 +207,11 @@ module.exports = new SmartApp()
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
 		// Cancel scheduled event to turn off main switch after delay
-		await context.api.schedules.delete('delayedOffSwitch');
+		const roomState = await SmartState.getState( context, 'roomOccupied' );
+		const transientStates = ["Entering", "Exiting"];
+		if (transientStates.includes(roomState)) {
+			await context.api.schedules.delete('delayedOffSwitch');
+		}
 		
 		// check value of roomSwitchPressed state variable
 		if ( switchPressed == 'true' ) {
@@ -425,10 +429,10 @@ module.exports = new SmartApp()
 		// turn on room switch/light(s) if home active
 		if (bHomeActive) {
 			console.log('contactOpenHandler - turning on room switch');
-			SmartState.putState(context, 'roomOccupied', 'entering');
-			// TODO: Define timers for checking for activity in room
-			await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-			await context.api.schedules.runIn('delayedSwitchOff', 15);		
+			await SmartState.putState(context, 'roomOccupied', 'entering');
+			// TODO: Define timers for checking for activity in room			
+			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
+			context.api.schedules.runIn('delayedSwitchOff', 15);		
 		}
 	}
 })	
