@@ -208,7 +208,7 @@ module.exports = new SmartApp()
 	
 		// Cancel scheduled event to turn off main switch after delay
 		const roomState = await SmartState.getState( context, 'roomOccupied' );
-		const transientStates = ["Entering", "Exiting"];
+		const transientStates = ['entering', 'exiting'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
 		if (transientStates.includes(roomState)) {
 			await context.api.schedules.delete('delayedOffSwitch');
@@ -351,7 +351,7 @@ module.exports = new SmartApp()
 			// set room occupied state to occupied if previously armed
 			const roomState = await SmartState.getState(context, 'roomOccupied');
 			console.log('motionStartHandler - room occupied state: ', roomState);
-			const entryStates = ["Entering", "Exiting"];
+			const entryStates = ['entering', 'exiting'];
 			if (entryStates.includes(roomState)) {
 				console.log('motionStartHandler - entry room state, update to occupied');
 				await SmartState.putState(context, 'roomOccupied', 'occupied');	
@@ -427,7 +427,7 @@ module.exports = new SmartApp()
 	} else {
 		const homeName = context.configStringValue('homeName');
 		const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
-		console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
+		console.log('contactOpenHandler - home name: ', homeName, ', home active: ', bHomeActive);
 
 		// turn on room switch/light(s) if home active
 		if (bHomeActive) {
