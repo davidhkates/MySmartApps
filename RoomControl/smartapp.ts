@@ -209,6 +209,7 @@ module.exports = new SmartApp()
 		// Cancel scheduled event to turn off main switch after delay
 		const roomState = await SmartState.getState( context, 'roomOccupied' );
 		const transientStates = ["Entering", "Exiting"];
+		console.log('roomSwitchOnHandler - room state: ', roomState);
 		if (transientStates.includes(roomState)) {
 			await context.api.schedules.delete('delayedOffSwitch');
 		}
@@ -348,9 +349,11 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
 			
 			// set room occupied state to occupied if previously armed
-			const roomOccupied = await SmartState.getState(context, 'roomOccupied');
+			const roomState = await SmartState.getState(context, 'roomOccupied');
 			console.log('motionStartHandler - room occupied state: ', roomOccupied);
-			if (roomOccupied=='armed') {
+			const entryStates = ["Entering", "Exiting"];
+			if (entryStates.includes(roomState)) {
+				console.log('motionStartHandler - entry room state, update to occupied');
 				await SmartState.putState(context, 'roomOccupied', 'occupied');	
 			}
 		}
@@ -439,8 +442,11 @@ module.exports = new SmartApp()
 
 
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	console.log('contactClosedHandler - set room to armed');
-	await SmartState.putState(context, 'roomOccupied', 'armed');
+	const roomStatus = await SmartState.getState(context, 'roomOccupied');
+	if (roomStatus == 'entering') {
+		console.log('contactClosedHandler - set room to entered');
+		await SmartState.putState(context, 'roomOccupied', 'entered');
+	}
 	
 	// Get room door states and motion delay
 	const roomContacts = await SmartDevice.getContactState(context, 'roomContacts');	
