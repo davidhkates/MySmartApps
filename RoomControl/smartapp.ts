@@ -206,6 +206,7 @@ module.exports = new SmartApp()
 		
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
+		/*
 		// Cancel scheduled event to turn off main switch after delay
 		const roomState = await SmartState.getState( context, 'roomOccupied' );
 		const transientStates = ['entering', 'exiting'];
@@ -213,6 +214,7 @@ module.exports = new SmartApp()
 		if (transientStates.includes(roomState)) {
 			await context.api.schedules.delete('delayedOffSwitch');
 		}
+		*/
 		
 		// check value of roomSwitchPressed state variable
 		if ( switchPressed == 'true' ) {
@@ -234,11 +236,20 @@ module.exports = new SmartApp()
 		}		
 	}
 	
-	// Schedule turning off room switch if delay specified
-	const delay = context.configNumberValue('motionDelay');
-	console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
-	if (delay) {
-		await context.api.schedules.runIn('delayedSwitchOff', delay);
+	// Determine room state to set delay for turning switch off
+	const roomState = await SmartState.getState( context, 'roomOccupied' );
+	const entryStates = ['entering', 'exiting'];
+	console.log('roomSwitchOnHandler - room state: ', roomState);
+	if (entryStates.includes(roomState)) {
+		await context.api.schedules.runin('delayedOffSwitch', 15);
+	} else if {
+
+		// Schedule turning off room switch if delay specified
+		const delay = context.configNumberValue('motionDelay');
+		console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
+		if (delay) {
+			await context.api.schedules.runIn('delayedSwitchOff', delay);
+		}
 	}
 	
 	// save state variable to indicate room should be turned off immediately
@@ -435,7 +446,7 @@ module.exports = new SmartApp()
 			await SmartState.putState(context, 'roomOccupied', 'entering');
 			// TODO: Define timers for checking for activity in room			
 			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-			context.api.schedules.runIn('delayedSwitchOff', 15);		
+			// context.api.schedules.runIn('delayedSwitchOff', 15);		
 		}
 	}
 })	
