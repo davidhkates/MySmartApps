@@ -242,7 +242,7 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOnHandler - room state: ', roomState);
 	if (entryStates.includes(roomState)) {
 		await context.api.schedules.runin('delayedOffSwitch', 15);
-	} else if {
+	} else {
 
 		// Schedule turning off room switch if delay specified
 		const delay = context.configNumberValue('motionDelay');
