@@ -465,14 +465,16 @@ module.exports = new SmartApp()
 			if (roomContacts==='closed') {
 			// console.log('contactClosedHandler - contact(s) state: ', roomContacts, ', off delay: ', offDelay);	
 
+				/*
 				const offDelay = context.configNumberValue('offDelay')
 				if (offDelay) {
 					// Turn off lights when all doors closed after off delay
 					context.api.schedules.runIn('delayedSwitchOff', offDelay);
 				} else {
+				*/
 					// Turn off lights immediately
 					SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-				}
+				// }
 			}
 		}
 	}			
