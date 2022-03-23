@@ -454,8 +454,9 @@ module.exports = new SmartApp()
 
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	const roomStatus = await SmartState.getState(context, 'roomOccupied');
-	console.log('contactClosedHandler - checking room state: ', roomStatus);
-	if (roomStatus==='leaving') {
+	const roomMotion = await SmartDevice.getMotionState(context, 'motionSensor');
+	console.log('contactClosedHandler - checking room state: ', roomStatus, ', motion: ', roomMotion);
+	if (roomStatus==='leaving' && roomMotion==='inactive') {
 		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 	}				
 })	
