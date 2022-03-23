@@ -453,21 +453,30 @@ module.exports = new SmartApp()
 
 
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	const roomStatus = await SmartState.getState(context, 'roomOccupied');
-	if (roomStatus == 'entering') {
-		console.log('contactClosedHandler - set room to entered');
-		await SmartState.putState(context, 'roomOccupied', 'entered');
-	}
-	
-	// Get room door states and motion delay
-	const roomContacts = await SmartDevice.getContactState(context, 'roomContacts');	
-	const offDelay = context.configNumberValue('offDelay')
-	console.log('contactClosedHandler - contact(s) state: ', roomContacts, ', off delay: ', offDelay);	
+	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch');
+	if (roomSwitch === 'on') {
+		const roomStatus = await SmartState.getState(context, 'roomOccupied');
+		if (roomStatus !== 'entering') {		
+			console.log('contactClosedHandler - set room to leaving');
+			await SmartState.putState(context, 'roomOccupied', 'leaving');
 
-	// Turn off lights when all doors closed after off delay
-	if (roomContacts==='closed' && offDelay) {
-		await context.api.schedules.runIn('delayedSwitchOff', offDelay);
-	}
+			// Get room door states and motion delay
+			const roomContacts = await SmartDevice.getContactState(context, 'roomContacts');	
+			if (roomContacts==='closed') {
+			// console.log('contactClosedHandler - contact(s) state: ', roomContacts, ', off delay: ', offDelay);	
+
+				const offDelay = context.configNumberValue('offDelay')
+				if (offDelay) {
+					// Turn off lights when all doors closed after off delay
+					context.api.schedules.runIn('delayedSwitchOff', offDelay);
+				} else {
+					// Turn off lights immediately
+					SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
+				}
+			}
+		}
+	}			
+	
 })	
 
 
