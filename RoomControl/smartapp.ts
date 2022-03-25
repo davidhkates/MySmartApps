@@ -431,7 +431,7 @@ module.exports = new SmartApp()
 	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch'); 
 	console.log('contactOpenHandler - room switch state: ', roomSwitch);
 
-	// Set room occupied state to leaving (or vacant?) if lights are on, else turn on
+	// Set room occupied state to leaving if lights are on, else turn on
 	if (roomSwitch==='on') {
 		console.log('contactOpenHandler - setting room state to leaving');
 		SmartState.putState(context, 'roomOccupied', 'leaving');
@@ -446,19 +446,25 @@ module.exports = new SmartApp()
 			await SmartState.putState(context, 'roomOccupied', 'entering');
 			// TODO: Define timers for checking for activity in room			
 			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-			// context.api.schedules.runIn('delayedSwitchOff', 15);		
+			// context.api.schedules.runIn('delayedSwitchOn', 15);		
 		}
 	}
 })	
 
 
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
-	const roomStatus = await SmartState.getState(context, 'roomOccupied');
-	const roomMotion = await SmartDevice.getMotionState(context, 'motionSensor');
-	console.log('contactClosedHandler - checking room state: ', roomStatus, ', motion: ', roomMotion);
+	const roomState = await SmartState.getState(context, 'roomOccupied');
+	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch');
+	const nextState = ( ( roomState==='leaving' && roomSwitch==='on' ) ? 'vacant' : 'occupied' );
+	console.log('contactClosedHandler - current room state: ', roomState, ', next state: ', nextState, ', room switch: ', roomSwitch);
+
+	/*
 	if (roomStatus==='leaving' && roomMotion==='inactive') {
 		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-	}				
+	}
+	*/
+	SmartState.putState(context, 'roomOccupied', nextState);
+	context.api.schedules.runIn('delayedSwitchOff', 15);
 })	
 
 
