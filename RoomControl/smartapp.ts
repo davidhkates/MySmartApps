@@ -385,12 +385,19 @@ module.exports = new SmartApp()
 	// ignore motion stop if room is occupied
 	const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
 	console.log('motionStopHandler - room occupied state: ', roomOccupied);
-	if ( roomOccupied=='occupied' ) return;
+	if ( roomOccupied==='occupied' ) return;
+	
+	// TODO: should we be looking for 'vacant' or 'leaving' ???
+	if ( roomOccupied==='vacant' ) {
+		await context.api.schedules.delete('delayedOffSwitch');
+		SmartState.putState(context, 'roomOccupied', 'occupied');
+	}
 
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
+	// TODO: consider whether to use SmartDevice routines for motion sensors
 	if (otherSensors) {
 		console.log('motionStopHandler - other sensors found');
 		// Get the current states of the other motion sensors
