@@ -464,13 +464,14 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - set room to occupied or vacant');	
 	const roomState = await SmartState.getState(context, 'roomOccupied');
-	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch');
-	const nextState = ( ( roomState==='leaving' && roomSwitch==='on' ) ? 'vacant' : 'occupied' );
-	console.log('contactClosedHandler - current room state: ', roomState, ', next state: ', nextState, ', room switch: ', roomSwitch);
-
-	// Set room state and set turner to turn off in 15 seconds (unless there's further motion)
-	SmartState.putState(context, 'roomOccupied', nextState);
-	context.api.schedules.runIn('delayedSwitchOff', 15);
+	console.log('contactClosedHandler - current room state: ', roomState);
+	
+	if (roomState==='leaving') {
+		await SmartState.putState(context, 'roomOccupied', 'vacant');
+		context.api.schedules.runIn('delayedSwitchOff', 15);
+	} else {
+		await SmartState.putState(context, 'roomOccupied', 'occupied');
+	}
 })	
 
 
