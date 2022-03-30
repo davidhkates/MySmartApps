@@ -360,6 +360,7 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
 			
 			// set room occupied state to occupied if previously armed
+			/*
 			const roomState = await SmartState.getState(context, 'roomOccupied');
 			console.log('motionStartHandler - room occupied state: ', roomState);
 			const entryStates = ['entering', 'exiting'];
@@ -367,6 +368,8 @@ module.exports = new SmartApp()
 				console.log('motionStartHandler - entry room state, update to occupied');
 				await SmartState.putState(context, 'roomOccupied', 'occupied');	
 			}
+			*/
+			await SmartState.putState(context, 'roomOccupied', 'occupied');	
 		}
 	}
 	
