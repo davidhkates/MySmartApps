@@ -447,7 +447,7 @@ module.exports = new SmartApp()
 
 	// Set room occupied state to leaving if lights are on, else turn on
 	if (roomSwitch==='on') {
-		console.log('contactOpenHandler - setting room state to leaving');
+		console.log('contactOpenHandler - setting room state to LEAVING');
 		SmartState.putState(context, 'roomOccupied', 'leaving');
 	} else {
 		const homeName = context.configStringValue('homeName');
@@ -456,7 +456,7 @@ module.exports = new SmartApp()
 
 		// turn on room switch/light(s) if home active
 		if (bHomeActive) {
-			console.log('contactOpenHandler - turning on room switch');
+			console.log('contactOpenHandler - turning on room switch, setting room state to ENTERING');
 			await SmartState.putState(context, 'roomOccupied', 'entering');
 			// TODO: Define timers for checking for activity in room			
 			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
@@ -510,6 +510,16 @@ module.exports = new SmartApp()
 
 
 // Turns off lights after delay when switch turned off
+.scheduledEventHandler('delayedSwitchOn', async (context, event) => {
+	console.log('delayedSwitchOn - starting');
+	
+	console.log('delayedSwitchOn - turning room switch ON, setting room state to OCCUPIED');
+	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+	SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
+	SmartState.putState(context, 'roomOccupied', 'occupied');
+})
+
+// Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
 	console.log('delayedSwitchOff - starting');
 	
@@ -517,7 +527,7 @@ module.exports = new SmartApp()
 	console.log('delayedSwitchOff - setting roomOff state variable to delay');
 	SmartState.putState(context, 'roomOff', 'delay');	
 	
-	console.log('delayedSwitchOff - turning off room switch');
+	console.log('delayedSwitchOff - turning room switch OFF, setting room state to VACANT');
 	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 	SmartState.putState(context, 'roomOccupied', 'vacant');
