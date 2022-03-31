@@ -461,6 +461,7 @@ module.exports = new SmartApp()
 			// TODO: Define timers for checking for activity in room			
 			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 			// context.api.schedules.runIn('delayedSwitchOn', 15);		
+			context.api.schedules.runIn('delayedSwitchOff', 15);
 		}
 	}
 })	
