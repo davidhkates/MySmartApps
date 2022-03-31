@@ -237,20 +237,22 @@ module.exports = new SmartApp()
 	}
 	
 	// Determine room state to set delay for turning switch off
+	/*
 	const roomState = await SmartState.getState( context, 'roomOccupied' );
 	const entryStates = ['entering', 'exiting'];
 	console.log('roomSwitchOnHandler - room state: ', roomState);
 	if (entryStates.includes(roomState)) {
 		await context.api.schedules.runIn('delayedSwitchOff', 15);
 	} else {
-
+	*/
+	
 		// Schedule turning off room switch if delay specified
 		const delay = context.configNumberValue('motionDelay');
 		console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
 		if (delay) {
 			await context.api.schedules.runIn('delayedSwitchOff', delay);
 		}
-	}
+	// }
 	
 	// save state variable to indicate room should be turned off immediately
 	SmartState.putState(context, 'roomOff', 'immediate');			
