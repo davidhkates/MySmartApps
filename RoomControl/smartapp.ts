@@ -471,9 +471,11 @@ module.exports = new SmartApp()
 	// if (roomState==='leaving') {
 		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'vacant');
-		context.api.schedules.runIn('delayedSwitchOff', 15);
+		// context.api.schedules.runIn('delayedSwitchOff', 15);
+		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
+		SmartDevice.setSwitchState(context, 'offGroup', 'off');
 	} else {
-		console.log('contactClosedHandler - setting room state to VACANT');
+		console.log('contactClosedHandler - setting room state to OCCUPIED');
 		await SmartState.putState(context, 'roomOccupied', 'occupied');
 	}
 })	
@@ -500,14 +502,6 @@ module.exports = new SmartApp()
 
 
 // Turns off lights after delay when switch turned off
-.scheduledEventHandler('delayedGroupOff', async (context, event) => {
-	console.log('delayedGroupOff - starting');
-	// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-	SmartDevice.setSwitchState(context, 'offGroup', 'off');
-})
-
-
-// Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOn', async (context, event) => {
 	console.log('delayedSwitchOn - starting');
 	
@@ -516,6 +510,7 @@ module.exports = new SmartApp()
 	SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 	SmartState.putState(context, 'roomOccupied', 'occupied');
 })
+
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
@@ -529,4 +524,12 @@ module.exports = new SmartApp()
 	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 	SmartState.putState(context, 'roomOccupied', 'vacant');
+})
+
+
+// Turns off lights after delay when switch turned off
+.scheduledEventHandler('delayedGroupOff', async (context, event) => {
+	console.log('delayedGroupOff - starting');
+	// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	SmartDevice.setSwitchState(context, 'offGroup', 'off');
 });
