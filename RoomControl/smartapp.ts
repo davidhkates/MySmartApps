@@ -206,18 +206,12 @@ module.exports = new SmartApp()
 		
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
-		/*
-		// Cancel scheduled event to turn off main switch after delay
+		// Turn onGroup on if switchPressed AND room is NOT in transient state
 		const roomState = await SmartState.getState( context, 'roomOccupied' );
-		const transientStates = ['entering', 'exiting'];
+		const transientStates = ['entering', 'leaving'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
-		if (transientStates.includes(roomState)) {
-			await context.api.schedules.delete('delayedOffSwitch');
-		}
-		*/
-		
-		// check value of roomSwitchPressed state variable
-		if ( switchPressed == 'true' ) {
+		if ( !!switchPressed && !(transientStates.includes(roomState)) ) {		
+		// if ( switchPressed == 'true' ) {
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 
@@ -472,7 +466,9 @@ module.exports = new SmartApp()
 	const roomState = await SmartState.getState(context, 'roomOccupied');
 	console.log('contactClosedHandler - current room state: ', roomState);
 	
-	if (roomState==='leaving') {
+	const transientStates = ['entering', 'leaving'];
+	if (transientStates.includes(roomState)) {
+	// if (roomState==='leaving') {
 		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'vacant');
 		context.api.schedules.runIn('delayedSwitchOff', 15);
