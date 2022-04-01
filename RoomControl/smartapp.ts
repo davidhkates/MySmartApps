@@ -266,9 +266,9 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOffHandler - starting');
 	
 	// Determine if in time window
-	console.log('roomSwitchOffHandler - time window: ', SmartUtils.inTimeContext( context, 'startTime', 'endTime') );
+	// console.log('roomSwitchOffHandler - time window: ', SmartUtils.inTimeContext( context, 'startTime', 'endTime') );
 	const daysOfWeek = context.configStringValue('daysOfWeek');
-	console.log('roomSwitchOffHandler - daysOfWeek: ', daysOfWeek, ', isDayOfWeek: ', SmartUtils.isDayOfWeek( daysOfWeek ) );
+	// console.log('roomSwitchOffHandler - daysOfWeek: ', daysOfWeek, ', isDayOfWeek: ', SmartUtils.isDayOfWeek( daysOfWeek ) );
 	
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
@@ -278,7 +278,7 @@ module.exports = new SmartApp()
 	if (!bTimeWindow) {	
 		console.log('roomSwitchOffHandler - outside time window');
 		const offDelay = context.configNumberValue('offDelay')
-		console.log('roomSwitchOffHandler - off delay: ', offDelay);
+		// console.log('roomSwitchOffHandler - off delay: ', offDelay);
 		
 		// get state variable to see if room switch was turned off by delay
 		const roomState = await SmartState.getState(context, 'roomOff');
@@ -473,9 +473,11 @@ module.exports = new SmartApp()
 	console.log('contactClosedHandler - current room state: ', roomState);
 	
 	if (roomState==='leaving') {
+		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'vacant');
 		context.api.schedules.runIn('delayedSwitchOff', 15);
 	} else {
+		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'occupied');
 	}
 })	
