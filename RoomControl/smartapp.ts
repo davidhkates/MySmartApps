@@ -192,11 +192,11 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
+	// console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
 	
 	// Get session state variable to see if button was manually pressed
 	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
-	console.log('roomSwitchOnHandler - main switch pressed: ', switchPressed);
+	console.log('roomSwitchOnHandler - starting, main switch pressed: ', switchPressed);
 	
 	// Determine if in time window
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
@@ -390,7 +390,7 @@ module.exports = new SmartApp()
 	// ignore motion stop if room is occupied
 	const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
 	console.log('motionStopHandler - room occupied state: ', roomOccupied);
-	if ( roomOccupied==='occupied' ) return;
+	// if ( roomOccupied==='occupied' ) return;
 	
 	/*
 	// TODO: should we be looking for 'vacant' or 'leaving' ???
