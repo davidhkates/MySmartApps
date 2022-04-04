@@ -29,27 +29,6 @@ interface device {
 // }
 */
 
-/*
-// Define JSON state machine object to manage room state
-const doorOpenJSON = 
-	'{
-	  "Comment": "A Hello World example of the Amazon States Language using a Pass state",
-	  "StartAt": "vacant",
-	  "States": {
-		"vacant": {
-		  "Type": "Pass",
-		  "Result": "Hello World!",
-		  "End": true
-		}
-	  }
-	}';
-
-
-'{"vacant":{"room":"off", "next":"entering"},
-					   "entering"
-const roomJSON = '{"vacant":{"room":"off", "doors":"open", "next":"name":"John", "age":30, "car":null}';
-const roomState = JSON.parse(roomJSON);
-*/
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -210,8 +189,8 @@ module.exports = new SmartApp()
 		const roomState = await SmartState.getState( context, 'roomOccupied' );
 		const transientStates = ['entering', 'leaving'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
-		if ( !!switchPressed && !(transientStates.includes(roomState)) ) {		
-		// if ( switchPressed == 'true' ) {
+		// if ( !!switchPressed && !(transientStates.includes(roomState)) ) {		
+		if ( switchPressed == 'true' ) {
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 
@@ -229,24 +208,13 @@ module.exports = new SmartApp()
 			SmartState.putState(context, 'roomSwitchPressed', 'true');
 		}		
 	}
-	
-	// Determine room state to set delay for turning switch off
-	/*
-	const roomState = await SmartState.getState( context, 'roomOccupied' );
-	const entryStates = ['entering', 'exiting'];
-	console.log('roomSwitchOnHandler - room state: ', roomState);
-	if (entryStates.includes(roomState)) {
-		await context.api.schedules.runIn('delayedSwitchOff', 15);
-	} else {
-	*/
-	
-		// Schedule turning off room switch if delay specified
-		const delay = context.configNumberValue('motionDelay');
-		console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
-		if (delay) {
-			await context.api.schedules.runIn('delayedSwitchOff', delay);
-		}
-	// }
+		
+	// Schedule turning off room switch if delay specified
+	const delay = context.configNumberValue('motionDelay');
+	console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
+	if (delay) {
+		await context.api.schedules.runIn('delayedSwitchOff', delay);
+	}
 	
 	// save state variable to indicate room should be turned off immediately
 	SmartState.putState(context, 'roomOff', 'immediate');			
@@ -260,9 +228,7 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOffHandler - starting');
 	
 	// Determine if in time window
-	// console.log('roomSwitchOffHandler - time window: ', SmartUtils.inTimeContext( context, 'startTime', 'endTime') );
 	const daysOfWeek = context.configStringValue('daysOfWeek');
-	// console.log('roomSwitchOffHandler - daysOfWeek: ', daysOfWeek, ', isDayOfWeek: ', SmartUtils.isDayOfWeek( daysOfWeek ) );
 	
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
@@ -272,7 +238,6 @@ module.exports = new SmartApp()
 	if (!bTimeWindow) {	
 		console.log('roomSwitchOffHandler - outside time window');
 		const offDelay = context.configNumberValue('offDelay')
-		// console.log('roomSwitchOffHandler - off delay: ', offDelay);
 		
 		// get state variable to see if room switch was turned off by delay
 		const roomState = await SmartState.getState(context, 'roomOff');
@@ -286,7 +251,6 @@ module.exports = new SmartApp()
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
 			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-			// await controlSpeakers(context, 'roomSpeakers', 'pause');
 			console.log('roomSwitchOffHandler - turning off group complete');
 		}
 	}
@@ -353,18 +317,7 @@ module.exports = new SmartApp()
 		// turn on light if in time window and check switch(es) are on
 		if (bHomeActive) {
 			console.log('motionStartHandler - turning lights/switches on');
-			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');		
-			
-			// set room occupied state to occupied if previously armed
-			/*
-			const roomState = await SmartState.getState(context, 'roomOccupied');
-			console.log('motionStartHandler - room occupied state: ', roomState);
-			const entryStates = ['entering', 'exiting'];
-			if (entryStates.includes(roomState)) {
-				console.log('motionStartHandler - entry room state, update to occupied');
-				await SmartState.putState(context, 'roomOccupied', 'occupied');	
-			}
-			*/
+			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');					
 			await SmartState.putState(context, 'roomOccupied', 'occupied');	
 		}
 	}
@@ -384,15 +337,6 @@ module.exports = new SmartApp()
 	// ignore motion stop if room is occupied
 	const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
 	console.log('motionStopHandler - room occupied state: ', roomOccupied);
-	// if ( roomOccupied==='occupied' ) return;
-	
-	/*
-	// TODO: should we be looking for 'vacant' or 'leaving' ???
-	if ( roomOccupied==='vacant' ) {
-		await context.api.schedules.delete('delayedOffSwitch');
-		SmartState.putState(context, 'roomOccupied', 'occupied');
-	}
-	*/
 
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
@@ -468,10 +412,8 @@ module.exports = new SmartApp()
 	
 	const transientStates = ['entering', 'leaving'];
 	if (transientStates.includes(roomState)) {
-	// if (roomState==='leaving') {
 		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'vacant');
-		// context.api.schedules.runIn('delayedSwitchOff', 15);
 		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 		SmartDevice.setSwitchState(context, 'offGroup', 'off');
 	} else {
