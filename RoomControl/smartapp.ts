@@ -189,8 +189,8 @@ module.exports = new SmartApp()
 		const roomState = await SmartState.getState( context, 'roomOccupied' );
 		const transientStates = ['entering', 'leaving'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
-		// if ( !!switchPressed && !(transientStates.includes(roomState)) ) {		
-		if ( switchPressed == 'true' ) {
+		if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
+		// if ( switchPressed == 'true' ) {
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 
