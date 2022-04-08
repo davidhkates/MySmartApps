@@ -204,7 +204,7 @@ module.exports = new SmartApp()
 					console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
 			}
 		} else {
-			console.log('roomSwitchHandler - main switch NOT pressed, don\'t turn on other lights');
+			console.log('roomSwitchOnHandler - main switch NOT pressed, don\'t turn on other lights');
 			SmartState.putState(context, 'roomSwitchPressed', 'true');
 		}		
 	}
@@ -212,7 +212,7 @@ module.exports = new SmartApp()
 	// Schedule turning off room switch if delay specified
 	const delay = context.configNumberValue('motionDelay');
 	console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
-	if (delay) {
+	if (delay && roomState==='occupied') {
 		await context.api.schedules.runIn('delayedSwitchOff', delay);
 	}
 	
