@@ -183,10 +183,10 @@ module.exports = new SmartApp()
 	const onTimeCheck = 'onAlways';
 	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
 		
+	const roomState = await SmartState.getState( context, 'roomOccupied' );
 	if (bTimeWindow || onTimeCheck==='onAlways') {		
 	
 		// Turn onGroup on if switchPressed AND room is NOT in transient state
-		const roomState = await SmartState.getState( context, 'roomOccupied' );
 		const transientStates = ['entering', 'leaving'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
 		if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
