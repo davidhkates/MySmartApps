@@ -335,14 +335,20 @@ module.exports = new SmartApp()
 	console.log('motionStopHandler - starting');
 
 	// ignore motion stop if room is occupied
-	const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
-	console.log('motionStopHandler - room occupied state: ', roomOccupied);
+	// const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
+	// console.log('motionStopHandler - room occupied state: ', roomOccupied);
 
+	// TODO: consider whether to use SmartDevice routines for motion sensors
+	// Check to make sure all motionSensors are inactive
+	const motionSensors = await SmartDevice.getMotionState(context, 'roomMotion');
+	if (motionSensors==='inactive') {
+	// DOES delayedSwitchOff need to be invoked if motionSensors='mixed'
+
+	/*
 	// See if there are any other motion sensors defined
 	const otherSensors =  context.config.roomMotion
 	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
 
-	// TODO: consider whether to use SmartDevice routines for motion sensors
 	if (otherSensors) {
 		console.log('motionStopHandler - other sensors found');
 		// Get the current states of the other motion sensors
@@ -360,6 +366,7 @@ module.exports = new SmartApp()
 		}
 	}
 	console.log('motionStopHandler - all other motion sensors inactive');
+	*/
 	
 	const delay = context.configNumberValue('motionDelay');
 	console.log('motionStopHandler - turn off lights after specified delay: ' + delay);	
@@ -372,6 +379,8 @@ module.exports = new SmartApp()
 		// Turn room switch off immediately if no delay
 		console.log('motionStopHandler - turn room switch off immediately');
 		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+	}
+	
 	}
 })
 
