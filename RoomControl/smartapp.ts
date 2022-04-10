@@ -368,19 +368,18 @@ module.exports = new SmartApp()
 	console.log('motionStopHandler - all other motion sensors inactive');
 	*/
 	
-	const delay = context.configNumberValue('motionDelay');
-	console.log('motionStopHandler - turn off lights after specified delay: ' + delay);	
+		const delay = context.configNumberValue('motionDelay');
+		console.log('motionStopHandler - turn off lights after specified delay: ' + delay);	
 
-	if (delay) {
-		// Schedule turning off room switch if delay is set
-		console.log('motionStopHandler - run delayedSwitchOff after specified delay: ', delay);
-		await context.api.schedules.runIn('delayedSwitchOff', delay)
-	} else {
-		// Turn room switch off immediately if no delay
-		console.log('motionStopHandler - turn room switch off immediately');
-		await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	}
-	
+		if (delay) {
+			// Schedule turning off room switch if delay is set
+			console.log('motionStopHandler - run delayedSwitchOff after specified delay: ', delay);
+			await context.api.schedules.runIn('delayedSwitchOff', delay)
+		} else {
+			// Turn room switch off immediately if no delay
+			console.log('motionStopHandler - turn room switch off immediately');
+			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+		}	
 	}
 })
 
