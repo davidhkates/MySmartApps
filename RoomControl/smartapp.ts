@@ -259,12 +259,15 @@ module.exports = new SmartApp()
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
-	console.log('groupOnHandler - starting, context: ', context, ' event: ', event);
+	console.log('groupOnHandler starting - check to see if room switch was pressed');
 
 	// indicate main switch was NOT manually pressed
 	SmartState.putState(context, 'roomSwitchPressed', 'false');
 
 	// Turn on the main switch when a light in the on group is turned on
+	const roomSwitchOn = await SmartDevice.getState(context, 'roomSwitch');
+	console.log('groupOnHandler - room switch current value: ', roomSwitchOn);
+	console.log('groupOnHandler - current schedules: ', context.api.schedules.list);
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 })
 
