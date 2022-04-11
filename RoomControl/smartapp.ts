@@ -211,8 +211,9 @@ module.exports = new SmartApp()
 		
 	// Schedule turning off room switch if delay specified
 	const delay = context.configNumberValue('motionDelay');
-	console.log('roomSwitchOnHandler - turn off lights after specified delay: ' + delay);	
+	console.log('roomSwitchOnHandler - turn off lights after specified delay: ', delay, ', room state: ', roomState);	
 	if (delay && roomState==='occupied') {
+		console.log('roomSwitchOnHandler - setting delayed switch off');
 		await context.api.schedules.runIn('delayedSwitchOff', delay);
 	}
 	
@@ -265,9 +266,11 @@ module.exports = new SmartApp()
 	SmartState.putState(context, 'roomSwitchPressed', 'false');
 
 	// Turn on the main switch when a light in the on group is turned on
+	/*
 	const roomSwitchState = await SmartDevice.getSwitchState(context, 'roomSwitch');
 	console.log('groupOnHandler - room switch current value: ', roomSwitchState);
 	console.log('groupOnHandler - current schedules: ', context.api.schedules.get('delayedSwitchOff'));
+	*/
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 })
 
