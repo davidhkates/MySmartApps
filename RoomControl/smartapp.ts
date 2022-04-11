@@ -267,7 +267,7 @@ module.exports = new SmartApp()
 	// Turn on the main switch when a light in the on group is turned on
 	const roomSwitchState = await SmartDevice.getSwitchState(context, 'roomSwitch');
 	console.log('groupOnHandler - room switch current value: ', roomSwitchState);
-	console.log('groupOnHandler - current schedules: ', context.api.schedules.list);
+	console.log('groupOnHandler - current schedules: ', context.api.schedules.get('delayedSwitchOff'));
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 })
 
