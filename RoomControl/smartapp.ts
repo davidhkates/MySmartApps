@@ -226,8 +226,9 @@ module.exports = new SmartApp()
 
 // Turn off the lights in the offGroup when room switch is turned off
 .subscribedEventHandler('roomSwitchOffHandler', async (context, event) => {
-	// Turn on the lights in off group based on behavior setting
+	// Set room occupied state to vacant
 	console.log('roomSwitchOffHandler - starting');
+	SmartState.putState(context, 'roomOccupied', 'vacant');
 	
 	// Determine if in time window
 	const daysOfWeek = context.configStringValue('daysOfWeek');
@@ -480,7 +481,7 @@ module.exports = new SmartApp()
 	console.log('delayedSwitchOff - turning room switch OFF, setting room state to VACANT');
 	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
 	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-	SmartState.putState(context, 'roomOccupied', 'vacant');
+	// SmartState.putState(context, 'roomOccupied', 'vacant');
 })
 
 
