@@ -28,10 +28,6 @@ module.exports = new SmartApp()
 	// separate page for additional options
 	// page.nextPageId('optionsPage');
 	
-	// Get list of locations
-	// const locationList = context.api.locations.list;
-	console.log('Configuration page: ', context.api);
-	
 	// operating switch and controls to set home status
 	page.section('controls', section => {
 		// section.booleanSetting('controlEnabled').defaultValue(true);
@@ -62,6 +58,10 @@ module.exports = new SmartApp()
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
 
+	// Get list of locations
+	const locationList = context.api.locations.list;
+	console.log('Configuration page: ', locationList);
+	
 /*
 	const homeName = context.configStringValue('homeName');
 	const returnValue = await SmartState.getHomeMode(homeName, 'occupancy');
