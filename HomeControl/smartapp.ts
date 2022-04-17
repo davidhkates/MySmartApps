@@ -61,6 +61,9 @@ module.exports = new SmartApp()
 	// Get list of locations
 	const locationList = context.api.locations.list; 
 	console.log('homeControl - list of locations: ', locationList.toString());
+	context.api.locations.list().then(locations => {
+		console.log('Number of locations: ', locations.length)
+	})
 	
 /*
 	const homeName = context.configStringValue('homeName');
