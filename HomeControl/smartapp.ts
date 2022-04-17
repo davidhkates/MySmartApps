@@ -144,7 +144,7 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - trigger to change home occupancy mode to AWAY');
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
-	context.api.modes.update(context.configStringValue('homeName'),'active');
+	context.api.modes.update(context.configStringValue('homeName'),'Awake');
 })
 
 
@@ -174,7 +174,7 @@ module.exports = new SmartApp()
 	// If we got here, no set home occupancy mode to active 
 	console.log('contactClosedHandler - change home occupancy mode to active');
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
-	context.api.modes.update(context.configStringValue('homeName'),'active');
+	context.api.modes.update(context.configStringValue('homeName'),'Awake');
 })
 
 
@@ -185,7 +185,7 @@ module.exports = new SmartApp()
 	const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
 	console.log('delayedHomeActivate - current home mode: ', homeMode);
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
-	context.api.modes.update(context.configStringValue('homeName'),'active');
+	context.api.modes.update(context.configStringValue('homeName'),'Awake');
 })
 
 
@@ -196,7 +196,7 @@ module.exports = new SmartApp()
 	// const homeMode = await SmartState.getHomeMode(context.configStringValue('homeName'), 'occupancy');
 	// console.log('endTimeInactivate - current home mode: ', homeMode);
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'inactive');
-	context.api.modes.update(context.configStringValue('homeName'),'inactive');
+	context.api.modes.update(context.configStringValue('homeName'),'Asleep');
 })
 
 
@@ -204,5 +204,5 @@ module.exports = new SmartApp()
 .scheduledEventHandler('onTimeActivate', async (context, event) => {		
 	console.log('onTimeActivate - starting set home status/mode');
 	SmartState.putHomeMode(context.configStringValue('homeName'), 'occupancy', 'active');
-	context.api.modes.update(context.configStringValue('homeName'),'active');
+	context.api.modes.update(context.configStringValue('homeName'),'Awake');
 });
