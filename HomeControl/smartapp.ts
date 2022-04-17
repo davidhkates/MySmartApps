@@ -30,7 +30,7 @@ module.exports = new SmartApp()
 	
 	// Get list of locations
 	// const locationList = context.api.locations.list;
-	console.log('Configuration page: ', context.api.locations);
+	console.log('Configuration page: ', context);
 	
 	// operating switch and controls to set home status
 	page.section('controls', section => {
