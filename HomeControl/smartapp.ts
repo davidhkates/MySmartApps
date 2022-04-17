@@ -59,8 +59,9 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// Get list of locations
-	const locationList = context.api.locations.list;
-	console.log('Configuration page: ', locationList);
+	const locationList = context.api.locations.list; 
+	locationList.forEach(element => console.log(element));
+	// console.log('Configuration page: ', locationList);
 	
 /*
 	const homeName = context.configStringValue('homeName');
