@@ -60,8 +60,7 @@ module.exports = new SmartApp()
 
 	// Get list of locations
 	const locationList = context.api.locations.list; 
-	locationList.forEach(element => console.log(element));
-	// console.log('Configuration page: ', locationList);
+	console.log('homeControl - list of locations: ', locationList);
 	
 /*
 	const homeName = context.configStringValue('homeName');
