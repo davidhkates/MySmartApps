@@ -59,7 +59,7 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// Get list of locations
-	const locationList = context.api.locations.list; 
+	const locationList = context.api.locations.list(); 
 	console.log('homeControl - list of locations: ', locationList);
 	
 /*
