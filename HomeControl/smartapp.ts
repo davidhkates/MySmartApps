@@ -59,9 +59,10 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// Get list of locations
-	console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
-	const locationList = context.api.locations.list; 
-	console.log('homeControl - list of locations: ', locationList.toString());
+	// console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
+	// const locationList = context.api.locations.list; 
+	// console.log('homeControl - list of locations: ', locationList.toString());
+	console.lor('homeControl - list of modes: ', context.api.modes.list);
 	// console.log('homeControl - list of locations: ', JSON.stringify(locationList));
 	
 	/*
