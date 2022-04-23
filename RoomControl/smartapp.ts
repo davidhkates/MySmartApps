@@ -119,9 +119,10 @@ module.exports = new SmartApp()
 	await context.api.schedules.delete();
 
 	// initialize state variable(s)
-	SmartState.putState(context, 'roomSwitchPressed', 'true');
 	SmartState.putState(context, 'roomOccupied', 'vacant');
-	SmartState.putState(context, 'roomOff', 'immediate');
+	SmartState.putState(context, 'roomSwitchMode', 'manual');
+	// SmartState.putState(context, 'roomSwitchPressed', 'true');
+	// SmartState.putState(context, 'roomOff', 'immediate');
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
@@ -174,8 +175,12 @@ module.exports = new SmartApp()
 	// console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
 	
 	// Get session state variable to see if button was manually pressed
+	/*
 	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
 	console.log('roomSwitchOnHandler - starting, main switch pressed: ', switchPressed);
+	*/
+	const roomSwitchMode = await SmartState.getState( context, 'roomSwitchMode' );
+	console.log('roomSwitchOnHandler - room switch mode: ', roomSwitchMode);
 	
 	// Determine if in time window
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
@@ -189,8 +194,8 @@ module.exports = new SmartApp()
 		// Turn onGroup on if switchPressed AND room is NOT in transient state
 		const transientStates = ['entering', 'leaving'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
-		if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
-		// if ( switchPressed == 'true' ) {
+		// if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
+		if ( (roomSwitchMode==='manual') && !(transientStates.includes(roomState)) ) {		
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
 			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
 
@@ -205,7 +210,8 @@ module.exports = new SmartApp()
 			}
 		} else {
 			console.log('roomSwitchOnHandler - main switch NOT pressed, don\'t turn on other lights');
-			SmartState.putState(context, 'roomSwitchPressed', 'true');
+			// SmartState.putState(context, 'roomSwitchPressed', 'true');
+			SmartState.putState(context, 'roomSwitchMode', 'manual');
 		}		
 	}
 		
@@ -219,7 +225,7 @@ module.exports = new SmartApp()
 	}
 	
 	// save state variable to indicate room should be turned off immediately
-	SmartState.putState(context, 'roomOff', 'immediate');			
+	// SmartState.putState(context, 'roomOff', 'immediate');			
 	console.log('roomSwitchOnHandler - finished');	
 })
 
@@ -243,12 +249,16 @@ module.exports = new SmartApp()
 		const offDelay = context.configNumberValue('offDelay')
 		
 		// get state variable to see if room switch was turned off by delay
-		const roomState = await SmartState.getState(context, 'roomOff');
-		console.log('roomSwitchOffHandler - room off context value: ', roomState);
+		// const roomState = await SmartState.getState(context, 'roomOff');
+		// console.log('roomSwitchOffHandler - room off context value: ', roomState);
+		const roomSwitchMode = await SmartState.getState(context, 'roomSwitchMode');		
+		console.log('roomSwitchOffHandler - room switch mode: ', roomSwitchMode);
 
-		if (offDelay>0 && roomState==='delay') {
+		// if (offDelay>0 && roomState==='delay') {
+		if (offDelay>0 && roomSwitchMode==='delay') {
 			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
+			SmartState.putState(context, 'roomSwitchMode', 'manual');
 		} else {
 			console.log('roomSwitchOffHandler - turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
@@ -262,17 +272,11 @@ module.exports = new SmartApp()
 
 // Turn ON main switch if ANY of the on group lights are turned on separately
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
-	console.log('groupOnHandler starting - check to see if room switch was pressed');
+	console.log('groupOnHandler starting - turn on main room switch');
 
-	// indicate main switch was NOT manually pressed
-	SmartState.putState(context, 'roomSwitchPressed', 'false');
-
-	// Turn on the main switch when a light in the on group is turned on
-	/*
-	const roomSwitchState = await SmartDevice.getSwitchState(context, 'roomSwitch');
-	console.log('groupOnHandler - room switch current value: ', roomSwitchState);
-	console.log('groupOnHandler - current schedules: ', context.api.schedules.get('delayedSwitchOff'));
-	*/
+	// indicate main switch was NOT manually pressed before turning on
+	// SmartState.putState(context, 'roomSwitchPressed', 'false');
+	SmartState.putState(context, 'roomSwitchMode', 'group');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 })
 
@@ -472,14 +476,17 @@ module.exports = new SmartApp()
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
-	console.log('delayedSwitchOff - starting');
+	// console.log('delayedSwitchOff - starting');
 	
 	// save state variable to indicate room switch was turned off by delay
-	console.log('delayedSwitchOff - setting roomOff state variable to delay');
-	SmartState.putState(context, 'roomOff', 'delay');	
+	// console.log('delayedSwitchOff - setting roomOff state variable to delay');
+	// SmartState.putState(context, 'roomOff', 'delay');	
+	console.log('delayedSwitchOff - setting room switch mode to delay');
+	SmartState.putState(context, 'roomSwitchMode', 'delay');
 	
-	console.log('delayedSwitchOff - turning room switch OFF, setting room state to VACANT');
+	// console.log('delayedSwitchOff - turning room switch OFF, setting room state to VACANT');
 	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+	console.log('delayedSwitchOff - turning room switch off');
 	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 	// SmartState.putState(context, 'roomOccupied', 'vacant');
 })
