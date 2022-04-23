@@ -276,6 +276,7 @@ module.exports = new SmartApp()
 
 	// indicate main switch was NOT manually pressed before turning on
 	// SmartState.putState(context, 'roomSwitchPressed', 'false');
+	// indicate room switch was turned on from 'group' handler
 	SmartState.putState(context, 'roomSwitchMode', 'group');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 })
