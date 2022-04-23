@@ -60,7 +60,7 @@ module.exports = new SmartApp()
 
 	// Get list of locations
 	// console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
-	const locationList = await context.api.locations.list(); 
+	const locationList = await context.api.locations.list; 
 	console.log('homeControl - list of locations: ', locationList);
 	/*
 	console.log('homeControl - list of modes: ', context.api.modes.list.toString());
