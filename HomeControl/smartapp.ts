@@ -32,6 +32,7 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		// section.booleanSetting('controlEnabled').defaultValue(true);
 		section.textSetting('homeName').required(true);
+		section.modeSetting('homeMode');
 		section.deviceSetting('homeSwitch').capabilities(['switch'])
 			.required(true).permissions('r');
 		section.deviceSetting('homeMotion').capabilities(['motionSensor'])
