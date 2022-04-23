@@ -32,7 +32,6 @@ module.exports = new SmartApp()
 	page.section('controls', section => {
 		// section.booleanSetting('controlEnabled').defaultValue(true);
 		section.textSetting('homeName').required(true);
-		section.modeSetting('homeMode');
 		section.deviceSetting('homeSwitch').capabilities(['switch'])
 			.required(true).permissions('r');
 		section.deviceSetting('homeMotion').capabilities(['motionSensor'])
@@ -60,7 +59,7 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// Get list of locations
-	console.log('homeControl - locations: ', context.api.locations);
+	console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
 	const locationList = context.api.locations.list; 
 	console.log('homeControl - list of locations: ', locationList.toString());
 	// console.log('homeControl - list of locations: ', JSON.stringify(locationList));
