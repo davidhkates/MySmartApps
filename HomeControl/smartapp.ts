@@ -62,7 +62,7 @@ module.exports = new SmartApp()
 	// console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
 	// const locationList = context.api.locations.list; 
 	// console.log('homeControl - list of locations: ', locationList.toString());
-	console.lor('homeControl - list of modes: ', context.api.modes.list);
+	console.log('homeControl - list of modes: ', context.api.modes.list);
 	// console.log('homeControl - list of locations: ', JSON.stringify(locationList));
 	
 	/*
