@@ -59,19 +59,17 @@ module.exports = new SmartApp()
 	await context.api.subscriptions.unsubscribeAll();
 
 	// Get list of locations
-	// console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
+	/*
+	console.log('homeControl - locations: ', context.api.locations, ', string: ', context.api.locations.toString());
 	const locationList = await context.api.locations.list; 
 	console.log('homeControl - list of locations: ', locationList);
-	/*
 	console.log('homeControl - list of modes: ', context.api.modes.list.toString());
 	console.log('homeControl - list of locations: ', JSON.stringify(locationList));
 	const modeList = await context.api.modes.list();
 	console.log('homeControl - list of modes: ', modeList);
 	const modeNiwot = await context.api.modes.list('846614f4-ee15-45fa-b052-b6968b5e75a2');
 	console.log('homeControl - list of Niwot modes: ', modeNiwot);
-	*/
-	
-	/*
+
 	context.api.locations.list().then(locations => {
 		console.log('Number of locations: ', locations.length)
 	})
