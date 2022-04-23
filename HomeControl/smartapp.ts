@@ -65,8 +65,8 @@ module.exports = new SmartApp()
 	console.log('homeControl - list of modes: ', context.api.modes.list.toString());
 	const modeList = await context.api.modes.list();
 	console.log('homeControl - list of modes: ', modeList);
-	const modeList = await context.api.modes.list('Niwot');
-	console.log('homeControl - list of modes: ', modeList);
+	const modeNiwot = await context.api.modes.list('Niwot');
+	console.log('homeControl - list of Niwot modes: ', modeNiwot);
 	// console.log('homeControl - list of locations: ', JSON.stringify(locationList));
 	
 	/*
