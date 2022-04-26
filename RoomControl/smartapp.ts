@@ -256,11 +256,9 @@ module.exports = new SmartApp()
 .subscribedEventHandler('roomSwitchOffHandler', async (context, event) => {
 	// Set room occupied state to vacant
 	console.log('roomSwitchOffHandler - starting');
-	SmartState.putState(context, 'roomOccupied', 'vacant');
 	
 	// Determine if in time window
-	const daysOfWeek = context.configStringValue('daysOfWeek');
-	
+	const daysOfWeek = context.configStringValue('daysOfWeek');	
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
 		!!(context.configStringValue('startTime')) ); 		
@@ -280,15 +278,19 @@ module.exports = new SmartApp()
 		if (offDelay>0 && roomSwitchMode==='delay') {
 			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
 			await context.api.schedules.runIn('delayedGroupOff', offDelay);
-			SmartState.putState(context, 'roomSwitchMode', 'manual');
+			// SmartState.putState(context, 'roomSwitchMode', 'manual');
 		} else {
 			console.log('roomSwitchOffHandler - turning off group immediately');
 			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 			console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
 			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-			console.log('roomSwitchOffHandler - turning off group complete');
+			// console.log('roomSwitchOffHandler - turning off group complete');
 		}
 	}
+	
+	// Set room switch mode to manual and room occupied to vacant
+	SmartState.putState(context, 'roomSwitchMode', 'manual');
+	SmartState.putState(context, 'roomOccupied', 'vacant');
 })
 
 
