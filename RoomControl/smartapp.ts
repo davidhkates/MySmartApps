@@ -199,11 +199,12 @@ module.exports = new SmartApp()
 	// Determine if in time window
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
-	const onTimeCheck = 'onAlways';
+	// const onTimeCheck = 'onAlways';
 	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', onTimeCheck: ', onTimeCheck);
 		
 	const roomState = await SmartState.getState( context, 'roomOccupied' );
-	if (bTimeWindow || onTimeCheck==='onAlways') {		
+	// if (bTimeWindow || onTimeCheck==='onAlways') {		
+	if (bTimeWindow) {
 	
 		// Turn onGroup on if switchPressed AND room is NOT in transient state
 		const transientStates = ['entering', 'leaving'];
