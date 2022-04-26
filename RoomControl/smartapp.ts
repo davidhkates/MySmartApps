@@ -29,6 +29,20 @@ interface device {
 // }
 */
 
+// turn room lights, outlets, and speakers on
+async function turnRoomOn( context ) {
+	console.log('turnRoomOn - turning on room lights, outlets and speakers');
+	// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+	await SmartDevice.setSwitchState(context, 'onGroup', 'on');
+
+	// turn on speakers based on setting of speakerBehavior
+	const speakerBehavior = context.configStringValue('speakerBehavior');
+	if (speakerBehavior==='onAlways' || speakerBehavior==='onActive' &&
+		SmartState.isHomeActive(context.stringValue('homeName'))) {		
+			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
+	}
+};
+
 
 /* Define the SmartApp */
 module.exports = new SmartApp()
@@ -196,7 +210,11 @@ module.exports = new SmartApp()
 		console.log('roomSwitchOnHandler - room state: ', roomState);
 		// if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
 		if ( (roomSwitchMode==='manual') && !(transientStates.includes(roomState)) ) {
+			await turnRoomOn(context);
+			
+			/*
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
+			
 			// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
 			await SmartDevice.setSwitchState(context, 'onGroup', 'on');
 
@@ -209,6 +227,7 @@ module.exports = new SmartApp()
 					await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 					console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
 			}
+			*/
 		} else {
 			console.log('roomSwitchOnHandler - main switch NOT pressed, don\'t turn on other lights');
 			// SmartState.putState(context, 'roomSwitchPressed', 'true');
@@ -336,8 +355,9 @@ module.exports = new SmartApp()
 				// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 				await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 			} else {
+				await turnRoomOn(context);
 				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-				await SmartDevice.setSwitchState(context, 'onGroup', 'on');
+				// await SmartDevice.setSwitchState(context, 'onGroup', 'on');
 			}
 			await SmartState.putState(context, 'roomOccupied', 'occupied');	
 		}
