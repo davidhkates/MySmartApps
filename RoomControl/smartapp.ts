@@ -195,9 +195,10 @@ module.exports = new SmartApp()
 		const transientStates = ['entering', 'leaving'];
 		console.log('roomSwitchOnHandler - room state: ', roomState);
 		// if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
-		if ( (roomSwitchMode==='manual') && !(transientStates.includes(roomState)) ) {		
+		if ( (roomSwitchMode==='manual') && !(transientStates.includes(roomState)) ) {
 			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
-			await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on')
+			// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+			await SmartDevice.setSwitchState(context, 'onGroup', 'on');
 
 			// turn on speakers based on setting of speakerBehavior
 			const speakerBehavior = context.configStringValue('speakerBehavior');
@@ -330,7 +331,14 @@ module.exports = new SmartApp()
 		// turn on light if in time window and check switch(es) are on
 		if (bHomeActive) {
 			console.log('motionStartHandler - turning lights/switches on');
-			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');					
+			const roomSwitchState = SmartDevice.getSwitchState(context, 'roomSwitch');
+			if (roomSwitchState==='off') {
+				// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
+				await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
+			} else {
+				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
+				await SmartDevice.setSwitchState(context, 'onGroup', 'on');
+			}
 			await SmartState.putState(context, 'roomOccupied', 'occupied');	
 		}
 	}
