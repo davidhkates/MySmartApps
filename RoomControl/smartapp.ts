@@ -332,7 +332,8 @@ module.exports = new SmartApp()
 	// If we get here, turn off the main switch and reset roomSwitchPressed state variable
 	console.log('groupOffHandler - turning off lights/switches');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	SmartState.putState(context, 'roomSwitchPressed', 'true');
+	// SmartState.putState(context, 'roomSwitchPressed', 'true');
+	SmartState.putState(context, 'roomSwitchMode', 'manual');
 	console.log('groupOffHandler - done');
 })
 
