@@ -127,7 +127,6 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
-	console.log('roomControl - context: ', context);
 	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
@@ -187,7 +186,7 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	// console.log('roomSwitchOnHandler - starting, context: ', context, ', event: ', event);
+	console.log('roomSwitchOnHandler - starting, context: ', context);
 	
 	// Get session state variable to see if button was manually pressed
 	/*
