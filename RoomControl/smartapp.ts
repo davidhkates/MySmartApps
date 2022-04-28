@@ -127,7 +127,8 @@ module.exports = new SmartApp()
 // Handler called for both INSTALLED and UPDATED events if no separate installed() handler
 .updated(async (context, updateData) => {
 	console.log('roomControl - start install/update');
-
+	console.log('roomControl - context: ', context);
+	
 	// unsubscribe all previously established subscriptions and scheduled events
 	await context.api.subscriptions.unsubscribeAll();
 	await context.api.schedules.delete();
