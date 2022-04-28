@@ -188,6 +188,7 @@ module.exports = new SmartApp()
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
 	console.log('roomSwitchOnHandler - starting, context: ', context);
 	console.log('roomSwitchHandler - locationId: ', context.locationId, ', installedAppId: ', context.installedAppId);
+	console.log('roomSwitchHandler - modes: ', context.api.modes.get( context.locationId ));
 	
 	// Get session state variable to see if button was manually pressed
 	/*
