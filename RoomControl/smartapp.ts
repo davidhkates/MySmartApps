@@ -519,13 +519,13 @@ module.exports = new SmartApp()
 	// console.log('delayedSwitchOff - setting roomOff state variable to delay');
 	// SmartState.putState(context, 'roomOff', 'delay');	
 	console.log('delayedSwitchOff - setting room switch mode to delay');
-	SmartState.putState(context, 'roomSwitchMode', 'delay');
-	
-	// console.log('delayedSwitchOff - turning room switch OFF, setting room state to VACANT');
-	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	console.log('delayedSwitchOff - turning room switch off');
-	SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-	// SmartState.putState(context, 'roomOccupied', 'vacant');
+	const roomSwitchState = SmartDevice.getSwitchState(context, 'roomSwitch');
+	if (roomSwitchState==='on') {
+		console.log('delayedSwitchOff - turning room switch off');
+		SmartState.putState(context, 'roomSwitchMode', 'delay');
+		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
+		// SmartState.putState(context, 'roomOccupied', 'vacant');
+	}
 })
 
 
