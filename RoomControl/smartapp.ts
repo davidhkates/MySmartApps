@@ -53,82 +53,89 @@ module.exports = new SmartApp()
 .page('mainPage', (context, page, configData) => {
 
 	// main options page with room controls and behaviors
-	// page.nextPageId('optionsPage');
 
 	// set control enabled flag to control other settings prompts
-	let bControlEnabled = context.configBooleanValue('controlEnabled');
+	let bControlEnabled: boolean = context.configBooleanValue('controlEnabled');
+	/*
 	if (bControlEnabled === undefined) {
 		bControlEnabled = true;
 	}
-	const roomType = context.configStringValue('roomType');
+	*/
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
 			section.textSetting('homeName').required(false);
+			section.booleanSetting('useDefaults').required(true);
 		}
 	});
 
+	// time window and days of week	
 	if (bControlEnabled) {
-		// room switches
-		page.section('controls', section => {
-			section.deviceSetting('roomSwitch').capabilities(['switch'])
-				.required(true).permissions('rx');
-				section.deviceSetting('onGroup').capabilities(['switch'])
-					.required(true).multiple(true).permissions('rx');
-				section.deviceSetting('offGroup').capabilities(['switch'])
-					.required(false).multiple(true).permissions('rx');
-				section.numberSetting('offDelay').required(false).min(0);
+		page.section('time', section => {
+			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
+				defaultValue('everyday').required(true);
+			section.timeSetting('startTime').required(false);
+			section.timeSetting('endTime').required(false);
 		});
-		
+	
 		// specify next (second) options page
+		page.nextPageId('controlsPage');
+	}
+})
+
+.page('controlsPage', (context, page, configData) => {
+
+	// room switches
+	page.section('controls', section => {
+		section.deviceSetting('roomSwitch').capabilities(['switch'])
+			.required(true).permissions('rx');
+			section.deviceSetting('onGroup').capabilities(['switch'])
+				.required(true).multiple(true).permissions('rx');
+			section.deviceSetting('offGroup').capabilities(['switch'])
+				.required(false).multiple(true).permissions('rx');
+			// section.numberSetting('offDelay').required(false).min(0);
+	});
+		
+	// get motion and contact sensors 
+	page.section('sensors', section => {
+		section.booleanSetting('motionEnabled').defaultValue(true);
+		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
+			.required(false).multiple(true).permissions('r');
+		// section.numberSetting('motionDelay').required(false).min(0);
+		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
+			.required(false).multiple(true).permissions('r');
+		// section.enumSetting('contactMode').options(['stayOnAlways', 'stayOnWindow', 'turnOffClose']);
+	});
+
+	// speakers
+	page.section('speakers', section => {
+		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
+			.required(false).multiple(true).permissions('rx');
+		// section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
+			// .required(true).defaultValue('doNothing');				
+	});
+		
+	// show options page if selected
+	if (context.configBooleanValue('useDefaults')) {
 		page.nextPageId('optionsPage');
 	}
 })
 
 .page('optionsPage', (context, page, configData) => {
-
-	// get settings 
-	page.section('sensors', section => {
-		section.booleanSetting('motionEnabled').defaultValue(true);
-		section.deviceSetting('roomMotion').capabilities(['motionSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.numberSetting('motionDelay').required(false).min(0);
-		section.deviceSetting('roomContacts').capabilities(['contactSensor'])
-			.required(false).multiple(true).permissions('r');
-		section.enumSetting('contactMode').options(['stayOnAlways', 'stayOnWindow', 'turnOffClose']);
+	page.section('delays', section => {
+		section.numberSetting('offDelay').required(false).min(0).defaultValue(300);
+		section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
+		section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
 	});
 
-	page.section('speakers', section => {
-		section.deviceSetting('roomSpeakers').capabilities(['audioVolume'])
-			.required(false).multiple(true).permissions('rx');
+	page.section('options', section => {
+		section.enumSetting('contactMode').options(['stayOnAlways', 'stayOnWindow', 'turnOffClose'])
+			.required(true).defaultValue('stayOnWindow');
 		section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
 			.required(true).defaultValue('doNothing');				
 	});
-		
-	// time window and days of week	
-	/*
-	if (context.configStringValue('homeName')===undefined) {
-		page.section('time', section => {
-			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
-				defaultValue('everyday').required(true);
-			section.timeSetting('startTime').required(false).submitOnChange(true);
-			if (context.configStringValue('startTime')) {
-				section.timeSetting('endTime').required(false);
-			}
-		});
-	}
-	*/
-	page.section('time', section => {
-		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
-			defaultValue('everyday').required(true);
-		section.timeSetting('startTime').required(false);
-		section.timeSetting('endTime').required(false);
-	});
-
-	// specify next (third) options page
-	// page.nextPageId('timePage');
 })
 
 
