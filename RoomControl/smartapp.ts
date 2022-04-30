@@ -67,7 +67,7 @@ module.exports = new SmartApp()
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
 			section.textSetting('homeName').required(false);
-			section.booleanSetting('useDefaults').required(true);
+			section.booleanSetting('changeSettings').required(true);
 		}
 	});
 
@@ -80,9 +80,28 @@ module.exports = new SmartApp()
 			section.timeSetting('endTime').required(false);
 		});
 	
-		// specify next (second) options page
-		page.nextPageId('controlsPage');
+		// show options page if selected
+		if (context.configBooleanValue('changeSettings')) {
+			page.nextPageId('optionsPage');
+		} else {
+			page.nextPageId('controlsPage');
+		}
 	}
+})
+
+.page('optionsPage', (context, page, configData) => {
+	page.section('delays', section => {
+		section.numberSetting('offDelay').required(false).min(0).defaultValue(300);
+		section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
+		section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
+	});
+
+	page.section('options', section => {
+		section.enumSetting('contactMode').options(['stayOnAlways', 'stayOnWindow', 'turnOffClose'])
+			.required(true).defaultValue('stayOnWindow');
+		section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
+			.required(true).defaultValue('doNothing');				
+	});	
 })
 
 .page('controlsPage', (context, page, configData) => {
@@ -121,21 +140,6 @@ module.exports = new SmartApp()
 	if (context.configBooleanValue('useDefaults')) {
 		page.nextPageId('optionsPage');
 	}
-})
-
-.page('optionsPage', (context, page, configData) => {
-	page.section('delays', section => {
-		section.numberSetting('offDelay').required(false).min(0).defaultValue(300);
-		section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
-		section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
-	});
-
-	page.section('options', section => {
-		section.enumSetting('contactMode').options(['stayOnAlways', 'stayOnWindow', 'turnOffClose'])
-			.required(true).defaultValue('stayOnWindow');
-		section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
-			.required(true).defaultValue('doNothing');				
-	});
 })
 
 
