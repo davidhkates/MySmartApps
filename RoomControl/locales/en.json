@@ -21,9 +21,7 @@
 	"pages.mainPage.settings.startTime.name": "Start time",
 	"pages.mainPage.settings.startTime.description": "",
 	"pages.mainPage.settings.endTime.name": "End time",
-	"pages.mainPage.settings.endTime.description": "",	
-	
-	
+	"pages.mainPage.settings.endTime.description": "",		
 	
 
 
@@ -68,5 +66,5 @@
 	"pages.optionsPage.settings.speakerBehavior.name": "When should speakers be turned on",
 	"pages.optionsPage.settings.speakerBehavior.options.doNothing.name": "Do not turn on",
 	"pages.optionsPage.settings.speakerBehavior.options.onAlways.name": "Always with room switch",
-	"pages.optionsPage.settings.speakerBehavior.options.onActive.name": "Only when home is active",
+	"pages.optionsPage.settings.speakerBehavior.options.onActive.name": "Only when home is active"
 }
