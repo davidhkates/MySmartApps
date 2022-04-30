@@ -108,6 +108,7 @@ module.exports = new SmartApp()
 	});
 		
 	// time window and days of week	
+	/*
 	if (context.configStringValue('homeName')===undefined) {
 		page.section('time', section => {
 			section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
@@ -118,6 +119,13 @@ module.exports = new SmartApp()
 			}
 		});
 	}
+	*/
+	page.section('time', section => {
+		section.enumSetting('daysOfWeek').options(['everyday','weekend','weekdays']).
+			defaultValue('everyday').required(true);
+		section.timeSetting('startTime').required(false);
+		section.timeSetting('endTime').required(false);
+	});
 
 	// specify next (third) options page
 	// page.nextPageId('timePage');
@@ -135,8 +143,6 @@ module.exports = new SmartApp()
 	// initialize state variable(s)
 	SmartState.putState(context, 'roomOccupied', 'vacant');
 	SmartState.putState(context, 'roomSwitchMode', 'manual');
-	// SmartState.putState(context, 'roomSwitchPressed', 'true');
-	// SmartState.putState(context, 'roomOff', 'immediate');
 
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
@@ -192,10 +198,6 @@ module.exports = new SmartApp()
 	// console.log('roomSwitchOnHandler - modes: ', modesList);
 	
 	// Get session state variable to see if button was manually pressed
-	/*
-	const switchPressed = await SmartState.getState( context, 'roomSwitchPressed' );
-	console.log('roomSwitchOnHandler - starting, main switch pressed: ', switchPressed);
-	*/
 	const roomSwitchMode = await SmartState.getState( context, 'roomSwitchMode' );
 	console.log('roomSwitchOnHandler - room switch mode: ', roomSwitchMode);
 	
@@ -212,30 +214,10 @@ module.exports = new SmartApp()
 	
 		// Turn onGroup on if switchPressed AND room is NOT in transient state
 		const transientStates = ['entering', 'leaving'];
-		// console.log('roomSwitchOnHandler - room state: ', roomState);
-		// if ( (switchPressed==='true') && !(transientStates.includes(roomState)) ) {		
 		if ( (roomSwitchMode==='manual') && !(transientStates.includes(roomState)) ) {
-			await turnRoomOn(context);
-			
-			/*
-			console.log('roomSwitchOnHandler - main switch pressed, turning on all lights in OnGroup');
-			
-			// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-			await SmartDevice.setSwitchState(context, 'onGroup', 'on');
-
-			// turn on speakers based on setting of speakerBehavior
-			const speakerBehavior = context.configStringValue('speakerBehavior');
-			if (speakerBehavior==='onAlways' || speakerBehavior==='onActive' &&
-				SmartState.isHomeActive(context.stringValue('homeName'))) {		
-
-					console.log('roomSwitchOnHandler - turning speakers on if part of onGroup');			
-					await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
-					console.log('roomSwitchOnHandler - speakers turned on as part of onGroup');
-			}
-			*/
+			await turnRoomOn(context);			
 		} else {
 			console.log('roomSwitchOnHandler - main switch NOT pressed, don\'t turn on other lights');
-			// SmartState.putState(context, 'roomSwitchPressed', 'true');
 			SmartState.putState(context, 'roomSwitchMode', 'manual');
 		}		
 	}
@@ -272,8 +254,6 @@ module.exports = new SmartApp()
 		const offDelay = context.configNumberValue('offDelay')
 		
 		// get state variable to see if room switch was turned off by delay
-		// const roomState = await SmartState.getState(context, 'roomOff');
-		// console.log('roomSwitchOffHandler - room off context value: ', roomState);
 		const roomSwitchMode = await SmartState.getState(context, 'roomSwitchMode');		
 		console.log('roomSwitchOffHandler - room switch mode: ', roomSwitchMode);
 
@@ -301,8 +281,6 @@ module.exports = new SmartApp()
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
 	console.log('groupOnHandler starting - turn on main room switch');
 
-	// indicate main switch was NOT manually pressed before turning on
-	// SmartState.putState(context, 'roomSwitchPressed', 'false');
 	// indicate room switch was turned on from 'group' handler
 	SmartState.putState(context, 'roomSwitchMode', 'group');
 	await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
@@ -360,12 +338,9 @@ module.exports = new SmartApp()
 			console.log('motionStartHandler - turning lights/switches on');
 			const roomSwitchState = SmartDevice.getSwitchState(context, 'roomSwitch');
 			if (roomSwitchState==='off') {
-				// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'on');
 				await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 			} else {
 				await turnRoomOn(context);
-				// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
-				// await SmartDevice.setSwitchState(context, 'onGroup', 'on');
 			}
 			await SmartState.putState(context, 'roomOccupied', 'occupied');	
 		}
@@ -383,40 +358,8 @@ module.exports = new SmartApp()
 .subscribedEventHandler('motionStopHandler', async (context, event) => {
 	console.log('motionStopHandler - starting');
 
-	// ignore motion stop if room is occupied
-	// const roomOccupied = await SmartState.getState(context, 'roomOccupied');	
-	// console.log('motionStopHandler - room occupied state: ', roomOccupied);
-
-	// TODO: consider whether to use SmartDevice routines for motion sensors
-	// Check to make sure all motionSensors are inactive
 	const motionSensors = await SmartDevice.getMotionState(context, 'roomMotion');
 	if (motionSensors==='inactive') {
-	// DOES delayedSwitchOff need to be invoked if motionSensors='mixed'
-
-	/*
-	// See if there are any other motion sensors defined
-	const otherSensors =  context.config.roomMotion
-	    .filter(it => it.deviceConfig.deviceId !== event.deviceId)
-
-	if (otherSensors) {
-		console.log('motionStopHandler - other sensors found');
-		// Get the current states of the other motion sensors
-		const stateRequests = otherSensors.map(it => context.api.devices.getCapabilityStatus(
-			it.deviceConfig.deviceId,
-			it.deviceConfig.componentId,
-			'motionSensor'
-		));
-
-		// Quit if there are other sensor still active
-		const states: any = await Promise.all(stateRequests)
-		if (states.find(it => it.motion.value === 'active')) {
-			console.log('motionStopHandler - other motion sensors active');
-			return;
-		}
-	}
-	console.log('motionStopHandler - all other motion sensors inactive');
-	*/
-	
 		const delay = context.configNumberValue('motionDelay');
 		console.log('motionStopHandler - turn off lights after specified delay: ' + delay);	
 
@@ -516,8 +459,6 @@ module.exports = new SmartApp()
 	// console.log('delayedSwitchOff - starting');
 	
 	// save state variable to indicate room switch was turned off by delay
-	// console.log('delayedSwitchOff - setting roomOff state variable to delay');
-	// SmartState.putState(context, 'roomOff', 'delay');	
 	console.log('delayedSwitchOff - setting room switch mode to delay');
 	const roomSwitchState = SmartDevice.getSwitchState(context, 'roomSwitch');
 	if (roomSwitchState==='on') {
@@ -532,6 +473,5 @@ module.exports = new SmartApp()
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedGroupOff', async (context, event) => {
 	console.log('delayedGroupOff - starting');
-	// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
 	SmartDevice.setSwitchState(context, 'offGroup', 'off');
 });
