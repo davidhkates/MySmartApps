@@ -6,7 +6,8 @@
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
 	"pages.mainPage.settings.homeName.name": "Name of home to check state",
-	"pages.mainPage.settings.changeSettings.name": "Change delays and/or option settings?",
+	"pages.mainPage.settings.changeSettings.name": "Change delays or option settings?",
+	"pages.mainPage.settings.changeSettings.description": "",
 
 	"pages.mainPage.settings.roomType.name": "Type of room controls",
 	"pages.mainPage.settings.roomType.description": "Indicate whether to set up simple or complex controls",
@@ -30,7 +31,7 @@
 	"pages.controlsPage.settings.roomSwitch.name": "Main switch to control room",
 	"pages.controlsPage.settings.roomSwitch.description": "",
 	"pages.controlsPage.settings.onGroup.name": "Lights to turn on from main switch",
-	"pages.mainPage.settings.offGroup.name": "Lights/outlets to turn off from main switch",
+	"pages.controlsPage.settings.offGroup.name": "Lights/outlets to turn off from main switch",
 
 	"pages.controlsPage.sections.behavior.name": "Switch off behavior",
 	"pages.controlsPage.settings.offBehavior.name": "Room light off action",
@@ -44,12 +45,7 @@
 	"pages.controlsPage.settings.motionEnabled.description": "Automatically turn on room based on other settings",
 	"pages.controlsPage.settings.roomMotionOn.name": "Motion sensor(s) to turn room on",
 	"pages.controlsPage.settings.roomMotion.name": "Motion sensor(s) to monitor room",
-	"pages.controlsPage.settings.motionDelay.name": "Delay turning off lights after motion stops (seconds)",
 	"pages.controlsPage.settings.roomContacts.name": "Door/window contact sensors",
-	"pages.controlsPage.settings.contactMode.name": "Contact state options",
-	"pages.controlsPage.settings.contactMode.options.stayOnAlways.name": "Stay on when closed",
-	"pages.controlsPage.settings.contactMode.options.stayOnWindow.name": "Stay on in time window",
-	"pages.controlsPage.settings.contactMode.options.turnOffClose.name": "Turn off when closed",
 	
 	"pages.controlsPage.sections.speakers.name": "Speakers in room to control",
 	"pages.controlsPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
@@ -57,12 +53,22 @@
 
 
 	"pages.optionsPage.name": "Room Control Options/Delays",
+	"pages.optionsPage.sections.delays.name": "Automation delay settings",
+
+	"pages.optionsPage.settings.offDelay.name": "Delay turning off group after main switch (seconds)",
+	"pages.optionsPage.settings.motionDelay.name": "Delay turning off lights after motion stops (seconds)",
+	"pages.optionsPage.settings.closeDelay.name": "Delay turning off lights after door(s) close (seconds)",
+	
+	"pages.optionsPage.sections.options.name": "Automation options",
+	"pages.optionsPage.settings.contactMode.name": "Contact state options",
+	"pages.optionsPage.settings.contactMode.options.stayOnAlways.name": "Stay on when closed",
+	"pages.optionsPage.settings.contactMode.options.stayOnWindow.name": "Stay on in time window",
+	"pages.optionsPage.settings.contactMode.options.turnOffClose.name": "Turn off when closed",
+
 	"pages.optionsPage.settings.onTimeCheck.name": "Times to turn on other lights",
 	"pages.optionsPage.settings.onTimeCheck.options.onWindow.name": "Time Window Only",
 	"pages.optionsPage.settings.onTimeCheck.options.onAlways.name": "Always",
 
-	"pages.optionsPage.settings.offDelay.name": "Delay turning off group after main switch (seconds)",
-	
 	"pages.optionsPage.settings.speakerBehavior.name": "When should speakers be turned on",
 	"pages.optionsPage.settings.speakerBehavior.options.doNothing.name": "Do not turn on",
 	"pages.optionsPage.settings.speakerBehavior.options.onAlways.name": "Always with room switch",

@@ -107,7 +107,7 @@ module.exports = new SmartApp()
 .page('controlsPage', (context, page, configData) => {
 
 	// room switches
-	page.section('controls', section => {
+	page.section('switches', section => {
 		section.deviceSetting('roomSwitch').capabilities(['switch'])
 			.required(true).permissions('rx');
 			section.deviceSetting('onGroup').capabilities(['switch'])
