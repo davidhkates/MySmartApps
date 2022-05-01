@@ -428,8 +428,8 @@ module.exports = new SmartApp()
 		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 		SmartDevice.setSwitchState(context, 'offGroup', 'off');
 	} else {
-		// console.log('contactClosedHandler - setting room state to OCCUPIED');
-		// await SmartState.putState(context, 'roomOccupied', 'occupied');
+		console.log('contactClosedHandler - setting room state to OCCUPIED');
+		await SmartState.putState(context, 'roomOccupied', 'occupied');
 
 		// turn off lights if motion NOT detected within specified time
 		const closeDelay = context.configNumberValue('closeDelay');
