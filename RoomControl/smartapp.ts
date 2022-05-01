@@ -81,7 +81,7 @@ module.exports = new SmartApp()
 		});
 	
 		// show options page if selected
-		if (context.configBooleanValue('changeSettings')) {
+		if (!!context.configBooleanValue('changeSettings')) {
 			page.nextPageId('optionsPage');
 		} else {
 			page.nextPageId('controlsPage');
@@ -105,7 +105,7 @@ module.exports = new SmartApp()
 	
 	// show options page if selected
 	// if (context.configBooleanValue('useDefaults')) {
-		page.nextPageId('optionsPage');
+		page.nextPageId('controlsPage');
 	// }
 })
 
