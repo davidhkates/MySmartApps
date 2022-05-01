@@ -102,6 +102,11 @@ module.exports = new SmartApp()
 		section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
 			.required(true).defaultValue('doNothing');				
 	});	
+	
+	// show options page if selected
+	// if (context.configBooleanValue('useDefaults')) {
+		page.nextPageId('optionsPage');
+	// }
 })
 
 .page('controlsPage', (context, page, configData) => {
@@ -134,12 +139,7 @@ module.exports = new SmartApp()
 			.required(false).multiple(true).permissions('rx');
 		// section.enumSetting('speakerBehavior').options(['doNothing', 'onAlways','onActive'])
 			// .required(true).defaultValue('doNothing');				
-	});
-		
-	// show options page if selected
-	if (context.configBooleanValue('useDefaults')) {
-		page.nextPageId('optionsPage');
-	}
+	});		
 })
 
 
@@ -430,6 +430,10 @@ module.exports = new SmartApp()
 	} else {
 		console.log('contactClosedHandler - setting room state to OCCUPIED');
 		await SmartState.putState(context, 'roomOccupied', 'occupied');
+
+		// turn off lights if motion NOT detected within specified time
+		const closeDelay = context.configNumberValue('closeDelay');
+		context.api.schedules.runIn('delayedSwitchOff', closeDelay;
 	}
 })	
 
