@@ -82,7 +82,7 @@ module.exports = new SmartApp()
 	
 		// show options page if selected
 		console.log('Boolean change settings: ', context.configBooleanValue('changeSettings'));
-		if (context.configBooleanValue('changeSettings')==='true') {
+		if (context.configBooleanValue('changeSettings')) {
 			page.nextPageId('optionsPage');
 		} else {
 			page.nextPageId('controlsPage');
