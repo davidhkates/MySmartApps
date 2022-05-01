@@ -81,7 +81,7 @@ module.exports = new SmartApp()
 		});
 	
 		// show options page if selected
-		if (!!context.configBooleanValue('changeSettings')) {
+		if (context.configBooleanValue('changeSettings')==='true') {
 			page.nextPageId('optionsPage');
 		} else {
 			page.nextPageId('controlsPage');
