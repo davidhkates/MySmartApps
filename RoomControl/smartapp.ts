@@ -433,7 +433,7 @@ module.exports = new SmartApp()
 
 		// turn off lights if motion NOT detected within specified time
 		const closeDelay = context.configNumberValue('closeDelay');
-		context.api.schedules.runIn('delayedSwitchOff', closeDelay;
+		context.api.schedules.runIn('delayedSwitchOff', closeDelay);
 	}
 })	
 
