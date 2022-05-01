@@ -66,8 +66,8 @@ module.exports = new SmartApp()
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 		if (bControlEnabled) {
-			section.textSetting('homeName').required(false);
 			section.booleanSetting('changeSettings').required(true);
+			section.textSetting('homeName').required(false);
 		}
 	});
 
@@ -81,6 +81,7 @@ module.exports = new SmartApp()
 		});
 	
 		// show options page if selected
+		console.log('Boolean change settings: ', context.configBooleanValue('changeSettings'));
 		if (context.configBooleanValue('changeSettings')==='true') {
 			page.nextPageId('optionsPage');
 		} else {
@@ -464,7 +465,7 @@ module.exports = new SmartApp()
 
 // Turns off lights after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOn', async (context, event) => {
-	console.log('delayedSwitchOn - starting');
+	// console.log('delayedSwitchOn - starting');
 	
 	console.log('delayedSwitchOn - turning room switch ON, setting room state to OCCUPIED');
 	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
