@@ -347,7 +347,7 @@ module.exports = new SmartApp()
 
 		// turn on light if in time window and check switch(es) are on
 		if (bHomeActive) {
-			const roomSwitchState = SmartDevice.getSwitchState(context, 'roomSwitch');
+			const roomSwitchState = await SmartDevice.getSwitchState(context, 'roomSwitch');
 			console.log('motionStartHandler - turning lights/switches on, currently: ', roomSwitchState);
 			if (roomSwitchState==='off') {
 				await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
