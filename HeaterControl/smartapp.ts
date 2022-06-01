@@ -153,7 +153,8 @@ module.exports = new SmartApp()
 
 	// unsubscribe all previously established subscriptions
 	await context.api.subscriptions.unsubscribeAll();
-	await context.api.subscriptions.delete();
+	await context.api.schedules.delete();
+
 	
 	// get heater enabled setting and turn off heater if not
 	const heaterEnabled = context.configBooleanValue('heaterEnabled');
