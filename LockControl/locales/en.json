@@ -8,7 +8,7 @@
 	"pages.mainPage.settings.doorLock.name": "Door lock to control",
 	"pages.mainPage.settings.lockDelay.name": "Delay locking door after unlocked (seconds)",
 	
-	"pages.mainPage.sections.time.name": "Days/times to disable this automation",
+	"pages.mainPage.sections.time.name": "Days/times to disable this automation (optional)",
 	"pages.mainPage.settings.daysOfWeek.name": "Days of week",
 	"pages.mainPage.settings.daysOfWeek.options.everyday.name": "Every Day",
 	"pages.mainPage.settings.daysOfWeek.options.weekdays.name": "Weekdays",
