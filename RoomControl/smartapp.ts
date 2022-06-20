@@ -45,7 +45,8 @@ async function turnRoomOn( context ) {
 
 async function turnRoomOff( context ) {
 	console.log('turnRoomOff - turning off room lights, outlets and speakers');
-	await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+	await SmartDevice.setSwitchState(context, 'offGroup', 'off');
 	console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
 	await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 };
