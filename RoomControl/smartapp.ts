@@ -204,7 +204,6 @@ module.exports = new SmartApp()
 
 // Turn on the lights/outlets in the on group when room switch is turned on
 .subscribedEventHandler('roomSwitchOnHandler', async (context, event) => {
-	// console.log('roomSwitchOnHandler - starting, context: ', context);
 	console.log('roomSwitchOnHandler - locationId: ', context.locationId, ', installedAppId: ', context.installedAppId);
 	// const modesList = await context.api.modes.get( context.locationId );
 	// console.log('roomSwitchOnHandler - modes: ', modesList);
@@ -214,6 +213,7 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOnHandler - room switch mode: ', roomSwitchMode);
 	
 	// Determine if in time window
+	/*
 	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
 		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) ); 		
 	// const onTimeCheck = 'onAlways';
@@ -223,6 +223,7 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', room state: ', roomState);
 	// if (bTimeWindow || onTimeCheck==='onAlways') {		
 	if (bTimeWindow) {
+	*/
 	
 		// Turn onGroup on if switchPressed AND room is NOT in transient state
 		const transientStates = ['entering', 'leaving'];
@@ -232,7 +233,7 @@ module.exports = new SmartApp()
 			console.log('roomSwitchOnHandler - main switch NOT pressed, don\'t turn on other lights');
 			SmartState.putState(context, 'roomSwitchMode', 'manual');
 		}		
-	}
+	// }
 		
 	// Schedule turning off room switch if delay specified
 	const delay = context.configNumberValue('motionDelay');
@@ -254,32 +255,35 @@ module.exports = new SmartApp()
 	// Set room occupied state to vacant
 	console.log('roomSwitchOffHandler - starting');
 	
-	// Determine if in time window
-	const daysOfWeek = context.configStringValue('daysOfWeek');	
-	const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
-		SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
-		!!(context.configStringValue('startTime')) ); 		
-		
-	console.log('roomSwitchOffHandler - in time window: ', bTimeWindow);
-	if (!bTimeWindow) {	
-		console.log('roomSwitchOffHandler - outside time window');
-		const offDelay = context.configNumberValue('offDelay')
-		
-		// get state variable to see if room switch was turned off by delay
-		const roomSwitchMode = await SmartState.getState(context, 'roomSwitchMode');		
-		console.log('roomSwitchOffHandler - room switch mode: ', roomSwitchMode);
+	// get state variable to see if room switch was turned off by delay
+	const roomSwitchMode = await SmartState.getState(context, 'roomSwitchMode');		
+	console.log('roomSwitchOffHandler - room switch mode: ', roomSwitchMode);
 
-		// if (offDelay>0 && roomState==='delay') {
-		if (offDelay>0 && roomSwitchMode==='delay') {
-			console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
-			await context.api.schedules.runIn('delayedGroupOff', offDelay);
-			// SmartState.putState(context, 'roomSwitchMode', 'manual');
-		} else {
-			console.log('roomSwitchOffHandler - turning off group immediately');
-			await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-			console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
-			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
-			// console.log('roomSwitchOffHandler - turning off group complete');
+	if (roomSwitchMode==='delay') {
+
+		// Determine if in time window
+		const daysOfWeek = context.configStringValue('daysOfWeek');	
+		const bTimeWindow = ( SmartUtils.inTimeContext( context, 'startTime', 'endTime' ) &&
+			SmartUtils.isDayOfWeek( context.configStringValue('daysOfWeek') ) &&
+			!!(context.configStringValue('startTime')) ); 					
+		console.log('roomSwitchOffHandler - in time window: ', bTimeWindow);
+	
+		if (!bTimeWindow) {	
+			console.log('roomSwitchOffHandler - outside time window');
+			const offDelay = context.configNumberValue('offDelay')
+			
+			// if (offDelay>0 && roomState==='delay') {
+			if (offDelay>0) {
+				console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
+				await context.api.schedules.runIn('delayedGroupOff', offDelay);
+				// SmartState.putState(context, 'roomSwitchMode', 'manual');
+			} else {
+				console.log('roomSwitchOffHandler - turning off group immediately');
+				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+				console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
+				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
+				// console.log('roomSwitchOffHandler - turning off group complete');
+			}
 		}
 	}
 	
