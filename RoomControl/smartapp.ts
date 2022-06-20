@@ -251,7 +251,7 @@ module.exports = new SmartApp()
 	}
 	
 	// save state variable to indicate room should be turned off immediately
-	SmartState.putState(context, 'roomSwitchMode', 'manual');
+	await SmartState.putState(context, 'roomSwitchMode', 'manual');
 	console.log('roomSwitchOnHandler - finished');	
 })
 
