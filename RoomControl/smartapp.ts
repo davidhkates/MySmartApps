@@ -221,7 +221,8 @@ module.exports = new SmartApp()
 	*/
 		
 	const roomState = await SmartState.getState( context, 'roomOccupied' );
-	console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', room state: ', roomState);
+	// console.log('roomSwitchOnHandler - time window: ', bTimeWindow, ', room state: ', roomState);
+	console.log('roomSwitchOnHandler - room state: ', roomState);
 	// if (bTimeWindow || onTimeCheck==='onAlways') {		
 	// if (bTimeWindow) {
 	
