@@ -32,7 +32,6 @@ interface device {
 // turn room lights, outlets, and speakers on
 async function turnRoomOn( context ) {
 	console.log('turnRoomOn - turning on room lights, outlets and speakers');
-	// await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'on');
 	await SmartDevice.setSwitchState(context, 'onGroup', 'on');
 
 	// turn on speakers based on setting of speakerBehavior
@@ -41,6 +40,14 @@ async function turnRoomOn( context ) {
 		SmartState.isHomeActive(context.stringValue('homeName'))) {		
 			await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'play');
 	}
+};
+
+// turn room lights, outlets, and speakers off
+async function turnRoomOff( context ) {
+	console.log('turnRoomOff - turning off room lights, outlets and speakers');
+	await SmartDevice.setSwitchState(context, 'offGroup', 'off');
+	console.log('turnRoomOff - turning speakers off', context.config['roomSpeakers']);
+	await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 };
 
 
@@ -244,7 +251,7 @@ module.exports = new SmartApp()
 	}
 	
 	// save state variable to indicate room should be turned off immediately
-	// SmartState.putState(context, 'roomOff', 'immediate');			
+	SmartState.putState(context, 'roomSwitchMode', 'manual');
 	console.log('roomSwitchOnHandler - finished');	
 })
 
@@ -259,7 +266,7 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOffHandler - room switch mode: ', roomSwitchMode);
 
 	if (roomSwitchMode==='manual') {
-		await SmartDevice.setSwitchState(context, 'offGroup', 'off');
+		turnRoomOff(context);
 	} else {
 	
 		// Determine if in time window
@@ -278,7 +285,8 @@ module.exports = new SmartApp()
 				await context.api.schedules.runIn('delayedGroupOff', offDelay);
 			} else {
 				console.log('roomSwitchOffHandler - turning off group immediately');
-				await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+				// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+				await SmartDevice.setSwitchState(context, 'offGroup', 'off');
 				console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
 				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
 			}
