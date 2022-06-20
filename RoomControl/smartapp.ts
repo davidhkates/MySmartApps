@@ -266,7 +266,7 @@ module.exports = new SmartApp()
 	console.log('roomSwitchOffHandler - room switch mode: ', roomSwitchMode);
 
 	if (roomSwitchMode==='manual') {
-		turnRoomOff(context);
+		await turnRoomOff(context);
 	} else {
 	
 		// Determine if in time window
@@ -284,11 +284,7 @@ module.exports = new SmartApp()
 				console.log('roomSwitchOffHandler - turning off group after delay, ' + offDelay);
 				await context.api.schedules.runIn('delayedGroupOff', offDelay);
 			} else {
-				console.log('roomSwitchOffHandler - turning off group immediately');
-				// await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
-				await SmartDevice.setSwitchState(context, 'offGroup', 'off');
-				console.log('roomSwitchOffHandler - turning speakers off', context.config['roomSpeakers']);
-				await SmartSonos.controlSpeakers(context, 'roomSpeakers', 'pause');
+				await turnRoomOff(context);
 			}
 		}
 	}
