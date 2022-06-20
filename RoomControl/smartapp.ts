@@ -304,7 +304,7 @@ module.exports = new SmartApp()
 	console.log('groupOnHandler starting - turn on main room switch');
 
 	// indicate room switch was turned on from 'group' handler
-	// SmartState.putState(context, 'roomSwitchMode', 'group');
+	SmartState.putState(context, 'roomSwitchMode', 'group');
 	await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 })
 
