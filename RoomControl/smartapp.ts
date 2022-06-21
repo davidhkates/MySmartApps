@@ -299,8 +299,11 @@ module.exports = new SmartApp()
 .subscribedEventHandler('groupOnHandler', async (context, event) => {
 	console.log('groupOnHandler starting - turn on main room switch');
 
+	const switchMode = await SmartState.getState(context, 'roomSwitchMode');
+	console.log('groupOnHandler - room switch mode: ', switchMode);
+	
 	// indicate room switch was turned on from 'group' handler
-	SmartState.putState(context, 'roomSwitchMode', 'group');
+	await SmartState.putState(context, 'roomSwitchMode', 'group');
 	await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 })
 
