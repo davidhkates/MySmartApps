@@ -301,6 +301,8 @@ module.exports = new SmartApp()
 
 	const switchMode = await SmartState.getState(context, 'roomSwitchMode');
 	console.log('groupOnHandler - room switch mode: ', switchMode);
+	const roomOccupied = await SmartState.getState(context, 'roomOccupied');
+	console.log('groupOnHandler - room occupied: ', roomOccupied);
 	
 	// indicate room switch was turned on from 'group' handler
 	await SmartState.putState(context, 'roomSwitchMode', 'group');
