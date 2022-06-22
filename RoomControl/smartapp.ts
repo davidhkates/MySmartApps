@@ -393,7 +393,7 @@ module.exports = new SmartApp()
 		} else {
 			// Turn room switch off immediately if no delay
 			console.log('motionStopHandler - turn room switch off immediately');
-			await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
+			await SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
 		}	
 	}
 })
@@ -420,8 +420,7 @@ module.exports = new SmartApp()
 			console.log('contactOpenHandler - turning on room switch, setting room state to ENTERING');
 			await SmartState.putState(context, 'roomOccupied', 'entering');
 			// TODO: Define timers for checking for activity in room			
-			SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-			// context.api.schedules.runIn('delayedSwitchOn', 15);		
+			await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
 			context.api.schedules.runIn('delayedSwitchOff', 15);
 		}
 	}
@@ -438,7 +437,7 @@ module.exports = new SmartApp()
 		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'vacant');
 		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-		SmartDevice.setSwitchState(context, 'offGroup', 'off');
+		// SmartDevice.setSwitchState(context, 'offGroup', 'off');
 	} else {
 		console.log('contactClosedHandler - setting room state to OCCUPIED');
 		await SmartState.putState(context, 'roomOccupied', 'occupied');
