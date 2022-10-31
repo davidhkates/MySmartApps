@@ -99,7 +99,7 @@ module.exports = new SmartApp()
 })
 
 
-// Turn on lights when motion occurs during defined times if dependent lights are on
+// Turn on trigger switch when motion occurs during defined times if dependent lights are on
 // TODO: turn off handler once lights are turned on
 .subscribedEventHandler('motionStartHandler', async (context, event) => {
 	console.log('motionStartHandler - start');
@@ -108,21 +108,14 @@ module.exports = new SmartApp()
 	console.log('motionStartHandler - motionEnabled: ', motionEnabled);
 	if (motionEnabled) {
 
-		// check to see if home is active
-		const modeName = context.configStringValue('modeName');
-		const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
-		console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
+		// check to see if current mode matches designated mode
+		const targetMode = context.configStringValue('modeName');
+		// const currentMode = context.configCurrentMode();
+		console.log('motionStartHandler - target mode name: ', targetName, ', current mode: ', currentMode);
 
 		// turn on light if in time window and check switch(es) are on
-		if (bHomeActive) {
-			const roomSwitchState = await SmartDevice.getSwitchState(context, 'roomSwitch');
-			console.log('motionStartHandler - turning lights/switches on, currently: ', roomSwitchState);
-			if (roomSwitchState==='off') {
-				await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-			} else {
-				await turnRoomOn(context);
-			}
-			await SmartState.putState(context, 'roomOccupied', 'occupied');	
+		if (currentMode==targetMode) {
+			await SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
 		}
 	}	
 	console.log('motionStartHandler - finished');
@@ -141,11 +134,11 @@ module.exports = new SmartApp()
 		if (delay) {
 			// Schedule turning off room switch if delay is set
 			console.log('motionStopHandler - run delayedSwitchOff after specified delay: ', delay);
-			await context.api.schedules.runIn('delayedSwitchOff', delay)
+			await context.api.schedules.runIn('delayedTriggerOff', delay)
 		} else {
 			// Turn room switch off immediately if no delay
 			console.log('motionStopHandler - turn room switch off immediately');
-			await SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
+			await SmartDevice.setSwitchState(context, 'triggerSwitch', 'off');
 		}	
 	}
 })
@@ -155,11 +148,11 @@ module.exports = new SmartApp()
 	console.log('contactOpenHandler - set room to entering or leaving');	
 
 	// Check to see if lights are already on and room is currently occupied
-	const roomSwitch = await SmartDevice.getSwitchState(context, 'roomSwitch'); 
-	console.log('contactOpenHandler - room switch state: ', roomSwitch);
+	const triggerSwitch = await SmartDevice.getSwitchState(context, 'triggerSwitch'); 
+	console.log('contactOpenHandler - room switch state: ', triggerSwitch);
 
 	// Set room occupied state to leaving if lights are on, else turn on
-	if (roomSwitch==='on') {
+	if (triggerSwitch==='on') {
 		console.log('contactOpenHandler - setting room state to LEAVING');
 		SmartState.putState(context, 'roomOccupied', 'leaving');
 	} else {
@@ -172,7 +165,7 @@ module.exports = new SmartApp()
 			console.log('contactOpenHandler - turning on room switch, setting room state to ENTERING');
 			await SmartState.putState(context, 'roomOccupied', 'entering');
 			// TODO: Define timers for checking for activity in room			
-			await SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
+			await SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
 			context.api.schedules.runIn('delayedSwitchOff', 15);
 		}
 	}
@@ -188,13 +181,9 @@ module.exports = new SmartApp()
 	if (transientStates.includes(roomState)) {
 		console.log('contactClosedHandler - setting room state to VACANT');
 		await SmartState.putState(context, 'roomOccupied', 'vacant');
-		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-		// SmartDevice.setSwitchState(context, 'offGroup', 'off');
+		SmartDevice.setSwitchState(context, 'triggerSwitch', 'off');
 	} else {
-		console.log('contactClosedHandler - setting room state to OCCUPIED');
-		await SmartState.putState(context, 'roomOccupied', 'occupied');
-
-		// turn off lights if motion NOT detected within specified time
+		// turn trigger switch off if motion NOT detected within specified time
 		const closeDelay = context.configNumberValue('closeDelay');
 		if (closeDelay>0) {
 			console.log('contactClosedHandler - check for activity after delay: ', closeDelay);
@@ -214,7 +203,7 @@ module.exports = new SmartApp()
 	if ( SmartUtils.isDayOfWeek(daysOfWeek) ) {
 		console.log('endTimeHandler - run end time handler today based on daysOfWeek:', daysOfWeek);
 		// Turn off room switch(es) if main switch already turned off
-		const isRoomOn = await SmartDevice.getSwitchState(context, 'roomSwitch');
+		const isRoomOn = await SmartDevice.getSwitchState(context, 'triggerSwitch');
 		console.log('endTimeHandler - isRoomOn state: ', isRoomOn );
 		if (isRoomOn!=='on') {
 			console.log('endTimeHandler - turning room switch(es) off since main switch already off');
@@ -225,30 +214,27 @@ module.exports = new SmartApp()
 })
 
 
-// Turns off lights after delay when switch turned off
+// Turn trigger switch on after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOn', async (context, event) => {
 	// console.log('delayedSwitchOn - starting');
 	
 	console.log('delayedSwitchOn - turning room switch ON, setting room state to OCCUPIED');
-	// await context.api.devices.sendCommands(context.config.roomSwitch, 'switch', 'off');
-	SmartDevice.setSwitchState(context, 'roomSwitch', 'on');
-	SmartState.putState(context, 'roomOccupied', 'occupied');
+	// await context.api.devices.sendCommands(context.config.triggerSwitch, 'switch', 'off');
+	SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
 })
 
 
-// Turns off lights after delay when switch turned off
+// Turn trigger switch off after delay when switch turned off
 .scheduledEventHandler('delayedSwitchOff', async (context, event) => {
 	// console.log('delayedSwitchOff - starting');
 	
 	// save state variable to indicate room switch was turned off by delay
 	console.log('delayedSwitchOff - setting room switch mode to delay');
-	const roomSwitchState = await SmartDevice.getSwitchState(context, 'roomSwitch');
-	console.log('delayedSwitchOff - current room switch state: ', roomSwitchState);
-	if (roomSwitchState==='on') {
+	const triggerSwitchState = await SmartDevice.getSwitchState(context, 'triggerSwitch');
+	console.log('delayedSwitchOff - current room switch state: ', triggerSwitchState);
+	if (triggerSwitchState==='on') {
 		console.log('delayedSwitchOff - turning room switch off');
-		SmartState.putState(context, 'roomSwitchMode', 'delay');
-		SmartDevice.setSwitchState(context, 'roomSwitch', 'off');
-		// SmartState.putState(context, 'roomOccupied', 'vacant');
+		SmartDevice.setSwitchState(context, 'triggerSwitch', 'off');
 	}
 })
 
