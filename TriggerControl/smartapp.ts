@@ -155,17 +155,11 @@ module.exports = new SmartApp()
 	// Set room occupied state to leaving if lights are on, else turn on
 	if (triggerSwitch==='on') {
 		console.log('contactOpenHandler - setting room state to LEAVING');
-		SmartState.putState(context, 'roomOccupied', 'leaving');
+		SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
 	} else {
-		const homeName = context.configStringValue('homeName');
-		const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
-		console.log('contactOpenHandler - home name: ', homeName, ', home active: ', bHomeActive);
-
 		// turn on room switch/light(s) if home active
-		if (bHomeActive) {
+		if (true) {
 			console.log('contactOpenHandler - turning on room switch, setting room state to ENTERING');
-			await SmartState.putState(context, 'roomOccupied', 'entering');
-			// TODO: Define timers for checking for activity in room			
 			await SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
 			context.api.schedules.runIn('delayedSwitchOff', 15);
 		}
@@ -181,7 +175,6 @@ module.exports = new SmartApp()
 	const transientStates = ['entering', 'leaving'];
 	if (transientStates.includes(roomState)) {
 		console.log('contactClosedHandler - setting room state to VACANT');
-		await SmartState.putState(context, 'roomOccupied', 'vacant');
 		SmartDevice.setSwitchState(context, 'triggerSwitch', 'off');
 	} else {
 		// turn trigger switch off if motion NOT detected within specified time
