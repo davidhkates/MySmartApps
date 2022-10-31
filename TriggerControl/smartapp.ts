@@ -169,9 +169,8 @@ module.exports = new SmartApp()
 
 .subscribedEventHandler('contactClosedHandler', async (context, event) => {
 	console.log('contactClosedHandler - set room to occupied or vacant');	
-	const roomState = await SmartState.getState(context, 'roomOccupied');
-	console.log('contactClosedHandler - current room state: ', roomState);
 	
+	const roomState = 'entering';
 	const transientStates = ['entering', 'leaving'];
 	if (transientStates.includes(roomState)) {
 		console.log('contactClosedHandler - setting room state to VACANT');
