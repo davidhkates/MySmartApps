@@ -9,8 +9,6 @@ const SmartApp = require('@smartthings/smartapp');
 // Install relevant SmartApp utilities
 const SmartDevice = require('@katesthings/smartdevice');
 const SmartUtils  = require('@katesthings/smartutils');
-const SmartState  = require('@katesthings/smartstate');
-const SmartSonos  = require('@katesthings/smartsonos');
 
 // SmartApp type definitions
 interface device {
@@ -111,7 +109,7 @@ module.exports = new SmartApp()
 	if (motionEnabled) {
 
 		// check to see if home is active
-		const homeName = context.configStringValue('homeName');
+		const modeName = context.configStringValue('modeName');
 		const bHomeActive: boolean = await SmartState.isHomeActive(homeName);
 		console.log('motionStartHandler - home name: ', homeName, ', home active: ', bHomeActive);
 
