@@ -57,6 +57,7 @@ module.exports = new SmartApp()
 			section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
 			section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
 		});
+	}
 })
 
 
