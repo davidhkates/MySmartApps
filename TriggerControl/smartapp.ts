@@ -111,8 +111,8 @@ module.exports = new SmartApp()
 
 		// check to see if current mode matches designated mode
 		const targetMode = context.configStringValue('modeName');
-		// const currentMode = context.configCurrentMode();
-		console.log('motionStartHandler - target mode name: ', targetName, ', current mode: ', currentMode);
+		const currentMode = context.configCurrentMode();
+		console.log('motionStartHandler - target mode name: ', targetMode, ', current mode: ', currentMode);
 
 		// turn on light if in time window and check switch(es) are on
 		if (currentMode==targetMode) {
