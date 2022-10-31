@@ -1,0 +1,18 @@
+service: trigger-control
+
+package:
+  patterns:
+    - index.js
+    - smartapp.js
+    - locales/**
+
+provider:
+  name: aws
+  stage: dev
+  runtime: nodejs18.x
+  region: us-west-2
+  
+functions:
+  smartapp:
+    handler: index.handle
+    timeout: 20
