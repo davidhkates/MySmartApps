@@ -26,19 +26,21 @@ module.exports = new SmartApp()
 
 	// main options page with room controls and behaviors
 
-	// set control enabled flag to control other settings prompts
-	let bControlEnabled: boolean = context.configBooleanValue('controlEnabled');
-	console.log('targetControl - initial value of bControlled: ', bControlEnabled);
-	// bControlEnabled = bControlEnabled === undefined ? true : bControlEnabled;
-
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
 	});
 
+	// set control enabled flag to control other settings prompts
+	/*
+	let bControlEnabled: boolean = context.configBooleanValue('controlEnabled');
+
 	if (bControlEnabled) {
+	*/
+	if (context.configBooleanValue('controlEnabled')) {	
 		// controls
 		page.section('controls', section => {
+			// trigger switch
 			section.deviceSetting('triggerSwitch').capabilities(['switch'])
 				.required(true).permissions('rx');		
 			// motion and contact switches 
@@ -63,7 +65,7 @@ module.exports = new SmartApp()
 	});
 	
 	page.section('behavior', section => {
-		section.booleanSetting('contactTriggerOn').options(['open', 'closed'])
+		section.enumSetting('contactTriggerOn').options(['open', 'closed'])
 			.required(true).defaultValue('open');
 		section.enumSetting('contactTriggerOpen').options(['all', 'any'])
 			.required(true).defaultValue('all');
