@@ -28,6 +28,7 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	let bControlEnabled: boolean = context.configBooleanValue('controlEnabled');
+	console.log('targetControl - initial value of bControlled: ', bControlEnabled);
 	// bControlEnabled = bControlEnabled === undefined ? true : bControlEnabled;
 
 	// enable/disable control, room name for dyanamodb settings table
@@ -62,10 +63,12 @@ module.exports = new SmartApp()
 	});
 	
 	page.section('behavior', section => {
-		section.enumSetting('contactTriggerOn').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed'])
-			.required(true).defaultValue('allOpen');
-		section.enumSetting('contactTriggerOff').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed'])
-			.required(true).defaultValue('anyClosed');
+		section.booleanSetting('contactTriggerOn').options(['open', 'closed'])
+			.required(true).defaultValue('open');
+		section.enumSetting('contactTriggerOpen').options(['all', 'any'])
+			.required(true).defaultValue('all');
+		section.enumSetting('contactTriggerClosed').options(['all', 'any'])
+			.required(true).defaultValue('any');
 	});
 	
 	page.section('modes', section => {
