@@ -1,56 +1,19 @@
 {
 	"Tap to set": "Tap to set",
-	"pages.mainPage.name": "Room Control Time/Mode Settings",
+	"pages.mainPage.name": "Trigger Control Settings",
 
 	"pages.mainPage.sections.parameters.name": "Automation parameters",
 	"pages.mainPage.settings.controlEnabled.name": "Operate control",
 	"pages.mainPage.settings.controlEnabled.description": "Turn on/off to enable/disable this automation",
-	"pages.mainPage.settings.homeName.name": "Name of home to check state",
-	"pages.mainPage.settings.changeSettings.name": "Change delays or option settings?",
-	"pages.mainPage.settings.changeSettings.description": "",
-
-	"pages.mainPage.settings.roomType.name": "Type of room controls",
-	"pages.mainPage.settings.roomType.description": "Indicate whether to set up simple or complex controls",
-	"pages.mainPage.settings.roomType.options.simple.name": "Simple (turn lights, outlets, and speakers on/off)",
-	"pages.mainPage.settings.roomType.options.complex.name": "Complex (motion/contact detectors, time window)",	
 	
-	"pages.mainPage.sections.time.name": "Days/times for this automation",
-	"pages.mainPage.settings.daysOfWeek.name": "Days of week",
-	"pages.mainPage.settings.daysOfWeek.options.everyday.name": "Every Day",
-	"pages.mainPage.settings.daysOfWeek.options.weekdays.name": "Weekdays",
-	"pages.mainPage.settings.daysOfWeek.options.weekend.name": "Weekend",	
-	"pages.mainPage.settings.startTime.name": "Start time",
-	"pages.mainPage.settings.startTime.description": "",
-	"pages.mainPage.settings.endTime.name": "End time",
-	"pages.mainPage.settings.endTime.description": "",		
-	
-
-
-	"pages.controlsPage.name": "Room Control Controls/Sensors",
-	"pages.controlsPage.sections.switches.name": "Switches to control room",
-	"pages.controlsPage.settings.roomSwitch.name": "Main switch to control room",
-	"pages.controlsPage.settings.roomSwitch.description": "",
-	"pages.controlsPage.settings.onGroup.name": "Lights to turn on from main switch",
-	"pages.controlsPage.settings.offGroup.name": "Lights/outlets to turn off from main switch",
-
-	"pages.controlsPage.sections.behavior.name": "Switch off behavior",
-	"pages.controlsPage.settings.offBehavior.name": "Room light off action",
-	"pages.controlsPage.settings.offBehavior.options.group.name": "Group Lights",
-	"pages.controlsPage.settings.offBehavior.options.speakers.name": "Room Speakers",
-	"pages.controlsPage.settings.offBehavior.options.all.name": "All Lights and Speakers",
-	"pages.controlsPage.settings.offBehavior.options.none.name": "Do Nothing (Main Only)",
-	
-	"pages.controlsPage.sections.sensors.name": "Room sensors",
-	"pages.controlsPage.settings.motionEnabled.name": "Turn on room with motion",
-	"pages.controlsPage.settings.motionEnabled.description": "Automatically turn on room based on other settings",
-	"pages.controlsPage.settings.roomMotionOn.name": "Motion sensor(s) to turn room on",
-	"pages.controlsPage.settings.roomMotion.name": "Motion sensor(s) to monitor room",
-	"pages.controlsPage.settings.roomContacts.name": "Door/window contact sensors",
-	
-	"pages.controlsPage.sections.speakers.name": "Speakers in room to control",
-	"pages.controlsPage.settings.roomSpeakers.name": "Select speakers to turn on/off",
-
-
+	"pages.mainPage.sections.controls.name": "Room controls",
+	"pages.mainPage.settings.triggerSwitch.name": "Virtual switch as trigger",
+	"pages.mainPage.settings.triggerSwitch.description": "",
+	"pages.mainPage.settings.motionEnabled.name": "Turn on room with motion",
+	"pages.mainPage.settings.motionEnabled.description": "Automatically turn on room based on other settings",
+	"pages.mainPage.settings.roomMotionOn.name": "Motion sensor(s) to turn room on",
+	"pages.mainPage.settings.roomMotion.name": "Motion sensor(s) to monitor room",
+	"pages.mainPage.settings.roomContacts.name": "Door/window contact sensors",
 
 	"pages.optionsPage.name": "Room Control Options/Delays",
 	"pages.optionsPage.sections.delays.name": "Automation delay settings",

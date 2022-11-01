@@ -45,8 +45,13 @@ module.exports = new SmartApp()
 				.required(false).multiple(true).permissions('r');
 			section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 				.required(false).multiple(true).permissions('r');
-		});
+		});		
+		page.nextPageId('optionsPage');
+	}
+})
 
+.page('optionsPage', (context, page, configData) => {
+	page.section('delays', section => {
 		// delays
 		page.section('delays', section => {
 			section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
