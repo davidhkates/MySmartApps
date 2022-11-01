@@ -66,11 +66,9 @@ module.exports = new SmartApp()
 			.required(true).defaultValue('anyClosed');
 	});
 	
-	/*
 	page.section('modes', section => {
-		section.modeSetting('targetMode').required(false).multiple(true).permissions('r');
+		section.modeSetting('targetMode').required(false).multiple(true);
 	});
-	*/
 })
 
 
