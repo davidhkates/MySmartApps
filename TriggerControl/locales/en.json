@@ -12,7 +12,7 @@
 	"pages.mainPage.settings.roomMotion.name": "Motion sensor(s) to set trigger",
 	"pages.mainPage.settings.roomContacts.name": "Door/window contact sensors",
 
-	"pages.mainPage.sections.delays.name": "Automation delay settings"
+	"pages.mainPage.sections.delays.name": "Automation delay settings",
 	"pages.mainPage.settings.motionDelay.name": "Delay after motion stops (seconds)",
 	"pages.mainPage.settings.openDelay.name": "Delay after all contacts open (seconds)",
 	"pages.mainPage.settings.closeDelay.name": "Delay after any contact closed (seconds)",
