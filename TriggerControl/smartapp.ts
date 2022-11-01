@@ -53,23 +53,22 @@ module.exports = new SmartApp()
 })
 
 .page('optionsPage', (context, page, configData) => {
-		page.section('delays', section => {
-			section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
-			section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
-			section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
-		});
-		
-		page.section('behavior', section => {
-			section.enumSetting('contactTriggerOn').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed'])
-				.required(true).defaultValue('allOpen');
-			section.enumSetting('contactTriggerOff').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed'])
-				.required(true).defaultValue('anyClosed');
-		});
-		
-		page.section('modes', section => {
-			section.modeSetting('targetMode').required(false).multiple(true).permissions('r');
-		});
-	}
+	page.section('delays', section => {
+		section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
+		section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
+		section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
+	});
+	
+	page.section('behavior', section => {
+		section.enumSetting('contactTriggerOn').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed'])
+			.required(true).defaultValue('allOpen');
+		section.enumSetting('contactTriggerOff').options(['allOpen', 'allClosed', 'anyOpen', 'anyClosed'])
+			.required(true).defaultValue('anyClosed');
+	});
+	
+	page.section('modes', section => {
+		section.modeSetting('targetMode').required(false).multiple(true).permissions('r');
+	});
 })
 
 
