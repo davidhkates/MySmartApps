@@ -28,7 +28,7 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	let bControlEnabled: boolean = context.configBooleanValue('controlEnabled');
-	bControllEnabled = bControlEnabled === undefined ? true : bControlEnabled;
+	bControlEnabled = bControlEnabled === undefined ? true : bControlEnabled;
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
