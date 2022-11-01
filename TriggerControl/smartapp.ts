@@ -57,6 +57,8 @@ module.exports = new SmartApp()
 		section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
 		section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
 		section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
+		section.numberSetting('openWait').required(false).min(0).defaultValue(0);
+		section.numberSetting('closeWait').required(false).min(0).defaultValue(0);
 	});
 	
 	page.section('behavior', section => {
@@ -83,8 +85,7 @@ module.exports = new SmartApp()
 	// if control is not enabled, turn off switch
 	const controlEnabled = context.configBooleanValue('controlEnabled');
 	if (!controlEnabled) {
-		await context.api.devices.sendCommands(context.config.onGroup, 'switch', 'off');
-		await context.api.devices.sendCommands(context.config.offGroup, 'switch', 'off');
+		await context.api.devices.sendCommands(context.config.triggerSwitch, 'switch', 'off');
 	} else {
 		// create subscriptions for relevant devices
 		console.log('targetControl - create subscriptions');
@@ -159,20 +160,23 @@ module.exports = new SmartApp()
 .subscribedEventHandler('contactOpenHandler', async (context, event) => {
 	console.log('contactOpenHandler - set room to entering or leaving');	
 
-	// Check to see if lights are already on and room is currently occupied
-	const triggerSwitch = await SmartDevice.getSwitchState(context, 'triggerSwitch'); 
-	console.log('contactOpenHandler - room switch state: ', triggerSwitch);
-
-	// Set room occupied state to leaving if lights are on, else turn on
-	if (triggerSwitch==='on') {
-		console.log('contactOpenHandler - setting room state to LEAVING');
-		SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
+	const openWait = context.configNumberValue('openWait');
+	if (openWait>0) {
+		context.api.schedules.runIn('delayedOpenTrigger', openWait);
 	} else {
-		// turn on room switch/light(s) if home active
-		if (true) {
-			console.log('contactOpenHandler - turning on room switch, setting room state to ENTERING');
-			await SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
-			context.api.schedules.runIn('delayedSwitchOff', 15);
+		const roomContacts = context.config.roomContacts;
+		if (roomContacts) {
+			const contactsState = await SmartDevice.getContactState(context, 'roomContacts');
+			const contactTriggerOn = context.configStringValue('contactTriggerOn');
+			const contactTriggerOff = context.configStringValue('contactTriggerOff');
+		
+			if ( (contactsState=='open'&&(contactTriggerOn=='allOpen' || contactTriggerOn=='anyOpen')) ||
+				 (contactsState=='mixed'&&contactTriggerOn=='anyOpen') {
+				await SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
+			} else if ( (contactsState=='closed'&&(contactTriggerOff=='allOpen' || contactTriggerOff=='anyOpen')) ||
+					 (contactsState=='mixed'&&contactTriggerOff=='anyOpen') {
+					await SmartDevice.setSwitchState(context, 'triggerSwitch', 'off');
+			}
 		}
 	}
 })	
