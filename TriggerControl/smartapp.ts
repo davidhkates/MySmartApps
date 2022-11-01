@@ -28,13 +28,11 @@ module.exports = new SmartApp()
 
 	// set control enabled flag to control other settings prompts
 	let bControlEnabled: boolean = context.configBooleanValue('controlEnabled');
+	bControllEnabled = bControlEnabled === undefined ? true : bControlEnabled;
 
 	// enable/disable control, room name for dyanamodb settings table
 	page.section('parameters', section => {
 		section.booleanSetting('controlEnabled').defaultValue(true).submitOnChange(true);
-		if (bControlEnabled) {
-			section.modeSetting('modeName').required(false);
-		}
 	});
 
 	if (bControlEnabled) {
@@ -45,14 +43,12 @@ module.exports = new SmartApp()
 			// motion and contact switches 
 			section.deviceSetting('roomMotion').capabilities(['motionSensor'])
 				.required(false).multiple(true).permissions('r');
-			// section.numberSetting('motionDelay').required(false).min(0);
 			section.deviceSetting('roomContacts').capabilities(['contactSensor'])
 				.required(false).multiple(true).permissions('r');
 		});
 
 		// delays
 		page.section('delays', section => {
-			section.numberSetting('offDelay').required(false).min(0).defaultValue(300);
 			section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
 			section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
 			section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
