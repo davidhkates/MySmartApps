@@ -171,10 +171,10 @@ module.exports = new SmartApp()
 			const contactTriggerOff = context.configStringValue('contactTriggerOff');
 		
 			if ( (contactsState=='open'&&(contactTriggerOn=='allOpen' || contactTriggerOn=='anyOpen')) ||
-				 (contactsState=='mixed'&&contactTriggerOn=='anyOpen') {
+				 (contactsState=='mixed'&&contactTriggerOn=='anyOpen') ) {
 				await SmartDevice.setSwitchState(context, 'triggerSwitch', 'on');
 			} else if ( (contactsState=='closed'&&(contactTriggerOff=='allOpen' || contactTriggerOff=='anyOpen')) ||
-					 (contactsState=='mixed'&&contactTriggerOff=='anyOpen') {
+					 (contactsState=='mixed'&&contactTriggerOff=='anyOpen') ) {
 					await SmartDevice.setSwitchState(context, 'triggerSwitch', 'off');
 			}
 		}
