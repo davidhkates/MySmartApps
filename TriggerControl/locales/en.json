@@ -26,17 +26,17 @@
 	"pages.optionsPage.settings.closeWait.name": "Wait for motion after contacts closed (seconds)",
 
 	"pages.optionsPage.sections.behavior.name": "Contact switch behavior settings",
-	"pages.optionsPage.settings.contactTriggerOn.name": "Contact state to turn trigger on",
-	"pages.optionsPage.settings.contactTriggerOn.options.allOpen.name": "All contacts open",
-	"pages.optionsPage.settings.contactTriggerOn.options.allClosed.name": "All contacts closed",
-	"pages.optionsPage.settings.contactTriggerOn.options.anyOpen.name": "Any contact open",
-	"pages.optionsPage.settings.contactTriggerOn.options.anyClosed.name": "Any contact open",
+	"pages.optionsPage.settings.contactTriggerOn.name": "Contact status to turn trigger on",
+	"pages.optionsPage.settings.contactTriggerOn.options.open.name": "Turn trigger on when contacts open",
+	"pages.optionsPage.settings.contactTriggerOn.options.closed.name": "Turn trigger on when contacts closed",
+
+	"pages.optionsPage.settings.contactTriggerOpen.name": "Contacts opened to change trigger state",
+	"pages.optionsPage.settings.contactTriggerOpen.options.all.name": "All contacts open",
+	"pages.optionsPage.settings.contactTriggerOpen.options.any.name": "Any contact open",
 	
-	"pages.optionsPage.settings.contactTriggerOff.name": "Contact state to turn trigger off",
-	"pages.optionsPage.settings.contactTriggerOff.options.allOpen.name": "All contacts open",
-	"pages.optionsPage.settings.contactTriggerOff.options.allClosed.name": "All contacts closed",
-	"pages.optionsPage.settings.contactTriggerOff.options.anyOpen.name": "Any contact open",
-	"pages.optionsPage.settings.contactTriggerOff.options.anyClosed.name": "Any contact open",
+	"pages.optionsPage.settings.contactTriggerClosed.name": "Contacts closed to change trigger state",
+	"pages.optionsPage.settings.contactTriggerClosed.options.all.name": "All contacts closed",
+	"pages.optionsPage.settings.contactTriggerClosed.options.any.name": "All contacts closed",
 	
 	"pages.optionsPage.sections.modes.name": "Modes for this trigger action",
 	"pages.optionsPage.settings.targetMode.name": "Target mode(s)"
