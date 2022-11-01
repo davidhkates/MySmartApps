@@ -52,13 +52,10 @@ module.exports = new SmartApp()
 
 .page('optionsPage', (context, page, configData) => {
 	page.section('delays', section => {
-		// delays
-		page.section('delays', section => {
-			section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
-			section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
-			section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
-		});
-	}
+		section.numberSetting('motionDelay').required(false).min(0).defaultValue(60);
+		section.numberSetting('openDelay').required(false).min(0).defaultValue(15);
+		section.numberSetting('closeDelay').required(false).min(0).defaultValue(30);
+	});
 })
 
 
